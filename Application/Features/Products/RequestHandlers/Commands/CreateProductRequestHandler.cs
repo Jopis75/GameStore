@@ -1,5 +1,4 @@
 ﻿using Application.Dtos.Common;
-using Application.Dtos.Companies;
 using Application.Dtos.Products;
 using Application.Features.Products.Requests.Commands;
 using Application.Interfaces.Persistance;

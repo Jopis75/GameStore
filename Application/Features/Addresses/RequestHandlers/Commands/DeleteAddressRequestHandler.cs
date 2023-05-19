@@ -13,14 +13,11 @@ namespace Application.Features.Addresses.RequestHandlers.Commands
     {
         private readonly IUnitOfWork _unitOfWork;
 
-        private readonly IMapper _mapper;
-
         private readonly IValidator<DeleteAddressRequestDto> _validator;
 
-        public DeleteAddressRequestHandler(IUnitOfWork unitOfWork, IMapper mapper, IValidator<DeleteAddressRequestDto> validator)
+        public DeleteAddressRequestHandler(IUnitOfWork unitOfWork, IValidator<DeleteAddressRequestDto> validator)
         {
             _unitOfWork = unitOfWork ?? throw new ArgumentNullException(nameof(unitOfWork));
-            _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
             _validator = validator ?? throw new ArgumentNullException(nameof(validator));
         }
 

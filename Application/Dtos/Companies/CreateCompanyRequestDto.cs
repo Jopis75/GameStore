@@ -5,7 +5,7 @@ namespace Application.Dtos.Companies
 {
     public class CreateCompanyRequestDto : ICreateRequestDto
     {
-        public CompanyType CompanyType { get; set; }
+        public CompanyType? CompanyType { get; set; }
 
         public string? Description { get; set; }
 

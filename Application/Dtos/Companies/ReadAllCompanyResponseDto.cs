@@ -18,7 +18,7 @@ namespace Application.Dtos.Companies
 
         public int? Founded { get; set; }
 
-        public ReadAllAddressResponseDto HeadOffice { get; set; } = new();
+        public ReadAllAddressResponseDto? HeadOffice { get; set; } = new();
 
         public int Id { get; set; }
 
@@ -28,9 +28,9 @@ namespace Application.Dtos.Companies
 
         public int? NumberOfEmployees { get; set; }
 
-        public ReadAllCompanyResponseDto ParentCompany { get; set; } = new();
+        public ReadAllCompanyResponseDto? ParentCompany { get; set; } = new();
 
-        public List<ReadAllProductResponseDto> Products { get; set; } = new();
+        public List<ReadAllProductResponseDto>? VideoGames { get; set; } = new();
 
         public string? TradeName { get; set; }
 

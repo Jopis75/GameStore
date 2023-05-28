@@ -9,9 +9,9 @@ namespace Application.Dtos.Companies
 
         public string? Description { get; set; }
 
-        public int Founded { get; set; }
+        public int? Founded { get; set; }
 
-        public int HeadOfficeId { get; set; }
+        public int? HeadOfficeId { get; set; }
 
         public int Id { get; set; }
 
@@ -19,7 +19,7 @@ namespace Application.Dtos.Companies
 
         public string? Name { get; set; }
 
-        public int NumberOfEmployees { get; set; }
+        public int? NumberOfEmployees { get; set; }
 
         public int? ParentCompanyId { get; set; }
 

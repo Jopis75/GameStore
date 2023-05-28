@@ -1,13 +1,10 @@
 ﻿using Application.Dtos.Common.Interfaces;
-using Application.Dtos.Companies;
 
 namespace Application.Dtos.Addresses
 {
     public class ReadAllAddressResponseDto : IReadAllResponseDto
     {
         public string? City { get; set; }
-
-        public ReadAllCompanyResponseDto? Company { get; set; } = new();
 
         public string? Country { get; set; }
 

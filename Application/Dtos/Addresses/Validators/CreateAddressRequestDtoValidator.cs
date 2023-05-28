@@ -34,10 +34,6 @@ namespace Application.Dtos.Addresses.Validators
                 .NotNull()
                 .NotEmpty()
                 .WithMessage("{PropertyName} is required.");
-
-            RuleFor(createAddressRequestDto => createAddressRequestDto.CompanyId)
-               .NotEqual(0)
-               .WithMessage("{PropertyName} must not equal 0.");
         }
     }
 }

@@ -8,10 +8,10 @@ namespace Application.Dtos.Reviews
 
         public int Id { get; set; }
 
-        public int? ProductId { get; set; }
-
         public DateTime? ReviewDate { get; set; }
 
         public string? ReviewText { get; set; }
+
+        public int? VideoGameId { get; set; }
     }
 }

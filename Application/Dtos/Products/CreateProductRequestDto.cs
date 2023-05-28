@@ -8,8 +8,6 @@ namespace Application.Dtos.Products
 
         public string? Description { get; set; }
 
-        public int? DeveloperId { get; set; }
-
         public decimal? Price { get; set; }
 
         public DateTime? PurchaseDate { get; set; }
@@ -21,5 +19,7 @@ namespace Application.Dtos.Products
         public string? Title { get; set; }
 
         public TimeSpan? TotalTimePlayed { get; set; }
+
+        public int? VideoGameDeveloperId { get; set; }
     }
 }

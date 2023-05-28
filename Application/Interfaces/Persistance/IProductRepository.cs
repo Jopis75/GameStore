@@ -4,7 +4,7 @@ namespace Application.Interfaces.Persistance
 {
     public interface IProductRepository : IRepositoryBase<Product>
     {
-        Task<IEnumerable<Product>> GetByDeveloperIdAsync(int developerId);
+        Task<IEnumerable<Product>> GetByDeveloperIdAsync(int videoGameDeveloperId);
 
         Task<IEnumerable<Product>> GetByPriceAsync(decimal fromPrice, decimal toPrice);
 
@@ -12,6 +12,6 @@ namespace Application.Interfaces.Persistance
 
         Task<IEnumerable<Product>> GetByReleaseDateAsync(DateTime fromReleaseDate, DateTime toReleaseDate);
 
-        Task<Product> GetByTitleAsync();
+        Task<Product> GetByTitleAsync(string title);
     }
 }

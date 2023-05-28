@@ -18,8 +18,6 @@ namespace Application.Dtos.Products
 
         public string? Description { get; set; }
 
-        public ReadByIdCompanyResponseDto? Developer { get; set; } = new();
-
         public int Id { get; set; }
 
         public decimal? Price { get; set; }
@@ -37,5 +35,7 @@ namespace Application.Dtos.Products
         public DateTime? UpdatedAt { get; set; }
 
         public string? UpdatedBy { get; set; }
+
+        public ReadByIdCompanyResponseDto? VideoGameDeveloper { get; set; } = new();
     }
 }

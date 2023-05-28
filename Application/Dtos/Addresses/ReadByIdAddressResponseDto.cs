@@ -7,8 +7,6 @@ namespace Application.Dtos.Addresses
     {
         public string? City { get; set; }
 
-        public ReadByIdCompanyResponseDto? Company { get; set; } = new();
-
         public string? Country { get; set; }
 
         public DateTime? CreatedAt { get; set; }

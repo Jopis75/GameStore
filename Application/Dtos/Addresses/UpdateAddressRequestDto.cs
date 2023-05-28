@@ -6,8 +6,6 @@ namespace Application.Dtos.Addresses
     {
         public string? City { get; set; }
 
-        public int? CompanyId { get; set; }
-
         public string? Country { get; set; }
 
         public int Id { get; set; }

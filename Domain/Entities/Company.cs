@@ -22,9 +22,9 @@
 
         public int? ParentCompanyId { get; set; }
 
-        public virtual ICollection<Product> Products { get; set; } = new List<Product>();
-
         public string? TradeName { get; set; }
+
+        public virtual ICollection<Product> VideoGames { get; set; } = new List<Product>();
 
         public string? WebsiteUrl { get; set; }
     }

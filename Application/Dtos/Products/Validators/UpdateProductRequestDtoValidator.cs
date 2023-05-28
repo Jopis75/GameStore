@@ -14,7 +14,7 @@ namespace Application.Dtos.Products.Validators
                 .NotEmpty()
                 .WithMessage("{PropertyName} is required.");
 
-            RuleFor(createProductRequestDto => createProductRequestDto.DeveloperId)
+            RuleFor(createProductRequestDto => createProductRequestDto.VideoGameDeveloperId)
                 .NotEqual(0)
                 .WithMessage("{PropertyName} must not equal 0.");
 

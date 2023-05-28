@@ -6,6 +6,6 @@ namespace Application.Interfaces.Persistance
     {
         Task<IEnumerable<Address>> GetByCityAsync(string city);
 
-        Task<IEnumerable<Address>> GetByZipCodeAsync(string zipCode);
+        Task<IEnumerable<Address>> GetByZipCodeAsync(string postalCode);
     }
 }

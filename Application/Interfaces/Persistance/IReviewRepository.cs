@@ -8,7 +8,7 @@ namespace Application.Interfaces.Persistance
 
         Task<IEnumerable<Review>> GetByGradeAsync(int fromGrade, int toGrade);
 
-        Task<Review> GetByProductIdAsync(int productId);
+        Task<Review> GetByProductIdAsync(int videoGameId);
 
         Task<IEnumerable<Review>> GetByReviewDateAsync(DateTime fromReviewDate, DateTime toReviewDate);
     }

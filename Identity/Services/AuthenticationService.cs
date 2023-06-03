@@ -31,14 +31,14 @@ namespace Identity.Services
 
             if (applicationUser == null)
             {
-                throw new ApplicationException($"Could not found user with email {authenticationRequest.Email}.");
+                throw new ApplicationException($"Could not found user {authenticationRequest.Email}.");
             }
 
             var result = await _signInManager.PasswordSignInAsync(applicationUser.UserName, authenticationRequest.Password, false, lockoutOnFailure: false);
 
             if (!result.Succeeded)
             {
-                throw new ApplicationException($"Could not sign in user {authenticationRequest.Email}.");
+                throw new ApplicationException($"Could not login in user {authenticationRequest.Email}.");
             }
 
             var jwtSecurityToken = await GenerateToken(applicationUser);

@@ -3,9 +3,6 @@
     public class NotFoundException : ApplicationException
     {
         public NotFoundException(string name, object key)
-            : base($"Could not found {name} ({key}).")
-        {
-
-        }
+            : base($"Could not found {name} ({key}).") { }
     }
 }

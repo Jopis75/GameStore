@@ -10,7 +10,7 @@ namespace Persistance.Repositories
         public CompanyRepository(GameStoreDbContext gameStoreDbContext)
             : base(gameStoreDbContext) { }
 
-        public async Task<IEnumerable<Company>> GetByFoundedAsync(int founded)
+        public async Task<IEnumerable<Company>> GetByFoundedAsync(DateTime founded)
         {
             var companies = await Entities
                 .Where(entity => entity.Founded == founded)

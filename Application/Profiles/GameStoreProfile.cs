@@ -11,29 +11,45 @@ namespace Application.Profiles
     {
         public GameStoreProfile()
         {
-            // Addresses
-            CreateMap<Address, CreateAddressRequestDto>().ReverseMap();
-            CreateMap<Address, ReadAllAddressResponseDto>().ReverseMap();
-            CreateMap<Address, ReadByIdAddressResponseDto>().ReverseMap();
-            CreateMap<Address, UpdateAddressRequestDto>().ReverseMap();
+            // Address.
+            CreateMap<Address, CreateAddressRequestDto>().
+                ReverseMap();
+            CreateMap<Address, ReadAllAddressResponseDto>()
+                .ReverseMap();
+            CreateMap<Address, ReadByIdAddressResponseDto>()
+                .ReverseMap();
+            CreateMap<Address, UpdateAddressRequestDto>()
+                .ReverseMap();
 
-            // Companies
-            CreateMap<Company, CreateCompanyRequestDto>().ReverseMap();
-            CreateMap<Company, ReadAllCompanyResponseDto>().ReverseMap();
-            CreateMap<Company, ReadByIdCompanyResponseDto>().ReverseMap();
-            CreateMap<Company, UpdateCompanyRequestDto>().ReverseMap();
+            // Company.
+            CreateMap<Company, CreateCompanyRequestDto>()
+                .ReverseMap();
+            CreateMap<Company, ReadAllCompanyResponseDto>()
+                .ReverseMap();
+            CreateMap<Company, ReadByIdCompanyResponseDto>()
+                .ReverseMap();
+            CreateMap<Company, UpdateCompanyRequestDto>()
+                .ReverseMap();
 
-            // Products
-            CreateMap<Product, CreateProductRequestDto>().ReverseMap();
-            CreateMap<Product, ReadAllProductResponseDto>().ReverseMap();
-            CreateMap<Product, ReadByIdProductResponseDto>().ReverseMap();
-            CreateMap<Product, UpdateProductRequestDto>().ReverseMap();
+            // Product.
+            CreateMap<Product, CreateProductRequestDto>()
+                .ReverseMap();
+            CreateMap<Product, ReadAllProductResponseDto>()
+                .ReverseMap();
+            CreateMap<Product, ReadByIdProductResponseDto>()
+                .ReverseMap();
+            CreateMap<Product, UpdateProductRequestDto>()
+                .ReverseMap();
 
-            // Reviews
-            CreateMap<Review, CreateReviewRequestDto>().ReverseMap();
-            CreateMap<Review, ReadAllReviewResponseDto>().ReverseMap();
-            CreateMap<Review, ReadByIdReviewResponseDto>().ReverseMap();
-            CreateMap<Review, UpdateReviewRequestDto>().ReverseMap();
+            // Review.
+            CreateMap<Review, CreateReviewRequestDto>()
+                .ReverseMap();
+            CreateMap<Review, ReadAllReviewResponseDto>()
+                .ReverseMap();
+            CreateMap<Review, ReadByIdReviewResponseDto>()
+                .ReverseMap();
+            CreateMap<Review, UpdateReviewRequestDto>()
+                .ReverseMap();
         }
     }
 }

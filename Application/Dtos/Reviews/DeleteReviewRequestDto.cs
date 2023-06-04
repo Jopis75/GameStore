@@ -5,5 +5,10 @@ namespace Application.Dtos.Reviews
     public class DeleteReviewRequestDto : IDeleteRequestDto
     {
         public int Id { get; set; }
+
+        public DeleteReviewRequestDto(int id)
+        {
+            Id = id;
+        }
     }
 }

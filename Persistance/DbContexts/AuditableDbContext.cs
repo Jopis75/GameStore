@@ -17,17 +17,17 @@ namespace Persistance.DbContexts
             {
                 if (entry.State == EntityState.Added)
                 {
-                    entry.Entity.CreatedAt = DateTime.UtcNow;
+                    entry.Entity.CreatedAt = DateTime.Now;
                     entry.Entity.CreatedBy = userName;
                 }
                 else if (entry.State == EntityState.Modified)
                 {
-                    entry.Entity.UpdatedAt = DateTime.UtcNow;
+                    entry.Entity.UpdatedAt = DateTime.Now;
                     entry.Entity.UpdatedBy = userName;
                 }
                 else if (entry.State == EntityState.Deleted)
                 {
-                    entry.Entity.DeletedAt = DateTime.UtcNow;
+                    entry.Entity.DeletedAt = DateTime.Now;
                     entry.Entity.DeletedBy = userName;
                 }
             }

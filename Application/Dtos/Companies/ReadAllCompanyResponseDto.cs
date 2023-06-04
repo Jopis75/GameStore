@@ -16,9 +16,9 @@ namespace Application.Dtos.Companies
 
         public string? Description { get; set; }
 
-        public int? Founded { get; set; }
+        public DateTime? Founded { get; set; }
 
-        public ReadAllAddressResponseDto? HeadOffice { get; set; } = new();
+        public ReadAllAddressResponseDto? Headquarters { get; set; } = new();
 
         public int Id { get; set; }
 
@@ -30,7 +30,7 @@ namespace Application.Dtos.Companies
 
         public ReadAllCompanyResponseDto? ParentCompany { get; set; } = new();
 
-        public List<ReadAllProductResponseDto>? VideoGames { get; set; } = new();
+        public List<ReadAllProductResponseDto>? Products { get; set; } = new();
 
         public string? TradeName { get; set; }
 

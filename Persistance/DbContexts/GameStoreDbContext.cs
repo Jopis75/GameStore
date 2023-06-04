@@ -30,7 +30,7 @@ namespace Persistance.DbContexts
                 .ToTable("Company");
             modelBuilder
                 .Entity<Company>()
-                .HasMany(company => company.VideoGames)
+                .HasMany(company => company.Products)
                 .WithOne(Product => Product.VideoGameDeveloper)
                 .HasForeignKey(product => product.VideoGameDeveloperId);
 
@@ -41,7 +41,7 @@ namespace Persistance.DbContexts
             modelBuilder
                 .Entity<Product>()
                 .HasOne(product => product.VideoGameDeveloper)
-                .WithMany(company => company.VideoGames)
+                .WithMany(company => company.Products)
                 .HasForeignKey(product => product.VideoGameDeveloperId);
             modelBuilder
                 .Entity<Product>()

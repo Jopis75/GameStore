@@ -2,7 +2,8 @@
 {
     public enum CompanyType
     {
-        DaughterCompany,
-        ParentCompany
+        Subsidiary,
+        Parent,
+        Division
     }
 }

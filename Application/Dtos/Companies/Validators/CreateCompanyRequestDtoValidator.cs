@@ -17,14 +17,14 @@ namespace Application.Dtos.Companies.Validators
                 .WithMessage("{PropertyName} is required.");
 
             RuleFor(createCompanyRequestDto => createCompanyRequestDto.Founded)
-                .GreaterThan(0)
-                .WithMessage("{PropertyName} must be greater than 0.");
+                .LessThanOrEqualTo(DateTime.Now)
+                .WithMessage("{PropertyName} must be less than or equal to " + $"{DateTime.Now}.");
 
             RuleFor(createCompanyRequestDto => createCompanyRequestDto.NumberOfEmployees)
                 .GreaterThan(0)
                 .WithMessage("{PropertyName} must be greater than 0.");
 
-            RuleFor(createCompanyRequestDto => createCompanyRequestDto.HeadOfficeId)
+            RuleFor(createCompanyRequestDto => createCompanyRequestDto.HeadquartersId)
                 .NotEqual(0)
                 .WithMessage("{PropertyName} must not equal 0.");
 

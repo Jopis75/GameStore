@@ -4,7 +4,7 @@ namespace Application.Interfaces.Persistance
 {
     public interface ICompanyRepository : IRepositoryBase<Company>
     {
-        Task<IEnumerable<Company>> GetByFoundedAsync(int founded);
+        Task<IEnumerable<Company>> GetByFoundedAsync(DateTime founded);
 
         Task<Company> GetByNameAsync(string name);
 

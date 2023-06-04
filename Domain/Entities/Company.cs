@@ -6,11 +6,11 @@
 
         public string? Description { get; set; }
 
-        public int? Founded { get; set; }
+        public DateTime? Founded { get; set; }
 
-        public virtual Address? HeadOffice { get; set; }
+        public virtual Address? Headquarters { get; set; }
 
-        public int? HeadOfficeId { get; set; }
+        public int? HeadquartersId { get; set; }
 
         public string? LogoImageUri { get; set; }
 
@@ -22,9 +22,9 @@
 
         public int? ParentCompanyId { get; set; }
 
-        public string? TradeName { get; set; }
+        public virtual ICollection<Product> Products { get; set; } = new List<Product>();
 
-        public virtual ICollection<Product> VideoGames { get; set; } = new List<Product>();
+        public string? TradeName { get; set; }
 
         public string? WebsiteUrl { get; set; }
     }

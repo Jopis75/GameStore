@@ -11,9 +11,9 @@ namespace Application.Interfaces.Persistance
 
         Task<bool> ExistsAsync(int id);
 
-        Task<IEnumerable<TEntity>> ReadAllAsync();
+        Task<IEnumerable<TEntity>> ReadAllAsync(bool asNoTracking = false);
 
-        Task<TEntity> ReadByIdAsync(int id);
+        Task<TEntity> ReadByIdAsync(int id, bool asNoTracking = false);
 
         Task<TEntity> UpdateAsync(TEntity entity);
     }

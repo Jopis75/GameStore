@@ -40,7 +40,7 @@ namespace Application.Features.Reviews.RequestHandlers.Queries
                     return new HttpResponseDto<ReadByIdReviewResponseDto>(new ValidationException(validationResult.Errors).Message, StatusCodes.Status400BadRequest);
                 }
 
-                var review = await _unitOfWork.ReviewRepository.ReadByIdAsync(readByIdReviewRequest.ReadByIdReviewRequestDto.Id);
+                var review = await _unitOfWork.ReviewRepository.ReadByIdAsync(readByIdReviewRequest.ReadByIdReviewRequestDto.Id, true);
                 var readByIdReviewResponseDto = _mapper.Map<ReadByIdReviewResponseDto>(review);
 
                 return new HttpResponseDto<ReadByIdReviewResponseDto>(readByIdReviewResponseDto, StatusCodes.Status200OK);

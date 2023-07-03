@@ -10,29 +10,44 @@ namespace Persistance.Repositories
         public ReviewRepository(GameStoreDbContext gameStoreDbContext)
             : base(gameStoreDbContext) { }
 
-        public async Task<IEnumerable<Review>> GetByGradeAsync(int grade)
+        public async Task<IEnumerable<Review>> GetByGradeAsync(int grade, bool asNoTracking = false)
         {
-            var reviews = await Entities
-                .Where(entity => entity.Grade == grade)
-                .ToListAsync();
+            var reviews = asNoTracking ?
+                await Entities
+                    .AsNoTracking<Review>()
+                    .Where(entity => entity.Grade == grade)
+                    .ToListAsync() :
+                await Entities
+                    .Where(entity => entity.Grade == grade)
+                    .ToListAsync();
 
             return reviews;
         }
 
-        public async Task<IEnumerable<Review>> GetByGradeAsync(int fromGrade, int toGrade)
+        public async Task<IEnumerable<Review>> GetByGradeAsync(int fromGrade, int toGrade, bool asNoTracking = false)
         {
-            var reviews = await Entities
-                .Where(entity => entity.Grade >= fromGrade && entity.Grade <= toGrade)
-                .ToListAsync();
+            var reviews = asNoTracking ?
+                await Entities
+                    .AsNoTracking<Review>()
+                    .Where(entity => entity.Grade >= fromGrade && entity.Grade <= toGrade)
+                    .ToListAsync() :
+                await Entities
+                    .Where(entity => entity.Grade >= fromGrade && entity.Grade <= toGrade)
+                    .ToListAsync();
 
             return reviews;
         }
 
-        public async Task<Review> GetByProductIdAsync(int videoGameId)
+        public async Task<Review> GetByProductIdAsync(int videoGameId, bool asNoTracking = false)
         {
-            var review = await Entities
-                .Where(entity => entity.VideoGameId == videoGameId)
-                .SingleOrDefaultAsync();
+            var review = asNoTracking ?
+                await Entities
+                    .AsNoTracking<Review>()
+                    .Where(entity => entity.VideoGameId == videoGameId)
+                    .SingleOrDefaultAsync() :
+                await Entities
+                    .Where(entity => entity.VideoGameId == videoGameId)
+                    .SingleOrDefaultAsync();
 
             if (review == null)
             {
@@ -42,11 +57,16 @@ namespace Persistance.Repositories
             return review;
         }
 
-        public async Task<IEnumerable<Review>> GetByReviewDateAsync(DateTime fromReviewDate, DateTime toReviewDate)
+        public async Task<IEnumerable<Review>> GetByReviewDateAsync(DateTime fromReviewDate, DateTime toReviewDate, bool asNoTracking = false)
         {
-            var reviews = await Entities
-                .Where(entity => entity.ReviewDate >= fromReviewDate && entity.ReviewDate <= toReviewDate)
-                .ToListAsync();
+            var reviews = asNoTracking ?
+                await Entities
+                    .AsNoTracking<Review>()
+                    .Where(entity => entity.ReviewDate >= fromReviewDate && entity.ReviewDate <= toReviewDate)
+                    .ToListAsync() :
+                await Entities
+                    .Where(entity => entity.ReviewDate >= fromReviewDate && entity.ReviewDate <= toReviewDate)
+                    .ToListAsync();
 
             return reviews;
         }

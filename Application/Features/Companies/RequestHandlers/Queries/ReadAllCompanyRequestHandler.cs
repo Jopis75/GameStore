@@ -24,7 +24,7 @@ namespace Application.Features.Companies.RequestHandlers.Queries
         {
             try
             {
-                var companies = await _unitOfWork.CompanyRepository.ReadAllAsync();
+                var companies = await _unitOfWork.CompanyRepository.ReadAllAsync(true);
                 var readAllCompanyResponseDtos = companies.Select(_mapper.Map<ReadAllCompanyResponseDto>).ToList();
 
                 return new HttpResponseDto<ReadAllCompanyResponseDto>(readAllCompanyResponseDtos, StatusCodes.Status200OK);

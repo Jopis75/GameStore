@@ -42,13 +42,13 @@ namespace Application.Features.Products.RequestHandlers.Commands
                 }
 
                 var product = _mapper.Map<Product>(createProductRequest.CreateProductRequestDto);
-                product = await _unitOfWork.ProductRepository.CreateAsync(product);
+                var createdProduct = await _unitOfWork.ProductRepository.CreateAsync(product);
                 await _unitOfWork.SaveAsync();
 
                 return new HttpResponseDto<CreateProductResponseDto>(new CreateProductResponseDto
                 {
-                    Id = product.Id,
-                    CreatedAt = product.CreatedAt,
+                    Id = createdProduct.Id,
+                    CreatedAt = createdProduct.CreatedAt,
                     CreatedBy = string.Empty
                 }, StatusCodes.Status201Created);
             }

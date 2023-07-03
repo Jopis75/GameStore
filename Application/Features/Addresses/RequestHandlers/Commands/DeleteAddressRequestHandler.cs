@@ -38,13 +38,13 @@ namespace Application.Features.Addresses.RequestHandlers.Commands
                 }
 
                 var address = await _unitOfWork.AddressRepository.ReadByIdAsync(deleteAddressRequest.DeleteAddressRequestDto.Id);
-                address = await _unitOfWork.AddressRepository.DeleteAsync(address);
+                var deletedAddress = await _unitOfWork.AddressRepository.DeleteAsync(address);
                 await _unitOfWork.SaveAsync();
 
                 return new HttpResponseDto<DeleteAddressResponseDto>(new DeleteAddressResponseDto
                 {
-                    Id = address.Id,
-                    DeletedAt = address.DeletedAt,
+                    Id = deletedAddress.Id,
+                    DeletedAt = deletedAddress.DeletedAt,
                     DeletedBy = string.Empty
                 }, StatusCodes.Status200OK);
             }

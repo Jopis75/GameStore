@@ -10,20 +10,30 @@ namespace Persistance.Repositories
         public CompanyRepository(GameStoreDbContext gameStoreDbContext)
             : base(gameStoreDbContext) { }
 
-        public async Task<IEnumerable<Company>> GetByFoundedAsync(DateTime founded)
+        public async Task<IEnumerable<Company>> GetByFoundedAsync(DateTime founded, bool asNoTracking = false)
         {
-            var companies = await Entities
-                .Where(entity => entity.Founded == founded)
-                .ToListAsync();
+            var companies = asNoTracking ?
+                await Entities
+                    .AsNoTracking<Company>()
+                    .Where(entity => entity.Founded == founded)
+                    .ToListAsync() :
+                await Entities
+                    .Where(entity => entity.Founded == founded)
+                    .ToListAsync();
 
             return companies;
         }
 
-        public async Task<Company> GetByNameAsync(string name)
+        public async Task<Company> GetByNameAsync(string name, bool asNoTracking = false)
         {
-            var company = await Entities
-                .Where(entity => entity.Name == name)
-                .SingleOrDefaultAsync();
+            var company = asNoTracking ?
+                await Entities
+                    .AsNoTracking<Company>()
+                    .Where(entity => entity.Name == name)
+                    .SingleOrDefaultAsync() :
+                await Entities
+                    .Where(entity => entity.Name == name)
+                    .SingleOrDefaultAsync();
 
             if (company == null)
             {
@@ -33,29 +43,44 @@ namespace Persistance.Repositories
             return company;
         }
 
-        public async Task<IEnumerable<Company>> GetByNumberOfEmployeesAsync(int numberOfEmployees)
+        public async Task<IEnumerable<Company>> GetByNumberOfEmployeesAsync(int numberOfEmployees, bool asNoTracking = false)
         {
-            var companies = await Entities
-                .Where(entity => entity.NumberOfEmployees == numberOfEmployees)
-                .ToListAsync();
+            var companies = asNoTracking ?
+                await Entities
+                    .AsNoTracking<Company>()
+                    .Where(entity => entity.NumberOfEmployees == numberOfEmployees)
+                    .ToListAsync() :
+                await Entities
+                    .Where(entity => entity.NumberOfEmployees == numberOfEmployees)
+                    .ToListAsync();
 
             return companies;
         }
 
-        public async Task<IEnumerable<Company>> GetByNumberOfEmployeesAsync(int fromNumberOfEmployees, int toNumberOfEmployees)
+        public async Task<IEnumerable<Company>> GetByNumberOfEmployeesAsync(int fromNumberOfEmployees, int toNumberOfEmployees, bool asNoTracking = false)
         {
-            var companies = await Entities
-                .Where(entity => entity.NumberOfEmployees >= fromNumberOfEmployees && entity.NumberOfEmployees <= toNumberOfEmployees)
-                .ToListAsync();
+            var companies = asNoTracking ?
+                await Entities
+                    .AsNoTracking<Company>()
+                    .Where(entity => entity.NumberOfEmployees >= fromNumberOfEmployees && entity.NumberOfEmployees <= toNumberOfEmployees)
+                    .ToListAsync() :
+                await Entities
+                    .Where(entity => entity.NumberOfEmployees >= fromNumberOfEmployees && entity.NumberOfEmployees <= toNumberOfEmployees)
+                    .ToListAsync();
 
             return companies;
         }
 
-        public async Task<Company> GetByTradeNameAsync(string tradeName)
+        public async Task<Company> GetByTradeNameAsync(string tradeName, bool asNoTracking = false)
         {
-            var company = await Entities
-                .Where(entity => entity.TradeName == tradeName)
-                .SingleOrDefaultAsync();
+            var company = asNoTracking ?
+                await Entities
+                    .AsNoTracking<Company>()
+                    .Where(entity => entity.TradeName == tradeName)
+                    .SingleOrDefaultAsync() :
+                await Entities
+                    .Where(entity => entity.TradeName == tradeName)
+                    .SingleOrDefaultAsync();
 
             if (company == null)
             {

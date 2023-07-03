@@ -6,7 +6,7 @@ namespace Application.Dtos.Products
     {
         public string? CoverImageUri { get; set; }
 
-        public string? Description { get; set; }
+        public int? DeveloperId { get; set; }
 
         public int Id { get; set; }
 
@@ -22,6 +22,6 @@ namespace Application.Dtos.Products
 
         public TimeSpan? TotalTimePlayed { get; set; }
 
-        public int? VideoGameDeveloperId { get; set; }
+        public string? Url { get; set; }
     }
 }

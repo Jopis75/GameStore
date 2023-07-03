@@ -40,7 +40,7 @@ namespace Application.Features.Companies.RequestHandlers.Queries
                     return new HttpResponseDto<ReadByIdCompanyResponseDto>(new ValidationException(validationResult.Errors).Message, StatusCodes.Status400BadRequest);
                 }
 
-                var company = await _unitOfWork.CompanyRepository.ReadByIdAsync(readByIdCompanyRequest.ReadByIdCompanyRequestDto.Id);
+                var company = await _unitOfWork.CompanyRepository.ReadByIdAsync(readByIdCompanyRequest.ReadByIdCompanyRequestDto.Id, true);
                 var readByIdCompanyResponseDto = _mapper.Map<ReadByIdCompanyResponseDto>(company);
 
                 return new HttpResponseDto<ReadByIdCompanyResponseDto>(readByIdCompanyResponseDto, StatusCodes.Status200OK);

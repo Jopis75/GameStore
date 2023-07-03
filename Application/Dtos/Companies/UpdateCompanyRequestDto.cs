@@ -7,8 +7,6 @@ namespace Application.Dtos.Companies
     {
         public CompanyType CompanyType { get; set; }
 
-        public string? Description { get; set; }
-
         public DateTime? Founded { get; set; }
 
         public int? HeadquartersId { get; set; }

@@ -4,7 +4,9 @@
     {
         public string? CoverImageUri { get; set; }
 
-        public string? Description { get; set; }
+        public virtual Company? Developer { get; set; }
+
+        public int? DeveloperId { get; set; }
 
         public decimal? Price { get; set; }
 
@@ -20,8 +22,6 @@
 
         public TimeSpan? TotalTimePlayed { get; set; }
 
-        public virtual Company? VideoGameDeveloper { get; set; }
-
-        public int? VideoGameDeveloperId { get; set; }
+        public string? Url { get; set; }
     }
 }

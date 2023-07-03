@@ -44,13 +44,13 @@ namespace Application.Features.Companies.RequestHandlers.Commands
                 }
 
                 var company = _mapper.Map<Company>(createCompanyRequest.CreateCompanyRequestDto);
-                company = await _unitOfWork.CompanyRepository.CreateAsync(company);
+                var createdCompany = await _unitOfWork.CompanyRepository.CreateAsync(company);
                 await _unitOfWork.SaveAsync();
 
                 return new HttpResponseDto<CreateCompanyResponseDto>(new CreateCompanyResponseDto
                 {
-                    Id = company.Id,
-                    CreatedAt = company.CreatedAt,
+                    Id = createdCompany.Id,
+                    CreatedAt = createdCompany.CreatedAt,
                     CreatedBy = string.Empty
                 }, StatusCodes.Status201Created);
             }

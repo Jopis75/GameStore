@@ -42,13 +42,13 @@ namespace Application.Features.Addresses.RequestHandlers.Commands
                 }
 
                 var address = _mapper.Map<Address>(createAddressRequest.CreateAddressRequestDto);
-                address = await _unitOfWork.AddressRepository.CreateAsync(address);
+                var createdAddress = await _unitOfWork.AddressRepository.CreateAsync(address);
                 await _unitOfWork.SaveAsync();
 
                 return new HttpResponseDto<CreateAddressResponseDto>(new CreateAddressResponseDto
                 {
-                    Id = address.Id,
-                    CreatedAt = address.CreatedAt,
+                    Id = createdAddress.Id,
+                    CreatedAt = createdAddress.CreatedAt,
                     CreatedBy = string.Empty
                 }, StatusCodes.Status201Created);
             }

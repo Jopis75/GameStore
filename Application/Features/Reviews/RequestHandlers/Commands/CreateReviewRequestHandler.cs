@@ -42,13 +42,13 @@ namespace Application.Features.Reviews.RequestHandlers.Commands
                 }
 
                 var review = _mapper.Map<Review>(createReviewRequest.CreateReviewRequestDto);
-                review = await _unitOfWork.ReviewRepository.CreateAsync(review);
+                var createdReview = await _unitOfWork.ReviewRepository.CreateAsync(review);
                 await _unitOfWork.SaveAsync();
 
                 return new HttpResponseDto<CreateReviewResponseDto>(new CreateReviewResponseDto
                 {
-                    Id = review.Id,
-                    CreatedAt = review.CreatedAt,
+                    Id = createdReview.Id,
+                    CreatedAt = createdReview.CreatedAt,
                     CreatedBy = string.Empty
                 }, StatusCodes.Status201Created);
             }

@@ -42,12 +42,13 @@ namespace Application.Features.Products.RequestHandlers.Commands
 
                 var product = await _unitOfWork.ProductRepository.ReadByIdAsync(updateProductRequest.UpdateProductRequestDto.Id);
                 _mapper.Map(updateProductRequest.UpdateProductRequestDto, product);
-                product = await _unitOfWork.ProductRepository.UpdateAsync(product);
+                var updatedProduct = await _unitOfWork.ProductRepository.UpdateAsync(product);
+                await _unitOfWork.SaveAsync();
 
                 return new HttpResponseDto<UpdateProductResponseDto>(new UpdateProductResponseDto
                 {
-                    Id = product.Id,
-                    UpdatedAt = product.UpdatedAt,
+                    Id = updatedProduct.Id,
+                    UpdatedAt = updatedProduct.UpdatedAt,
                     UpdatedBy = string.Empty
                 }, StatusCodes.Status200OK);
             }

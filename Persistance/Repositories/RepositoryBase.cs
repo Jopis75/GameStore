@@ -15,12 +15,18 @@ namespace Persistance.Repositories
 
         public GameStoreDbContext Dbcontext
         {
-            get { return _gameStoreDbContext; }
+            get
+            {
+                return _gameStoreDbContext;
+            }
         }
 
         public DbSet<TEntity> Entities
         {
-            get { return _entities; }
+            get
+            {
+                return _entities;
+            }
         }
 
         public RepositoryBase(GameStoreDbContext gameStoreDbContext)
@@ -46,16 +52,26 @@ namespace Persistance.Repositories
             return await Entities.AnyAsync(entity => entity.Id == id);
         }
 
-        public async Task<IEnumerable<TEntity>> ReadAllAsync()
+        public async Task<IEnumerable<TEntity>> ReadAllAsync(bool asNoTracking = false)
         {
-            return await Entities.ToListAsync();
+            return asNoTracking ?
+                await Entities
+                    .AsNoTracking<TEntity>()
+                    .ToListAsync() :
+                await Entities
+                    .ToListAsync();
         }
 
-        public async Task<TEntity> ReadByIdAsync(int id)
+        public async Task<TEntity> ReadByIdAsync(int id, bool asNoTracking = false)
         {
-            var entity = await Entities
-                .Where(entity => entity.Id == id)
-                .SingleOrDefaultAsync();
+            var entity = asNoTracking ?
+                await Entities
+                    .AsNoTracking<TEntity>()
+                    .Where(entity => entity.Id == id)
+                    .SingleOrDefaultAsync() :
+                await Entities
+                    .Where(entity => entity.Id == id)
+                    .SingleOrDefaultAsync();
 
             if (entity == null)
             {

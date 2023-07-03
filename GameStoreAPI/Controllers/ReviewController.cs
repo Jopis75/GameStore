@@ -40,7 +40,10 @@ namespace GameStoreAPI.Controllers
         {
             var httpResponseDto = await _mediator.Send(new DeleteReviewRequest
             {
-                DeleteReviewRequestDto = new DeleteReviewRequestDto(id)
+                DeleteReviewRequestDto = new DeleteReviewRequestDto
+                {
+                    Id = id
+                }
             });
             return StatusCode(httpResponseDto.StatusCode, httpResponseDto);
         }
@@ -64,7 +67,10 @@ namespace GameStoreAPI.Controllers
         {
             var httpResponseDto = await _mediator.Send(new ReadByIdReviewRequest
             {
-                ReadByIdReviewRequestDto = new ReadByIdReviewRequestDto(id)
+                ReadByIdReviewRequestDto = new ReadByIdReviewRequestDto
+                {
+                    Id = id
+                }
             });
             return StatusCode(httpResponseDto.StatusCode, httpResponseDto);
         }

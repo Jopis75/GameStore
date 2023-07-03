@@ -42,12 +42,13 @@ namespace Application.Features.Reviews.RequestHandlers.Commands
 
                 var review = await _unitOfWork.ReviewRepository.ReadByIdAsync(updateReviewRequest.UpdateReviewRequestDto.Id);
                 _mapper.Map(updateReviewRequest.UpdateReviewRequestDto, review);
-                review = await _unitOfWork.ReviewRepository.UpdateAsync(review);
+                var updatedReview = await _unitOfWork.ReviewRepository.UpdateAsync(review);
+                await _unitOfWork.SaveAsync();
 
                 return new HttpResponseDto<UpdateReviewResponseDto>(new UpdateReviewResponseDto
                 {
-                    Id = review.Id,
-                    UpdatedAt = review.UpdatedAt,
+                    Id = updatedReview.Id,
+                    UpdatedAt = updatedReview.UpdatedAt,
                     UpdatedBy = string.Empty
                 }, StatusCodes.Status200OK);
             }

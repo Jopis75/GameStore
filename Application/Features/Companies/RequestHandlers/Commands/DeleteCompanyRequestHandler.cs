@@ -37,13 +37,13 @@ namespace Application.Features.Companies.RequestHandlers.Commands
                 }
 
                 var company = await _unitOfWork.CompanyRepository.ReadByIdAsync(deleteCompanyRequest.DeleteCompanyRequestDto.Id);
-                company = await _unitOfWork.CompanyRepository.DeleteAsync(company);
+                var deletedCompany = await _unitOfWork.CompanyRepository.DeleteAsync(company);
                 await _unitOfWork.SaveAsync();
 
                 return new HttpResponseDto<DeleteCompanyResponseDto>(new DeleteCompanyResponseDto
                 {
-                    Id = company.Id,
-                    DeletedAt = company.DeletedAt,
+                    Id = deletedCompany.Id,
+                    DeletedAt = deletedCompany.DeletedAt,
                     DeletedBy = string.Empty
                 }, StatusCodes.Status200OK);
             }

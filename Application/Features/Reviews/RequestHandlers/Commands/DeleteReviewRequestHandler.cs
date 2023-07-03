@@ -38,13 +38,13 @@ namespace Application.Features.Reviews.RequestHandlers.Commands
                 }
 
                 var review = await _unitOfWork.ReviewRepository.ReadByIdAsync(deleteReviewRequest.DeleteReviewRequestDto.Id);
-                review = await _unitOfWork.ReviewRepository.DeleteAsync(review);
+                var deletedReview = await _unitOfWork.ReviewRepository.DeleteAsync(review);
                 await _unitOfWork.SaveAsync();
 
                 return new HttpResponseDto<DeleteReviewResponseDto>(new DeleteReviewResponseDto
                 {
-                    Id = review.Id,
-                    DeletedAt = review.DeletedAt,
+                    Id = deletedReview.Id,
+                    DeletedAt = deletedReview.DeletedAt,
                     DeletedBy = string.Empty
                 }, StatusCodes.Status200OK);
             }

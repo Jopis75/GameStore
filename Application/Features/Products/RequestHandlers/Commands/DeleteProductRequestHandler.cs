@@ -37,13 +37,13 @@ namespace Application.Features.Products.RequestHandlers.Commands
                 }
 
                 var product = await _unitOfWork.ProductRepository.ReadByIdAsync(deleteProductRequest.DeleteProductRequestDto.Id);
-                product = await _unitOfWork.ProductRepository.DeleteAsync(product);
+                var deletedProduct = await _unitOfWork.ProductRepository.DeleteAsync(product);
                 await _unitOfWork.SaveAsync();
 
                 return new HttpResponseDto<DeleteProductResponseDto>(new DeleteProductResponseDto
                 {
-                    Id = product.Id,
-                    DeletedAt = product.DeletedAt,
+                    Id = deletedProduct.Id,
+                    DeletedAt = deletedProduct.DeletedAt,
                     DeletedBy = string.Empty
                 }, StatusCodes.Status200OK);
             }

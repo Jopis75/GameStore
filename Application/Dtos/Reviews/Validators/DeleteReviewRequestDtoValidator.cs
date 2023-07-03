@@ -1,12 +1,13 @@
-﻿using FluentValidation;
+﻿using Application.Dtos.Common.Validators;
+using FluentValidation;
 
 namespace Application.Dtos.Reviews.Validators
 {
     public class DeleteReviewRequestDtoValidator : AbstractValidator<DeleteReviewRequestDto>
     {
-        DeleteReviewRequestDtoValidator()
+        public DeleteReviewRequestDtoValidator()
         {
-            Include(new DeleteReviewRequestDtoValidator());
+            Include(new DeleteRequestDtoValidator());
         }
     }
 }

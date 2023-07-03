@@ -40,7 +40,7 @@ namespace Application.Features.Addresses.RequestHandlers.Queries
                     return new HttpResponseDto<ReadByIdAddressResponseDto>(new ValidationException(validationResult.Errors).Message, StatusCodes.Status400BadRequest);
                 }
 
-                var address = await _unitOfWork.AddressRepository.ReadByIdAsync(readByIdAddressRequest.ReadByIdAddressRequestDto.Id);
+                var address = await _unitOfWork.AddressRepository.ReadByIdAsync(readByIdAddressRequest.ReadByIdAddressRequestDto.Id, true);
                 var readByIdAddressResponseDto = _mapper.Map<ReadByIdAddressResponseDto>(address);
 
                 return new HttpResponseDto<ReadByIdAddressResponseDto>(readByIdAddressResponseDto, StatusCodes.Status200OK);

@@ -5,10 +5,5 @@ namespace Application.Dtos.Addresses
     public class ReadByIdAddressRequestDto : IReadByIdRequestDto
     {
         public int Id { get; set; }
-
-        public ReadByIdAddressRequestDto(int id)
-        {
-            Id = id;
-        }
     }
 }

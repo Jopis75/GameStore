@@ -10,20 +10,30 @@ namespace Persistance.Repositories
         public AddressRepository(GameStoreDbContext gameStoreDbContext)
             : base(gameStoreDbContext) { }
 
-        public async Task<IEnumerable<Address>> GetByCityAsync(string city)
+        public async Task<IEnumerable<Address>> GetByCityAsync(string city, bool asNoTracking = false)
         {
-            var addresses = await Entities
-                .Where(entity => entity.City == city)
-                .ToListAsync();
+            var addresses = asNoTracking ?
+                await Entities
+                    .AsNoTracking<Address>()
+                    .Where(entity => entity.City == city)
+                    .ToListAsync() :
+                await Entities
+                    .Where(entity => entity.City == city)
+                    .ToListAsync();
 
             return addresses;
         }
 
-        public async Task<IEnumerable<Address>> GetByZipCodeAsync(string postalCode)
+        public async Task<IEnumerable<Address>> GetByZipCodeAsync(string postalCode, bool asNoTracking = false)
         {
-            var addresses = await Entities
-                .Where(entity => entity.PostalCode == postalCode)
-                .ToListAsync();
+            var addresses = asNoTracking ?
+                await Entities
+                    .AsNoTracking<Address>()
+                    .Where(entity => entity.PostalCode == postalCode)
+                    .ToListAsync() :
+                await Entities
+                    .Where(entity => entity.PostalCode == postalCode)
+                    .ToListAsync();
 
             return addresses;
         }

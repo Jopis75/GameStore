@@ -16,7 +16,7 @@ namespace Application.Dtos.Products
 
         public string? DeletedBy { get; set; }
 
-        public string? Description { get; set; }
+        public ReadAllCompanyResponseDto? Developer { get; set; } = new();
 
         public int Id { get; set; }
 
@@ -36,6 +36,6 @@ namespace Application.Dtos.Products
 
         public string? UpdatedBy { get; set; }
 
-        public ReadAllCompanyResponseDto? VideoGameDeveloper { get; set; } = new();
+        public string? Url { get; set; }
     }
 }

@@ -7,6 +7,7 @@ using Application.Dtos.Products.Validators;
 using Application.Dtos.Reviews;
 using Application.Dtos.Reviews.Validators;
 using FluentValidation;
+using MediatR;
 using Microsoft.Extensions.DependencyInjection;
 using System.Reflection;
 
@@ -32,7 +33,7 @@ namespace Application
 
         private static IServiceCollection AddMediatR(this IServiceCollection serviceCollection)
         {
-            serviceCollection.AddMediatR();
+            serviceCollection.AddMediatR(mediatRServiceConfiguration => mediatRServiceConfiguration.RegisterServicesFromAssemblies(Assembly.GetExecutingAssembly()));
 
             return serviceCollection;
         }

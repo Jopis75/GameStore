@@ -14,8 +14,6 @@ namespace Application.Dtos.Companies
 
         public string? DeletedBy { get; set; }
 
-        public string? Description { get; set; }
-
         public DateTime? Founded { get; set; }
 
         public ReadByIdAddressResponseDto? Headquarters { get; set; } = new();

@@ -42,12 +42,13 @@ namespace Application.Features.Addresses.RequestHandlers.Commands
 
                 var address = await _unitOfWork.AddressRepository.ReadByIdAsync(updateAddressRequest.UpdateAddressRequestDto.Id);
                 _mapper.Map(updateAddressRequest.UpdateAddressRequestDto, address);
-                address = await _unitOfWork.AddressRepository.UpdateAsync(address);
+                var updatedAddress = await _unitOfWork.AddressRepository.UpdateAsync(address);
+                await _unitOfWork.SaveAsync();
 
                 return new HttpResponseDto<UpdateAddressResponseDto>(new UpdateAddressResponseDto
                 {
-                    Id = address.Id,
-                    UpdatedAt = address.UpdatedAt,
+                    Id = updatedAddress.Id,
+                    UpdatedAt = updatedAddress.UpdatedAt,
                     UpdatedBy = string.Empty
                 }, StatusCodes.Status200OK);
             }

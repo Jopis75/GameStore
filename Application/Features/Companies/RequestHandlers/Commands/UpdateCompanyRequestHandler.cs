@@ -42,12 +42,13 @@ namespace Application.Features.Companies.RequestHandlers.Commands
 
                 var company = await _unitOfWork.CompanyRepository.ReadByIdAsync(updateCompanyRequest.UpdateCompanyRequestDto.Id);
                 _mapper.Map(updateCompanyRequest.UpdateCompanyRequestDto, company);
-                await _unitOfWork.CompanyRepository.UpdateAsync(company);
+                var updatedCompany = await _unitOfWork.CompanyRepository.UpdateAsync(company);
+                await _unitOfWork.SaveAsync();
 
                 return new HttpResponseDto<UpdateCompanyResponseDto>(new UpdateCompanyResponseDto
                 {
-                    Id = company.Id,
-                    UpdatedAt = company.UpdatedAt,
+                    Id = updatedCompany.Id,
+                    UpdatedAt = updatedCompany.UpdatedAt,
                     UpdatedBy = string.Empty
                 }, StatusCodes.Status200OK);
             }

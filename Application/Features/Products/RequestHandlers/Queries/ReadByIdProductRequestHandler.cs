@@ -40,7 +40,7 @@ namespace Application.Features.Products.RequestHandlers.Queries
                     return new HttpResponseDto<ReadByIdProductResponseDto>(new ValidationException(validationResult.Errors).Message, StatusCodes.Status400BadRequest);
                 }
 
-                var product = await _unitOfWork.ProductRepository.ReadByIdAsync(readByIdProductRequest.ReadByIdProductRequestDto.Id);
+                var product = await _unitOfWork.ProductRepository.ReadByIdAsync(readByIdProductRequest.ReadByIdProductRequestDto.Id, true);
                 var readByIdProductResponseDto = _mapper.Map<ReadByIdProductResponseDto>(product);
 
                 return new HttpResponseDto<ReadByIdProductResponseDto>(readByIdProductResponseDto, StatusCodes.Status200OK);

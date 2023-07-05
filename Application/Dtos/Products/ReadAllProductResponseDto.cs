@@ -6,8 +6,6 @@ namespace Application.Dtos.Products
 {
     public class ReadAllProductResponseDto : IReadAllResponseDto
     {
-        public string? CoverImageUri { get; set; }
-
         public DateTime? CreatedAt { get; set; }
 
         public string? CreatedBy { get; set; }
@@ -19,6 +17,8 @@ namespace Application.Dtos.Products
         public ReadAllCompanyResponseDto? Developer { get; set; } = new();
 
         public int Id { get; set; }
+
+        public string? ImageUri { get; set; }
 
         public decimal? Price { get; set; }
 

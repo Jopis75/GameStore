@@ -16,7 +16,7 @@ namespace Persistance.Configurations
                     PostalCode = "94404",
                     City = "San Mateo",
                     State = "California",
-                    Country = "United States",
+                    Country = "USA",
                     CreatedBy = "System",
                     CreatedAt = DateTime.Now,
                     UpdatedBy = string.Empty,
@@ -27,6 +27,21 @@ namespace Persistance.Configurations
                 new Address
                 {
                     Id = 2,
+                    StreetAddress = "2207 Bridgepointe Pkwy",
+                    PostalCode = "94404",
+                    City = "San Mateo",
+                    State = "California",
+                    Country = "United States",
+                    CreatedBy = "System",
+                    CreatedAt = DateTime.Now,
+                    UpdatedBy = string.Empty,
+                    UpdatedAt = null,
+                    DeletedBy = string.Empty,
+                    DeletedAt = null
+                },
+                new Address
+                {
+                    Id = 3,
                     StreetAddress = "Nieuwezijds Voorburgwal 225",
                     PostalCode = "1012 RL",
                     City = "Amsterdam",
@@ -41,7 +56,7 @@ namespace Persistance.Configurations
                 },
                 new Address
                 {
-                    Id = 3,
+                    Id = 4,
                     StreetAddress = "500 108th Avenue North East Suite 2600",
                     PostalCode = "98004",
                     City = "Bellevue",

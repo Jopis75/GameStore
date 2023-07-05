@@ -1,11 +1,14 @@
 ﻿using Application.Dtos.Addresses;
 using Application.Dtos.Common.Interfaces;
 using Application.Dtos.Products;
+using Domain.Entities;
 
 namespace Application.Dtos.Companies
 {
     public class ReadAllCompanyResponseDto : IReadAllResponseDto
     {
+        public CompanyType? CompanyType { get; set; }
+
         public DateTime? CreatedAt { get; set; }
 
         public string? CreatedBy { get; set; }
@@ -14,19 +17,21 @@ namespace Application.Dtos.Companies
 
         public string? DeletedBy { get; set; }
 
-        public DateTime? Founded { get; set; }
+        public string? EmailAddress { get; set; }
 
         public ReadAllAddressResponseDto? Headquarters { get; set; } = new();
 
         public int Id { get; set; }
 
+        public Industry? Industry { get; set; }
+
         public string? LogoImageUri { get; set; }
 
         public string? Name { get; set; }
 
-        public int? NumberOfEmployees { get; set; }
-
         public ReadAllCompanyResponseDto? ParentCompany { get; set; } = new();
+
+        public string? PhoneNumber { get; set; }
 
         public List<ReadAllProductResponseDto>? Products { get; set; } = new();
 

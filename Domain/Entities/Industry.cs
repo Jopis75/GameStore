@@ -2,6 +2,6 @@
 {
     public enum Industry
     {
-        VideoGames = 0
+        VideoGame
     }
 }

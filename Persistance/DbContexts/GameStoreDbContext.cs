@@ -1,6 +1,7 @@
 ﻿using Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using Persistance.Configurations;
+using Console = Domain.Entities.Console;
 
 namespace Persistance.DbContexts
 {
@@ -9,6 +10,10 @@ namespace Persistance.DbContexts
         public DbSet<Address> Addresses { get; set; }
 
         public DbSet<Company> Companies { get; set; }
+
+        public DbSet<ConsoleProduct> ConsoleProducts { get; set; }
+
+        public DbSet<Console> Consoles { get; set; }
 
         public DbSet<Product> Products { get; set; }
 
@@ -36,6 +41,25 @@ namespace Persistance.DbContexts
                 .WithOne(Product => Product.Developer)
                 .HasForeignKey(product => product.DeveloperId);
 
+            // Console.
+            modelBuilder
+                .Entity<Console>()
+                .ToTable("Console");
+            modelBuilder
+                .Entity<Console>()
+                .HasOne(console => console.Developer)
+                .WithMany(company => company.Consoles)
+                .HasForeignKey(product => product.DeveloperId);
+            modelBuilder
+                .Entity<Console>()
+                .HasOne(console => console.Review)
+                .WithOne(review => review.Console)
+                .HasForeignKey<Console>(product => product.ReviewId);
+            modelBuilder
+                .Entity<Console>()
+                .Property(console => console.Price)
+                .HasPrecision(18, 2);
+
             // Product.
             modelBuilder
                 .Entity<Product>()
@@ -48,12 +72,24 @@ namespace Persistance.DbContexts
             modelBuilder
                 .Entity<Product>()
                 .HasOne(product => product.Review)
-                .WithOne(review => review.VideoGame)
+                .WithOne(review => review.Product)
                 .HasForeignKey<Product>(product => product.ReviewId);
             modelBuilder
                 .Entity<Product>()
                 .Property(product => product.Price)
                 .HasPrecision(18, 2);
+
+            // ConsoleProduct.
+            modelBuilder.Entity<ConsoleProduct>()
+                .HasKey(consoleProduct => new { consoleProduct.ConsoleId, consoleProduct.ProductId });
+            modelBuilder.Entity<ConsoleProduct>()
+                .HasOne(consoleProduct => consoleProduct.Console)
+                .WithMany(console => console.ConsoleProducts)
+                .HasForeignKey(consoleProduct => consoleProduct.ConsoleId);
+            modelBuilder.Entity<ConsoleProduct>()
+                .HasOne(consoleProduct => consoleProduct.Product)
+                .WithMany(product => product.ConsoleProducts)
+                .HasForeignKey(consoleProduct => consoleProduct.ProductId);
 
             // Review.
             modelBuilder
@@ -61,12 +97,14 @@ namespace Persistance.DbContexts
                 .ToTable("Review");
             modelBuilder
                 .Entity<Review>()
-                .HasOne(review => review.VideoGame)
+                .HasOne(review => review.Product)
                 .WithOne(product => product.Review)
-                .HasForeignKey<Review>(review => review.VideoGameId);
+                .HasForeignKey<Review>(review => review.ProductId);
 
             modelBuilder.ApplyConfiguration(new AddressConfiguration());
+            modelBuilder.ApplyConfiguration(new ConsoleConfiguration());
             modelBuilder.ApplyConfiguration(new ProductConfiguration());
+            modelBuilder.ApplyConfiguration(new ConsoleProductConfiguration());
             modelBuilder.ApplyConfiguration(new CompanyConfiguration());
         }
 

@@ -19,17 +19,15 @@ namespace Application.Dtos.Companies.Validators
                 .NotEmpty()
                 .WithMessage("{PropertyName} is required.");
 
-            RuleFor(createCompanyRequestDto => createCompanyRequestDto.Founded)
-                .LessThanOrEqualTo(DateTime.Now)
-                .WithMessage("{PropertyName} must be less than or equal to " + $"{DateTime.Now}.");
-
-            RuleFor(createCompanyRequestDto => createCompanyRequestDto.NumberOfEmployees)
-                .GreaterThan(0)
-                .WithMessage("{PropertyName} must be greater than 0.");
-
             RuleFor(createCompanyRequestDto => createCompanyRequestDto.HeadquartersId)
                 .NotEqual(0)
                 .WithMessage("{PropertyName} must not equal 0.");
+
+            RuleFor(createCompanyRequestDto => createCompanyRequestDto.EmailAddress)
+                .EmailAddress()
+                .WithMessage("{PropertyName} is not valid.");
+
+            //RuleFor(createCompanyRequestDto => createCompanyRequestDto.PhoneNumber)
 
             RuleFor(createCompanyRequestDto => createCompanyRequestDto.ParentCompanyId)
                 .NotEqual(0)

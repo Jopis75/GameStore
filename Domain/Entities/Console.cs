@@ -1,6 +1,6 @@
 ﻿namespace Domain.Entities
 {
-    public class Product : EntityBase
+    public class Console : EntityBase
     {
         public virtual ICollection<ConsoleProduct>? ConsoleProducts { get; set; } = new List<ConsoleProduct>();
 
@@ -9,6 +9,8 @@
         public int? DeveloperId { get; set; }
 
         public string? ImageUri { get; set; }
+
+        public string? Name { get; set; }
 
         public decimal? Price { get; set; }
 
@@ -19,10 +21,6 @@
         public virtual Review? Review { get; set; }
 
         public int? ReviewId { get; set; }
-
-        public string? Title { get; set; }
-
-        public TimeSpan? TotalTimePlayed { get; set; }
 
         public string? Url { get; set; }
     }

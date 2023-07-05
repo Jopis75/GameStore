@@ -7,17 +7,19 @@ namespace Application.Dtos.Companies
     {
         public CompanyType? CompanyType { get; set; }
 
-        public DateTime? Founded { get; set; }
+        public string? EmailAddress { get; set; }
 
         public int? HeadquartersId { get; set; }
+
+        public Industry? Industry { get; set; }
 
         public string? LogoImageUri { get; set; }
 
         public string? Name { get; set; }
 
-        public int? NumberOfEmployees { get; set; }
-
         public int? ParentCompanyId { get; set; }
+
+        public string? PhoneNumber { get; set; }
 
         public string? TradeName { get; set; }
 

@@ -4,11 +4,11 @@ namespace Application.Dtos.Products
 {
     public class UpdateProductRequestDto : IUpdateRequestDto
     {
-        public string? CoverImageUri { get; set; }
-
         public int? DeveloperId { get; set; }
 
         public int Id { get; set; }
+
+        public string? ImageUri { get; set; }
 
         public decimal? Price { get; set; }
 

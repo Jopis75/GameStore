@@ -1,10 +1,11 @@
 ﻿using Application.Dtos.Common.Interfaces;
 using Application.Dtos.Companies;
+using Application.Dtos.Products;
 using Application.Dtos.Reviews;
 
-namespace Application.Dtos.Products
+namespace Application.Dtos.Consoles
 {
-    public class ReadByIdProductResponseDto : IReadByIdResponseDto
+    public class ReadByIdConsoleResponseDto : IReadByIdResponseDto
     {
         public DateTime? CreatedAt { get; set; }
 
@@ -20,17 +21,17 @@ namespace Application.Dtos.Products
 
         public string? ImageUri { get; set; }
 
+        public string? Name { get; set; }
+
         public decimal? Price { get; set; }
+
+        public List<ReadByIdProductResponseDto>? Products { get; set; } = new();
 
         public DateTime? PurchaseDate { get; set; }
 
         public DateTime? ReleaseDate { get; set; }
 
         public ReadByIdReviewResponseDto? Review { get; set; } = new();
-
-        public string? Title { get; set; }
-
-        public TimeSpan? TotalTimePlayed { get; set; }
 
         public DateTime? UpdatedAt { get; set; }
 

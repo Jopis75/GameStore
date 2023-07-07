@@ -12,6 +12,8 @@ namespace Persistance.Repositories
 
         private ICompanyRepository? _companyRepository;
 
+        private IConsoleProductRepository? _consoleProductRepository;
+
         private IConsoleRepository? _consoleRepository;
 
         private readonly IHttpContextAccessor _httpContextAccessor;
@@ -25,6 +27,9 @@ namespace Persistance.Repositories
 
         public ICompanyRepository CompanyRepository =>
             _companyRepository ??= new CompanyRepository(_gameStoreDbContext);
+
+        public IConsoleProductRepository ConsoleProductRepository =>
+            _consoleProductRepository ??= new ConsoleProductRepository(_gameStoreDbContext);
 
         public IConsoleRepository ConsoleRepository =>
             _consoleRepository ??= new ConsoleRepository(_gameStoreDbContext);

@@ -101,6 +101,7 @@ namespace Persistance.DbContexts
                 .WithOne(product => product.Review)
                 .HasForeignKey<Review>(review => review.ProductId);
 
+            // Configurations.
             modelBuilder.ApplyConfiguration(new AddressConfiguration());
             modelBuilder.ApplyConfiguration(new ConsoleConfiguration());
             modelBuilder.ApplyConfiguration(new ProductConfiguration());

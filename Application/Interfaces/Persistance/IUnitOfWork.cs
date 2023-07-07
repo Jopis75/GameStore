@@ -6,6 +6,8 @@
 
         ICompanyRepository CompanyRepository { get; }
 
+        IConsoleRepository ConsoleRepository { get; }
+
         IProductRepository ProductRepository { get; }
 
         IReviewRepository ReviewRepository { get; }

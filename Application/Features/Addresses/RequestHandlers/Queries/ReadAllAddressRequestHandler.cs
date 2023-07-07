@@ -25,7 +25,9 @@ namespace Application.Features.Addresses.RequestHandlers.Queries
             try
             {
                 var addresses = await _unitOfWork.AddressRepository.ReadAllAsync(true);
-                var readAllAddressResponseDtos = addresses.Select(_mapper.Map<ReadAllAddressResponseDto>).ToList();
+                var readAllAddressResponseDtos = addresses
+                    .Select(_mapper.Map<ReadAllAddressResponseDto>)
+                    .ToList();
 
                 return new HttpResponseDto<ReadAllAddressResponseDto>(readAllAddressResponseDtos, StatusCodes.Status200OK);
             }

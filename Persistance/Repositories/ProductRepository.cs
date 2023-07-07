@@ -10,7 +10,7 @@ namespace Persistance.Repositories
         public ProductRepository(GameStoreDbContext gameStoreDbContext)
             : base(gameStoreDbContext) { }
 
-        public async Task<IEnumerable<Product>> GetByDeveloperIdAsync(int videoGameDeveloperId, bool asNoTracking = false)
+        public async Task<IEnumerable<Product>> ReadByDeveloperIdAsync(int videoGameDeveloperId, bool asNoTracking = false)
         {
             var products = asNoTracking ?
                 await Entities
@@ -24,7 +24,7 @@ namespace Persistance.Repositories
             return products;
         }
 
-        public async Task<IEnumerable<Product>> GetByPriceAsync(decimal fromPrice, decimal toPrice, bool asNoTracking = false)
+        public async Task<IEnumerable<Product>> ReadByPriceAsync(decimal fromPrice, decimal toPrice, bool asNoTracking = false)
         {
             var products = asNoTracking ?
                 await Entities
@@ -38,7 +38,7 @@ namespace Persistance.Repositories
             return products;
         }
 
-        public async Task<IEnumerable<Product>> GetByPurchaseDateAsync(DateTime fromPurchaseDate, DateTime toPurchaseDate, bool asNoTracking = false)
+        public async Task<IEnumerable<Product>> ReadByPurchaseDateAsync(DateTime fromPurchaseDate, DateTime toPurchaseDate, bool asNoTracking = false)
         {
             var products = asNoTracking ?
                 await Entities
@@ -52,7 +52,7 @@ namespace Persistance.Repositories
             return products;
         }
 
-        public async Task<IEnumerable<Product>> GetByReleaseDateAsync(DateTime fromReleaseDate, DateTime toReleaseDate, bool asNoTracking = false)
+        public async Task<IEnumerable<Product>> ReadByReleaseDateAsync(DateTime fromReleaseDate, DateTime toReleaseDate, bool asNoTracking = false)
         {
             var products = asNoTracking ?
                 await Entities
@@ -66,7 +66,7 @@ namespace Persistance.Repositories
             return products;
         }
 
-        public async Task<Product> GetByTitleAsync(string title, bool asNoTracking = false)
+        public async Task<Product> ReadByTitleAsync(string title, bool asNoTracking = false)
         {
             var product = asNoTracking ?
                 await Entities

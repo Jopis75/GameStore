@@ -25,7 +25,9 @@ namespace Application.Features.Reviews.RequestHandlers.Queries
             try
             {
                 var reviews = await _unitOfWork.ReviewRepository.ReadAllAsync(true);
-                var readAllReviewResponseDtos = reviews.Select(_mapper.Map<ReadAllReviewResponseDto>).ToList();
+                var readAllReviewResponseDtos = reviews
+                    .Select(_mapper.Map<ReadAllReviewResponseDto>)
+                    .ToList();
 
                 return new HttpResponseDto<ReadAllReviewResponseDto>(readAllReviewResponseDtos, StatusCodes.Status200OK);
             }

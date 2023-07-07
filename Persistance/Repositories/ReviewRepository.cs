@@ -10,7 +10,7 @@ namespace Persistance.Repositories
         public ReviewRepository(GameStoreDbContext gameStoreDbContext)
             : base(gameStoreDbContext) { }
 
-        public async Task<IEnumerable<Review>> GetByGradeAsync(int grade, bool asNoTracking = false)
+        public async Task<IEnumerable<Review>> ReadByGradeAsync(int grade, bool asNoTracking = false)
         {
             var reviews = asNoTracking ?
                 await Entities
@@ -24,7 +24,7 @@ namespace Persistance.Repositories
             return reviews;
         }
 
-        public async Task<IEnumerable<Review>> GetByGradeAsync(int fromGrade, int toGrade, bool asNoTracking = false)
+        public async Task<IEnumerable<Review>> ReadByGradeAsync(int fromGrade, int toGrade, bool asNoTracking = false)
         {
             var reviews = asNoTracking ?
                 await Entities
@@ -38,7 +38,7 @@ namespace Persistance.Repositories
             return reviews;
         }
 
-        public async Task<Review> GetByProductIdAsync(int videoGameId, bool asNoTracking = false)
+        public async Task<Review> ReadByProductIdAsync(int videoGameId, bool asNoTracking = false)
         {
             var review = asNoTracking ?
                 await Entities
@@ -57,7 +57,7 @@ namespace Persistance.Repositories
             return review;
         }
 
-        public async Task<IEnumerable<Review>> GetByReviewDateAsync(DateTime fromReviewDate, DateTime toReviewDate, bool asNoTracking = false)
+        public async Task<IEnumerable<Review>> ReadByReviewDateAsync(DateTime fromReviewDate, DateTime toReviewDate, bool asNoTracking = false)
         {
             var reviews = asNoTracking ?
                 await Entities

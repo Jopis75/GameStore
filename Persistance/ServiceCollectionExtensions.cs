@@ -31,6 +31,7 @@ namespace Persistance
             serviceCollection.AddScoped(typeof(IRepositoryBase<>), typeof(RepositoryBase<>));
             serviceCollection.AddScoped<IAddressRepository, AddressRepository>();
             serviceCollection.AddScoped<ICompanyRepository, CompanyRepository>();
+            serviceCollection.AddScoped<IConsoleRepository, ConsoleRepository>();
             serviceCollection.AddScoped<IProductRepository, ProductRepository>();
             serviceCollection.AddScoped<IReviewRepository, ReviewRepository>();
 

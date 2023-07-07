@@ -5,15 +5,21 @@ namespace Application.Dtos.Common
     public class HttpResponseDto<TDto> : IHttpResponseDto<TDto>
         where TDto : class, IResponseDto, new()
     {
+        public bool ClientError => StatusCode >= 400 && StatusCode <= 499;
+
         public List<TDto> Data { get; set; }
 
         public string ErrorMessage { get; set; }
 
-        public bool Fail => !Success;
+        public bool Informational => StatusCode >= 100 && StatusCode <= 199;
+
+        public bool Redirection => StatusCode >= 300 && StatusCode <= 399;
+
+        public bool ServerError => StatusCode >= 500 && StatusCode <= 599;
 
         public int StatusCode { get; set; }
 
-        public bool Success => StatusCode >= 200 && StatusCode <= 299;
+        public bool Successful => StatusCode >= 200 && StatusCode <= 299;
 
         public HttpResponseDto(TDto data, int statusCode)
         {

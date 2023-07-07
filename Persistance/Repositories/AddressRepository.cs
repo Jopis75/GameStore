@@ -10,7 +10,7 @@ namespace Persistance.Repositories
         public AddressRepository(GameStoreDbContext gameStoreDbContext)
             : base(gameStoreDbContext) { }
 
-        public async Task<IEnumerable<Address>> GetByCityAsync(string city, bool asNoTracking = false)
+        public async Task<IEnumerable<Address>> ReadByCityAsync(string city, bool asNoTracking = false)
         {
             var addresses = asNoTracking ?
                 await Entities
@@ -24,7 +24,7 @@ namespace Persistance.Repositories
             return addresses;
         }
 
-        public async Task<IEnumerable<Address>> GetByZipCodeAsync(string postalCode, bool asNoTracking = false)
+        public async Task<IEnumerable<Address>> ReadByZipCodeAsync(string postalCode, bool asNoTracking = false)
         {
             var addresses = asNoTracking ?
                 await Entities

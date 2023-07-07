@@ -13,7 +13,7 @@ namespace Persistance.Repositories
 
         private readonly DbSet<TEntity> _entities;
 
-        public GameStoreDbContext Dbcontext
+        public GameStoreDbContext DbContext
         {
             get
             {
@@ -54,12 +54,14 @@ namespace Persistance.Repositories
 
         public async Task<IEnumerable<TEntity>> ReadAllAsync(bool asNoTracking = false)
         {
-            return asNoTracking ?
+            var entities = asNoTracking ?
                 await Entities
                     .AsNoTracking<TEntity>()
                     .ToListAsync() :
                 await Entities
                     .ToListAsync();
+
+            return entities;
         }
 
         public async Task<TEntity> ReadByIdAsync(int id, bool asNoTracking = false)

@@ -25,7 +25,9 @@ namespace Application.Features.Products.RequestHandlers.Queries
             try
             {
                 var products = await _unitOfWork.ProductRepository.ReadAllAsync(true);
-                var readAllProductsResponseDtos = products.Select(_mapper.Map<ReadAllProductResponseDto>).ToList();
+                var readAllProductsResponseDtos = products
+                    .Select(_mapper.Map<ReadAllProductResponseDto>)
+                    .ToList();
 
                 return new HttpResponseDto<ReadAllProductResponseDto>(readAllProductsResponseDtos, StatusCodes.Status200OK);
             }

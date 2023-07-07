@@ -10,7 +10,7 @@ namespace Persistance.Repositories
         public CompanyRepository(GameStoreDbContext gameStoreDbContext)
             : base(gameStoreDbContext) { }
 
-        public async Task<Company> GetByNameAsync(string name, bool asNoTracking = false)
+        public async Task<Company> ReadByNameAsync(string name, bool asNoTracking = false)
         {
             var company = asNoTracking ?
                 await Entities
@@ -29,7 +29,7 @@ namespace Persistance.Repositories
             return company;
         }
 
-        public async Task<Company> GetByTradeNameAsync(string tradeName, bool asNoTracking = false)
+        public async Task<Company> ReadByTradeNameAsync(string tradeName, bool asNoTracking = false)
         {
             var company = asNoTracking ?
                 await Entities

@@ -4,8 +4,8 @@ namespace Application.Interfaces.Persistance
 {
     public interface IAddressRepository : IRepositoryBase<Address>
     {
-        Task<IEnumerable<Address>> GetByCityAsync(string city, bool asNoTracking = false);
+        Task<IEnumerable<Address>> ReadByCityAsync(string city, bool asNoTracking = false);
 
-        Task<IEnumerable<Address>> GetByZipCodeAsync(string postalCode, bool asNoTracking = false);
+        Task<IEnumerable<Address>> ReadByZipCodeAsync(string postalCode, bool asNoTracking = false);
     }
 }

@@ -20,4 +20,9 @@
     <ProjectReference Include="..\Domain\Domain.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Features\ConsoleProducts\RequestHandlers\Commands\" />
+    <Folder Include="Features\ConsoleProducts\RequestHandlers\Queries\" />
+  </ItemGroup>
+
 </Project>

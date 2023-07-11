@@ -1,7 +1,5 @@
-﻿using Application.Dtos.Addresses;
-using Application.Dtos.Common;
+﻿using Application.Dtos.Common;
 using Application.Dtos.Companies;
-using Application.Features.Addresses.Requests.Commands;
 using Application.Features.Companies.Requests.Commands;
 using Application.Interfaces.Persistance;
 using AutoMapper;

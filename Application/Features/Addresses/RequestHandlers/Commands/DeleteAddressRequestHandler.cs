@@ -2,7 +2,6 @@
 using Application.Dtos.Common;
 using Application.Features.Addresses.Requests.Commands;
 using Application.Interfaces.Persistance;
-using AutoMapper;
 using FluentValidation;
 using MediatR;
 using Microsoft.AspNetCore.Http;

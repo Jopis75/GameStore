@@ -1,6 +1,5 @@
 ﻿using Application.Dtos.Common;
 using Application.Dtos.ConsoleProducts;
-using Application.Dtos.Consoles;
 using Application.Features.ConsoleProducts.Requests.Commands;
 using Application.Interfaces.Persistance;
 using AutoMapper;

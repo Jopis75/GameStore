@@ -1,15 +1,15 @@
 ﻿using Application.Dtos.Addresses;
-using Application.Dtos.Addresses.Validators;
 using Application.Dtos.Companies;
-using Application.Dtos.Companies.Validators;
 using Application.Dtos.ConsoleProducts;
-using Application.Dtos.ConsoleProducts.Validators;
 using Application.Dtos.Consoles;
-using Application.Dtos.Consoles.Validators;
 using Application.Dtos.Products;
-using Application.Dtos.Products.Validators;
 using Application.Dtos.Reviews;
-using Application.Dtos.Reviews.Validators;
+using Application.Validators.Addresses;
+using Application.Validators.Companies;
+using Application.Validators.ConsoleProducts;
+using Application.Validators.Consoles;
+using Application.Validators.Products;
+using Application.Validators.Reviews;
 using FluentValidation;
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
@@ -44,25 +44,25 @@ namespace Application
 
         private static IServiceCollection AddValidators(this IServiceCollection serviceCollection)
         {
-            // Address.
+            // Addresses.
             serviceCollection.AddScoped<IValidator<CreateAddressRequestDto>, CreateAddressRequestDtoValidator>();
             serviceCollection.AddScoped<IValidator<ReadByIdAddressRequestDto>, ReadByIdAddressRequestDtoValidator>();
             serviceCollection.AddScoped<IValidator<UpdateAddressRequestDto>, UpdateAddressRequestDtoValidator>();
             serviceCollection.AddScoped<IValidator<DeleteAddressRequestDto>, DeleteAddressRequestDtoValidator>();
 
-            // Company.
+            // Companies.
             serviceCollection.AddScoped<IValidator<CreateCompanyRequestDto>, CreateCompanyRequestDtoValidator>();
             serviceCollection.AddScoped<IValidator<ReadByIdCompanyRequestDto>, ReadByIdCompanyRequestDtoValidator>();
             serviceCollection.AddScoped<IValidator<UpdateCompanyRequestDto>, UpdateCompanyRequestDtoValidator>();
             serviceCollection.AddScoped<IValidator<DeleteCompanyRequestDto>, DeleteCompanyRequestDtoValidator>();
 
-            // Console.
+            // Consoles.
             serviceCollection.AddScoped<IValidator<CreateConsoleRequestDto>, CreateConsoleRequestDtoValidator>();
             serviceCollection.AddScoped<IValidator<ReadByIdConsoleRequestDto>, ReadByIdConsoleRequestDtoValidator>();
             serviceCollection.AddScoped<IValidator<UpdateConsoleRequestDto>, UpdateConsoleRequestDtoValidator>();
             serviceCollection.AddScoped<IValidator<DeleteConsoleRequestDto>, DeleteConsoleRequestDtoValidator>();
 
-            // ConsoleProduct.
+            // ConsoleProducts.
             serviceCollection.AddScoped<IValidator<CreateConsoleProductRequestDto>, CreateConsoleProductRequestDtoValidator>();
             serviceCollection.AddScoped<IValidator<ReadByIdConsoleProductRequestDto>, ReadByIdConsoleProductRequestDtoValidator>();
             serviceCollection.AddScoped<IValidator<UpdateConsoleProductRequestDto>, UpdateConsoleProductRequestDtoValidator>();
@@ -74,7 +74,7 @@ namespace Application
             serviceCollection.AddScoped<IValidator<UpdateProductRequestDto>, UpdateProductRequestDtoValidator>();
             serviceCollection.AddScoped<IValidator<DeleteProductRequestDto>, DeleteProductRequestDtoValidator>();
 
-            // Review.
+            // Reviews.
             serviceCollection.AddScoped<IValidator<CreateReviewRequestDto>, CreateReviewRequestDtoValidator>();
             serviceCollection.AddScoped<IValidator<ReadByIdReviewRequestDto>, ReadByIdReviewRequestDtoValidator>();
             serviceCollection.AddScoped<IValidator<UpdateReviewRequestDto>, UpdateReviewRequestDtoValidator>();

@@ -1,0 +1,35 @@
+﻿using Application.Dtos.Consoles;
+using Application.Validators.Common;
+using FluentValidation;
+
+namespace Application.Validators.Consoles
+{
+    public class UpdateConsoleRequestDtoValidator : AbstractValidator<UpdateConsoleRequestDto>
+    {
+        public UpdateConsoleRequestDtoValidator()
+        {
+            Include(new UpdateRequestDtoValidator());
+
+            RuleFor(createConsoleRequestDto => createConsoleRequestDto.Name)
+                .NotNull()
+                .NotEmpty()
+                .WithMessage("{PropertyName} is required.");
+
+            RuleFor(createConsoleRequestDto => createConsoleRequestDto.DeveloperId)
+                .NotEqual(0)
+                .WithMessage("{PropertyName} must not equal 0.");
+
+            RuleFor(createConsoleRequestDto => createConsoleRequestDto.ReleaseDate)
+                .LessThanOrEqualTo(createConsoleRequestDto => createConsoleRequestDto.PurchaseDate)
+                .WithMessage("{PropertyName} must be less than or equal to {ComparisonProperty}.");
+
+            RuleFor(createConsoleRequestDto => createConsoleRequestDto.PurchaseDate)
+                .GreaterThanOrEqualTo(createConsoleRequestDto => createConsoleRequestDto.ReleaseDate)
+                .WithMessage("{PropertyName} must be greater than or equal to {ComparisonProperty}.");
+
+            RuleFor(createConsoleRequestDto => createConsoleRequestDto.Price)
+                .GreaterThan(0)
+                .WithMessage("{PropertyName} must be greater than 0.");
+        }
+    }
+}

@@ -14,7 +14,7 @@ namespace Application.Profiles
     {
         public GameStoreProfile()
         {
-            // Address.
+            // Addresses.
             CreateMap<Address, CreateAddressRequestDto>().ReverseMap();
             CreateMap<Address, CreateAddressResponseDto>().ReverseMap();
             CreateMap<Address, ReadAllAddressRequestDto>().ReverseMap();
@@ -26,7 +26,7 @@ namespace Application.Profiles
             CreateMap<Address, DeleteAddressRequestDto>().ReverseMap();
             CreateMap<Address, DeleteAddressResponseDto>().ReverseMap();
 
-            // Company.
+            // Companies.
             CreateMap<Company, CreateCompanyRequestDto>().ReverseMap();
             CreateMap<Company, CreateCompanyResponseDto>().ReverseMap();
             CreateMap<Company, ReadAllCompanyRequestDto>().ReverseMap();
@@ -38,7 +38,7 @@ namespace Application.Profiles
             CreateMap<Company, DeleteCompanyRequestDto>().ReverseMap();
             CreateMap<Company, DeleteCompanyResponseDto>().ReverseMap();
 
-            // Console.
+            // Consoles.
             CreateMap<Console, CreateConsoleRequestDto>().ReverseMap();
             CreateMap<Console, CreateConsoleResponseDto>().ReverseMap();
             CreateMap<Console, ReadAllConsoleRequestDto>().ReverseMap();
@@ -50,7 +50,7 @@ namespace Application.Profiles
             CreateMap<Console, DeleteConsoleRequestDto>().ReverseMap();
             CreateMap<Console, DeleteConsoleResponseDto>().ReverseMap();
 
-            // ConsoleProduct.
+            // ConsoleProducts.
             CreateMap<ConsoleProduct, CreateConsoleProductRequestDto>().ReverseMap();
             CreateMap<ConsoleProduct, CreateConsoleProductResponseDto>().ReverseMap();
             CreateMap<ConsoleProduct, ReadAllConsoleProductRequestDto>().ReverseMap();
@@ -62,7 +62,7 @@ namespace Application.Profiles
             CreateMap<ConsoleProduct, DeleteConsoleProductRequestDto>().ReverseMap();
             CreateMap<ConsoleProduct, DeleteConsoleProductResponseDto>().ReverseMap();
 
-            // Product.
+            // Products.
             CreateMap<Product, CreateProductRequestDto>().ReverseMap();
             CreateMap<Product, CreateProductResponseDto>().ReverseMap();
             CreateMap<Product, ReadAllProductRequestDto>().ReverseMap();
@@ -74,7 +74,7 @@ namespace Application.Profiles
             CreateMap<Product, DeleteProductRequestDto>().ReverseMap();
             CreateMap<Product, DeleteProductResponseDto>().ReverseMap();
 
-            // Review.
+            // Reviews.
             CreateMap<Review, CreateReviewRequestDto>().ReverseMap();
             CreateMap<Review, CreateReviewResponseDto>().ReverseMap();
             CreateMap<Review, ReadAllReviewRequestDto>().ReverseMap();

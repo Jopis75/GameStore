@@ -73,7 +73,7 @@ namespace Persistance.Migrations
                             Id = 1,
                             City = "San Mateo",
                             Country = "USA",
-                            CreatedAt = new DateTime(2023, 7, 5, 14, 10, 10, 403, DateTimeKind.Local).AddTicks(9965),
+                            CreatedAt = new DateTime(2023, 7, 14, 16, 11, 37, 787, DateTimeKind.Local).AddTicks(7486),
                             CreatedBy = "System",
                             DeletedBy = "",
                             PostalCode = "94404",
@@ -86,7 +86,7 @@ namespace Persistance.Migrations
                             Id = 2,
                             City = "San Mateo",
                             Country = "United States",
-                            CreatedAt = new DateTime(2023, 7, 5, 14, 10, 10, 404, DateTimeKind.Local).AddTicks(15),
+                            CreatedAt = new DateTime(2023, 7, 14, 16, 11, 37, 787, DateTimeKind.Local).AddTicks(7535),
                             CreatedBy = "System",
                             DeletedBy = "",
                             PostalCode = "94404",
@@ -99,7 +99,7 @@ namespace Persistance.Migrations
                             Id = 3,
                             City = "Amsterdam",
                             Country = "The Netherlands",
-                            CreatedAt = new DateTime(2023, 7, 5, 14, 10, 10, 404, DateTimeKind.Local).AddTicks(18),
+                            CreatedAt = new DateTime(2023, 7, 14, 16, 11, 37, 787, DateTimeKind.Local).AddTicks(7539),
                             CreatedBy = "System",
                             DeletedBy = "",
                             PostalCode = "1012 RL",
@@ -112,7 +112,7 @@ namespace Persistance.Migrations
                             Id = 4,
                             City = "Bellevue",
                             Country = "United States",
-                            CreatedAt = new DateTime(2023, 7, 5, 14, 10, 10, 404, DateTimeKind.Local).AddTicks(21),
+                            CreatedAt = new DateTime(2023, 7, 14, 16, 11, 37, 787, DateTimeKind.Local).AddTicks(7542),
                             CreatedBy = "System",
                             DeletedBy = "",
                             PostalCode = "98004",
@@ -180,7 +180,9 @@ namespace Persistance.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("HeadquartersId");
+                    b.HasIndex("HeadquartersId")
+                        .IsUnique()
+                        .HasFilter("[HeadquartersId] IS NOT NULL");
 
                     b.HasIndex("ParentCompanyId");
 
@@ -191,7 +193,7 @@ namespace Persistance.Migrations
                         {
                             Id = 1,
                             CompanyType = 0,
-                            CreatedAt = new DateTime(2023, 7, 5, 14, 10, 10, 404, DateTimeKind.Local).AddTicks(870),
+                            CreatedAt = new DateTime(2023, 7, 14, 16, 11, 37, 787, DateTimeKind.Local).AddTicks(8316),
                             CreatedBy = "System",
                             DeletedBy = "",
                             HeadquartersId = 1,
@@ -205,7 +207,7 @@ namespace Persistance.Migrations
                         {
                             Id = 2,
                             CompanyType = 2,
-                            CreatedAt = new DateTime(2023, 7, 5, 14, 10, 10, 404, DateTimeKind.Local).AddTicks(875),
+                            CreatedAt = new DateTime(2023, 7, 14, 16, 11, 37, 787, DateTimeKind.Local).AddTicks(8321),
                             CreatedBy = "System",
                             DeletedBy = "",
                             HeadquartersId = 2,
@@ -220,7 +222,7 @@ namespace Persistance.Migrations
                         {
                             Id = 3,
                             CompanyType = 0,
-                            CreatedAt = new DateTime(2023, 7, 5, 14, 10, 10, 404, DateTimeKind.Local).AddTicks(878),
+                            CreatedAt = new DateTime(2023, 7, 14, 16, 11, 37, 787, DateTimeKind.Local).AddTicks(8324),
                             CreatedBy = "System",
                             DeletedBy = "",
                             HeadquartersId = 3,
@@ -235,7 +237,7 @@ namespace Persistance.Migrations
                         {
                             Id = 4,
                             CompanyType = 0,
-                            CreatedAt = new DateTime(2023, 7, 5, 14, 10, 10, 404, DateTimeKind.Local).AddTicks(881),
+                            CreatedAt = new DateTime(2023, 7, 14, 16, 11, 37, 787, DateTimeKind.Local).AddTicks(8327),
                             CreatedBy = "System",
                             DeletedBy = "",
                             HeadquartersId = 4,
@@ -313,14 +315,14 @@ namespace Persistance.Migrations
                         new
                         {
                             Id = 1,
-                            CreatedAt = new DateTime(2023, 7, 5, 14, 10, 10, 404, DateTimeKind.Local).AddTicks(370),
+                            CreatedAt = new DateTime(2023, 7, 14, 16, 11, 37, 787, DateTimeKind.Local).AddTicks(7835),
                             CreatedBy = "System",
                             DeletedBy = "",
                             DeveloperId = 1,
                             ImageUri = "",
                             Name = "PlayStation®5 Console",
                             Price = 499.99m,
-                            PurchaseDate = new DateTime(2023, 7, 5, 14, 10, 10, 404, DateTimeKind.Local).AddTicks(367),
+                            PurchaseDate = new DateTime(2023, 7, 14, 16, 11, 37, 787, DateTimeKind.Local).AddTicks(7832),
                             ReleaseDate = new DateTime(2020, 11, 12, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             UpdatedBy = "",
                             Url = "https://direct.playstation.com/en-us/buy-consoles/playstation5-console/"
@@ -360,7 +362,7 @@ namespace Persistance.Migrations
 
                     b.HasIndex("ProductId");
 
-                    b.ToTable("ConsoleProducts");
+                    b.ToTable("ConsoleProduct", (string)null);
 
                     b.HasData(
                         new
@@ -447,7 +449,7 @@ namespace Persistance.Migrations
                         new
                         {
                             Id = 1,
-                            CreatedAt = new DateTime(2023, 7, 5, 14, 10, 10, 404, DateTimeKind.Local).AddTicks(541),
+                            CreatedAt = new DateTime(2023, 7, 14, 16, 11, 37, 787, DateTimeKind.Local).AddTicks(7999),
                             CreatedBy = "System",
                             DeletedBy = "",
                             DeveloperId = 2,
@@ -463,7 +465,7 @@ namespace Persistance.Migrations
                         new
                         {
                             Id = 2,
-                            CreatedAt = new DateTime(2023, 7, 5, 14, 10, 10, 404, DateTimeKind.Local).AddTicks(550),
+                            CreatedAt = new DateTime(2023, 7, 14, 16, 11, 37, 787, DateTimeKind.Local).AddTicks(8007),
                             CreatedBy = "System",
                             DeletedBy = "",
                             DeveloperId = 2,
@@ -479,7 +481,7 @@ namespace Persistance.Migrations
                         new
                         {
                             Id = 3,
-                            CreatedAt = new DateTime(2023, 7, 5, 14, 10, 10, 404, DateTimeKind.Local).AddTicks(558),
+                            CreatedAt = new DateTime(2023, 7, 14, 16, 11, 37, 787, DateTimeKind.Local).AddTicks(8015),
                             CreatedBy = "System",
                             DeletedBy = "",
                             DeveloperId = 3,
@@ -547,8 +549,9 @@ namespace Persistance.Migrations
             modelBuilder.Entity("Domain.Entities.Company", b =>
                 {
                     b.HasOne("Domain.Entities.Address", "Headquarters")
-                        .WithMany()
-                        .HasForeignKey("HeadquartersId");
+                        .WithOne("Company")
+                        .HasForeignKey("Domain.Entities.Company", "HeadquartersId")
+                        .OnDelete(DeleteBehavior.SetNull);
 
                     b.HasOne("Domain.Entities.Company", "ParentCompany")
                         .WithMany()
@@ -563,11 +566,13 @@ namespace Persistance.Migrations
                 {
                     b.HasOne("Domain.Entities.Company", "Developer")
                         .WithMany("Consoles")
-                        .HasForeignKey("DeveloperId");
+                        .HasForeignKey("DeveloperId")
+                        .OnDelete(DeleteBehavior.SetNull);
 
                     b.HasOne("Domain.Entities.Review", "Review")
                         .WithOne("Console")
-                        .HasForeignKey("Domain.Entities.Console", "ReviewId");
+                        .HasForeignKey("Domain.Entities.Console", "ReviewId")
+                        .OnDelete(DeleteBehavior.SetNull);
 
                     b.Navigation("Developer");
 
@@ -597,7 +602,8 @@ namespace Persistance.Migrations
                 {
                     b.HasOne("Domain.Entities.Company", "Developer")
                         .WithMany("Products")
-                        .HasForeignKey("DeveloperId");
+                        .HasForeignKey("DeveloperId")
+                        .OnDelete(DeleteBehavior.SetNull);
 
                     b.Navigation("Developer");
                 });
@@ -606,9 +612,15 @@ namespace Persistance.Migrations
                 {
                     b.HasOne("Domain.Entities.Product", "Product")
                         .WithOne("Review")
-                        .HasForeignKey("Domain.Entities.Review", "ProductId");
+                        .HasForeignKey("Domain.Entities.Review", "ProductId")
+                        .OnDelete(DeleteBehavior.SetNull);
 
                     b.Navigation("Product");
+                });
+
+            modelBuilder.Entity("Domain.Entities.Address", b =>
+                {
+                    b.Navigation("Company");
                 });
 
             modelBuilder.Entity("Domain.Entities.Company", b =>

@@ -5,23 +5,13 @@ using Domain.Entities;
 
 namespace Application.Dtos.Companies
 {
-    public class ReadByIdCompanyResponseDto : IReadByIdResponseDto
+    public class ReadByIdCompanyResponseDto : ReadByIdResponseDto
     {
         public CompanyType? CompanyType { get; set; }
-
-        public DateTime? CreatedAt { get; set; }
-
-        public string? CreatedBy { get; set; }
-
-        public DateTime? DeletedAt { get; set; }
-
-        public string? DeletedBy { get; set; }
 
         public string? EmailAddress { get; set; }
 
         public ReadByIdAddressResponseDto? Headquarters { get; set; } = new();
-
-        public int Id { get; set; }
 
         public Industry? Industry { get; set; }
 
@@ -36,10 +26,6 @@ namespace Application.Dtos.Companies
         public List<ReadByIdProductResponseDto>? Products { get; set; } = new();
 
         public string? TradeName { get; set; }
-
-        public DateTime? UpdatedAt { get; set; }
-
-        public string? UpdatedBy { get; set; }
 
         public string? WebsiteUrl { get; set; }
     }

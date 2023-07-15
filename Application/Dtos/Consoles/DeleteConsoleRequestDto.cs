@@ -2,7 +2,7 @@
 
 namespace Application.Dtos.Consoles
 {
-    public class DeleteConsoleRequestDto : IDeleteRequestDto
+    public class DeleteConsoleRequestDto : DeleteRequestDto
     {
         public int Id { get; set; }
     }

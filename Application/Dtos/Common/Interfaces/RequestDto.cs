@@ -1,6 +1,6 @@
 ﻿namespace Application.Dtos.Common.Interfaces
 {
-    public interface IRequestDto
+    public class RequestDto
     {
     }
 }

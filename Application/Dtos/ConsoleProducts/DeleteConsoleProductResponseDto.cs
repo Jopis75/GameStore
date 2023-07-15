@@ -2,7 +2,7 @@
 
 namespace Application.Dtos.ConsoleProducts
 {
-    public class DeleteConsoleProductResponseDto : IDeleteResponseDto
+    public class DeleteConsoleProductResponseDto : DeleteResponseDto
     {
         public DateTime? DeletedAt { get; set; }
 

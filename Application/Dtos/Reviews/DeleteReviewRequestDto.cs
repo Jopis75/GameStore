@@ -2,8 +2,7 @@
 
 namespace Application.Dtos.Reviews
 {
-    public class DeleteReviewRequestDto : IDeleteRequestDto
+    public class DeleteReviewRequestDto : DeleteRequestDto
     {
-        public int Id { get; set; }
     }
 }

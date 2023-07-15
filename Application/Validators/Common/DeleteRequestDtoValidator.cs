@@ -3,7 +3,7 @@ using FluentValidation;
 
 namespace Application.Validators.Common
 {
-    public class DeleteRequestDtoValidator : AbstractValidator<IDeleteRequestDto>
+    public class DeleteRequestDtoValidator : AbstractValidator<DeleteRequestDto>
     {
         public DeleteRequestDtoValidator()
         {

@@ -2,11 +2,9 @@
 
 namespace Application.Dtos.Products
 {
-    public class UpdateProductRequestDto : IUpdateRequestDto
+    public class UpdateProductRequestDto : UpdateRequestDto
     {
         public int? DeveloperId { get; set; }
-
-        public int Id { get; set; }
 
         public string? ImageUri { get; set; }
 

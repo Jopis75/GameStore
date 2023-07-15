@@ -2,7 +2,7 @@
 
 namespace Application.Dtos.Addresses
 {
-    public class CreateAddressRequestDto : ICreateRequestDto
+    public class CreateAddressRequestDto : CreateRequestDto
     {
         public string? City { get; set; }
 

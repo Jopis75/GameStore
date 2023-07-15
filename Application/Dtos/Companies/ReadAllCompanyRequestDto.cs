@@ -2,7 +2,7 @@
 
 namespace Application.Dtos.Companies
 {
-    public class ReadAllCompanyRequestDto : IReadAllRequestDto
+    public class ReadAllCompanyRequestDto : ReadAllRequestDto
     {
     }
 }

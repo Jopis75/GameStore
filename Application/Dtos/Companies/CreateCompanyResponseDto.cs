@@ -2,12 +2,7 @@
 
 namespace Application.Dtos.Companies
 {
-    public class CreateCompanyResponseDto : ICreateResponseDto
+    public class CreateCompanyResponseDto : CreateResponseDto
     {
-        public DateTime? CreatedAt { get; set; }
-
-        public string? CreatedBy { get; set; }
-
-        public int Id { get; set; }
     }
 }

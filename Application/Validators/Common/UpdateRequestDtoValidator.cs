@@ -3,7 +3,7 @@ using FluentValidation;
 
 namespace Application.Validators.Common
 {
-    public class UpdateRequestDtoValidator : AbstractValidator<IUpdateRequestDto>
+    public class UpdateRequestDtoValidator : AbstractValidator<UpdateRequestDto>
     {
         public UpdateRequestDtoValidator()
         {

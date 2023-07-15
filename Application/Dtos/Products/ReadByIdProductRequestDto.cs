@@ -2,8 +2,7 @@
 
 namespace Application.Dtos.Products
 {
-    public class ReadByIdProductRequestDto : IReadByIdRequestDto
+    public class ReadByIdProductRequestDto : ReadByIdRequestDto
     {
-        public int Id { get; set; }
     }
 }

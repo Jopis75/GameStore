@@ -3,7 +3,7 @@ using FluentValidation;
 
 namespace Application.Validators.Common
 {
-    public class ReadByIdRequestDtoValidator : AbstractValidator<IReadByIdRequestDto>
+    public class ReadByIdRequestDtoValidator : AbstractValidator<ReadByIdRequestDto>
     {
         public ReadByIdRequestDtoValidator()
         {

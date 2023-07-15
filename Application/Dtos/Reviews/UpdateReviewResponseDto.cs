@@ -2,12 +2,7 @@
 
 namespace Application.Dtos.Reviews
 {
-    public class UpdateReviewResponseDto : IUpdateResponseDto
+    public class UpdateReviewResponseDto : UpdateResponseDto
     {
-        public int Id { get; set; }
-
-        public DateTime? UpdatedAt { get; set; }
-
-        public string? UpdatedBy { get; set; }
     }
 }

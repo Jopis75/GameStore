@@ -2,7 +2,7 @@
 
 namespace Application.Dtos.Addresses
 {
-    public class ReadAllAddressRequestDto : IReadAllRequestDto
+    public class ReadAllAddressRequestDto : ReadAllRequestDto
     {
     }
 }

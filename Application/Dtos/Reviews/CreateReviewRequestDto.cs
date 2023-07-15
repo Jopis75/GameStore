@@ -2,7 +2,7 @@
 
 namespace Application.Dtos.Reviews
 {
-    public class CreateReviewRequestDto : ICreateRequestDto
+    public class CreateReviewRequestDto : CreateRequestDto
     {
         public int? Grade { get; set; }
 
@@ -10,6 +10,6 @@ namespace Application.Dtos.Reviews
 
         public string? ReviewText { get; set; }
 
-        public int? VideoGameId { get; set; }
+        public int? ProductId { get; set; }
     }
 }

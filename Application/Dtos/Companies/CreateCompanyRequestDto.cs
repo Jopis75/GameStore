@@ -3,7 +3,7 @@ using Domain.Entities;
 
 namespace Application.Dtos.Companies
 {
-    public class CreateCompanyRequestDto : ICreateRequestDto
+    public class CreateCompanyRequestDto : CreateRequestDto
     {
         public CompanyType? CompanyType { get; set; }
 

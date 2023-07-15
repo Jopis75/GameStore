@@ -2,8 +2,7 @@
 
 namespace Application.Dtos.Companies
 {
-    public class ReadByIdCompanyRequestDto : IReadByIdRequestDto
+    public class ReadByIdCompanyRequestDto : ReadByIdRequestDto
     {
-        public int Id { get; set; }
     }
 }

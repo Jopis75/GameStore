@@ -1,7 +1,7 @@
 ﻿namespace Application.Dtos.Common.Interfaces
 {
     public interface IHttpResponseDto<TDto>
-        where TDto : class, IResponseDto, new()
+        where TDto : ResponseDto, new()
     {
         public bool ClientError { get; }
 

@@ -2,7 +2,7 @@
 
 namespace Application.Dtos.ConsoleProducts
 {
-    public class UpdateConsoleProductRequestDto : IUpdateRequestDto
+    public class UpdateConsoleProductRequestDto : UpdateRequestDto
     {
         public int? ConsoleId { get; set; }
 

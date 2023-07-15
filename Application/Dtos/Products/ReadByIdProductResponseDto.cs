@@ -4,19 +4,9 @@ using Application.Dtos.Reviews;
 
 namespace Application.Dtos.Products
 {
-    public class ReadByIdProductResponseDto : IReadByIdResponseDto
+    public class ReadByIdProductResponseDto : ReadByIdResponseDto
     {
-        public DateTime? CreatedAt { get; set; }
-
-        public string? CreatedBy { get; set; }
-
-        public DateTime? DeletedAt { get; set; }
-
-        public string? DeletedBy { get; set; }
-
         public ReadByIdCompanyResponseDto? Developer { get; set; } = new();
-
-        public int Id { get; set; }
 
         public string? ImageUri { get; set; }
 
@@ -31,10 +21,6 @@ namespace Application.Dtos.Products
         public string? Title { get; set; }
 
         public TimeSpan? TotalTimePlayed { get; set; }
-
-        public DateTime? UpdatedAt { get; set; }
-
-        public string? UpdatedBy { get; set; }
 
         public string? Url { get; set; }
     }

@@ -2,11 +2,9 @@
 
 namespace Application.Dtos.Reviews
 {
-    public class UpdateReviewRequestDto : IUpdateRequestDto
+    public class UpdateReviewRequestDto : UpdateRequestDto
     {
         public int? Grade { get; set; }
-
-        public int Id { get; set; }
 
         public DateTime? ReviewDate { get; set; }
 

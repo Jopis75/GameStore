@@ -2,13 +2,11 @@
 
 namespace Application.Dtos.Addresses
 {
-    public class UpdateAddressRequestDto : IUpdateRequestDto
+    public class UpdateAddressRequestDto : UpdateRequestDto
     {
         public string? City { get; set; }
 
         public string? Country { get; set; }
-
-        public int Id { get; set; }
 
         public string? PostalCode { get; set; }
 

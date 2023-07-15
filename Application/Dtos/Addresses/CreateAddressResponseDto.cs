@@ -2,12 +2,7 @@
 
 namespace Application.Dtos.Addresses
 {
-    public class CreateAddressResponseDto : ICreateResponseDto
+    public class CreateAddressResponseDto : CreateResponseDto
     {
-        public DateTime? CreatedAt { get; set; }
-
-        public string? CreatedBy { get; set; }
-
-        public int Id { get; set; }
     }
 }

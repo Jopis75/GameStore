@@ -1,6 +1,6 @@
 ﻿namespace Application.Dtos.Common.Interfaces
 {
-    public interface IReadAllResponseDto : IReadResponseDto
+    public class ReadAllResponseDto : ReadResponseDto
     {
     }
 }

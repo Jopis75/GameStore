@@ -2,8 +2,7 @@
 
 namespace Application.Dtos.Reviews
 {
-    public class ReadByIdReviewRequestDto : IReadByIdRequestDto
+    public class ReadByIdReviewRequestDto : ReadByIdRequestDto
     {
-        public int Id { get; set; }
     }
 }

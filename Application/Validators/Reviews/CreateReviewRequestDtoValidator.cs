@@ -13,7 +13,7 @@ namespace Application.Validators.Reviews
                 .LessThanOrEqualTo(100)
                 .WithMessage("{PropertyName} must be less than or equal to 100.");
 
-            RuleFor(createReviewRequestDto => createReviewRequestDto.VideoGameId)
+            RuleFor(createReviewRequestDto => createReviewRequestDto.ProductId)
                 .NotNull()
                 .NotEqual(0)
                 .WithMessage("{PropertyName} must not equal 0.");

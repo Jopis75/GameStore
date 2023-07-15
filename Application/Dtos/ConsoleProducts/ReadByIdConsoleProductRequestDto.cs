@@ -2,7 +2,7 @@
 
 namespace Application.Dtos.ConsoleProducts
 {
-    public class ReadByIdConsoleProductRequestDto : IReadByIdRequestDto
+    public class ReadByIdConsoleProductRequestDto : ReadByIdRequestDto
     {
         public int Id { get; set; }
     }

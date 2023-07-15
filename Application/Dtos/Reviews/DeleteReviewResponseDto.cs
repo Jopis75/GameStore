@@ -2,12 +2,7 @@
 
 namespace Application.Dtos.Reviews
 {
-    public class DeleteReviewResponseDto : IDeleteResponseDto
+    public class DeleteReviewResponseDto : DeleteResponseDto
     {
-        public DateTime? DeletedAt { get; set; }
-
-        public string? DeletedBy { get; set; }
-
-        public int Id { get; set; }
     }
 }

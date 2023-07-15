@@ -2,7 +2,7 @@
 
 namespace Application.Dtos.Reviews
 {
-    public class ReadAllReviewRequestDto : IReadAllRequestDto
+    public class ReadAllReviewRequestDto : ReadAllRequestDto
     {
     }
 }

@@ -2,7 +2,7 @@
 
 namespace Application.Dtos.Consoles
 {
-    public class ReadAllConsoleRequestDto : IReadAllRequestDto
+    public class ReadAllConsoleRequestDto : ReadAllRequestDto
     {
     }
 }

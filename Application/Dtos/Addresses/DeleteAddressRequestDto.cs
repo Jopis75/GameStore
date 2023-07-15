@@ -2,8 +2,7 @@
 
 namespace Application.Dtos.Addresses
 {
-    public class DeleteAddressRequestDto : IDeleteRequestDto
+    public class DeleteAddressRequestDto : DeleteRequestDto
     {
-        public int Id { get; set; }
     }
 }

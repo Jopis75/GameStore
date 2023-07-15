@@ -2,12 +2,7 @@
 
 namespace Application.Dtos.Products
 {
-    public class UpdateProductResponseDto : IUpdateResponseDto
+    public class UpdateProductResponseDto : UpdateResponseDto
     {
-        public int Id { get; set; }
-
-        public DateTime? UpdatedAt { get; set; }
-
-        public string? UpdatedBy { get; set; }
     }
 }

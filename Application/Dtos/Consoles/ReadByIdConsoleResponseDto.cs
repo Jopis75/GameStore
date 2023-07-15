@@ -5,7 +5,7 @@ using Application.Dtos.Reviews;
 
 namespace Application.Dtos.Consoles
 {
-    public class ReadByIdConsoleResponseDto : IReadByIdResponseDto
+    public class ReadByIdConsoleResponseDto : ReadByIdResponseDto
     {
         public DateTime? CreatedAt { get; set; }
 

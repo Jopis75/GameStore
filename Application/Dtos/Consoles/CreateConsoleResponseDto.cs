@@ -2,7 +2,7 @@
 
 namespace Application.Dtos.Consoles
 {
-    public class CreateConsoleResponseDto : ICreateResponseDto
+    public class CreateConsoleResponseDto : CreateResponseDto
     {
         public DateTime? CreatedAt { get; set; }
 

@@ -1,7 +1,6 @@
 ﻿namespace Application.Dtos.Common.Interfaces
 {
-    public interface IResponseDto
+    public class ReadByIdResponseDto : ReadResponseDto
     {
-        int Id { get; }
     }
 }

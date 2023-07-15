@@ -2,8 +2,7 @@
 
 namespace Application.Dtos.Addresses
 {
-    public class ReadByIdAddressRequestDto : IReadByIdRequestDto
+    public class ReadByIdAddressRequestDto : ReadByIdRequestDto
     {
-        public int Id { get; set; }
     }
 }

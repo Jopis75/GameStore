@@ -2,7 +2,7 @@
 
 namespace Application.Dtos.Products
 {
-    public class CreateProductRequestDto : ICreateRequestDto
+    public class CreateProductRequestDto : CreateRequestDto
     {
         public int? DeveloperId { get; set; }
 

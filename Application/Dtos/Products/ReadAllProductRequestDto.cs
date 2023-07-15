@@ -2,7 +2,7 @@
 
 namespace Application.Dtos.Products
 {
-    public class ReadAllProductRequestDto : IReadAllRequestDto
+    public class ReadAllProductRequestDto : ReadAllRequestDto
     {
     }
 }

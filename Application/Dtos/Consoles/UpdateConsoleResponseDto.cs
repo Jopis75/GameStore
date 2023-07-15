@@ -2,7 +2,7 @@
 
 namespace Application.Dtos.Consoles
 {
-    public class UpdateConsoleResponseDto : IUpdateResponseDto
+    public class UpdateConsoleResponseDto : UpdateResponseDto
     {
         public int Id { get; set; }
 

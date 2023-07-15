@@ -2,7 +2,7 @@
 
 namespace Application.Dtos.ConsoleProducts
 {
-    public class CreateConsoleProductRequestDto : ICreateRequestDto
+    public class CreateConsoleProductRequestDto : CreateRequestDto
     {
         public int? ConsoleId { get; set; }
 

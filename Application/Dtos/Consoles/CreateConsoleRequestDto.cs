@@ -2,7 +2,7 @@
 
 namespace Application.Dtos.Consoles
 {
-    public class CreateConsoleRequestDto : ICreateRequestDto
+    public class CreateConsoleRequestDto : CreateRequestDto
     {
         public int? DeveloperId { get; set; }
 

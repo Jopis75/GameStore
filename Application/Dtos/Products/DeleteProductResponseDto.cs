@@ -2,12 +2,7 @@
 
 namespace Application.Dtos.Products
 {
-    public class DeleteProductResponseDto : IDeleteResponseDto
+    public class DeleteProductResponseDto : DeleteResponseDto
     {
-        public DateTime? DeletedAt { get; set; }
-
-        public string? DeletedBy { get; set; }
-
-        public int Id { get; set; }
     }
 }

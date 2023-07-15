@@ -1,27 +1,16 @@
 ﻿using Application.Dtos.Common.Interfaces;
+using Application.Dtos.Products;
 
 namespace Application.Dtos.Reviews
 {
-    public class ReadByIdReviewResponseDto : IReadByIdResponseDto
+    public class ReadByIdReviewResponseDto : ReadByIdResponseDto
     {
-        public DateTime? CreatedAt { get; set; }
-
-        public string? CreatedBy { get; set; }
-
-        public DateTime? DeletedAt { get; set; }
-
-        public string? DeletedBy { get; set; }
-
         public int? Grade { get; set; }
 
-        public int Id { get; set; }
+        public ReadByIdProductResponseDto? Product { get; set; } = new();
 
         public DateTime? ReviewDate { get; set; }
 
         public string? ReviewText { get; set; }
-
-        public DateTime? UpdatedAt { get; set; }
-
-        public string? UpdatedBy { get; set; }
     }
 }

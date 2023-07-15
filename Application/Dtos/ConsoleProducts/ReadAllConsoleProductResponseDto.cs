@@ -4,7 +4,7 @@ using Application.Dtos.Products;
 
 namespace Application.Dtos.ConsoleProducts
 {
-    public class ReadAllConsoleProductResponseDto : IReadAllResponseDto
+    public class ReadAllConsoleProductResponseDto : ReadAllResponseDto
     {
         public ReadAllConsoleResponseDto? Console { get; set; } = new();
 

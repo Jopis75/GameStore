@@ -2,8 +2,7 @@
 
 namespace Application.Dtos.Companies
 {
-    public class DeleteCompanyRequestDto : IDeleteRequestDto
+    public class DeleteCompanyRequestDto : DeleteRequestDto
     {
-        public int Id { get; set; }
     }
 }

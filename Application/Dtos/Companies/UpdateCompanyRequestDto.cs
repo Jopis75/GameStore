@@ -3,15 +3,13 @@ using Domain.Entities;
 
 namespace Application.Dtos.Companies
 {
-    public class UpdateCompanyRequestDto : IUpdateRequestDto
+    public class UpdateCompanyRequestDto : UpdateRequestDto
     {
         public CompanyType? CompanyType { get; set; }
 
         public string? EmailAddress { get; set; }
 
         public int? HeadquartersId { get; set; }
-
-        public int Id { get; set; }
 
         public Industry? Industry { get; set; }
 

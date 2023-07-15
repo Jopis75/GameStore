@@ -1,5 +1,5 @@
 ﻿using Application.Dtos.Addresses;
-using Application.Dtos.Common.Interfaces;
+using Application.Dtos.Common;
 using Application.Dtos.Products;
 using Domain.Entities;
 

@@ -1,4 +1,4 @@
-﻿using Application.Dtos.Common.Interfaces;
+﻿using Application.Dtos.Common;
 using Domain.Entities;
 
 namespace Application.Dtos.Companies

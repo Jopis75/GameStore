@@ -1,4 +1,4 @@
-﻿using Application.Dtos.Common.Interfaces;
+﻿using Application.Dtos.Common;
 using FluentValidation;
 
 namespace Application.Validators.Common

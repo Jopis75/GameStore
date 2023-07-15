@@ -1,4 +1,4 @@
-﻿using Application.Dtos.Common.Interfaces;
+﻿using Application.Dtos.Common;
 using Application.Dtos.Companies;
 using Application.Dtos.Products;
 using Application.Dtos.Reviews;

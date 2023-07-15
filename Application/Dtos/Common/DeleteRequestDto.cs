@@ -1,4 +1,4 @@
-﻿namespace Application.Dtos.Common.Interfaces
+﻿namespace Application.Dtos.Common
 {
     public class DeleteRequestDto : RequestDto
     {

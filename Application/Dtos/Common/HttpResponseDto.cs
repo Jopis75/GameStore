@@ -1,6 +1,4 @@
-﻿using Application.Dtos.Common.Interfaces;
-
-namespace Application.Dtos.Common
+﻿namespace Application.Dtos.Common
 {
     public class HttpResponseDto<TDto> : IHttpResponseDto<TDto>
         where TDto : ResponseDto, new()

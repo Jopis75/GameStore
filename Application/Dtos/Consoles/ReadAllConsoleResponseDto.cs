@@ -15,7 +15,7 @@ namespace Application.Dtos.Consoles
 
         public string? DeletedBy { get; set; }
 
-        //public ReadAllCompanyResponseDto? Developer { get; set; } = new();
+        public ReadAllCompanyResponseDto? Developer { get; set; } = new();
 
         public int Id { get; set; }
 
@@ -25,13 +25,13 @@ namespace Application.Dtos.Consoles
 
         public decimal? Price { get; set; }
 
-        //public List<ReadAllProductResponseDto>? Products { get; set; } = new();
+        public List<ReadAllProductResponseDto>? Products { get; set; } = new();
 
         public DateTime? PurchaseDate { get; set; }
 
         public DateTime? ReleaseDate { get; set; }
 
-        //public ReadAllReviewResponseDto? Review { get; set; } = new();
+        public ReadAllReviewResponseDto? Review { get; set; } = new();
 
         public DateTime? UpdatedAt { get; set; }
 

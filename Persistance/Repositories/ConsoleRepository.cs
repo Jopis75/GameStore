@@ -10,14 +10,18 @@ namespace Persistance.Repositories
         public ConsoleRepository(GameStoreDbContext gameStoreDbContext)
             : base(gameStoreDbContext) { }
 
-        public async Task<Console> ReadByNameAsync(string name, bool asNoTracking = false)
+        public async Task<Console> ReadByNameAsync(string name, bool include = false, bool asNoTracking = false)
         {
-            var console = asNoTracking ?
-                await Entities
-                    .AsNoTracking()
+            var entities = asNoTracking ? Entities.AsNoTracking() : Entities;
+
+            var console = include ?
+                await entities
+                    .Include(entity => entity.ConsoleProducts)
+                    .Include(entity => entity.Developer)
+                    .Include(entity => entity.Review)
                     .Where(entity => entity.Name == name)
                     .SingleOrDefaultAsync() :
-                await Entities
+                await entities
                     .Where(entity => entity.Name == name)
                     .SingleOrDefaultAsync();
 

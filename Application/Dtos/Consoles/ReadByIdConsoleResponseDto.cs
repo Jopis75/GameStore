@@ -1,42 +1,28 @@
 ﻿using Application.Dtos.Common;
 using Application.Dtos.Companies;
-using Application.Dtos.Products;
 using Application.Dtos.Reviews;
+using Application.Dtos.VideoGames;
 
 namespace Application.Dtos.Consoles
 {
     public class ReadByIdConsoleResponseDto : ReadByIdResponseDto
     {
-        public DateTime? CreatedAt { get; set; }
+        public ReadByIdCompanyResponseDto Developer { get; set; } = new();
 
-        public string? CreatedBy { get; set; }
+        public string ImageUri { get; set; } = default!;
 
-        public DateTime? DeletedAt { get; set; }
+        public string Name { get; set; } = default!;
 
-        public string? DeletedBy { get; set; }
+        public decimal Price { get; set; }
 
-        public ReadByIdCompanyResponseDto? Developer { get; set; } = new();
+        public DateTime PurchaseDate { get; set; }
 
-        public int Id { get; set; }
+        public DateTime ReleaseDate { get; set; }
 
-        public string? ImageUri { get; set; }
+        public ReadByIdReviewResponseDto? Review { get; set; }
 
-        public string? Name { get; set; }
+        public string Url { get; set; } = default!;
 
-        public decimal? Price { get; set; }
-
-        public List<ReadByIdProductResponseDto>? Products { get; set; } = new();
-
-        public DateTime? PurchaseDate { get; set; }
-
-        public DateTime? ReleaseDate { get; set; }
-
-        public ReadByIdReviewResponseDto? Review { get; set; } = new();
-
-        public DateTime? UpdatedAt { get; set; }
-
-        public string? UpdatedBy { get; set; }
-
-        public string? Url { get; set; }
+        public List<ReadByIdVideoGameResponseDto> VideoGames { get; set; } = new();
     }
 }

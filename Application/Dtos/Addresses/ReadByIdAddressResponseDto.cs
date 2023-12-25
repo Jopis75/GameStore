@@ -4,14 +4,14 @@ namespace Application.Dtos.Addresses
 {
     public class ReadByIdAddressResponseDto : ReadByIdResponseDto
     {
-        public string? City { get; set; }
+        public string City { get; set; } = default!;
 
-        public string? Country { get; set; }
+        public string Country { get; set; } = default!;
 
-        public string? PostalCode { get; set; }
+        public string PostalCode { get; set; } = default!;
 
-        public string? State { get; set; }
+        public string State { get; set; } = default!;
 
-        public string? StreetAddress { get; set; }
+        public string StreetAddress { get; set; } = default!;
     }
 }

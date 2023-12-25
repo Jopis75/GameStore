@@ -4,25 +4,25 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Persistance.Configurations
 {
-    public class ConsoleProductConfiguration : IEntityTypeConfiguration<ConsoleProduct>
+    public class ConsoleProductConfiguration : IEntityTypeConfiguration<ConsoleVideoGame>
     {
-        public void Configure(EntityTypeBuilder<ConsoleProduct> builder)
+        public void Configure(EntityTypeBuilder<ConsoleVideoGame> builder)
         {
             builder.HasData(
-                new ConsoleProduct
+                new ConsoleVideoGame
                 {
                     ConsoleId = 1,
-                    ProductId = 1
+                    VideoGameId = 1
                 },
-                new ConsoleProduct
+                new ConsoleVideoGame
                 {
                     ConsoleId = 1,
-                    ProductId = 2
+                    VideoGameId = 2
                 },
-                new ConsoleProduct
+                new ConsoleVideoGame
                 {
                     ConsoleId = 1,
-                    ProductId = 3
+                    VideoGameId = 3
                 }
             );
         }

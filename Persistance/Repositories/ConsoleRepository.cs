@@ -16,7 +16,7 @@ namespace Persistance.Repositories
 
             var console = include ?
                 await entities
-                    .Include(entity => entity.ConsoleProducts)
+                    .Include(entity => entity.ConsoleVideoGames)
                     .Include(entity => entity.Developer)
                     .Include(entity => entity.Review)
                     .Where(entity => entity.Name == name)

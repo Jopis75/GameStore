@@ -10,12 +10,12 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Persistance.Configurations
 {
-    public class ProductConfiguration : IEntityTypeConfiguration<Product>
+    public class ProductConfiguration : IEntityTypeConfiguration<VideoGame>
     {
-        public void Configure(EntityTypeBuilder<Product> builder)
+        public void Configure(EntityTypeBuilder<VideoGame> builder)
         {
             builder.HasData(
-                new Product
+                new VideoGame
                 {
                     Id = 1,
                     Title = "Horizon Forbidden West",
@@ -33,7 +33,7 @@ namespace Persistance.Configurations
                     DeletedBy = string.Empty,
                     DeletedAt = null
                 },
-                new Product
+                new VideoGame
                 {
                     Id = 2,
                     Title = "Horizon Call of the Mountain",
@@ -51,7 +51,7 @@ namespace Persistance.Configurations
                     DeletedBy = string.Empty,
                     DeletedAt = null
                 },
-                new Product
+                new VideoGame
                 {
                     Id = 3,
                     Title = "Ghost of Tsushima DIRECTOR’S CUT",

@@ -20,7 +20,7 @@ namespace Application.Validators.Companies
                 .NotEmpty()
                 .WithMessage("{PropertyName} is required.");
 
-            RuleFor(updateCompanyRequestDto => updateCompanyRequestDto.HeadquartersId)
+            RuleFor(updateCompanyRequestDto => updateCompanyRequestDto.HeadquarterId)
                 .NotEqual(0)
                 .WithMessage("{PropertyName} must not equal 0.");
 

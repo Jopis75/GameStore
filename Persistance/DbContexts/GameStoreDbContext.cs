@@ -11,11 +11,11 @@ namespace Persistance.DbContexts
 
         public DbSet<Company> Companies { get; set; }
 
-        public DbSet<ConsoleProduct> ConsoleProducts { get; set; }
+        public DbSet<ConsoleVideoGame> ConsoleProducts { get; set; }
 
         public DbSet<Console> Consoles { get; set; }
 
-        public DbSet<Product> Products { get; set; }
+        public DbSet<VideoGame> Products { get; set; }
 
         public DbSet<Review> Reviews { get; set; }
 
@@ -43,15 +43,15 @@ namespace Persistance.DbContexts
                 .HasKey(company => company.Id);
             modelBuilder
                 .Entity<Company>()
-                .HasMany(company => company.Products)
+                .HasMany(company => company.VideoGames)
                 .WithOne(Product => Product.Developer)
                 .HasForeignKey(product => product.DeveloperId)
                 .OnDelete(DeleteBehavior.SetNull);
             modelBuilder
                 .Entity<Company>()
-                .HasOne(company => company.Headquarters)
+                .HasOne(company => company.Headquarter)
                 .WithOne(address => address.Company)
-                .HasForeignKey<Company>(company => company.HeadquartersId)
+                .HasForeignKey<Company>(company => company.HeadquarterId)
                 .OnDelete(DeleteBehavior.SetNull);
 
             // Console.
@@ -80,43 +80,43 @@ namespace Persistance.DbContexts
 
             // Product.
             modelBuilder
-                .Entity<Product>()
+                .Entity<VideoGame>()
                 .ToTable("Product");
             modelBuilder
-                .Entity<Product>()
+                .Entity<VideoGame>()
                 .HasKey(product => product.Id);
             modelBuilder
-                .Entity<Product>()
+                .Entity<VideoGame>()
                 .HasOne(product => product.Developer)
-                .WithMany(company => company.Products)
+                .WithMany(company => company.VideoGames)
                 .HasForeignKey(product => product.DeveloperId)
                 .OnDelete(DeleteBehavior.SetNull);
             modelBuilder
-                .Entity<Product>()
+                .Entity<VideoGame>()
                 .HasOne(product => product.Review)
-                .WithOne(review => review.Product)
-                .HasForeignKey<Product>(product => product.ReviewId)
+                .WithOne(review => review.VideoGame)
+                .HasForeignKey<VideoGame>(product => product.ReviewId)
                 .OnDelete(DeleteBehavior.SetNull);
             modelBuilder
-                .Entity<Product>()
+                .Entity<VideoGame>()
                 .Property(product => product.Price)
                 .HasPrecision(18, 2);
 
             // ConsoleProduct.
             modelBuilder
-                .Entity<ConsoleProduct>()
+                .Entity<ConsoleVideoGame>()
                 .ToTable("ConsoleProduct");
-            modelBuilder.Entity<ConsoleProduct>()
-                .HasKey(consoleProduct => new { consoleProduct.ConsoleId, consoleProduct.ProductId });
-            modelBuilder.Entity<ConsoleProduct>()
+            modelBuilder.Entity<ConsoleVideoGame>()
+                .HasKey(consoleProduct => new { consoleProduct.ConsoleId, consoleProduct.VideoGameId });
+            modelBuilder.Entity<ConsoleVideoGame>()
                 .HasOne(consoleProduct => consoleProduct.Console)
-                .WithMany(console => console.ConsoleProducts)
+                .WithMany(console => console.ConsoleVideoGames)
                 .HasForeignKey(consoleProduct => consoleProduct.ConsoleId);
             //.OnDelete(DeleteBehavior.SetNull);
-            modelBuilder.Entity<ConsoleProduct>()
-                .HasOne(consoleProduct => consoleProduct.Product)
-                .WithMany(product => product.ConsoleProducts)
-                .HasForeignKey(consoleProduct => consoleProduct.ProductId);
+            modelBuilder.Entity<ConsoleVideoGame>()
+                .HasOne(consoleProduct => consoleProduct.VideoGame)
+                .WithMany(product => product.ConsoleVideoGames)
+                .HasForeignKey(consoleProduct => consoleProduct.VideoGameId);
                 //.OnDelete(DeleteBehavior.SetNull);
 
             // Review.
@@ -128,9 +128,9 @@ namespace Persistance.DbContexts
                 .HasKey(review => review.Id);
             modelBuilder
                 .Entity<Review>()
-                .HasOne(review => review.Product)
+                .HasOne(review => review.VideoGame)
                 .WithOne(product => product.Review)
-                .HasForeignKey<Review>(review => review.ProductId)
+                .HasForeignKey<Review>(review => review.VideoGameId)
                 .OnDelete(DeleteBehavior.SetNull);
 
             // Configurations.

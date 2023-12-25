@@ -6,14 +6,14 @@
 
         ICompanyRepository CompanyRepository { get; }
 
-        IConsoleProductRepository ConsoleProductRepository { get; }
-
         IConsoleRepository ConsoleRepository { get; }
 
-        IProductRepository ProductRepository { get; }
+        IConsoleVideoGameRepository ConsoleVideoGameRepository { get; }
 
         IReviewRepository ReviewRepository { get; }
 
         Task SaveAsync();
+
+        IVideoGameRepository VideoGameRepository { get; }
     }
 }

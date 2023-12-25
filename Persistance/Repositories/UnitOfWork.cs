@@ -12,15 +12,15 @@ namespace Persistance.Repositories
 
         private ICompanyRepository? _companyRepository;
 
-        private IConsoleProductRepository? _consoleProductRepository;
-
         private IConsoleRepository? _consoleRepository;
+
+        private IConsoleVideoGameRepository? _consoleVideoGameRepository;
 
         private readonly IHttpContextAccessor _httpContextAccessor;
 
-        private IProductRepository? _productRepository;
-
         private IReviewRepository? _reviewRepository;
+
+        private IVideoGameRepository? _videoGameRepository;
 
         public IAddressRepository AddressRepository =>
             _addressRepository ??= new AddressRepository(_gameStoreDbContext);
@@ -28,17 +28,17 @@ namespace Persistance.Repositories
         public ICompanyRepository CompanyRepository =>
             _companyRepository ??= new CompanyRepository(_gameStoreDbContext);
 
-        public IConsoleProductRepository ConsoleProductRepository =>
-            _consoleProductRepository ??= new ConsoleProductRepository(_gameStoreDbContext);
-
         public IConsoleRepository ConsoleRepository =>
             _consoleRepository ??= new ConsoleRepository(_gameStoreDbContext);
 
-        public IProductRepository ProductRepository =>
-            _productRepository ??= new ProductRepository(_gameStoreDbContext);
+        public IConsoleVideoGameRepository ConsoleVideoGameRepository =>
+            _consoleVideoGameRepository ??= new ConsoleVideoGameRepository(_gameStoreDbContext);
 
         public IReviewRepository ReviewRepository =>
             _reviewRepository ??= new ReviewRepository(_gameStoreDbContext);
+
+        public IVideoGameRepository VideoGameRepository =>
+            _videoGameRepository ??= new VideoGameRepository(_gameStoreDbContext);
 
         public UnitOfWork(GameStoreDbContext gameStoreDbContext, IHttpContextAccessor httpContextAccessor)
         {

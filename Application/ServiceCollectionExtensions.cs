@@ -1,15 +1,15 @@
 ﻿using Application.Dtos.Addresses;
 using Application.Dtos.Companies;
-using Application.Dtos.ConsoleProducts;
 using Application.Dtos.Consoles;
-using Application.Dtos.Products;
+using Application.Dtos.ConsoleVideoGames;
 using Application.Dtos.Reviews;
+using Application.Dtos.VideoGames;
 using Application.Validators.Addresses;
 using Application.Validators.Companies;
-using Application.Validators.ConsoleProducts;
 using Application.Validators.Consoles;
-using Application.Validators.Products;
+using Application.Validators.ConsoleVideoGames;
 using Application.Validators.Reviews;
+using Application.Validators.VideoGames;
 using FluentValidation;
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
@@ -62,17 +62,17 @@ namespace Application
             serviceCollection.AddScoped<IValidator<UpdateConsoleRequestDto>, UpdateConsoleRequestDtoValidator>();
             serviceCollection.AddScoped<IValidator<DeleteConsoleRequestDto>, DeleteConsoleRequestDtoValidator>();
 
-            // ConsoleProducts.
-            serviceCollection.AddScoped<IValidator<CreateConsoleProductRequestDto>, CreateConsoleProductRequestDtoValidator>();
-            serviceCollection.AddScoped<IValidator<ReadByIdConsoleProductRequestDto>, ReadByIdConsoleProductRequestDtoValidator>();
-            serviceCollection.AddScoped<IValidator<UpdateConsoleProductRequestDto>, UpdateConsoleProductRequestDtoValidator>();
-            serviceCollection.AddScoped<IValidator<DeleteConsoleProductRequestDto>, DeleteConsoleProductRequestDtoValidator>();
+            // ConsoleVideoGames.
+            serviceCollection.AddScoped<IValidator<CreateConsoleVideoGameRequestDto>, CreateConsoleVideoGameRequestDtoValidator>();
+            serviceCollection.AddScoped<IValidator<ReadByIdConsoleVideoGameRequestDto>, ReadByIdConsoleVideoGameRequestDtoValidator>();
+            serviceCollection.AddScoped<IValidator<UpdateConsoleVideoGameRequestDto>, UpdateConsoleVideoGameRequestDtoValidator>();
+            serviceCollection.AddScoped<IValidator<DeleteConsoleVideoGameRequestDto>, DeleteConsoleVideoGameRequestDtoValidator>();
 
-            // Products.
-            serviceCollection.AddScoped<IValidator<CreateProductRequestDto>, CreateProductRequestDtoValidator>();
-            serviceCollection.AddScoped<IValidator<ReadByIdProductRequestDto>, ReadByIdProductRequestDtoValidator>();
-            serviceCollection.AddScoped<IValidator<UpdateProductRequestDto>, UpdateProductRequestDtoValidator>();
-            serviceCollection.AddScoped<IValidator<DeleteProductRequestDto>, DeleteProductRequestDtoValidator>();
+            // VideoGames.
+            serviceCollection.AddScoped<IValidator<CreateVideoGameRequestDto>, CreateVideoGameRequestDtoValidator>();
+            serviceCollection.AddScoped<IValidator<ReadByIdVideoGameRequestDto>, ReadByIdVideoGameRequestDtoValidator>();
+            serviceCollection.AddScoped<IValidator<UpdateVideoGameRequestDto>, UpdateVideoGameRequestDtoValidator>();
+            serviceCollection.AddScoped<IValidator<DeleteVideoGameRequestDto>, DeleteVideoGameRequestDtoValidator>();
 
             // Reviews.
             serviceCollection.AddScoped<IValidator<CreateReviewRequestDto>, CreateReviewRequestDtoValidator>();

@@ -6,14 +6,14 @@
 
         public int? ConsoleId { get; set; }
 
-        public int? Grade { get; set; }
+        public int Grade { get; set; }
 
-        public DateTime? ReviewDate { get; set; }
+        public DateTime ReviewDate { get; set; }
 
-        public string? ReviewText { get; set; }
+        public string ReviewText { get; set; } = default!;
 
-        public virtual Product? Product { get; set; }
+        public virtual VideoGame? VideoGame { get; set; }
 
-        public int? ProductId { get; set; }
+        public int? VideoGameId { get; set; }
     }
 }

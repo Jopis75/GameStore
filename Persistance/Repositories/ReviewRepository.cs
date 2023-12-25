@@ -43,10 +43,10 @@ namespace Persistance.Repositories
             var review = asNoTracking ?
                 await Entities
                     .AsNoTracking<Review>()
-                    .Where(entity => entity.ProductId == videoGameId)
+                    .Where(entity => entity.VideoGameId == videoGameId)
                     .SingleOrDefaultAsync() :
                 await Entities
-                    .Where(entity => entity.ProductId == videoGameId)
+                    .Where(entity => entity.VideoGameId == videoGameId)
                     .SingleOrDefaultAsync();
 
             if (review == null)

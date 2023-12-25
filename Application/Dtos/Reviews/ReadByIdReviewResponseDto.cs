@@ -1,16 +1,19 @@
 ﻿using Application.Dtos.Common;
-using Application.Dtos.Products;
+using Application.Dtos.Consoles;
+using Application.Dtos.VideoGames;
 
 namespace Application.Dtos.Reviews
 {
     public class ReadByIdReviewResponseDto : ReadByIdResponseDto
     {
-        public int? Grade { get; set; }
+        public ReadAllConsoleResponseDto? Console { get; set; }
 
-        public ReadByIdProductResponseDto? Product { get; set; } = new();
+        public int Grade { get; set; }
 
-        public DateTime? ReviewDate { get; set; }
+        public DateTime ReviewDate { get; set; }
 
-        public string? ReviewText { get; set; }
+        public string ReviewText { get; set; } = default!;
+
+        public ReadAllVideoGameResponseDto? VideoGame { get; set; }
     }
 }

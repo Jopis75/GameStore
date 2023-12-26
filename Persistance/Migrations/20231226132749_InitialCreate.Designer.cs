@@ -12,7 +12,7 @@ using Persistance.DbContexts;
 namespace Persistance.Migrations
 {
     [DbContext(typeof(GameStoreDbContext))]
-    [Migration("20230714141137_InitialCreate")]
+    [Migration("20231226132749_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -34,9 +34,11 @@ namespace Persistance.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("City")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Country")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime?>("CreatedAt")
@@ -52,12 +54,15 @@ namespace Persistance.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("PostalCode")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("State")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("StreetAddress")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime?>("UpdatedAt")
@@ -76,7 +81,7 @@ namespace Persistance.Migrations
                             Id = 1,
                             City = "San Mateo",
                             Country = "USA",
-                            CreatedAt = new DateTime(2023, 7, 14, 16, 11, 37, 787, DateTimeKind.Local).AddTicks(7486),
+                            CreatedAt = new DateTime(2023, 12, 26, 14, 27, 49, 684, DateTimeKind.Local).AddTicks(4646),
                             CreatedBy = "System",
                             DeletedBy = "",
                             PostalCode = "94404",
@@ -89,7 +94,7 @@ namespace Persistance.Migrations
                             Id = 2,
                             City = "San Mateo",
                             Country = "United States",
-                            CreatedAt = new DateTime(2023, 7, 14, 16, 11, 37, 787, DateTimeKind.Local).AddTicks(7535),
+                            CreatedAt = new DateTime(2023, 12, 26, 14, 27, 49, 684, DateTimeKind.Local).AddTicks(4691),
                             CreatedBy = "System",
                             DeletedBy = "",
                             PostalCode = "94404",
@@ -102,7 +107,7 @@ namespace Persistance.Migrations
                             Id = 3,
                             City = "Amsterdam",
                             Country = "The Netherlands",
-                            CreatedAt = new DateTime(2023, 7, 14, 16, 11, 37, 787, DateTimeKind.Local).AddTicks(7539),
+                            CreatedAt = new DateTime(2023, 12, 26, 14, 27, 49, 684, DateTimeKind.Local).AddTicks(4695),
                             CreatedBy = "System",
                             DeletedBy = "",
                             PostalCode = "1012 RL",
@@ -115,7 +120,7 @@ namespace Persistance.Migrations
                             Id = 4,
                             City = "Bellevue",
                             Country = "United States",
-                            CreatedAt = new DateTime(2023, 7, 14, 16, 11, 37, 787, DateTimeKind.Local).AddTicks(7542),
+                            CreatedAt = new DateTime(2023, 12, 26, 14, 27, 49, 684, DateTimeKind.Local).AddTicks(4697),
                             CreatedBy = "System",
                             DeletedBy = "",
                             PostalCode = "98004",
@@ -133,7 +138,7 @@ namespace Persistance.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int?>("CompanyType")
+                    b.Property<int>("CompanyType")
                         .HasColumnType("int");
 
                     b.Property<DateTime?>("CreatedAt")
@@ -149,27 +154,32 @@ namespace Persistance.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("EmailAddress")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("HeadquartersId")
+                    b.Property<int>("HeadquarterId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("Industry")
+                    b.Property<int>("Industry")
                         .HasColumnType("int");
 
                     b.Property<string>("LogoImageUri")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Name")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int?>("ParentCompanyId")
                         .HasColumnType("int");
 
                     b.Property<string>("PhoneNumber")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("TradeName")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime?>("UpdatedAt")
@@ -179,13 +189,13 @@ namespace Persistance.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("WebsiteUrl")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("HeadquartersId")
-                        .IsUnique()
-                        .HasFilter("[HeadquartersId] IS NOT NULL");
+                    b.HasIndex("HeadquarterId")
+                        .IsUnique();
 
                     b.HasIndex("ParentCompanyId");
 
@@ -196,12 +206,15 @@ namespace Persistance.Migrations
                         {
                             Id = 1,
                             CompanyType = 0,
-                            CreatedAt = new DateTime(2023, 7, 14, 16, 11, 37, 787, DateTimeKind.Local).AddTicks(8316),
+                            CreatedAt = new DateTime(2023, 12, 26, 14, 27, 49, 684, DateTimeKind.Local).AddTicks(5637),
                             CreatedBy = "System",
                             DeletedBy = "",
-                            HeadquartersId = 1,
+                            EmailAddress = "johan.steinrud@gmail.com",
+                            HeadquarterId = 1,
+                            Industry = 0,
                             LogoImageUri = "",
                             Name = "Sony Interactive Entertainment",
+                            PhoneNumber = "46702651007",
                             TradeName = "Sony Interactive Entertainment",
                             UpdatedBy = "",
                             WebsiteUrl = "https://sonyinteractive.com/en/"
@@ -210,13 +223,16 @@ namespace Persistance.Migrations
                         {
                             Id = 2,
                             CompanyType = 2,
-                            CreatedAt = new DateTime(2023, 7, 14, 16, 11, 37, 787, DateTimeKind.Local).AddTicks(8321),
+                            CreatedAt = new DateTime(2023, 12, 26, 14, 27, 49, 684, DateTimeKind.Local).AddTicks(5643),
                             CreatedBy = "System",
                             DeletedBy = "",
-                            HeadquartersId = 2,
+                            EmailAddress = "johan.steinrud@gmail.com",
+                            HeadquarterId = 2,
+                            Industry = 0,
                             LogoImageUri = "",
                             Name = "PlayStation Studios",
                             ParentCompanyId = 2,
+                            PhoneNumber = "46702651007",
                             TradeName = "PlayStation Studios",
                             UpdatedBy = "",
                             WebsiteUrl = "https://www.playstation.com/en-us/corporate/playstation-studios/"
@@ -225,13 +241,16 @@ namespace Persistance.Migrations
                         {
                             Id = 3,
                             CompanyType = 0,
-                            CreatedAt = new DateTime(2023, 7, 14, 16, 11, 37, 787, DateTimeKind.Local).AddTicks(8324),
+                            CreatedAt = new DateTime(2023, 12, 26, 14, 27, 49, 684, DateTimeKind.Local).AddTicks(5646),
                             CreatedBy = "System",
                             DeletedBy = "",
-                            HeadquartersId = 3,
+                            EmailAddress = "johan.steinrud@gmail.com",
+                            HeadquarterId = 3,
+                            Industry = 0,
                             LogoImageUri = "",
                             Name = "Guerrilla",
                             ParentCompanyId = 2,
+                            PhoneNumber = "46702651007",
                             TradeName = "Guerrilla Games",
                             UpdatedBy = "",
                             WebsiteUrl = "https://www.guerrilla-games.com/"
@@ -240,13 +259,16 @@ namespace Persistance.Migrations
                         {
                             Id = 4,
                             CompanyType = 0,
-                            CreatedAt = new DateTime(2023, 7, 14, 16, 11, 37, 787, DateTimeKind.Local).AddTicks(8327),
+                            CreatedAt = new DateTime(2023, 12, 26, 14, 27, 49, 684, DateTimeKind.Local).AddTicks(5649),
                             CreatedBy = "System",
                             DeletedBy = "",
-                            HeadquartersId = 4,
+                            EmailAddress = "johan.steinrud@gmail.com",
+                            HeadquarterId = 4,
+                            Industry = 0,
                             LogoImageUri = "",
                             Name = "Sucker Punch",
                             ParentCompanyId = 2,
+                            PhoneNumber = "46702651007",
                             TradeName = "Sucker Punch Productions",
                             UpdatedBy = "",
                             WebsiteUrl = "https://www.suckerpunch.com/"
@@ -273,23 +295,25 @@ namespace Persistance.Migrations
                     b.Property<string>("DeletedBy")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("DeveloperId")
+                    b.Property<int>("DeveloperId")
                         .HasColumnType("int");
 
                     b.Property<string>("ImageUri")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Name")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<decimal?>("Price")
+                    b.Property<decimal>("Price")
                         .HasPrecision(18, 2)
                         .HasColumnType("decimal(18,2)");
 
-                    b.Property<DateTime?>("PurchaseDate")
+                    b.Property<DateTime>("PurchaseDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<DateTime?>("ReleaseDate")
+                    b.Property<DateTime>("ReleaseDate")
                         .HasColumnType("datetime2");
 
                     b.Property<int?>("ReviewId")
@@ -302,6 +326,7 @@ namespace Persistance.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Url")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
@@ -318,26 +343,29 @@ namespace Persistance.Migrations
                         new
                         {
                             Id = 1,
-                            CreatedAt = new DateTime(2023, 7, 14, 16, 11, 37, 787, DateTimeKind.Local).AddTicks(7835),
+                            CreatedAt = new DateTime(2023, 12, 26, 14, 27, 49, 684, DateTimeKind.Local).AddTicks(5044),
                             CreatedBy = "System",
                             DeletedBy = "",
                             DeveloperId = 1,
                             ImageUri = "",
                             Name = "PlayStation®5 Console",
-                            Price = 499.99m,
-                            PurchaseDate = new DateTime(2023, 7, 14, 16, 11, 37, 787, DateTimeKind.Local).AddTicks(7832),
+                            Price = 9988.00m,
+                            PurchaseDate = new DateTime(2022, 1, 29, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             ReleaseDate = new DateTime(2020, 11, 12, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             UpdatedBy = "",
                             Url = "https://direct.playstation.com/en-us/buy-consoles/playstation5-console/"
                         });
                 });
 
-            modelBuilder.Entity("Domain.Entities.ConsoleProduct", b =>
+            modelBuilder.Entity("Domain.Entities.ConsoleVideoGame", b =>
                 {
-                    b.Property<int?>("ConsoleId")
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    b.Property<int?>("ProductId")
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("ConsoleId")
                         .HasColumnType("int");
 
                     b.Property<DateTime?>("CreatedAt")
@@ -352,8 +380,76 @@ namespace Persistance.Migrations
                     b.Property<string>("DeletedBy")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("Id")
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("UpdatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("VideoGameId")
                         .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ConsoleId");
+
+                    b.HasIndex("VideoGameId");
+
+                    b.ToTable("ConsoleVideoGame", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            ConsoleId = 1,
+                            VideoGameId = 1
+                        },
+                        new
+                        {
+                            Id = 2,
+                            ConsoleId = 1,
+                            VideoGameId = 2
+                        },
+                        new
+                        {
+                            Id = 3,
+                            ConsoleId = 1,
+                            VideoGameId = 3
+                        });
+                });
+
+            modelBuilder.Entity("Domain.Entities.Review", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int?>("ConsoleId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("DeletedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("DeletedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Grade")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("ReviewDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("ReviewText")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime?>("UpdatedAt")
                         .HasColumnType("datetime2");
@@ -361,34 +457,19 @@ namespace Persistance.Migrations
                     b.Property<string>("UpdatedBy")
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("ConsoleId", "ProductId");
+                    b.Property<int?>("VideoGameId")
+                        .HasColumnType("int");
 
-                    b.HasIndex("ProductId");
+                    b.HasKey("Id");
 
-                    b.ToTable("ConsoleProduct", (string)null);
+                    b.HasIndex("VideoGameId")
+                        .IsUnique()
+                        .HasFilter("[VideoGameId] IS NOT NULL");
 
-                    b.HasData(
-                        new
-                        {
-                            ConsoleId = 1,
-                            ProductId = 1,
-                            Id = 0
-                        },
-                        new
-                        {
-                            ConsoleId = 1,
-                            ProductId = 2,
-                            Id = 0
-                        },
-                        new
-                        {
-                            ConsoleId = 1,
-                            ProductId = 3,
-                            Id = 0
-                        });
+                    b.ToTable("Review", (string)null);
                 });
 
-            modelBuilder.Entity("Domain.Entities.Product", b =>
+            modelBuilder.Entity("Domain.Entities.VideoGame", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -408,29 +489,35 @@ namespace Persistance.Migrations
                     b.Property<string>("DeletedBy")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("DeveloperId")
+                    b.Property<int>("DeveloperId")
                         .HasColumnType("int");
 
                     b.Property<string>("ImageUri")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<decimal?>("Price")
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<decimal>("Price")
                         .HasPrecision(18, 2)
                         .HasColumnType("decimal(18,2)");
 
-                    b.Property<DateTime?>("PurchaseDate")
+                    b.Property<DateTime>("PurchaseDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<DateTime?>("ReleaseDate")
+                    b.Property<DateTime>("ReleaseDate")
                         .HasColumnType("datetime2");
 
                     b.Property<int?>("ReviewId")
                         .HasColumnType("int");
 
                     b.Property<string>("Title")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<TimeSpan?>("TotalTimePlayed")
+                    b.Property<TimeSpan>("TotalTimePlayed")
                         .HasColumnType("time");
 
                     b.Property<DateTime?>("UpdatedAt")
@@ -440,23 +527,25 @@ namespace Persistance.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Url")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
                     b.HasIndex("DeveloperId");
 
-                    b.ToTable("Product", (string)null);
+                    b.ToTable("VideoGame", (string)null);
 
                     b.HasData(
                         new
                         {
                             Id = 1,
-                            CreatedAt = new DateTime(2023, 7, 14, 16, 11, 37, 787, DateTimeKind.Local).AddTicks(7999),
+                            CreatedAt = new DateTime(2023, 12, 26, 14, 27, 49, 684, DateTimeKind.Local).AddTicks(5224),
                             CreatedBy = "System",
                             DeletedBy = "",
                             DeveloperId = 2,
                             ImageUri = "",
+                            Name = "Horizon Forbidden West",
                             Price = 69.99m,
                             PurchaseDate = new DateTime(2022, 7, 18, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             ReleaseDate = new DateTime(2022, 2, 18, 0, 0, 0, 0, DateTimeKind.Unspecified),
@@ -468,11 +557,12 @@ namespace Persistance.Migrations
                         new
                         {
                             Id = 2,
-                            CreatedAt = new DateTime(2023, 7, 14, 16, 11, 37, 787, DateTimeKind.Local).AddTicks(8007),
+                            CreatedAt = new DateTime(2023, 12, 26, 14, 27, 49, 684, DateTimeKind.Local).AddTicks(5233),
                             CreatedBy = "System",
                             DeletedBy = "",
                             DeveloperId = 2,
                             ImageUri = "",
+                            Name = "Horizon Call of the Mountain",
                             Price = 59.99m,
                             PurchaseDate = new DateTime(2023, 2, 24, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             ReleaseDate = new DateTime(2023, 2, 22, 0, 0, 0, 0, DateTimeKind.Unspecified),
@@ -484,11 +574,12 @@ namespace Persistance.Migrations
                         new
                         {
                             Id = 3,
-                            CreatedAt = new DateTime(2023, 7, 14, 16, 11, 37, 787, DateTimeKind.Local).AddTicks(8015),
+                            CreatedAt = new DateTime(2023, 12, 26, 14, 27, 49, 684, DateTimeKind.Local).AddTicks(5241),
                             CreatedBy = "System",
                             DeletedBy = "",
                             DeveloperId = 3,
                             ImageUri = "",
+                            Name = "Ghost of Tsushima DIRECTOR’S CUT",
                             Price = 69.99m,
                             PurchaseDate = new DateTime(2022, 5, 3, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             ReleaseDate = new DateTime(2020, 7, 17, 0, 0, 0, 0, DateTimeKind.Unspecified),
@@ -499,68 +590,19 @@ namespace Persistance.Migrations
                         });
                 });
 
-            modelBuilder.Entity("Domain.Entities.Review", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int?>("ConsoleId")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime?>("CreatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("CreatedBy")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime?>("DeletedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("DeletedBy")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int?>("Grade")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("ProductId")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime?>("ReviewDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("ReviewText")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime?>("UpdatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("UpdatedBy")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ProductId")
-                        .IsUnique()
-                        .HasFilter("[ProductId] IS NOT NULL");
-
-                    b.ToTable("Review", (string)null);
-                });
-
             modelBuilder.Entity("Domain.Entities.Company", b =>
                 {
-                    b.HasOne("Domain.Entities.Address", "Headquarters")
+                    b.HasOne("Domain.Entities.Address", "Headquarter")
                         .WithOne("Company")
-                        .HasForeignKey("Domain.Entities.Company", "HeadquartersId")
-                        .OnDelete(DeleteBehavior.SetNull);
+                        .HasForeignKey("Domain.Entities.Company", "HeadquarterId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("Domain.Entities.Company", "ParentCompany")
                         .WithMany()
                         .HasForeignKey("ParentCompanyId");
 
-                    b.Navigation("Headquarters");
+                    b.Navigation("Headquarter");
 
                     b.Navigation("ParentCompany");
                 });
@@ -570,55 +612,53 @@ namespace Persistance.Migrations
                     b.HasOne("Domain.Entities.Company", "Developer")
                         .WithMany("Consoles")
                         .HasForeignKey("DeveloperId")
-                        .OnDelete(DeleteBehavior.SetNull);
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("Domain.Entities.Review", "Review")
                         .WithOne("Console")
-                        .HasForeignKey("Domain.Entities.Console", "ReviewId")
-                        .OnDelete(DeleteBehavior.SetNull);
+                        .HasForeignKey("Domain.Entities.Console", "ReviewId");
 
                     b.Navigation("Developer");
 
                     b.Navigation("Review");
                 });
 
-            modelBuilder.Entity("Domain.Entities.ConsoleProduct", b =>
+            modelBuilder.Entity("Domain.Entities.ConsoleVideoGame", b =>
                 {
                     b.HasOne("Domain.Entities.Console", "Console")
-                        .WithMany("ConsoleProducts")
+                        .WithMany("ConsoleVideoGames")
                         .HasForeignKey("ConsoleId")
-                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Domain.Entities.Product", "Product")
-                        .WithMany("ConsoleProducts")
-                        .HasForeignKey("ProductId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                    b.HasOne("Domain.Entities.VideoGame", "VideoGame")
+                        .WithMany("ConsoleVideoGames")
+                        .HasForeignKey("VideoGameId")
                         .IsRequired();
 
                     b.Navigation("Console");
 
-                    b.Navigation("Product");
-                });
-
-            modelBuilder.Entity("Domain.Entities.Product", b =>
-                {
-                    b.HasOne("Domain.Entities.Company", "Developer")
-                        .WithMany("Products")
-                        .HasForeignKey("DeveloperId")
-                        .OnDelete(DeleteBehavior.SetNull);
-
-                    b.Navigation("Developer");
+                    b.Navigation("VideoGame");
                 });
 
             modelBuilder.Entity("Domain.Entities.Review", b =>
                 {
-                    b.HasOne("Domain.Entities.Product", "Product")
+                    b.HasOne("Domain.Entities.VideoGame", "VideoGame")
                         .WithOne("Review")
-                        .HasForeignKey("Domain.Entities.Review", "ProductId")
-                        .OnDelete(DeleteBehavior.SetNull);
+                        .HasForeignKey("Domain.Entities.Review", "VideoGameId");
 
-                    b.Navigation("Product");
+                    b.Navigation("VideoGame");
+                });
+
+            modelBuilder.Entity("Domain.Entities.VideoGame", b =>
+                {
+                    b.HasOne("Domain.Entities.Company", "Developer")
+                        .WithMany("VideoGames")
+                        .HasForeignKey("DeveloperId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Developer");
                 });
 
             modelBuilder.Entity("Domain.Entities.Address", b =>
@@ -630,24 +670,24 @@ namespace Persistance.Migrations
                 {
                     b.Navigation("Consoles");
 
-                    b.Navigation("Products");
+                    b.Navigation("VideoGames");
                 });
 
             modelBuilder.Entity("Domain.Entities.Console", b =>
                 {
-                    b.Navigation("ConsoleProducts");
-                });
-
-            modelBuilder.Entity("Domain.Entities.Product", b =>
-                {
-                    b.Navigation("ConsoleProducts");
-
-                    b.Navigation("Review");
+                    b.Navigation("ConsoleVideoGames");
                 });
 
             modelBuilder.Entity("Domain.Entities.Review", b =>
                 {
                     b.Navigation("Console");
+                });
+
+            modelBuilder.Entity("Domain.Entities.VideoGame", b =>
+                {
+                    b.Navigation("ConsoleVideoGames");
+
+                    b.Navigation("Review");
                 });
 #pragma warning restore 612, 618
         }

@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Persistance.Configurations
 {
-    public class ProductConfiguration : IEntityTypeConfiguration<VideoGame>
+    public class VideoGameConfiguration : IEntityTypeConfiguration<VideoGame>
     {
         public void Configure(EntityTypeBuilder<VideoGame> builder)
         {
@@ -18,14 +18,16 @@ namespace Persistance.Configurations
                 new VideoGame
                 {
                     Id = 1,
+                    Name = "Horizon Forbidden West",
                     Title = "Horizon Forbidden West",
+                    ImageUri = string.Empty,
                     DeveloperId = 2,
                     Price = 69.99M,
                     ReleaseDate = DateTime.Parse("2022-02-18"),
                     PurchaseDate = DateTime.Parse("2022-07-18"),
                     TotalTimePlayed = TimeSpan.FromHours(0),
                     Url = "https://www.playstation.com/sv-se/games/horizon-forbidden-west/",
-                    ImageUri = string.Empty,
+                    ReviewId = null,
                     CreatedBy = "System",
                     CreatedAt = DateTime.Now,
                     UpdatedBy = string.Empty,
@@ -36,14 +38,16 @@ namespace Persistance.Configurations
                 new VideoGame
                 {
                     Id = 2,
+                    Name = "Horizon Call of the Mountain",
                     Title = "Horizon Call of the Mountain",
+                    ImageUri = string.Empty,
                     DeveloperId = 2,
                     Price = 59.99M,
                     ReleaseDate = DateTime.Parse("2023-02-22"),
                     PurchaseDate = DateTime.Parse("2023-02-24"),
                     TotalTimePlayed = TimeSpan.FromHours(0),
                     Url = "https://www.playstation.com/en-se/games/horizon-call-of-the-mountain/",
-                    ImageUri = string.Empty,
+                    ReviewId = null,
                     CreatedBy = "System",
                     CreatedAt = DateTime.Now,
                     UpdatedBy = string.Empty,
@@ -54,14 +58,16 @@ namespace Persistance.Configurations
                 new VideoGame
                 {
                     Id = 3,
+                    Name = "Ghost of Tsushima DIRECTOR’S CUT",
                     Title = "Ghost of Tsushima DIRECTOR’S CUT",
+                    ImageUri = string.Empty,
                     DeveloperId = 3,
                     Price = 69.99M,
                     ReleaseDate = DateTime.Parse("2020-07-17"),
                     PurchaseDate = DateTime.Parse("2022-05-03"),
                     TotalTimePlayed = TimeSpan.FromHours(0),
                     Url = "https://www.playstation.com/en-se/games/ghost-of-tsushima/",
-                    ImageUri = string.Empty,
+                    ReviewId = null,
                     CreatedBy = "System",
                     CreatedAt = DateTime.Now,
                     UpdatedBy = string.Empty,

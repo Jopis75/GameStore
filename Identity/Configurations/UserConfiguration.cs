@@ -22,7 +22,7 @@ namespace Identity.Configurations
                     EmailConfirmed = true,
                     UserName = "johan.steinrud@gmail.com",
                     NormalizedUserName = "JOHAN.STEINRUD@GMAIL.COM",
-                    PasswordHash = passwordHasher.HashPassword(null, "~ZhCp4%*QK~gqJ+}")
+                    PasswordHash = passwordHasher.HashPassword(new ApplicationUser(), "~ZhCp4%*QK~gqJ+}")
                 }
             );
         }

@@ -11,11 +11,11 @@ namespace Persistance.DbContexts
 
         public DbSet<Company> Companies { get; set; }
 
-        public DbSet<ConsoleVideoGame> ConsoleProducts { get; set; }
+        public DbSet<ConsoleVideoGame> ConsoleVideoGames { get; set; }
 
         public DbSet<Console> Consoles { get; set; }
 
-        public DbSet<VideoGame> Products { get; set; }
+        public DbSet<VideoGame> VideoGames { get; set; }
 
         public DbSet<Review> Reviews { get; set; }
 
@@ -45,14 +45,12 @@ namespace Persistance.DbContexts
                 .Entity<Company>()
                 .HasMany(company => company.VideoGames)
                 .WithOne(Product => Product.Developer)
-                .HasForeignKey(product => product.DeveloperId)
-                .OnDelete(DeleteBehavior.SetNull);
+                .HasForeignKey(product => product.DeveloperId);
             modelBuilder
                 .Entity<Company>()
                 .HasOne(company => company.Headquarter)
                 .WithOne(address => address.Company)
-                .HasForeignKey<Company>(company => company.HeadquarterId)
-                .OnDelete(DeleteBehavior.SetNull);
+                .HasForeignKey<Company>(company => company.HeadquarterId);
 
             // Console.
             modelBuilder
@@ -65,59 +63,58 @@ namespace Persistance.DbContexts
                 .Entity<Console>()
                 .HasOne(console => console.Developer)
                 .WithMany(company => company.Consoles)
-                .HasForeignKey(product => product.DeveloperId)
-                .OnDelete(DeleteBehavior.SetNull);
+                .HasForeignKey(console => console.DeveloperId);
             modelBuilder
                 .Entity<Console>()
                 .HasOne(console => console.Review)
                 .WithOne(review => review.Console)
-                .HasForeignKey<Console>(product => product.ReviewId)
-                .OnDelete(DeleteBehavior.SetNull);
+                .HasForeignKey<Console>(product => product.ReviewId);
             modelBuilder
                 .Entity<Console>()
                 .Property(console => console.Price)
                 .HasPrecision(18, 2);
 
-            // Product.
+            // VideoGame.
             modelBuilder
                 .Entity<VideoGame>()
-                .ToTable("Product");
+                .ToTable("VideoGame");
             modelBuilder
                 .Entity<VideoGame>()
-                .HasKey(product => product.Id);
+                .HasKey(videoGame => videoGame.Id);
             modelBuilder
                 .Entity<VideoGame>()
-                .HasOne(product => product.Developer)
+                .HasOne(videoGame => videoGame.Developer)
                 .WithMany(company => company.VideoGames)
-                .HasForeignKey(product => product.DeveloperId)
-                .OnDelete(DeleteBehavior.SetNull);
+                .HasForeignKey(videoGame => videoGame.DeveloperId);
             modelBuilder
                 .Entity<VideoGame>()
-                .HasOne(product => product.Review)
+                .HasOne(videoGame => videoGame.Review)
                 .WithOne(review => review.VideoGame)
-                .HasForeignKey<VideoGame>(product => product.ReviewId)
-                .OnDelete(DeleteBehavior.SetNull);
+                .HasForeignKey<VideoGame>(videoGame => videoGame.ReviewId);
             modelBuilder
                 .Entity<VideoGame>()
-                .Property(product => product.Price)
+                .Property(videoGame => videoGame.Price)
                 .HasPrecision(18, 2);
 
-            // ConsoleProduct.
+            // ConsoleVideoGame.
             modelBuilder
                 .Entity<ConsoleVideoGame>()
-                .ToTable("ConsoleProduct");
-            modelBuilder.Entity<ConsoleVideoGame>()
-                .HasKey(consoleProduct => new { consoleProduct.ConsoleId, consoleProduct.VideoGameId });
-            modelBuilder.Entity<ConsoleVideoGame>()
-                .HasOne(consoleProduct => consoleProduct.Console)
+                .ToTable("ConsoleVideoGame");
+            modelBuilder
+                .Entity<ConsoleVideoGame>()
+                .HasKey(consoleVideoGame => consoleVideoGame.Id);
+            modelBuilder
+                .Entity<ConsoleVideoGame>()
+                .HasOne(consoleVideoGame => consoleVideoGame.Console)
                 .WithMany(console => console.ConsoleVideoGames)
-                .HasForeignKey(consoleProduct => consoleProduct.ConsoleId);
-            //.OnDelete(DeleteBehavior.SetNull);
-            modelBuilder.Entity<ConsoleVideoGame>()
-                .HasOne(consoleProduct => consoleProduct.VideoGame)
-                .WithMany(product => product.ConsoleVideoGames)
-                .HasForeignKey(consoleProduct => consoleProduct.VideoGameId);
-                //.OnDelete(DeleteBehavior.SetNull);
+                .HasForeignKey(consoleVideoGame => consoleVideoGame.ConsoleId)
+                .OnDelete(DeleteBehavior.ClientSetNull);
+            modelBuilder
+                .Entity<ConsoleVideoGame>()
+                .HasOne(consoleVideoGame => consoleVideoGame.VideoGame)
+                .WithMany(videoGame => videoGame.ConsoleVideoGames)
+                .HasForeignKey(consoleVideoGame => consoleVideoGame.VideoGameId)
+                .OnDelete(DeleteBehavior.ClientSetNull);
 
             // Review.
             modelBuilder
@@ -130,14 +127,13 @@ namespace Persistance.DbContexts
                 .Entity<Review>()
                 .HasOne(review => review.VideoGame)
                 .WithOne(product => product.Review)
-                .HasForeignKey<Review>(review => review.VideoGameId)
-                .OnDelete(DeleteBehavior.SetNull);
+                .HasForeignKey<Review>(review => review.VideoGameId);
 
             // Configurations.
             modelBuilder.ApplyConfiguration(new AddressConfiguration());
             modelBuilder.ApplyConfiguration(new ConsoleConfiguration());
-            modelBuilder.ApplyConfiguration(new ProductConfiguration());
-            modelBuilder.ApplyConfiguration(new ConsoleProductConfiguration());
+            modelBuilder.ApplyConfiguration(new VideoGameConfiguration());
+            modelBuilder.ApplyConfiguration(new ConsoleVideoGameConfiguration());
             modelBuilder.ApplyConfiguration(new CompanyConfiguration());
         }
 

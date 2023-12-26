@@ -12,9 +12,12 @@ namespace GameStoreAPI.Controllers
     {
         private readonly IMediator _mediator;
 
-        public AddressController(IMediator mediator)
+        private readonly ILogger<AddressController> _logger;
+
+        public AddressController(IMediator mediator, ILogger<AddressController> logger)
         {
             _mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
+            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
         [HttpPost]
@@ -54,6 +57,8 @@ namespace GameStoreAPI.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<ActionResult<ReadAllAddressResponseDto>> ReadAllAsync()
         {
+            _logger.LogInformation("Hello from AddressController.ReadAllAsync!");
+
             var httpResponseDto = await _mediator.Send(new ReadAllAddressRequest());
             return StatusCode(httpResponseDto.StatusCode, httpResponseDto);
         }

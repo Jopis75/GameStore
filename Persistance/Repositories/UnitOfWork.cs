@@ -16,7 +16,7 @@ namespace Persistance.Repositories
 
         private IConsoleVideoGameRepository? _consoleVideoGameRepository;
 
-        private readonly IHttpContextAccessor _httpContextAccessor;
+        //private readonly IHttpContextAccessor _httpContextAccessor;
 
         private IReviewRepository? _reviewRepository;
 
@@ -40,10 +40,10 @@ namespace Persistance.Repositories
         public IVideoGameRepository VideoGameRepository =>
             _videoGameRepository ??= new VideoGameRepository(_gameStoreDbContext);
 
-        public UnitOfWork(GameStoreDbContext gameStoreDbContext, IHttpContextAccessor httpContextAccessor)
+        public UnitOfWork(GameStoreDbContext gameStoreDbContext/*, IHttpContextAccessor httpContextAccessor*/)
         {
             _gameStoreDbContext = gameStoreDbContext ?? throw new ArgumentNullException(nameof(gameStoreDbContext));
-            _httpContextAccessor = httpContextAccessor ?? throw new ArgumentNullException(nameof(httpContextAccessor));
+            //_httpContextAccessor = httpContextAccessor ?? throw new ArgumentNullException(nameof(httpContextAccessor));
         }
 
         public void Dispose()
@@ -54,8 +54,8 @@ namespace Persistance.Repositories
 
         public async Task SaveAsync()
         {
-            var userName = _httpContextAccessor.HttpContext.User.FindFirst(string.Empty)?.Value;
-            await _gameStoreDbContext.SaveChangesAsync(userName ?? "System");
+            //var userName = _httpContextAccessor.HttpContext.User.FindFirst(string.Empty)?.Value;
+            await _gameStoreDbContext.SaveChangesAsync(/*userName ??*/ "System");
         }
     }
 }

@@ -6,6 +6,7 @@ using AutoMapper;
 using FluentValidation;
 using MediatR;
 using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Logging;
 using Console = Domain.Entities.Console;
 
 namespace Application.Features.Consoles.RequestHandlers.Commands
@@ -18,43 +19,56 @@ namespace Application.Features.Consoles.RequestHandlers.Commands
 
         private readonly IValidator<CreateConsoleRequestDto> _validator;
 
-        public CreateConsoleRequestHandler(IUnitOfWork unitOfWork, IMapper mapper, IValidator<CreateConsoleRequestDto> validator)
+        private readonly ILogger<CreateConsoleRequestHandler> _logger;
+
+        public CreateConsoleRequestHandler(IUnitOfWork unitOfWork, IMapper mapper, IValidator<CreateConsoleRequestDto> validator, ILogger<CreateConsoleRequestHandler> logger)
         {
             _unitOfWork = unitOfWork ?? throw new ArgumentNullException(nameof(unitOfWork));
             _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
             _validator = validator ?? throw new ArgumentNullException(nameof(validator));
+            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
         public async Task<HttpResponseDto<CreateConsoleResponseDto>> Handle(CreateConsoleRequest createConsoleRequest, CancellationToken cancellationToken)
         {
             try
             {
+                _logger.LogInformation("Begin CreateConsole {@CreateConsoleRequest}.", createConsoleRequest);
+
                 if (createConsoleRequest.CreateConsoleRequestDto == null)
                 {
-                    return new HttpResponseDto<CreateConsoleResponseDto>(new ArgumentNullException(nameof(createConsoleRequest.CreateConsoleRequestDto)).Message, StatusCodes.Status400BadRequest);
+                    var httpResponseDto1 = new HttpResponseDto<CreateConsoleResponseDto>(new ArgumentNullException(nameof(createConsoleRequest.CreateConsoleRequestDto)).Message, StatusCodes.Status400BadRequest);
+                    _logger.LogError("Error CreateConsole {@HttpResponseDto}.", httpResponseDto1);
+                    return httpResponseDto1;
                 }
 
                 var validationResult = await _validator.ValidateAsync(createConsoleRequest.CreateConsoleRequestDto, cancellationToken);
 
                 if (!validationResult.IsValid)
                 {
-                    return new HttpResponseDto<CreateConsoleResponseDto>(new ValidationException(validationResult.Errors).Message, StatusCodes.Status400BadRequest);
+                    var httpResponseDto1 = new HttpResponseDto<CreateConsoleResponseDto>(new ValidationException(validationResult.Errors).Message, StatusCodes.Status400BadRequest);
+                    _logger.LogError("Error CreateConsole {@HttpResponseDto}.", httpResponseDto1);
+                    return httpResponseDto1;
                 }
 
                 var console = _mapper.Map<Console>(createConsoleRequest.CreateConsoleRequestDto);
                 var createdConsole = await _unitOfWork.ConsoleRepository.CreateAsync(console);
                 await _unitOfWork.SaveAsync();
 
-                return new HttpResponseDto<CreateConsoleResponseDto>(new CreateConsoleResponseDto
+                var httpResponseDto = new HttpResponseDto<CreateConsoleResponseDto>(new CreateConsoleResponseDto
                 {
                     Id = createdConsole.Id,
                     CreatedAt = createdConsole.CreatedAt,
-                    CreatedBy = string.Empty
+                    CreatedBy = createdConsole.CreatedBy,
                 }, StatusCodes.Status201Created);
+                _logger.LogInformation("End CreateConsole {@HttpResponseDto}.", httpResponseDto);
+                return httpResponseDto;
             }
             catch (Exception ex)
             {
-                return new HttpResponseDto<CreateConsoleResponseDto>(ex.Message, StatusCodes.Status500InternalServerError);
+                var httpResponseDto1 = new HttpResponseDto<CreateConsoleResponseDto>(ex.Message, StatusCodes.Status500InternalServerError);
+                _logger.LogError("Error CreateConsole {@HttpResponseDto}.", httpResponseDto1);
+                return httpResponseDto1;
             }
         }
     }

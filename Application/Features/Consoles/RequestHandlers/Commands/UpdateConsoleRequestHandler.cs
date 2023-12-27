@@ -6,6 +6,7 @@ using AutoMapper;
 using FluentValidation;
 using MediatR;
 using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Logging;
 
 namespace Application.Features.Consoles.RequestHandlers.Commands
 {
@@ -17,27 +18,36 @@ namespace Application.Features.Consoles.RequestHandlers.Commands
 
         private readonly IValidator<UpdateConsoleRequestDto> _validator;
 
-        public UpdateConsoleRequestHandler(IUnitOfWork unitOfWork, IMapper mapper, IValidator<UpdateConsoleRequestDto> validator)
+        private readonly ILogger<UpdateConsoleRequestHandler> _logger;
+
+        public UpdateConsoleRequestHandler(IUnitOfWork unitOfWork, IMapper mapper, IValidator<UpdateConsoleRequestDto> validator, ILogger<UpdateConsoleRequestHandler> logger)
         {
             _unitOfWork = unitOfWork ?? throw new ArgumentNullException(nameof(unitOfWork));
             _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
             _validator = validator ?? throw new ArgumentNullException(nameof(validator));
+            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
         public async Task<HttpResponseDto<UpdateConsoleResponseDto>> Handle(UpdateConsoleRequest updateConsoleRequest, CancellationToken cancellationToken)
         {
             try
             {
+                _logger.LogInformation("Begin UpdateConsole {@UpdateConsoleRequest}.", updateConsoleRequest);
+
                 if (updateConsoleRequest.UpdateConsoleRequestDto == null)
                 {
-                    return new HttpResponseDto<UpdateConsoleResponseDto>(new ArgumentNullException(nameof(updateConsoleRequest.UpdateConsoleRequestDto)).Message, StatusCodes.Status400BadRequest);
+                    var httpResponseDto1 = new HttpResponseDto<UpdateConsoleResponseDto>(new ArgumentNullException(nameof(updateConsoleRequest.UpdateConsoleRequestDto)).Message, StatusCodes.Status400BadRequest);
+                    _logger.LogError("Error UpdateConsole {@HttpResponseDto}.", httpResponseDto1);
+                    return httpResponseDto1;
                 }
 
                 var validationResult = await _validator.ValidateAsync(updateConsoleRequest.UpdateConsoleRequestDto, cancellationToken);
 
                 if (!validationResult.IsValid)
                 {
-                    return new HttpResponseDto<UpdateConsoleResponseDto>(new ValidationException(validationResult.Errors).Message, StatusCodes.Status400BadRequest);
+                    var httpResponseDto1 = new HttpResponseDto<UpdateConsoleResponseDto>(new ValidationException(validationResult.Errors).Message, StatusCodes.Status400BadRequest);
+                    _logger.LogError("Error UpdateConsole {@HttpResponseDto}.", httpResponseDto1);
+                    return httpResponseDto1;
                 }
 
                 var console = await _unitOfWork.ConsoleRepository.ReadByIdAsync(updateConsoleRequest.UpdateConsoleRequestDto.Id);
@@ -45,16 +55,20 @@ namespace Application.Features.Consoles.RequestHandlers.Commands
                 var updatedConsole = await _unitOfWork.ConsoleRepository.UpdateAsync(console);
                 await _unitOfWork.SaveAsync();
 
-                return new HttpResponseDto<UpdateConsoleResponseDto>(new UpdateConsoleResponseDto
+                var httpResponseDto = new HttpResponseDto<UpdateConsoleResponseDto>(new UpdateConsoleResponseDto
                 {
                     Id = updatedConsole.Id,
                     UpdatedAt = updatedConsole.UpdatedAt,
-                    UpdatedBy = string.Empty
+                    UpdatedBy = updatedConsole.UpdatedBy,
                 }, StatusCodes.Status200OK);
+                _logger.LogInformation("End UpdateConsole {@HttpResponseDto}.", httpResponseDto);
+                return httpResponseDto;
             }
             catch (Exception ex)
             {
-                return new HttpResponseDto<UpdateConsoleResponseDto>(ex.Message, StatusCodes.Status500InternalServerError);
+                var httpResponseDto1 = new HttpResponseDto<UpdateConsoleResponseDto>(ex.Message, StatusCodes.Status500InternalServerError);
+                _logger.LogError("Error UpdateConsole {@HttpResponseDto}.", httpResponseDto1);
+                return httpResponseDto1;
             }
         }
     }

@@ -6,6 +6,7 @@ using AutoMapper;
 using FluentValidation;
 using MediatR;
 using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Logging;
 
 namespace Application.Features.Addresses.RequestHandlers.Commands
 {
@@ -17,27 +18,36 @@ namespace Application.Features.Addresses.RequestHandlers.Commands
 
         private readonly IValidator<UpdateAddressRequestDto> _validator;
 
-        public UpdateAddressRequestHandler(IUnitOfWork unitOfWork, IMapper mapper, IValidator<UpdateAddressRequestDto> validator)
+        private readonly ILogger<UpdateAddressRequestHandler> _logger;
+
+        public UpdateAddressRequestHandler(IUnitOfWork unitOfWork, IMapper mapper, IValidator<UpdateAddressRequestDto> validator, ILogger<UpdateAddressRequestHandler> logger)
         {
             _unitOfWork = unitOfWork ?? throw new ArgumentNullException(nameof(unitOfWork));
             _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
             _validator = validator ?? throw new ArgumentNullException(nameof(validator));
+            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
         public async Task<HttpResponseDto<UpdateAddressResponseDto>> Handle(UpdateAddressRequest updateAddressRequest, CancellationToken cancellationToken)
         {
             try
             {
+                _logger.LogInformation("Begin UpdateAddress {@UpdateAddressRequest}.", updateAddressRequest);
+
                 if (updateAddressRequest.UpdateAddressRequestDto == null)
                 {
-                    return new HttpResponseDto<UpdateAddressResponseDto>(new ArgumentNullException(nameof(updateAddressRequest.UpdateAddressRequestDto)).Message, StatusCodes.Status400BadRequest);
+                    var httpResponseDto1 = new HttpResponseDto<UpdateAddressResponseDto>(new ArgumentNullException(nameof(updateAddressRequest.UpdateAddressRequestDto)).Message, StatusCodes.Status400BadRequest);
+                    _logger.LogError("Error UpdateAddress {@HttpResponseDto}.", httpResponseDto1);
+                    return httpResponseDto1;
                 }
 
                 var validationResult = await _validator.ValidateAsync(updateAddressRequest.UpdateAddressRequestDto, cancellationToken);
 
                 if (!validationResult.IsValid)
                 {
-                    return new HttpResponseDto<UpdateAddressResponseDto>(new ValidationException(validationResult.Errors).Message, StatusCodes.Status400BadRequest);
+                    var httpResponseDto1 = new HttpResponseDto<UpdateAddressResponseDto>(new ValidationException(validationResult.Errors).Message, StatusCodes.Status400BadRequest);
+                    _logger.LogError("Error UpdateAddress {@HttpResponseDto}.", httpResponseDto1);
+                    return httpResponseDto1;
                 }
 
                 var address = await _unitOfWork.AddressRepository.ReadByIdAsync(updateAddressRequest.UpdateAddressRequestDto.Id);
@@ -45,16 +55,20 @@ namespace Application.Features.Addresses.RequestHandlers.Commands
                 var updatedAddress = await _unitOfWork.AddressRepository.UpdateAsync(address);
                 await _unitOfWork.SaveAsync();
 
-                return new HttpResponseDto<UpdateAddressResponseDto>(new UpdateAddressResponseDto
+                var httpResponseDto = new HttpResponseDto<UpdateAddressResponseDto>(new UpdateAddressResponseDto
                 {
                     Id = updatedAddress.Id,
                     UpdatedAt = updatedAddress.UpdatedAt,
                     UpdatedBy = string.Empty
                 }, StatusCodes.Status200OK);
+                _logger.LogInformation("End UpdateAddress {@HttpResponseDto}.", httpResponseDto);
+                return httpResponseDto;
             }
             catch (Exception ex)
             {
-                return new HttpResponseDto<UpdateAddressResponseDto>(ex.Message, StatusCodes.Status500InternalServerError);
+                var httpResponseDto1 = new HttpResponseDto<UpdateAddressResponseDto>(ex.Message, StatusCodes.Status500InternalServerError);
+                _logger.LogError("Error UpdateAddress {@HttpResponseDto}.", httpResponseDto1);
+                return httpResponseDto1;
             }
         }
     }

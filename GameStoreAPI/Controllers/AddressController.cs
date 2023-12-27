@@ -57,8 +57,6 @@ namespace GameStoreAPI.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<ActionResult<ReadAllAddressResponseDto>> ReadAllAsync()
         {
-            _logger.LogInformation("Hello from AddressController.ReadAllAsync!");
-
             var httpResponseDto = await _mediator.Send(new ReadAllAddressRequest());
             return StatusCode(httpResponseDto.StatusCode, httpResponseDto);
         }

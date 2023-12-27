@@ -5,6 +5,7 @@ using Application.Interfaces.Persistance;
 using FluentValidation;
 using MediatR;
 using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Logging;
 
 namespace Application.Features.Addresses.RequestHandlers.Commands
 {
@@ -14,42 +15,55 @@ namespace Application.Features.Addresses.RequestHandlers.Commands
 
         private readonly IValidator<DeleteAddressRequestDto> _validator;
 
-        public DeleteAddressRequestHandler(IUnitOfWork unitOfWork, IValidator<DeleteAddressRequestDto> validator)
+        private readonly ILogger<DeleteAddressRequestHandler> _logger;
+
+        public DeleteAddressRequestHandler(IUnitOfWork unitOfWork, IValidator<DeleteAddressRequestDto> validator, ILogger<DeleteAddressRequestHandler> logger)
         {
             _unitOfWork = unitOfWork ?? throw new ArgumentNullException(nameof(unitOfWork));
             _validator = validator ?? throw new ArgumentNullException(nameof(validator));
+            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
         public async Task<HttpResponseDto<DeleteAddressResponseDto>> Handle(DeleteAddressRequest deleteAddressRequest, CancellationToken cancellationToken)
         {
             try
             {
+                _logger.LogInformation("Begin DeleteAddress {@DeleteAddressRequest}.", deleteAddressRequest);
+
                 if (deleteAddressRequest.DeleteAddressRequestDto == null)
                 {
-                    return new HttpResponseDto<DeleteAddressResponseDto>(new ArgumentNullException(nameof(deleteAddressRequest.DeleteAddressRequestDto)).Message, StatusCodes.Status400BadRequest);
+                    var httpResponseDto1 = new HttpResponseDto<DeleteAddressResponseDto>(new ArgumentNullException(nameof(deleteAddressRequest.DeleteAddressRequestDto)).Message, StatusCodes.Status400BadRequest);
+                    _logger.LogError("Error DeleteAddress {@HttpResponseDto}.", httpResponseDto1);
+                    return httpResponseDto1;
                 }
 
                 var validationResult = await _validator.ValidateAsync(deleteAddressRequest.DeleteAddressRequestDto, cancellationToken);
 
                 if (!validationResult.IsValid)
                 {
-                    return new HttpResponseDto<DeleteAddressResponseDto>(new ValidationException(validationResult.Errors).Message, StatusCodes.Status400BadRequest);
+                    var httpResponseDto1 = new HttpResponseDto<DeleteAddressResponseDto>(new ValidationException(validationResult.Errors).Message, StatusCodes.Status400BadRequest);
+                    _logger.LogError("Error DeleteAddress {@HttpResponseDto}.", httpResponseDto1);
+                    return httpResponseDto1;
                 }
 
                 var address = await _unitOfWork.AddressRepository.ReadByIdAsync(deleteAddressRequest.DeleteAddressRequestDto.Id);
                 var deletedAddress = await _unitOfWork.AddressRepository.DeleteAsync(address);
                 await _unitOfWork.SaveAsync();
 
-                return new HttpResponseDto<DeleteAddressResponseDto>(new DeleteAddressResponseDto
+                var httpResponseDto = new HttpResponseDto<DeleteAddressResponseDto>(new DeleteAddressResponseDto
                 {
                     Id = deletedAddress.Id,
                     DeletedAt = deletedAddress.DeletedAt,
-                    DeletedBy = string.Empty
+                    DeletedBy = deletedAddress.DeletedBy,
                 }, StatusCodes.Status200OK);
+                _logger.LogInformation("End DeleteAddress {@HttpResponseDto}.", httpResponseDto);
+                return httpResponseDto;
             }
             catch (Exception ex)
             {
-                return new HttpResponseDto<DeleteAddressResponseDto>(ex.Message, StatusCodes.Status500InternalServerError);
+                var httpResponseDto1 = new HttpResponseDto<DeleteAddressResponseDto>(ex.Message, StatusCodes.Status500InternalServerError);
+                _logger.LogError("Error DeleteAddress {@HttpResponseDto}.", httpResponseDto1);
+                return httpResponseDto1;
             }
         }
     }

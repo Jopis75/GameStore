@@ -28,18 +28,22 @@ namespace Application.Features.Addresses.RequestHandlers.Queries
         {
             try
             {
-                _logger.LogInformation("Hello from ReadAllAddressRequestHandler.Handle!");
+                _logger.LogInformation("Begin ReadAllAddress {@ReadAllAddressRequest}.", readAllAddressRequest);
 
                 var addresses = await _unitOfWork.AddressRepository.ReadAllAsync(true);
                 var readAllAddressResponseDtos = addresses
                     .Select(_mapper.Map<ReadAllAddressResponseDto>)
                     .ToList();
 
-                return new HttpResponseDto<ReadAllAddressResponseDto>(readAllAddressResponseDtos, StatusCodes.Status200OK);
+                var httpResponseDto = new HttpResponseDto<ReadAllAddressResponseDto>(readAllAddressResponseDtos, StatusCodes.Status200OK);
+                _logger.LogInformation("End ReadAllAddress {@HttpResponseDto}.", httpResponseDto);
+                return httpResponseDto;
             }
             catch (Exception ex)
             {
-                return new HttpResponseDto<ReadAllAddressResponseDto>(ex.Message, StatusCodes.Status500InternalServerError);
+                var httpResponseDto1 = new HttpResponseDto<ReadAllAddressResponseDto>(ex.Message, StatusCodes.Status500InternalServerError);
+                _logger.LogError("Error ReadAllAddress {@HttpResponseDto}.", httpResponseDto1);
+                return httpResponseDto1;
             }
         }
     }

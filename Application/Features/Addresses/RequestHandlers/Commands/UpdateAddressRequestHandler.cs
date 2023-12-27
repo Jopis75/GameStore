@@ -59,7 +59,7 @@ namespace Application.Features.Addresses.RequestHandlers.Commands
                 {
                     Id = updatedAddress.Id,
                     UpdatedAt = updatedAddress.UpdatedAt,
-                    UpdatedBy = string.Empty
+                    UpdatedBy = updatedAddress.UpdatedBy,
                 }, StatusCodes.Status200OK);
                 _logger.LogInformation("End UpdateAddress {@HttpResponseDto}.", httpResponseDto);
                 return httpResponseDto;

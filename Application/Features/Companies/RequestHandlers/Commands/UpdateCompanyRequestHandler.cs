@@ -6,6 +6,7 @@ using AutoMapper;
 using FluentValidation;
 using MediatR;
 using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Logging;
 
 namespace Application.Features.Companies.RequestHandlers.Commands
 {
@@ -17,27 +18,36 @@ namespace Application.Features.Companies.RequestHandlers.Commands
 
         private readonly IValidator<UpdateCompanyRequestDto> _validator;
 
-        public UpdateCompanyRequestHandler(IUnitOfWork unitOfWork, IMapper mapper, IValidator<UpdateCompanyRequestDto> validator)
+        private readonly ILogger<UpdateCompanyRequestHandler> _logger;
+
+        public UpdateCompanyRequestHandler(IUnitOfWork unitOfWork, IMapper mapper, IValidator<UpdateCompanyRequestDto> validator, ILogger<UpdateCompanyRequestHandler> logger)
         {
             _unitOfWork = unitOfWork ?? throw new ArgumentNullException(nameof(unitOfWork));
             _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
             _validator = validator ?? throw new ArgumentNullException(nameof(validator));
+            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
         public async Task<HttpResponseDto<UpdateCompanyResponseDto>> Handle(UpdateCompanyRequest updateCompanyRequest, CancellationToken cancellationToken)
         {
             try
             {
+                _logger.LogInformation("Begin UpdateCompany {@UpdateCompanyRequest}.", updateCompanyRequest);
+
                 if (updateCompanyRequest.UpdateCompanyRequestDto == null)
                 {
-                    return new HttpResponseDto<UpdateCompanyResponseDto>(new ArgumentNullException(nameof(updateCompanyRequest.UpdateCompanyRequestDto)).Message, StatusCodes.Status400BadRequest);
+                    var httpResponseDto1 = new HttpResponseDto<UpdateCompanyResponseDto>(new ArgumentNullException(nameof(updateCompanyRequest.UpdateCompanyRequestDto)).Message, StatusCodes.Status400BadRequest);
+                    _logger.LogError("Error UpdateCompany {@HttpResponseDto}.", httpResponseDto1);
+                    return httpResponseDto1;
                 }
 
                 var validationResult = await _validator.ValidateAsync(updateCompanyRequest.UpdateCompanyRequestDto, cancellationToken);
 
                 if (!validationResult.IsValid)
                 {
-                    return new HttpResponseDto<UpdateCompanyResponseDto>(new ValidationException(validationResult.Errors).Message, StatusCodes.Status400BadRequest);
+                    var httpResponseDto1 = new HttpResponseDto<UpdateCompanyResponseDto>(new ValidationException(validationResult.Errors).Message, StatusCodes.Status400BadRequest);
+                    _logger.LogError("Error UpdateCompany {@HttpResponseDto}.", httpResponseDto1);
+                    return httpResponseDto1;
                 }
 
                 var company = await _unitOfWork.CompanyRepository.ReadByIdAsync(updateCompanyRequest.UpdateCompanyRequestDto.Id);
@@ -45,16 +55,20 @@ namespace Application.Features.Companies.RequestHandlers.Commands
                 var updatedCompany = await _unitOfWork.CompanyRepository.UpdateAsync(company);
                 await _unitOfWork.SaveAsync();
 
-                return new HttpResponseDto<UpdateCompanyResponseDto>(new UpdateCompanyResponseDto
+                var httpResponseDto = new HttpResponseDto<UpdateCompanyResponseDto>(new UpdateCompanyResponseDto
                 {
                     Id = updatedCompany.Id,
                     UpdatedAt = updatedCompany.UpdatedAt,
-                    UpdatedBy = string.Empty
+                    UpdatedBy = updatedCompany.UpdatedBy,
                 }, StatusCodes.Status200OK);
+                _logger.LogInformation("End UpdateCompany {@HttpResponseDto}.", httpResponseDto);
+                return httpResponseDto;
             }
             catch (Exception ex)
             {
-                return new HttpResponseDto<UpdateCompanyResponseDto>(ex.Message, StatusCodes.Status500InternalServerError);
+                var httpResponseDto1 = new HttpResponseDto<UpdateCompanyResponseDto>(ex.Message, StatusCodes.Status500InternalServerError);
+                _logger.LogError("Error UpdateCompany {@HttpResponseDto}.", httpResponseDto1);
+                return httpResponseDto1;
             }
         }
     }

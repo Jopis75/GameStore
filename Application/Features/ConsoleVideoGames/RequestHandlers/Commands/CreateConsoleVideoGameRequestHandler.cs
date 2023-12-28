@@ -59,7 +59,7 @@ namespace Application.Features.ConsoleVideoGames.RequestHandlers.Commands
                 {
                     Id = createdConsoleVideoGame.Id,
                     CreatedAt = createdConsoleVideoGame.CreatedAt,
-                    CreatedBy = string.Empty
+                    CreatedBy = createdConsoleVideoGame.CreatedBy,
                 }, StatusCodes.Status201Created);
                 _logger.LogInformation("End CreateConsoleVideoGame {@HttpResponseDto}.", httpResponseDto);
                 return httpResponseDto;

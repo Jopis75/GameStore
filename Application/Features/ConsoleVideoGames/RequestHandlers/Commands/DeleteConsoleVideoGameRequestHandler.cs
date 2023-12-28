@@ -55,7 +55,7 @@ namespace Application.Features.ConsoleVideoGames.RequestHandlers.Commands
                 {
                     Id = deletedConsoleVideoGame.Id,
                     DeletedAt = deletedConsoleVideoGame.DeletedAt,
-                    DeletedBy = string.Empty
+                    DeletedBy = deletedConsoleVideoGame.DeletedBy
                 }, StatusCodes.Status200OK);
                 _logger.LogInformation("End DeleteConsoleVideoGame {@HttpResponseDto}.", httpResponseDto);
                 return httpResponseDto;

@@ -6,6 +6,7 @@ using AutoMapper;
 using FluentValidation;
 using MediatR;
 using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Logging;
 
 namespace Application.Features.ConsoleVideoGames.RequestHandlers.Commands
 {
@@ -17,27 +18,36 @@ namespace Application.Features.ConsoleVideoGames.RequestHandlers.Commands
 
         private readonly IValidator<UpdateConsoleVideoGameRequestDto> _validator;
 
-        public UpdateConsoleVideoGameRequestHandler(IUnitOfWork unitOfWork, IMapper mapper, IValidator<UpdateConsoleVideoGameRequestDto> validator)
+        private readonly ILogger<UpdateConsoleVideoGameRequestHandler> _logger;
+
+        public UpdateConsoleVideoGameRequestHandler(IUnitOfWork unitOfWork, IMapper mapper, IValidator<UpdateConsoleVideoGameRequestDto> validator, ILogger<UpdateConsoleVideoGameRequestHandler> logger)
         {
             _unitOfWork = unitOfWork ?? throw new ArgumentNullException(nameof(unitOfWork));
             _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
             _validator = validator ?? throw new ArgumentNullException(nameof(validator));
+            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
         public async Task<HttpResponseDto<UpdateConsoleVideoGameResponseDto>> Handle(UpdateConsoleVideoGameRequest updateConsoleVideoGameRequest, CancellationToken cancellationToken)
         {
             try
             {
+                _logger.LogInformation("Begin UpdateConsoleVideoGame {@UpdateConsoleVideoGameRequest}.", updateConsoleVideoGameRequest);
+
                 if (updateConsoleVideoGameRequest.UpdateConsoleVideoGameRequestDto == null)
                 {
-                    return new HttpResponseDto<UpdateConsoleVideoGameResponseDto>(new ArgumentNullException(nameof(updateConsoleVideoGameRequest.UpdateConsoleVideoGameRequestDto)).Message, StatusCodes.Status400BadRequest);
+                    var httpResponseDto1 = new HttpResponseDto<UpdateConsoleVideoGameResponseDto>(new ArgumentNullException(nameof(updateConsoleVideoGameRequest.UpdateConsoleVideoGameRequestDto)).Message, StatusCodes.Status400BadRequest);
+                    _logger.LogError("Error UpdateConsoleVideoGame {@HttpResponseDto}.", httpResponseDto1);
+                    return httpResponseDto1;
                 }
 
                 var validationResult = await _validator.ValidateAsync(updateConsoleVideoGameRequest.UpdateConsoleVideoGameRequestDto, cancellationToken);
 
                 if (!validationResult.IsValid)
                 {
-                    return new HttpResponseDto<UpdateConsoleVideoGameResponseDto>(new ValidationException(validationResult.Errors).Message, StatusCodes.Status400BadRequest);
+                    var httpResponseDto1 = new HttpResponseDto<UpdateConsoleVideoGameResponseDto>(new ValidationException(validationResult.Errors).Message, StatusCodes.Status400BadRequest);
+                    _logger.LogError("Error UpdateConsoleVideoGame {@HttpResponseDto}.", httpResponseDto1);
+                    return httpResponseDto1;
                 }
 
                 var consoleVideoGame = await _unitOfWork.ConsoleVideoGameRepository.ReadByIdAsync(updateConsoleVideoGameRequest.UpdateConsoleVideoGameRequestDto.Id);
@@ -45,16 +55,20 @@ namespace Application.Features.ConsoleVideoGames.RequestHandlers.Commands
                 var updatedConsoleVideoGame = await _unitOfWork.ConsoleVideoGameRepository.UpdateAsync(consoleVideoGame);
                 await _unitOfWork.SaveAsync();
 
-                return new HttpResponseDto<UpdateConsoleVideoGameResponseDto>(new UpdateConsoleVideoGameResponseDto
+                var httpResponseDto = new HttpResponseDto<UpdateConsoleVideoGameResponseDto>(new UpdateConsoleVideoGameResponseDto
                 {
                     Id = updatedConsoleVideoGame.Id,
                     UpdatedAt = updatedConsoleVideoGame.UpdatedAt,
                     UpdatedBy = string.Empty
                 }, StatusCodes.Status200OK);
+                _logger.LogInformation("End UpdateConsoleVideoGame {@HttpResponseDto}.", httpResponseDto);
+                return httpResponseDto;
             }
             catch (Exception ex)
             {
-                return new HttpResponseDto<UpdateConsoleVideoGameResponseDto>(ex.Message, StatusCodes.Status500InternalServerError);
+                var httpResponseDto1 = new HttpResponseDto<UpdateConsoleVideoGameResponseDto>(ex.Message, StatusCodes.Status500InternalServerError);
+                _logger.LogError("Error UpdateConsoleVideoGame {@HttpResponseDto}.", httpResponseDto1);
+                return httpResponseDto1;
             }
         }
     }

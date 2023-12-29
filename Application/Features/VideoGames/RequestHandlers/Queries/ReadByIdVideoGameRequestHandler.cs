@@ -6,6 +6,7 @@ using AutoMapper;
 using FluentValidation;
 using MediatR;
 using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Logging;
 
 namespace Application.Features.VideoGames.RequestHandlers.Queries
 {
@@ -17,37 +18,50 @@ namespace Application.Features.VideoGames.RequestHandlers.Queries
 
         private readonly IValidator<ReadByIdVideoGameRequestDto> _validator;
 
-        public ReadByIdVideoGameRequestHandler(IUnitOfWork unitOfWork, IMapper mapper, IValidator<ReadByIdVideoGameRequestDto> validator)
+        private readonly ILogger<ReadByIdVideoGameRequestHandler> _logger;
+
+        public ReadByIdVideoGameRequestHandler(IUnitOfWork unitOfWork, IMapper mapper, IValidator<ReadByIdVideoGameRequestDto> validator, ILogger<ReadByIdVideoGameRequestHandler> logger)
         {
             _unitOfWork = unitOfWork ?? throw new ArgumentNullException(nameof(unitOfWork));
             _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
             _validator = validator ?? throw new ArgumentNullException(nameof(validator));
+            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
         public async Task<HttpResponseDto<ReadByIdVideoGameResponseDto>> Handle(ReadByIdVideoGameRequest readByIdVideoGameRequest, CancellationToken cancellationToken)
         {
             try
             {
+                _logger.LogInformation("Begin ReadByIdVideoGame {@ReadByIdVideoGameRequest}.", readByIdVideoGameRequest);
+
                 if (readByIdVideoGameRequest.ReadByIdVideoGameRequestDto == null)
                 {
-                    return new HttpResponseDto<ReadByIdVideoGameResponseDto>(new ArgumentNullException(nameof(readByIdVideoGameRequest.ReadByIdVideoGameRequestDto)).Message, StatusCodes.Status400BadRequest);
+                    var httpResponseDto1 = new HttpResponseDto<ReadByIdVideoGameResponseDto>(new ArgumentNullException(nameof(readByIdVideoGameRequest.ReadByIdVideoGameRequestDto)).Message, StatusCodes.Status400BadRequest);
+                    _logger.LogError("Error ReadbyIdVideoGame {@HttpResponseDto}.", httpResponseDto1);
+                    return httpResponseDto1;
                 }
 
                 var validationResult = await _validator.ValidateAsync(readByIdVideoGameRequest.ReadByIdVideoGameRequestDto, cancellationToken);
 
                 if (!validationResult.IsValid)
                 {
-                    return new HttpResponseDto<ReadByIdVideoGameResponseDto>(new ValidationException(validationResult.Errors).Message, StatusCodes.Status400BadRequest);
+                    var httpResponseDto1 = new HttpResponseDto<ReadByIdVideoGameResponseDto>(new ValidationException(validationResult.Errors).Message, StatusCodes.Status400BadRequest);
+                    _logger.LogError("Error ReadbyIdVideoGame {@HttpResponseDto}.", httpResponseDto1);
+                    return httpResponseDto1;
                 }
 
                 var videoGame = await _unitOfWork.VideoGameRepository.ReadByIdAsync(readByIdVideoGameRequest.ReadByIdVideoGameRequestDto.Id, true);
                 var readByIdVideoGameResponseDto = _mapper.Map<ReadByIdVideoGameResponseDto>(videoGame);
 
-                return new HttpResponseDto<ReadByIdVideoGameResponseDto>(readByIdVideoGameResponseDto, StatusCodes.Status200OK);
+                var httpResponseDto = new HttpResponseDto<ReadByIdVideoGameResponseDto>(readByIdVideoGameResponseDto, StatusCodes.Status200OK);
+                _logger.LogInformation("End ReadByIdVideoGame {@HttpResponseDto}.", httpResponseDto);
+                return httpResponseDto;
             }
             catch (Exception ex)
             {
-                return new HttpResponseDto<ReadByIdVideoGameResponseDto>(ex.Message, StatusCodes.Status500InternalServerError);
+                var httpResponseDto1 = new HttpResponseDto<ReadByIdVideoGameResponseDto>(ex.Message, StatusCodes.Status500InternalServerError);
+                _logger.LogError("Error ReadbyIdVideoGame {@HttpResponseDto}.", httpResponseDto1);
+                return httpResponseDto1;
             }
         }
     }

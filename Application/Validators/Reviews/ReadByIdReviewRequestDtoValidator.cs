@@ -4,7 +4,7 @@ using FluentValidation;
 
 namespace Application.Validators.Reviews
 {
-    public class ReadByIdReviewRequestDtoValidator : AbstractValidator<ReadByIdReviewRequestDto>
+    public class ReadByIdReviewRequestDtoValidator : AbstractValidator<ReadReviewByIdRequestDto>
     {
         public ReadByIdReviewRequestDtoValidator()
         {

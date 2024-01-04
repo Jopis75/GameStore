@@ -4,7 +4,7 @@ using FluentValidation;
 
 namespace Application.Validators.Addresses
 {
-    public class ReadByIdAddressRequestDtoValidator : AbstractValidator<ReadByIdAddressRequestDto>
+    public class ReadByIdAddressRequestDtoValidator : AbstractValidator<ReadAddressByIdRequestDto>
     {
         public ReadByIdAddressRequestDtoValidator()
         {

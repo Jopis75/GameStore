@@ -46,37 +46,37 @@ namespace Application
         {
             // Addresses.
             serviceCollection.AddScoped<IValidator<CreateAddressRequestDto>, CreateAddressRequestDtoValidator>();
-            serviceCollection.AddScoped<IValidator<ReadByIdAddressRequestDto>, ReadByIdAddressRequestDtoValidator>();
+            serviceCollection.AddScoped<IValidator<ReadAddressByIdRequestDto>, ReadByIdAddressRequestDtoValidator>();
             serviceCollection.AddScoped<IValidator<UpdateAddressRequestDto>, UpdateAddressRequestDtoValidator>();
             serviceCollection.AddScoped<IValidator<DeleteAddressRequestDto>, DeleteAddressRequestDtoValidator>();
 
             // Companies.
             serviceCollection.AddScoped<IValidator<CreateCompanyRequestDto>, CreateCompanyRequestDtoValidator>();
-            serviceCollection.AddScoped<IValidator<ReadByIdCompanyRequestDto>, ReadByIdCompanyRequestDtoValidator>();
+            serviceCollection.AddScoped<IValidator<Dtos.Companies.ReadCompanyByIdRequestDto>, ReadByIdCompanyRequestDtoValidator>();
             serviceCollection.AddScoped<IValidator<UpdateCompanyRequestDto>, UpdateCompanyRequestDtoValidator>();
             serviceCollection.AddScoped<IValidator<DeleteCompanyRequestDto>, DeleteCompanyRequestDtoValidator>();
 
             // Consoles.
             serviceCollection.AddScoped<IValidator<CreateConsoleRequestDto>, CreateConsoleRequestDtoValidator>();
-            serviceCollection.AddScoped<IValidator<ReadByIdConsoleRequestDto>, ReadByIdConsoleRequestDtoValidator>();
+            serviceCollection.AddScoped<IValidator<Dtos.Consoles.ReadConsoleByIdRequestDto>, ReadByIdConsoleRequestDtoValidator>();
             serviceCollection.AddScoped<IValidator<UpdateConsoleRequestDto>, UpdateConsoleRequestDtoValidator>();
             serviceCollection.AddScoped<IValidator<DeleteConsoleRequestDto>, DeleteConsoleRequestDtoValidator>();
 
             // ConsoleVideoGames.
             serviceCollection.AddScoped<IValidator<CreateConsoleVideoGameRequestDto>, CreateConsoleVideoGameRequestDtoValidator>();
-            serviceCollection.AddScoped<IValidator<ReadByIdConsoleVideoGameRequestDto>, ReadByIdConsoleVideoGameRequestDtoValidator>();
+            serviceCollection.AddScoped<IValidator<ReadConsoleVideoGameByIdRequestDto>, ReadByIdConsoleVideoGameRequestDtoValidator>();
             serviceCollection.AddScoped<IValidator<UpdateConsoleVideoGameRequestDto>, UpdateConsoleVideoGameRequestDtoValidator>();
             serviceCollection.AddScoped<IValidator<DeleteConsoleVideoGameRequestDto>, DeleteConsoleVideoGameRequestDtoValidator>();
 
             // VideoGames.
             serviceCollection.AddScoped<IValidator<CreateVideoGameRequestDto>, CreateVideoGameRequestDtoValidator>();
-            serviceCollection.AddScoped<IValidator<ReadByIdVideoGameRequestDto>, ReadByIdVideoGameRequestDtoValidator>();
+            serviceCollection.AddScoped<IValidator<ReadVideoGameByIdRequestDto>, ReadByIdVideoGameRequestDtoValidator>();
             serviceCollection.AddScoped<IValidator<UpdateVideoGameRequestDto>, UpdateVideoGameRequestDtoValidator>();
             serviceCollection.AddScoped<IValidator<DeleteVideoGameRequestDto>, DeleteVideoGameRequestDtoValidator>();
 
             // Reviews.
             serviceCollection.AddScoped<IValidator<CreateReviewRequestDto>, CreateReviewRequestDtoValidator>();
-            serviceCollection.AddScoped<IValidator<ReadByIdReviewRequestDto>, ReadByIdReviewRequestDtoValidator>();
+            serviceCollection.AddScoped<IValidator<ReadReviewByIdRequestDto>, ReadByIdReviewRequestDtoValidator>();
             serviceCollection.AddScoped<IValidator<UpdateReviewRequestDto>, UpdateReviewRequestDtoValidator>();
             serviceCollection.AddScoped<IValidator<DeleteReviewRequestDto>, DeleteReviewRequestDtoValidator>();
 

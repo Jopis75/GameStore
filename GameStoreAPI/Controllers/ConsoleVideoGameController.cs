@@ -54,7 +54,7 @@ namespace GameStoreAPI.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<ActionResult<ReadConsoleVideoGameResponseDto>> ReadAllAsync()
         {
-            var httpResponseDto = await _mediator.Send(new ReadAllConsoleVideoGameRequest());
+            var httpResponseDto = await _mediator.Send(new ReadConsoleVideoGameAllRequest());
             return StatusCode(httpResponseDto.StatusCode, httpResponseDto);
         }
 
@@ -65,9 +65,9 @@ namespace GameStoreAPI.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<ActionResult<ReadConsoleVideoGameResponseDto>> ReadByIdAsync(int id)
         {
-            var httpResponseDto = await _mediator.Send(new ReadByIdConsoleVideoGameRequest
+            var httpResponseDto = await _mediator.Send(new ReadConsoleVideoGameByIdRequest
             {
-                ReadByIdConsoleVideoGameRequestDto = new ReadByIdConsoleVideoGameRequestDto
+                ReadConsoleVideoGameByIdRequestDto = new ReadConsoleVideoGameByIdRequestDto
                 {
                     Id = id
                 }

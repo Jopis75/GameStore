@@ -17,8 +17,7 @@ namespace Application.Profiles
             // Addresses.
             CreateMap<Address, CreateAddressRequestDto>().ReverseMap();
             CreateMap<Address, CreateAddressResponseDto>().ReverseMap();
-            CreateMap<Address, ReadAllAddressRequestDto>().ReverseMap();
-            CreateMap<Address, ReadByIdAddressRequestDto>().ReverseMap();
+            CreateMap<Address, ReadAddressByIdRequestDto>().ReverseMap();
             CreateMap<Address, ReadAddressResponseDto>().ReverseMap();
             CreateMap<Address, UpdateAddressRequestDto>().ReverseMap();
             CreateMap<Address, UpdateAddressResponseDto>().ReverseMap();
@@ -28,8 +27,7 @@ namespace Application.Profiles
             // Companies.
             CreateMap<Company, CreateCompanyRequestDto>().ReverseMap();
             CreateMap<Company, CreateCompanyResponseDto>().ReverseMap();
-            CreateMap<Company, ReadAllCompanyRequestDto>().ReverseMap();
-            CreateMap<Company, ReadByIdCompanyRequestDto>().ReverseMap();
+            CreateMap<Company, ReadCompanyByIdRequestDto>().ReverseMap();
             CreateMap<Company, ReadCompanyResponseDto>().ReverseMap();
             CreateMap<Company, UpdateCompanyRequestDto>().ReverseMap();
             CreateMap<Company, UpdateCompanyResponseDto>().ReverseMap();
@@ -39,8 +37,7 @@ namespace Application.Profiles
             // Consoles.
             CreateMap<Console, CreateConsoleRequestDto>().ReverseMap();
             CreateMap<Console, CreateConsoleResponseDto>().ReverseMap();
-            CreateMap<Console, ReadAllConsoleRequestDto>().ReverseMap();
-            CreateMap<Console, ReadByIdConsoleRequestDto>().ReverseMap();
+            CreateMap<Console, ReadConsoleByIdRequestDto>().ReverseMap();
             CreateMap<Console, ReadConsoleResponseDto>().ReverseMap();
             CreateMap<Console, UpdateConsoleRequestDto>().ReverseMap();
             CreateMap<Console, UpdateConsoleResponseDto>().ReverseMap();
@@ -50,8 +47,7 @@ namespace Application.Profiles
             // ConsoleVideoGames.
             CreateMap<ConsoleVideoGame, CreateConsoleVideoGameRequestDto>().ReverseMap();
             CreateMap<ConsoleVideoGame, CreateConsoleVideoGameResponseDto>().ReverseMap();
-            CreateMap<ConsoleVideoGame, ReadAllConsoleVideoGameRequestDto>().ReverseMap();
-            CreateMap<ConsoleVideoGame, ReadByIdConsoleVideoGameRequestDto>().ReverseMap();
+            CreateMap<ConsoleVideoGame, ReadConsoleVideoGameByIdRequestDto>().ReverseMap();
             CreateMap<ConsoleVideoGame, ReadConsoleVideoGameResponseDto>().ReverseMap();
             CreateMap<ConsoleVideoGame, UpdateConsoleVideoGameRequestDto>().ReverseMap();
             CreateMap<ConsoleVideoGame, UpdateConsoleVideoGameResponseDto>().ReverseMap();
@@ -61,8 +57,7 @@ namespace Application.Profiles
             // VideoGames.
             CreateMap<VideoGame, CreateVideoGameRequestDto>().ReverseMap();
             CreateMap<VideoGame, CreateVideoGameResponseDto>().ReverseMap();
-            CreateMap<VideoGame, ReadAllVideoGameRequestDto>().ReverseMap();
-            CreateMap<VideoGame, ReadByIdVideoGameRequestDto>().ReverseMap();
+            CreateMap<VideoGame, ReadVideoGameByIdRequestDto>().ReverseMap();
             CreateMap<VideoGame, ReadVideoGameResponseDto>().ReverseMap();
             CreateMap<VideoGame, UpdateVideoGameRequestDto>().ReverseMap();
             CreateMap<VideoGame, UpdateVideoGameResponseDto>().ReverseMap();
@@ -72,8 +67,7 @@ namespace Application.Profiles
             // Reviews.
             CreateMap<Review, CreateReviewRequestDto>().ReverseMap();
             CreateMap<Review, CreateReviewResponseDto>().ReverseMap();
-            CreateMap<Review, ReadAllReviewRequestDto>().ReverseMap();
-            CreateMap<Review, ReadByIdReviewRequestDto>().ReverseMap();
+            CreateMap<Review, ReadReviewByIdRequestDto>().ReverseMap();
             CreateMap<Review, ReadReviewByVideoGameIdRequestDto>().ReverseMap();
             CreateMap<Review, ReadReviewResponseDto>().ReverseMap();
             CreateMap<Review, UpdateReviewRequestDto>().ReverseMap();

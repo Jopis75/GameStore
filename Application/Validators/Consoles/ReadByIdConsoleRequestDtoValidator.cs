@@ -4,7 +4,7 @@ using FluentValidation;
 
 namespace Application.Validators.Consoles
 {
-    public class ReadByIdConsoleRequestDtoValidator : AbstractValidator<ReadByIdConsoleRequestDto>
+    public class ReadByIdConsoleRequestDtoValidator : AbstractValidator<ReadConsoleByIdRequestDto>
     {
         public ReadByIdConsoleRequestDtoValidator()
         {

@@ -4,7 +4,7 @@ using FluentValidation;
 
 namespace Application.Validators.Companies
 {
-    public class ReadByIdCompanyRequestDtoValidator : AbstractValidator<ReadByIdCompanyRequestDto>
+    public class ReadByIdCompanyRequestDtoValidator : AbstractValidator<ReadCompanyByIdRequestDto>
     {
         public ReadByIdCompanyRequestDtoValidator()
         {

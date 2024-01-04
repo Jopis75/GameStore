@@ -4,7 +4,7 @@ using FluentValidation;
 
 namespace Application.Validators.ConsoleVideoGames
 {
-    public class ReadByIdConsoleVideoGameRequestDtoValidator : AbstractValidator<ReadByIdConsoleVideoGameRequestDto>
+    public class ReadByIdConsoleVideoGameRequestDtoValidator : AbstractValidator<ReadConsoleVideoGameByIdRequestDto>
     {
         public ReadByIdConsoleVideoGameRequestDtoValidator()
         {

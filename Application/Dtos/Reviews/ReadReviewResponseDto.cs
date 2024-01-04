@@ -4,9 +4,9 @@ using Application.Dtos.VideoGames;
 
 namespace Application.Dtos.Reviews
 {
-    public class ReadAllReviewResponseDto : ReadAllResponseDto
+    public class ReadReviewResponseDto : ReadResponseDto
     {
-        public ReadAllConsoleResponseDto? Console { get; set; }
+        public ReadConsoleResponseDto? Console { get; set; }
 
         public int Grade { get; set; }
 
@@ -14,6 +14,6 @@ namespace Application.Dtos.Reviews
 
         public string ReviewText { get; set; } = default!;
 
-        public ReadAllVideoGameResponseDto? VideoGame { get; set; }
+        public ReadVideoGameResponseDto? VideoGame { get; set; }
     }
 }

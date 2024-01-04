@@ -2,7 +2,7 @@
 
 namespace Application.Dtos.Addresses
 {
-    public class ReadAllAddressResponseDto : ReadAllResponseDto
+    public class ReadAddressResponseDto : ReadResponseDto
     {
         public string City { get; set; } = default!;
 

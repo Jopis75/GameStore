@@ -4,9 +4,9 @@ using Application.Dtos.Reviews;
 
 namespace Application.Dtos.VideoGames
 {
-    public class ReadByIdVideoGameResponseDto : ReadByIdResponseDto
+    public class ReadVideoGameResponseDto : ReadResponseDto
     {
-        public ReadByIdCompanyResponseDto Developer { get; set; } = new();
+        public ReadCompanyResponseDto Developer { get; set; } = new();
 
         public string ImageUri { get; set; } = default!;
 
@@ -16,7 +16,7 @@ namespace Application.Dtos.VideoGames
 
         public DateTime ReleaseDate { get; set; }
 
-        public ReadByIdReviewResponseDto? Review { get; set; }
+        public ReadReviewResponseDto? Review { get; set; }
 
         public string Title { get; set; } = default!;
 

@@ -4,7 +4,7 @@ using MediatR;
 
 namespace Application.Features.ConsoleVideoGames.Requests.Queries
 {
-    public class ReadAllConsoleVideoGameRequest : IRequest<HttpResponseDto<ReadAllConsoleVideoGameResponseDto>>
+    public class ReadAllConsoleVideoGameRequest : IRequest<HttpResponseDto<ReadConsoleVideoGameResponseDto>>
     {
     }
 }

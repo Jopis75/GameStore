@@ -50,9 +50,9 @@ namespace GameStoreAPI.Controllers
 
         [HttpGet]
         [Route("ReadAll")]
-        [ProducesResponseType(typeof(ReadAllReviewResponseDto), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ReadReviewResponseDto), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult<ReadAllReviewResponseDto>> ReadAllAsync()
+        public async Task<ActionResult<ReadReviewResponseDto>> ReadAllAsync()
         {
             var httpResponseDto = await _mediator.Send(new ReadAllReviewRequest());
             return StatusCode(httpResponseDto.StatusCode, httpResponseDto);
@@ -60,10 +60,10 @@ namespace GameStoreAPI.Controllers
 
         [HttpGet]
         [Route("ReadById/{id}")]
-        [ProducesResponseType(typeof(ReadByIdReviewResponseDto), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ReadReviewResponseDto), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult<ReadByIdReviewResponseDto>> ReadByIdAsync(int id)
+        public async Task<ActionResult<ReadReviewResponseDto>> ReadByIdAsync(int id)
         {
             var httpResponseDto = await _mediator.Send(new ReadByIdReviewRequest
             {
@@ -74,6 +74,16 @@ namespace GameStoreAPI.Controllers
             });
             return StatusCode(httpResponseDto.StatusCode, httpResponseDto);
         }
+
+        //[HttpGet]
+        //[Route("ReadByVideoGameId/{videoGameId}")]
+        //[ProducesResponseType(typeof(ReadReviewResponseDto), StatusCodes.Status200OK)]
+        //[ProducesResponseType(StatusCodes.Status400BadRequest)]
+        //[ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        //public async Task<ActionResult<ReadReviewResponseDto>> ReadByVideoGameIdAsync(int videoGameId)
+        //{
+
+        //}
 
         [HttpPut]
         [Route("Update")]

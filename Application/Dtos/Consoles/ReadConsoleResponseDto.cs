@@ -5,9 +5,9 @@ using Application.Dtos.VideoGames;
 
 namespace Application.Dtos.Consoles
 {
-    public class ReadByIdConsoleResponseDto : ReadByIdResponseDto
+    public class ReadConsoleResponseDto : ReadResponseDto
     {
-        public ReadByIdCompanyResponseDto Developer { get; set; } = new();
+        public ReadCompanyResponseDto Developer { get; set; } = new();
 
         public string ImageUri { get; set; } = default!;
 
@@ -19,10 +19,10 @@ namespace Application.Dtos.Consoles
 
         public DateTime ReleaseDate { get; set; }
 
-        public ReadByIdReviewResponseDto? Review { get; set; }
+        public ReadReviewResponseDto? Review { get; set; }
 
         public string Url { get; set; } = default!;
 
-        public List<ReadByIdVideoGameResponseDto> VideoGames { get; set; } = new();
+        public List<ReadVideoGameResponseDto> VideoGames { get; set; } = new();
     }
 }

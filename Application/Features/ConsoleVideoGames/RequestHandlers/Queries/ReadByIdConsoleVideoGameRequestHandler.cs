@@ -10,7 +10,7 @@ using Microsoft.Extensions.Logging;
 
 namespace Application.Features.ConsoleVideoGames.RequestHandlers.Queries
 {
-    public class ReadByIdConsoleVideoGameRequestHandler : IRequestHandler<ReadByIdConsoleVideoGameRequest, HttpResponseDto<ReadByIdConsoleVideoGameResponseDto>>
+    public class ReadByIdConsoleVideoGameRequestHandler : IRequestHandler<ReadByIdConsoleVideoGameRequest, HttpResponseDto<ReadConsoleVideoGameResponseDto>>
     {
         private readonly IUnitOfWork _unitOfWork;
 
@@ -28,7 +28,7 @@ namespace Application.Features.ConsoleVideoGames.RequestHandlers.Queries
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
-        public async Task<HttpResponseDto<ReadByIdConsoleVideoGameResponseDto>> Handle(ReadByIdConsoleVideoGameRequest readByIdConsoleVideoGameRequest, CancellationToken cancellationToken)
+        public async Task<HttpResponseDto<ReadConsoleVideoGameResponseDto>> Handle(ReadByIdConsoleVideoGameRequest readByIdConsoleVideoGameRequest, CancellationToken cancellationToken)
         {
             try
             {
@@ -36,7 +36,7 @@ namespace Application.Features.ConsoleVideoGames.RequestHandlers.Queries
 
                 if (readByIdConsoleVideoGameRequest.ReadByIdConsoleVideoGameRequestDto == null)
                 {
-                    var httpResponseDto1 = new HttpResponseDto<ReadByIdConsoleVideoGameResponseDto>(new ArgumentNullException(nameof(readByIdConsoleVideoGameRequest.ReadByIdConsoleVideoGameRequestDto)).Message, StatusCodes.Status400BadRequest);
+                    var httpResponseDto1 = new HttpResponseDto<ReadConsoleVideoGameResponseDto>(new ArgumentNullException(nameof(readByIdConsoleVideoGameRequest.ReadByIdConsoleVideoGameRequestDto)).Message, StatusCodes.Status400BadRequest);
                     _logger.LogError("Error ReadByIdConsoleVideoGame {@HttpResponseDto}.", httpResponseDto1);
                     return httpResponseDto1;
                 }
@@ -45,21 +45,21 @@ namespace Application.Features.ConsoleVideoGames.RequestHandlers.Queries
 
                 if (!validationResult.IsValid)
                 {
-                    var httpResponseDto1 = new HttpResponseDto<ReadByIdConsoleVideoGameResponseDto>(new ValidationException(validationResult.Errors).Message, StatusCodes.Status400BadRequest);
+                    var httpResponseDto1 = new HttpResponseDto<ReadConsoleVideoGameResponseDto>(new ValidationException(validationResult.Errors).Message, StatusCodes.Status400BadRequest);
                     _logger.LogError("Error ReadByIdConsoleVideoGame {@HttpResponseDto}.", httpResponseDto1);
                     return httpResponseDto1;
                 }
 
                 var consoleVideoGame = await _unitOfWork.ConsoleVideoGameRepository.ReadByIdAsync(readByIdConsoleVideoGameRequest.ReadByIdConsoleVideoGameRequestDto.Id, true);
-                var readByIdConsoleVideoGameResponseDto = _mapper.Map<ReadByIdConsoleVideoGameResponseDto>(consoleVideoGame);
+                var readByIdConsoleVideoGameResponseDto = _mapper.Map<ReadConsoleVideoGameResponseDto>(consoleVideoGame);
 
-                var httpResponseDto = new HttpResponseDto<ReadByIdConsoleVideoGameResponseDto>(readByIdConsoleVideoGameResponseDto, StatusCodes.Status200OK);
+                var httpResponseDto = new HttpResponseDto<ReadConsoleVideoGameResponseDto>(readByIdConsoleVideoGameResponseDto, StatusCodes.Status200OK);
                 _logger.LogInformation("End ReadByIdConsolevideoGame {@HttpResponseDto}.", httpResponseDto);
                 return httpResponseDto;
             }
             catch (Exception ex)
             {
-                var httpResponseDto1 = new HttpResponseDto<ReadByIdConsoleVideoGameResponseDto>(ex.Message, StatusCodes.Status500InternalServerError);
+                var httpResponseDto1 = new HttpResponseDto<ReadConsoleVideoGameResponseDto>(ex.Message, StatusCodes.Status500InternalServerError);
                 _logger.LogError("Error ReadByIdConsoleVideoGame {@HttpResponseDto}.", httpResponseDto1);
                 return httpResponseDto1;
             }

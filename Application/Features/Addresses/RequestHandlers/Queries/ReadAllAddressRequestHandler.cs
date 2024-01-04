@@ -9,7 +9,7 @@ using Microsoft.Extensions.Logging;
 
 namespace Application.Features.Addresses.RequestHandlers.Queries
 {
-    public class ReadAllAddressRequestHandler : IRequestHandler<ReadAllAddressRequest, HttpResponseDto<ReadAllAddressResponseDto>>
+    public class ReadAllAddressRequestHandler : IRequestHandler<ReadAllAddressRequest, HttpResponseDto<ReadAddressResponseDto>>
     {
         private readonly IUnitOfWork _unitOfWork;
 
@@ -24,7 +24,7 @@ namespace Application.Features.Addresses.RequestHandlers.Queries
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
-        public async Task<HttpResponseDto<ReadAllAddressResponseDto>> Handle(ReadAllAddressRequest readAllAddressRequest, CancellationToken cancellationToken)
+        public async Task<HttpResponseDto<ReadAddressResponseDto>> Handle(ReadAllAddressRequest readAllAddressRequest, CancellationToken cancellationToken)
         {
             try
             {
@@ -32,16 +32,16 @@ namespace Application.Features.Addresses.RequestHandlers.Queries
 
                 var addresses = await _unitOfWork.AddressRepository.ReadAllAsync(true);
                 var readAllAddressResponseDtos = addresses
-                    .Select(_mapper.Map<ReadAllAddressResponseDto>)
+                    .Select(_mapper.Map<ReadAddressResponseDto>)
                     .ToList();
 
-                var httpResponseDto = new HttpResponseDto<ReadAllAddressResponseDto>(readAllAddressResponseDtos, StatusCodes.Status200OK);
+                var httpResponseDto = new HttpResponseDto<ReadAddressResponseDto>(readAllAddressResponseDtos, StatusCodes.Status200OK);
                 _logger.LogInformation("End ReadAllAddress {@HttpResponseDto}.", httpResponseDto);
                 return httpResponseDto;
             }
             catch (Exception ex)
             {
-                var httpResponseDto1 = new HttpResponseDto<ReadAllAddressResponseDto>(ex.Message, StatusCodes.Status500InternalServerError);
+                var httpResponseDto1 = new HttpResponseDto<ReadAddressResponseDto>(ex.Message, StatusCodes.Status500InternalServerError);
                 _logger.LogError("Error ReadAllAddress {@HttpResponseDto}.", httpResponseDto1);
                 return httpResponseDto1;
             }

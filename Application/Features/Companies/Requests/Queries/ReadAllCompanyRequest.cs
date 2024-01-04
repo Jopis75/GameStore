@@ -4,7 +4,7 @@ using MediatR;
 
 namespace Application.Features.Companies.Requests.Queries
 {
-    public class ReadAllCompanyRequest : IRequest<HttpResponseDto<ReadAllCompanyResponseDto>>
+    public class ReadAllCompanyRequest : IRequest<HttpResponseDto<ReadCompanyResponseDto>>
     {
     }
 }

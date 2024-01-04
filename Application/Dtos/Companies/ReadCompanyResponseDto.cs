@@ -5,13 +5,13 @@ using Domain.Entities;
 
 namespace Application.Dtos.Companies
 {
-    public class ReadAllCompanyResponseDto : ReadAllResponseDto
+    public class ReadCompanyResponseDto : ReadResponseDto
     {
         public CompanyType CompanyType { get; set; }
 
         public string EmailAddress { get; set; } = default!;
 
-        public ReadAllAddressResponseDto Headquarter { get; set; } = new();
+        public ReadAddressResponseDto Headquarter { get; set; } = new();
 
         public Industry Industry { get; set; }
 
@@ -19,13 +19,13 @@ namespace Application.Dtos.Companies
 
         public string Name { get; set; } = default!;
 
-        public ReadAllCompanyResponseDto? ParentCompany { get; set; }
+        public ReadCompanyResponseDto? ParentCompany { get; set; }
 
         public string PhoneNumber { get; set; } = default!;
 
         public string TradeName { get; set; } = default!;
 
-        public List<ReadAllVideoGameResponseDto> VideoGames { get; set; } = new();
+        public List<ReadVideoGameResponseDto> VideoGames { get; set; } = new();
 
         public string WebsiteUrl { get; set; } = default!;
     }

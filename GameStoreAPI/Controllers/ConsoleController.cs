@@ -50,9 +50,9 @@ namespace GameStoreAPI.Controllers
 
         [HttpGet]
         [Route("ReadAll")]
-        [ProducesResponseType(typeof(ReadAllConsoleResponseDto), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ReadConsoleResponseDto), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult<ReadAllConsoleResponseDto>> ReadAllAsync()
+        public async Task<ActionResult<ReadConsoleResponseDto>> ReadAllAsync()
         {
             var httpResponseDto = await _mediator.Send(new ReadAllConsoleRequest());
             return StatusCode(httpResponseDto.StatusCode, httpResponseDto);
@@ -60,10 +60,10 @@ namespace GameStoreAPI.Controllers
 
         [HttpGet]
         [Route("ReadById/{id}")]
-        [ProducesResponseType(typeof(ReadByIdConsoleResponseDto), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ReadConsoleResponseDto), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult<ReadByIdConsoleResponseDto>> ReadByIdAsync(int id)
+        public async Task<ActionResult<ReadConsoleResponseDto>> ReadByIdAsync(int id)
         {
             var httpResponseDto = await _mediator.Send(new ReadByIdConsoleRequest
             {

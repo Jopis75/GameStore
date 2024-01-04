@@ -4,7 +4,7 @@ using MediatR;
 
 namespace Application.Features.Addresses.Requests.Queries
 {
-    public class ReadByIdAddressRequest : IRequest<HttpResponseDto<ReadByIdAddressResponseDto>>
+    public class ReadByIdAddressRequest : IRequest<HttpResponseDto<ReadAddressResponseDto>>
     {
         public ReadByIdAddressRequestDto? ReadByIdAddressRequestDto { get; set; }
     }

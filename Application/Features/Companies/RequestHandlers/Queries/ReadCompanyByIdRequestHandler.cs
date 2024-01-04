@@ -16,11 +16,11 @@ namespace Application.Features.Companies.RequestHandlers.Queries
 
         private readonly IMapper _mapper;
 
-        private readonly IValidator<ReadCompanyByIdRequestDto> _validator;
+        private readonly IValidator<ReadByIdRequestDto> _validator;
 
         private readonly ILogger<ReadCompanyByIdRequestHandler> _logger;
 
-        public ReadCompanyByIdRequestHandler(IUnitOfWork unitOfWork, IMapper mapper, IValidator<ReadCompanyByIdRequestDto> validator, ILogger<ReadCompanyByIdRequestHandler> logger)
+        public ReadCompanyByIdRequestHandler(IUnitOfWork unitOfWork, IMapper mapper, IValidator<ReadByIdRequestDto> validator, ILogger<ReadCompanyByIdRequestHandler> logger)
         {
             _unitOfWork = unitOfWork ?? throw new ArgumentNullException(nameof(unitOfWork));
             _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
@@ -34,14 +34,14 @@ namespace Application.Features.Companies.RequestHandlers.Queries
             {
                 _logger.LogInformation("Begin ReadByIdCompany {@ReadByIdCompanyRequest}.", readByIdCompanyRequest);
 
-                if (readByIdCompanyRequest.ReadCompanyByIdRequestDto == null)
+                if (readByIdCompanyRequest.ReadByIdRequestDto == null)
                 {
-                    var httpResponseDto1 = new HttpResponseDto<ReadCompanyResponseDto>(new ArgumentNullException(nameof(readByIdCompanyRequest.ReadCompanyByIdRequestDto)).Message, StatusCodes.Status400BadRequest);
+                    var httpResponseDto1 = new HttpResponseDto<ReadCompanyResponseDto>(new ArgumentNullException(nameof(readByIdCompanyRequest.ReadByIdRequestDto)).Message, StatusCodes.Status400BadRequest);
                     _logger.LogError("Error ReadByIdCompany {@HttpResponseDto}.", httpResponseDto1);
                     return httpResponseDto1;
                 }
 
-                var validationResult = await _validator.ValidateAsync(readByIdCompanyRequest.ReadCompanyByIdRequestDto, cancellationToken);
+                var validationResult = await _validator.ValidateAsync(readByIdCompanyRequest.ReadByIdRequestDto, cancellationToken);
 
                 if (!validationResult.IsValid)
                 {
@@ -50,7 +50,7 @@ namespace Application.Features.Companies.RequestHandlers.Queries
                     return httpResponseDto1;
                 }
 
-                var company = await _unitOfWork.CompanyRepository.ReadByIdAsync(readByIdCompanyRequest.ReadCompanyByIdRequestDto.Id, true);
+                var company = await _unitOfWork.CompanyRepository.ReadByIdAsync(readByIdCompanyRequest.ReadByIdRequestDto.Id, true);
                 var readByIdCompanyResponseDto = _mapper.Map<ReadCompanyResponseDto>(company);
 
                 var httpResponseDto = new HttpResponseDto<ReadCompanyResponseDto>(readByIdCompanyResponseDto, StatusCodes.Status200OK);

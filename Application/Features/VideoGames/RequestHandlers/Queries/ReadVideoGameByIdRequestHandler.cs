@@ -16,11 +16,11 @@ namespace Application.Features.VideoGames.RequestHandlers.Queries
 
         private readonly IMapper _mapper;
 
-        private readonly IValidator<ReadVideoGameByIdRequestDto> _validator;
+        private readonly IValidator<ReadByIdRequestDto> _validator;
 
         private readonly ILogger<ReadVideoGameByIdRequestHandler> _logger;
 
-        public ReadVideoGameByIdRequestHandler(IUnitOfWork unitOfWork, IMapper mapper, IValidator<ReadVideoGameByIdRequestDto> validator, ILogger<ReadVideoGameByIdRequestHandler> logger)
+        public ReadVideoGameByIdRequestHandler(IUnitOfWork unitOfWork, IMapper mapper, IValidator<ReadByIdRequestDto> validator, ILogger<ReadVideoGameByIdRequestHandler> logger)
         {
             _unitOfWork = unitOfWork ?? throw new ArgumentNullException(nameof(unitOfWork));
             _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
@@ -34,14 +34,14 @@ namespace Application.Features.VideoGames.RequestHandlers.Queries
             {
                 _logger.LogInformation("Begin ReadByIdVideoGame {@ReadByIdVideoGameRequest}.", readByIdVideoGameRequest);
 
-                if (readByIdVideoGameRequest.ReadVideoGameByIdRequestDto == null)
+                if (readByIdVideoGameRequest.ReadByIdRequestDto == null)
                 {
-                    var httpResponseDto1 = new HttpResponseDto<ReadVideoGameResponseDto>(new ArgumentNullException(nameof(readByIdVideoGameRequest.ReadVideoGameByIdRequestDto)).Message, StatusCodes.Status400BadRequest);
+                    var httpResponseDto1 = new HttpResponseDto<ReadVideoGameResponseDto>(new ArgumentNullException(nameof(readByIdVideoGameRequest.ReadByIdRequestDto)).Message, StatusCodes.Status400BadRequest);
                     _logger.LogError("Error ReadbyIdVideoGame {@HttpResponseDto}.", httpResponseDto1);
                     return httpResponseDto1;
                 }
 
-                var validationResult = await _validator.ValidateAsync(readByIdVideoGameRequest.ReadVideoGameByIdRequestDto, cancellationToken);
+                var validationResult = await _validator.ValidateAsync(readByIdVideoGameRequest.ReadByIdRequestDto, cancellationToken);
 
                 if (!validationResult.IsValid)
                 {
@@ -50,7 +50,7 @@ namespace Application.Features.VideoGames.RequestHandlers.Queries
                     return httpResponseDto1;
                 }
 
-                var videoGame = await _unitOfWork.VideoGameRepository.ReadByIdAsync(readByIdVideoGameRequest.ReadVideoGameByIdRequestDto.Id, true);
+                var videoGame = await _unitOfWork.VideoGameRepository.ReadByIdAsync(readByIdVideoGameRequest.ReadByIdRequestDto.Id, true);
                 var readByIdVideoGameResponseDto = _mapper.Map<ReadVideoGameResponseDto>(videoGame);
 
                 var httpResponseDto = new HttpResponseDto<ReadVideoGameResponseDto>(readByIdVideoGameResponseDto, StatusCodes.Status200OK);

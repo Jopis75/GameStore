@@ -6,6 +6,6 @@ namespace Application.Features.Addresses.Requests.Queries
 {
     public class ReadAddressByIdRequest : IRequest<HttpResponseDto<ReadAddressResponseDto>>
     {
-        public ReadAddressByIdRequestDto? ReadAddressByIdRequestDto { get; set; }
+        public ReadByIdRequestDto? ReadByIdRequestDto { get; set; }
     }
 }

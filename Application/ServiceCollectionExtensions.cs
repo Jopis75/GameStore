@@ -1,10 +1,12 @@
 ﻿using Application.Dtos.Addresses;
+using Application.Dtos.Common;
 using Application.Dtos.Companies;
 using Application.Dtos.Consoles;
 using Application.Dtos.ConsoleVideoGames;
 using Application.Dtos.Reviews;
 using Application.Dtos.VideoGames;
 using Application.Validators.Addresses;
+using Application.Validators.Common;
 using Application.Validators.Companies;
 using Application.Validators.Consoles;
 using Application.Validators.ConsoleVideoGames;
@@ -46,39 +48,36 @@ namespace Application
         {
             // Addresses.
             serviceCollection.AddScoped<IValidator<CreateAddressRequestDto>, CreateAddressRequestDtoValidator>();
-            serviceCollection.AddScoped<IValidator<ReadAddressByIdRequestDto>, ReadByIdAddressRequestDtoValidator>();
             serviceCollection.AddScoped<IValidator<UpdateAddressRequestDto>, UpdateAddressRequestDtoValidator>();
             serviceCollection.AddScoped<IValidator<DeleteAddressRequestDto>, DeleteAddressRequestDtoValidator>();
 
             // Companies.
             serviceCollection.AddScoped<IValidator<CreateCompanyRequestDto>, CreateCompanyRequestDtoValidator>();
-            serviceCollection.AddScoped<IValidator<Dtos.Companies.ReadCompanyByIdRequestDto>, ReadByIdCompanyRequestDtoValidator>();
             serviceCollection.AddScoped<IValidator<UpdateCompanyRequestDto>, UpdateCompanyRequestDtoValidator>();
             serviceCollection.AddScoped<IValidator<DeleteCompanyRequestDto>, DeleteCompanyRequestDtoValidator>();
 
+            // Common.
+            serviceCollection.AddScoped<IValidator<ReadByIdRequestDto>, ReadByIdRequestDtoValidator>();
+
             // Consoles.
             serviceCollection.AddScoped<IValidator<CreateConsoleRequestDto>, CreateConsoleRequestDtoValidator>();
-            serviceCollection.AddScoped<IValidator<Dtos.Consoles.ReadConsoleByIdRequestDto>, ReadByIdConsoleRequestDtoValidator>();
             serviceCollection.AddScoped<IValidator<UpdateConsoleRequestDto>, UpdateConsoleRequestDtoValidator>();
             serviceCollection.AddScoped<IValidator<DeleteConsoleRequestDto>, DeleteConsoleRequestDtoValidator>();
 
             // ConsoleVideoGames.
             serviceCollection.AddScoped<IValidator<CreateConsoleVideoGameRequestDto>, CreateConsoleVideoGameRequestDtoValidator>();
-            serviceCollection.AddScoped<IValidator<ReadConsoleVideoGameByIdRequestDto>, ReadByIdConsoleVideoGameRequestDtoValidator>();
             serviceCollection.AddScoped<IValidator<UpdateConsoleVideoGameRequestDto>, UpdateConsoleVideoGameRequestDtoValidator>();
             serviceCollection.AddScoped<IValidator<DeleteConsoleVideoGameRequestDto>, DeleteConsoleVideoGameRequestDtoValidator>();
 
-            // VideoGames.
-            serviceCollection.AddScoped<IValidator<CreateVideoGameRequestDto>, CreateVideoGameRequestDtoValidator>();
-            serviceCollection.AddScoped<IValidator<ReadVideoGameByIdRequestDto>, ReadByIdVideoGameRequestDtoValidator>();
-            serviceCollection.AddScoped<IValidator<UpdateVideoGameRequestDto>, UpdateVideoGameRequestDtoValidator>();
-            serviceCollection.AddScoped<IValidator<DeleteVideoGameRequestDto>, DeleteVideoGameRequestDtoValidator>();
-
             // Reviews.
             serviceCollection.AddScoped<IValidator<CreateReviewRequestDto>, CreateReviewRequestDtoValidator>();
-            serviceCollection.AddScoped<IValidator<ReadReviewByIdRequestDto>, ReadByIdReviewRequestDtoValidator>();
             serviceCollection.AddScoped<IValidator<UpdateReviewRequestDto>, UpdateReviewRequestDtoValidator>();
             serviceCollection.AddScoped<IValidator<DeleteReviewRequestDto>, DeleteReviewRequestDtoValidator>();
+
+            // VideoGames.
+            serviceCollection.AddScoped<IValidator<CreateVideoGameRequestDto>, CreateVideoGameRequestDtoValidator>();
+            serviceCollection.AddScoped<IValidator<UpdateVideoGameRequestDto>, UpdateVideoGameRequestDtoValidator>();
+            serviceCollection.AddScoped<IValidator<DeleteVideoGameRequestDto>, DeleteVideoGameRequestDtoValidator>();
 
             return serviceCollection;
         }

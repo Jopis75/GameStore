@@ -16,11 +16,11 @@ namespace Application.Features.Consoles.RequestHandlers.Queries
 
         private readonly IMapper _mapper;
 
-        private readonly IValidator<ReadConsoleByIdRequestDto> _validator;
+        private readonly IValidator<ReadByIdRequestDto> _validator;
 
         private readonly ILogger<ReadConsoleByIdRequestHandler> _logger;
 
-        public ReadConsoleByIdRequestHandler(IUnitOfWork unitOfWork, IMapper mapper, IValidator<ReadConsoleByIdRequestDto> validator, ILogger<ReadConsoleByIdRequestHandler> logger)
+        public ReadConsoleByIdRequestHandler(IUnitOfWork unitOfWork, IMapper mapper, IValidator<ReadByIdRequestDto> validator, ILogger<ReadConsoleByIdRequestHandler> logger)
         {
             _unitOfWork = unitOfWork ?? throw new ArgumentNullException(nameof(unitOfWork));
             _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
@@ -34,14 +34,14 @@ namespace Application.Features.Consoles.RequestHandlers.Queries
             {
                 _logger.LogInformation("Begin ReadByIdConsole {@ReadByIdConsoleRequest}.", readByIdConsoleRequest);
 
-                if (readByIdConsoleRequest.ReadConsoleByIdRequestDto == null)
+                if (readByIdConsoleRequest.ReadByIdRequestDto == null)
                 {
-                    var httpResponseDto1 = new HttpResponseDto<ReadConsoleResponseDto>(new ArgumentNullException(nameof(readByIdConsoleRequest.ReadConsoleByIdRequestDto)).Message, StatusCodes.Status400BadRequest);
+                    var httpResponseDto1 = new HttpResponseDto<ReadConsoleResponseDto>(new ArgumentNullException(nameof(readByIdConsoleRequest.ReadByIdRequestDto)).Message, StatusCodes.Status400BadRequest);
                     _logger.LogError("Error ReadByIdConsole {@HttpResponseDto}.", httpResponseDto1);
                     return httpResponseDto1;
                 }
 
-                var validationResult = await _validator.ValidateAsync(readByIdConsoleRequest.ReadConsoleByIdRequestDto, cancellationToken);
+                var validationResult = await _validator.ValidateAsync(readByIdConsoleRequest.ReadByIdRequestDto, cancellationToken);
 
                 if (!validationResult.IsValid)
                 {
@@ -50,7 +50,7 @@ namespace Application.Features.Consoles.RequestHandlers.Queries
                     return httpResponseDto1;
                 }
 
-                var console = await _unitOfWork.ConsoleRepository.ReadByIdAsync(readByIdConsoleRequest.ReadConsoleByIdRequestDto.Id, true);
+                var console = await _unitOfWork.ConsoleRepository.ReadByIdAsync(readByIdConsoleRequest.ReadByIdRequestDto.Id, true);
                 var readByIdConsoleResponseDto = _mapper.Map<ReadConsoleResponseDto>(console);
 
                 var httpResponseDto = new HttpResponseDto<ReadConsoleResponseDto>(readByIdConsoleResponseDto, StatusCodes.Status200OK);

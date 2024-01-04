@@ -1,4 +1,5 @@
-﻿using Application.Dtos.VideoGames;
+﻿using Application.Dtos.Common;
+using Application.Dtos.VideoGames;
 using Application.Features.VideoGames.Requests.Commands;
 using Application.Features.VideoGames.Requests.Queries;
 using MediatR;
@@ -67,7 +68,7 @@ namespace GameStoreAPI.Controllers
         {
             var httpResponseDto = await _mediator.Send(new ReadVideoGameByIdRequest
             {
-                ReadVideoGameByIdRequestDto = new ReadVideoGameByIdRequestDto
+                ReadByIdRequestDto = new ReadByIdRequestDto
                 {
                     Id = id
                 }

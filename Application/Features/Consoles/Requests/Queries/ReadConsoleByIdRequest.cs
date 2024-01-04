@@ -6,6 +6,6 @@ namespace Application.Features.Consoles.Requests.Queries
 {
     public class ReadConsoleByIdRequest : IRequest<HttpResponseDto<ReadConsoleResponseDto>>
     {
-        public ReadConsoleByIdRequestDto? ReadConsoleByIdRequestDto { get; set; }
+        public ReadByIdRequestDto? ReadByIdRequestDto { get; set; }
     }
 }

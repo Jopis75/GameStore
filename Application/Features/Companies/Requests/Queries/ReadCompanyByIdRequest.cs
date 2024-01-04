@@ -6,6 +6,6 @@ namespace Application.Features.Companies.Requests.Queries
 {
     public class ReadCompanyByIdRequest : IRequest<HttpResponseDto<ReadCompanyResponseDto>>
     {
-        public ReadCompanyByIdRequestDto? ReadCompanyByIdRequestDto { get; set; }
+        public ReadByIdRequestDto? ReadByIdRequestDto { get; set; }
     }
 }

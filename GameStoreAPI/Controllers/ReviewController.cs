@@ -1,4 +1,5 @@
-﻿using Application.Dtos.Reviews;
+﻿using Application.Dtos.Common;
+using Application.Dtos.Reviews;
 using Application.Features.Reviews.Requests.Commands;
 using Application.Features.Reviews.Requests.Queries;
 using MediatR;
@@ -67,7 +68,7 @@ namespace GameStoreAPI.Controllers
         {
             var httpResponseDto = await _mediator.Send(new ReadReviewByIdRequest
             {
-                ReadReviewByIdRequestDto = new ReadReviewByIdRequestDto
+                ReadByIdRequestDto = new ReadByIdRequestDto
                 {
                     Id = id
                 }

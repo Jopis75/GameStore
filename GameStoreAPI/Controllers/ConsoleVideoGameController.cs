@@ -1,4 +1,5 @@
-﻿using Application.Dtos.ConsoleVideoGames;
+﻿using Application.Dtos.Common;
+using Application.Dtos.ConsoleVideoGames;
 using Application.Features.ConsoleVideoGames.Requests.Commands;
 using Application.Features.ConsoleVideoGames.Requests.Queries;
 using MediatR;
@@ -67,7 +68,7 @@ namespace GameStoreAPI.Controllers
         {
             var httpResponseDto = await _mediator.Send(new ReadConsoleVideoGameByIdRequest
             {
-                ReadConsoleVideoGameByIdRequestDto = new ReadConsoleVideoGameByIdRequestDto
+                ReadByIdRequestDto = new ReadByIdRequestDto
                 {
                     Id = id
                 }

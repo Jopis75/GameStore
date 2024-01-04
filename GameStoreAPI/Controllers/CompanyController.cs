@@ -1,4 +1,5 @@
 ﻿using Application.Dtos.Addresses;
+using Application.Dtos.Common;
 using Application.Dtos.Companies;
 using Application.Features.Companies.Requests.Commands;
 using Application.Features.Companies.Requests.Queries;
@@ -68,7 +69,7 @@ namespace GameStoreAPI.Controllers
         {
             var httpResponseDto = await _mediator.Send(new ReadCompanyByIdRequest
             {
-                ReadCompanyByIdRequestDto = new ReadCompanyByIdRequestDto
+                ReadByIdRequestDto = new ReadByIdRequestDto
                 {
                     Id = id
                 }

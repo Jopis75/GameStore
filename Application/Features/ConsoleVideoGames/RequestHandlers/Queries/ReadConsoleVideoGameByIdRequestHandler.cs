@@ -16,11 +16,11 @@ namespace Application.Features.ConsoleVideoGames.RequestHandlers.Queries
 
         private readonly IMapper _mapper;
 
-        private readonly IValidator<ReadConsoleVideoGameByIdRequestDto> _validator;
+        private readonly IValidator<ReadByIdRequestDto> _validator;
 
         private readonly ILogger<ReadConsoleVideoGameByIdRequestHandler> _logger;
 
-        public ReadConsoleVideoGameByIdRequestHandler(IUnitOfWork unitOfWork, IMapper mapper, IValidator<ReadConsoleVideoGameByIdRequestDto> validator, ILogger<ReadConsoleVideoGameByIdRequestHandler> logger)
+        public ReadConsoleVideoGameByIdRequestHandler(IUnitOfWork unitOfWork, IMapper mapper, IValidator<ReadByIdRequestDto> validator, ILogger<ReadConsoleVideoGameByIdRequestHandler> logger)
         {
             _unitOfWork = unitOfWork ?? throw new ArgumentNullException(nameof(unitOfWork));
             _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
@@ -34,14 +34,14 @@ namespace Application.Features.ConsoleVideoGames.RequestHandlers.Queries
             {
                 _logger.LogInformation("Begin ReadByIdConsoleVideoGame {@ReadByIdConsoleVideoGameRequest}.", readByIdConsoleVideoGameRequest);
 
-                if (readByIdConsoleVideoGameRequest.ReadConsoleVideoGameByIdRequestDto == null)
+                if (readByIdConsoleVideoGameRequest.ReadByIdRequestDto == null)
                 {
-                    var httpResponseDto1 = new HttpResponseDto<ReadConsoleVideoGameResponseDto>(new ArgumentNullException(nameof(readByIdConsoleVideoGameRequest.ReadConsoleVideoGameByIdRequestDto)).Message, StatusCodes.Status400BadRequest);
+                    var httpResponseDto1 = new HttpResponseDto<ReadConsoleVideoGameResponseDto>(new ArgumentNullException(nameof(readByIdConsoleVideoGameRequest.ReadByIdRequestDto)).Message, StatusCodes.Status400BadRequest);
                     _logger.LogError("Error ReadByIdConsoleVideoGame {@HttpResponseDto}.", httpResponseDto1);
                     return httpResponseDto1;
                 }
 
-                var validationResult = await _validator.ValidateAsync(readByIdConsoleVideoGameRequest.ReadConsoleVideoGameByIdRequestDto, cancellationToken);
+                var validationResult = await _validator.ValidateAsync(readByIdConsoleVideoGameRequest.ReadByIdRequestDto, cancellationToken);
 
                 if (!validationResult.IsValid)
                 {
@@ -50,7 +50,7 @@ namespace Application.Features.ConsoleVideoGames.RequestHandlers.Queries
                     return httpResponseDto1;
                 }
 
-                var consoleVideoGame = await _unitOfWork.ConsoleVideoGameRepository.ReadByIdAsync(readByIdConsoleVideoGameRequest.ReadConsoleVideoGameByIdRequestDto.Id, true);
+                var consoleVideoGame = await _unitOfWork.ConsoleVideoGameRepository.ReadByIdAsync(readByIdConsoleVideoGameRequest.ReadByIdRequestDto.Id, true);
                 var readByIdConsoleVideoGameResponseDto = _mapper.Map<ReadConsoleVideoGameResponseDto>(consoleVideoGame);
 
                 var httpResponseDto = new HttpResponseDto<ReadConsoleVideoGameResponseDto>(readByIdConsoleVideoGameResponseDto, StatusCodes.Status200OK);

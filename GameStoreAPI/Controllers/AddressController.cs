@@ -1,4 +1,5 @@
 ﻿using Application.Dtos.Addresses;
+using Application.Dtos.Common;
 using Application.Features.Addresses.Requests.Commands;
 using Application.Features.Addresses.Requests.Queries;
 using MediatR;
@@ -70,7 +71,7 @@ namespace GameStoreAPI.Controllers
         {
             var httpResponseDto = await _mediator.Send(new ReadAddressByIdRequest
             {
-                ReadAddressByIdRequestDto = new ReadAddressByIdRequestDto
+                ReadByIdRequestDto = new ReadByIdRequestDto
                 {
                     Id = id
                 }

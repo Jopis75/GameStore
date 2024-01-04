@@ -16,11 +16,11 @@ namespace Application.Features.Addresses.RequestHandlers.Queries
 
         private readonly IMapper _mapper;
 
-        private readonly IValidator<ReadAddressByIdRequestDto> _validator;
+        private readonly IValidator<ReadByIdRequestDto> _validator;
 
         private readonly ILogger<ReadAddressByIdRequestHandler> _logger;
 
-        public ReadAddressByIdRequestHandler(IUnitOfWork unitOfWork, IMapper mapper, IValidator<ReadAddressByIdRequestDto> validator, ILogger<ReadAddressByIdRequestHandler> logger)
+        public ReadAddressByIdRequestHandler(IUnitOfWork unitOfWork, IMapper mapper, IValidator<ReadByIdRequestDto> validator, ILogger<ReadAddressByIdRequestHandler> logger)
         {
             _unitOfWork = unitOfWork ?? throw new ArgumentNullException(nameof(unitOfWork));
             _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
@@ -34,14 +34,14 @@ namespace Application.Features.Addresses.RequestHandlers.Queries
             {
                 _logger.LogInformation("Begin ReadByIdAddress {@ReadByIdAddressRequest}.", readByIdAddressRequest);
 
-                if (readByIdAddressRequest.ReadAddressByIdRequestDto == null)
+                if (readByIdAddressRequest.ReadByIdRequestDto == null)
                 {
-                    var httpResponseDto1 = new HttpResponseDto<ReadAddressResponseDto>(new ArgumentNullException(nameof(readByIdAddressRequest.ReadAddressByIdRequestDto)).Message, StatusCodes.Status400BadRequest);
+                    var httpResponseDto1 = new HttpResponseDto<ReadAddressResponseDto>(new ArgumentNullException(nameof(readByIdAddressRequest.ReadByIdRequestDto)).Message, StatusCodes.Status400BadRequest);
                     _logger.LogError("Error ReadByIdAddress {@HttpResponseDto}.", httpResponseDto1);
                     return httpResponseDto1;
                 }
 
-                var validationResult = await _validator.ValidateAsync(readByIdAddressRequest.ReadAddressByIdRequestDto, cancellationToken);
+                var validationResult = await _validator.ValidateAsync(readByIdAddressRequest.ReadByIdRequestDto, cancellationToken);
 
                 if (!validationResult.IsValid)
                 {
@@ -50,7 +50,7 @@ namespace Application.Features.Addresses.RequestHandlers.Queries
                     return httpResponseDto1;
                 }
 
-                var address = await _unitOfWork.AddressRepository.ReadByIdAsync(readByIdAddressRequest.ReadAddressByIdRequestDto.Id, true);
+                var address = await _unitOfWork.AddressRepository.ReadByIdAsync(readByIdAddressRequest.ReadByIdRequestDto.Id, true);
                 var readByIdAddressResponseDto = _mapper.Map<ReadAddressResponseDto>(address);
 
                 var httpResponseDto = new HttpResponseDto<ReadAddressResponseDto>(readByIdAddressResponseDto, StatusCodes.Status200OK);

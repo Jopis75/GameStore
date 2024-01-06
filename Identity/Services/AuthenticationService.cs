@@ -1,4 +1,5 @@
-﻿using Application.Interfaces.Identity;
+﻿using Application.Exceptions;
+using Application.Interfaces.Identity;
 using Application.Models.Identity;
 using Identity.Models;
 using Microsoft.AspNetCore.Identity;
@@ -27,49 +28,87 @@ namespace Identity.Services
 
         public async Task<AuthenticationResponse> Login(AuthenticationRequest authenticationRequest)
         {
-            var applicationUser = await _userManager.FindByEmailAsync(authenticationRequest.Email);
+            var applicationUser = await _userManager.FindByEmailAsync(authenticationRequest.UserName);
 
             if (applicationUser == null)
             {
-                throw new ApplicationException($"Could not found user {authenticationRequest.Email}.");
+                throw new NotFoundException($"Could not find user {authenticationRequest.UserName}.", authenticationRequest.UserName);
             }
 
-            var result = await _signInManager.PasswordSignInAsync(applicationUser.UserName, authenticationRequest.Password, false, lockoutOnFailure: false);
+            var signInResult = await _signInManager.CheckPasswordSignInAsync(applicationUser, authenticationRequest.Password, false);
 
-            if (!result.Succeeded)
+            if (!signInResult.Succeeded)
             {
-                throw new ApplicationException($"Could not login in user {authenticationRequest.Email}.");
+                var message = $"The user {authenticationRequest.UserName} failed to sign-in.";
+
+                if (signInResult.IsLockedOut)
+                {
+                    message = $"The user {authenticationRequest.UserName} is locked out.";
+                }
+                else if (signInResult.IsNotAllowed)
+                {
+                    message = $"The user {authenticationRequest.UserName} is not allowed to sign-in.";
+                }
+                else if (signInResult.RequiresTwoFactor)
+                {
+                    message = $"The user {authenticationRequest.UserName} requires two factor authentication.";
+                }
+
+                throw new BadRequestException(message);
             }
 
-            var jwtSecurityToken = await GenerateToken(applicationUser);
+            var jwtSecurityToken = await GenerateJwtSecurityTokenAsync(applicationUser);
 
-            var authenticationResponse = new AuthenticationResponse
+            return new AuthenticationResponse
             {
                 Id = applicationUser.Id,
+                JwtSecurityToken = new JwtSecurityTokenHandler().WriteToken(jwtSecurityToken),
                 UserName = applicationUser.UserName,
-                Email = applicationUser.Email,
-                Token = new JwtSecurityTokenHandler().WriteToken(jwtSecurityToken)
+                Email = applicationUser.Email  
+            };
+        }
+
+        public async Task<RegistrationResponse> Register(RegistrationRequest registrationRequest)
+        {
+            var applicationUser = new ApplicationUser
+            {
+                UserName = registrationRequest.UserName,
+                FirstName = registrationRequest.FirstName,
+                LastName = registrationRequest.LastName,
+                Email = registrationRequest.Email,
+                EmailConfirmed = true
             };
 
-            return authenticationResponse;
+            var identityResult = await _userManager.CreateAsync(applicationUser, registrationRequest.Password);
+
+            if (!identityResult.Succeeded)
+            {
+                var stringBuilder = new StringBuilder();
+
+                foreach (var error in identityResult.Errors)
+                {
+                    stringBuilder.AppendLine($"{error.Code}: {error.Description}");
+                }
+
+                throw new BadRequestException(stringBuilder.ToString());
+            }
+
+            await _userManager.AddToRoleAsync(applicationUser, "User");
+
+            return new RegistrationResponse
+            {
+                UserId = applicationUser.Id
+            };
         }
 
-        public Task<RegistrationResponse> Register(RegistrationRequest registrationRequest)
-        {
-            throw new NotImplementedException();
-        }
-
-        private async Task<JwtSecurityToken> GenerateToken(ApplicationUser applicationUser)
+        private async Task<JwtSecurityToken> GenerateJwtSecurityTokenAsync(ApplicationUser applicationUser)
         {
             var userClaims = await _userManager.GetClaimsAsync(applicationUser);
-            var roleClaims = new List<Claim>();
 
-            var roles = await _userManager.GetRolesAsync(applicationUser);
-
-            foreach (var role in roles)
-            {
-                roleClaims.Add(new Claim(ClaimTypes.Role, role));
-            }
+            var roleClaims = (await _userManager
+                .GetRolesAsync(applicationUser))
+                .Select(role => new Claim(ClaimTypes.Role, role))
+                .ToList();
 
             var claims = new[]
             {
@@ -83,15 +122,14 @@ namespace Identity.Services
 
             var symmetricSecuritykey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwtSettings.Key));
             var signingCredentials = new SigningCredentials(symmetricSecuritykey, SecurityAlgorithms.HmacSha256);
-            var jwtSecurityToken = new JwtSecurityToken(
+            
+            return new JwtSecurityToken(
                 issuer: _jwtSettings.Issuer,
                 audience: _jwtSettings.Audience,
                 claims: claims,
-                expires: DateTime.UtcNow.AddMinutes(_jwtSettings.DurationInMinutes),
+                expires: DateTime.Now.AddMinutes(_jwtSettings.DurationInMinutes),
                 signingCredentials: signingCredentials
             );
-
-            return jwtSecurityToken;
         }
     }
 }

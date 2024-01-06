@@ -24,25 +24,25 @@ namespace Application.Features.Consoles.RequestHandlers.Queries
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
-        public async Task<HttpResponseDto<ReadConsoleResponseDto>> Handle(ReadConsoleAllRequest readAllConsoleRequest, CancellationToken cancellationToken)
+        public async Task<HttpResponseDto<ReadConsoleResponseDto>> Handle(ReadConsoleAllRequest readConsoleAllRequest, CancellationToken cancellationToken)
         {
             try
             {
-                _logger.LogInformation("Begin ReadAllConsole {@ReadAllConsoleRequest}.", readAllConsoleRequest);
+                _logger.LogInformation("Begin ReadConsoleAll {@ReadConsoleAllRequest}.", readConsoleAllRequest);
 
                 var consoles = await _unitOfWork.ConsoleRepository.ReadAllAsync(true);
-                var readAllConsoleResponseDtos = consoles
+                var readConsoleResponseDtos = consoles
                     .Select(_mapper.Map<ReadConsoleResponseDto>)
                     .ToList();
 
-                var httpResponseDto = new HttpResponseDto<ReadConsoleResponseDto>(readAllConsoleResponseDtos, StatusCodes.Status200OK);
-                _logger.LogInformation("End ReadAllConsole {@HttpResponseDto}.", httpResponseDto);
+                var httpResponseDto = new HttpResponseDto<ReadConsoleResponseDto>(readConsoleResponseDtos, StatusCodes.Status200OK);
+                _logger.LogInformation("Done ReadConsoleAll {@HttpResponseDto}.", httpResponseDto);
                 return httpResponseDto;
             }
             catch (Exception ex)
             {
                 var httpResponseDto1 = new HttpResponseDto<ReadConsoleResponseDto>(ex.Message, StatusCodes.Status500InternalServerError);
-                _logger.LogError("Error ReadAllConsole {@HttpResponseDto}.", httpResponseDto1);
+                _logger.LogError("Error ReadConsoleAll {@HttpResponseDto}.", httpResponseDto1);
                 return httpResponseDto1;
             }
         }

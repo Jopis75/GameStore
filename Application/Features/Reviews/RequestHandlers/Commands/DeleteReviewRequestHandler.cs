@@ -56,7 +56,7 @@ namespace Application.Features.Reviews.RequestHandlers.Commands
                     DeletedAt = deletedReview.DeletedAt,
                     DeletedBy = deletedReview.DeletedBy
                 }, StatusCodes.Status200OK);
-                _logger.LogInformation("End DeleteReview {@HttpResponseDto}.", httpResponseDto);
+                _logger.LogInformation("Done DeleteReview {@HttpResponseDto}.", httpResponseDto);
                 return httpResponseDto;
             }
             catch (Exception ex)

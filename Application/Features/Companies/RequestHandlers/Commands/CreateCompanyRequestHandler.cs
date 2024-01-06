@@ -61,7 +61,7 @@ namespace Application.Features.Companies.RequestHandlers.Commands
                     CreatedAt = createdCompany.CreatedAt,
                     CreatedBy = createdCompany.CreatedBy,
                 }, StatusCodes.Status201Created);
-                _logger.LogInformation("End CreateCompany {@HttpResponseDto}.", httpResponseDto);
+                _logger.LogInformation("Done CreateCompany {@HttpResponseDto}.", httpResponseDto);
                 return httpResponseDto;
             }
             catch (Exception ex)

@@ -61,7 +61,7 @@ namespace Application.Features.ConsoleVideoGames.RequestHandlers.Commands
                     UpdatedAt = updatedConsoleVideoGame.UpdatedAt,
                     UpdatedBy = updatedConsoleVideoGame.UpdatedBy
                 }, StatusCodes.Status200OK);
-                _logger.LogInformation("End UpdateConsoleVideoGame {@HttpResponseDto}.", httpResponseDto);
+                _logger.LogInformation("Done UpdateConsoleVideoGame {@HttpResponseDto}.", httpResponseDto);
                 return httpResponseDto;
             }
             catch (Exception ex)

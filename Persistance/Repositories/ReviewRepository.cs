@@ -38,7 +38,21 @@ namespace Persistance.Repositories
             return reviews;
         }
 
-        public async Task<Review> ReadByProductIdAsync(int videoGameId, bool asNoTracking = false)
+        public async Task<IEnumerable<Review>> ReadByReviewDateAsync(DateTime fromReviewDate, DateTime toReviewDate, bool asNoTracking = false)
+        {
+            var reviews = asNoTracking ?
+                await Entities
+                    .AsNoTracking<Review>()
+                    .Where(entity => entity.ReviewDate >= fromReviewDate && entity.ReviewDate <= toReviewDate)
+                    .ToListAsync() :
+                await Entities
+                    .Where(entity => entity.ReviewDate >= fromReviewDate && entity.ReviewDate <= toReviewDate)
+                    .ToListAsync();
+
+            return reviews;
+        }
+
+        public async Task<Review> ReadByVideoGameIdAsync(int videoGameId, bool asNoTracking = false)
         {
             var review = asNoTracking ?
                 await Entities
@@ -55,20 +69,6 @@ namespace Persistance.Repositories
             }
 
             return review;
-        }
-
-        public async Task<IEnumerable<Review>> ReadByReviewDateAsync(DateTime fromReviewDate, DateTime toReviewDate, bool asNoTracking = false)
-        {
-            var reviews = asNoTracking ?
-                await Entities
-                    .AsNoTracking<Review>()
-                    .Where(entity => entity.ReviewDate >= fromReviewDate && entity.ReviewDate <= toReviewDate)
-                    .ToListAsync() :
-                await Entities
-                    .Where(entity => entity.ReviewDate >= fromReviewDate && entity.ReviewDate <= toReviewDate)
-                    .ToListAsync();
-
-            return reviews;
         }
     }
 }

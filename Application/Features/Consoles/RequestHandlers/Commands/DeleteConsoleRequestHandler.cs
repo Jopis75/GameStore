@@ -56,7 +56,7 @@ namespace Application.Features.Consoles.RequestHandlers.Commands
                     DeletedAt = deletedConsole.DeletedAt,
                     DeletedBy = deletedConsole.DeletedBy,
                 }, StatusCodes.Status200OK);
-                _logger.LogInformation("End DeleteConsole {@HttpResponseDto}.", httpResponseDto);
+                _logger.LogInformation("Done DeleteConsole {@HttpResponseDto}.", httpResponseDto);
                 return httpResponseDto;
             }
             catch (Exception ex)

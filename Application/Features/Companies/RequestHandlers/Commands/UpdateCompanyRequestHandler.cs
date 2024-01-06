@@ -61,7 +61,7 @@ namespace Application.Features.Companies.RequestHandlers.Commands
                     UpdatedAt = updatedCompany.UpdatedAt,
                     UpdatedBy = updatedCompany.UpdatedBy,
                 }, StatusCodes.Status200OK);
-                _logger.LogInformation("End UpdateCompany {@HttpResponseDto}.", httpResponseDto);
+                _logger.LogInformation("Done UpdateCompany {@HttpResponseDto}.", httpResponseDto);
                 return httpResponseDto;
             }
             catch (Exception ex)

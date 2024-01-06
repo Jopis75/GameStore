@@ -28,39 +28,39 @@ namespace Application.Features.Addresses.RequestHandlers.Queries
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
-        public async Task<HttpResponseDto<ReadAddressResponseDto>> Handle(ReadAddressByIdRequest readByIdAddressRequest, CancellationToken cancellationToken)
+        public async Task<HttpResponseDto<ReadAddressResponseDto>> Handle(ReadAddressByIdRequest readAddressByIdRequest, CancellationToken cancellationToken)
         {
             try
             {
-                _logger.LogInformation("Begin ReadByIdAddress {@ReadByIdAddressRequest}.", readByIdAddressRequest);
+                _logger.LogInformation("Begin ReadAddressById {@ReadAddressByIdRequest}.", readAddressByIdRequest);
 
-                if (readByIdAddressRequest.ReadByIdRequestDto == null)
+                if (readAddressByIdRequest.ReadByIdRequestDto == null)
                 {
-                    var httpResponseDto1 = new HttpResponseDto<ReadAddressResponseDto>(new ArgumentNullException(nameof(readByIdAddressRequest.ReadByIdRequestDto)).Message, StatusCodes.Status400BadRequest);
-                    _logger.LogError("Error ReadByIdAddress {@HttpResponseDto}.", httpResponseDto1);
+                    var httpResponseDto1 = new HttpResponseDto<ReadAddressResponseDto>(new ArgumentNullException(nameof(readAddressByIdRequest.ReadByIdRequestDto)).Message, StatusCodes.Status400BadRequest);
+                    _logger.LogError("Error ReadAddressById {@HttpResponseDto}.", httpResponseDto1);
                     return httpResponseDto1;
                 }
 
-                var validationResult = await _validator.ValidateAsync(readByIdAddressRequest.ReadByIdRequestDto, cancellationToken);
+                var validationResult = await _validator.ValidateAsync(readAddressByIdRequest.ReadByIdRequestDto, cancellationToken);
 
                 if (!validationResult.IsValid)
                 {
                     var httpResponseDto1 = new HttpResponseDto<ReadAddressResponseDto>(new ValidationException(validationResult.Errors).Message, StatusCodes.Status400BadRequest);
-                    _logger.LogError("Error ReadByIdAddress {@HttpResponseDto}.", httpResponseDto1);
+                    _logger.LogError("Error ReadAddressById {@HttpResponseDto}.", httpResponseDto1);
                     return httpResponseDto1;
                 }
 
-                var address = await _unitOfWork.AddressRepository.ReadByIdAsync(readByIdAddressRequest.ReadByIdRequestDto.Id, true);
-                var readByIdAddressResponseDto = _mapper.Map<ReadAddressResponseDto>(address);
+                var address = await _unitOfWork.AddressRepository.ReadByIdAsync(readAddressByIdRequest.ReadByIdRequestDto.Id, true);
+                var readAddressResponseDto = _mapper.Map<ReadAddressResponseDto>(address);
 
-                var httpResponseDto = new HttpResponseDto<ReadAddressResponseDto>(readByIdAddressResponseDto, StatusCodes.Status200OK);
-                _logger.LogInformation("End ReadByIdAddress {@HttpResponseDto}.", httpResponseDto);
+                var httpResponseDto = new HttpResponseDto<ReadAddressResponseDto>(readAddressResponseDto, StatusCodes.Status200OK);
+                _logger.LogInformation("Done ReadAddressById {@HttpResponseDto}.", httpResponseDto);
                 return httpResponseDto;
             }
             catch (Exception ex)
             {
                 var httpResponseDto1 = new HttpResponseDto<ReadAddressResponseDto>(ex.Message, StatusCodes.Status500InternalServerError);
-                _logger.LogError("Error ReadByIdAddress {@HttpResponseDto}.", httpResponseDto1);
+                _logger.LogError("Error ReadAddressById {@HttpResponseDto}.", httpResponseDto1);
                 return httpResponseDto1;
             }
         }

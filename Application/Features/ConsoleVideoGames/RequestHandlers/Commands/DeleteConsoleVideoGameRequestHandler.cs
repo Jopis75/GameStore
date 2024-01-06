@@ -57,7 +57,7 @@ namespace Application.Features.ConsoleVideoGames.RequestHandlers.Commands
                     DeletedAt = deletedConsoleVideoGame.DeletedAt,
                     DeletedBy = deletedConsoleVideoGame.DeletedBy
                 }, StatusCodes.Status200OK);
-                _logger.LogInformation("End DeleteConsoleVideoGame {@HttpResponseDto}.", httpResponseDto);
+                _logger.LogInformation("Done DeleteConsoleVideoGame {@HttpResponseDto}.", httpResponseDto);
                 return httpResponseDto;
             }
             catch (Exception ex)

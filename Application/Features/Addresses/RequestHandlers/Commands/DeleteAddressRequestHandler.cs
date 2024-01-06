@@ -56,7 +56,7 @@ namespace Application.Features.Addresses.RequestHandlers.Commands
                     DeletedAt = deletedAddress.DeletedAt,
                     DeletedBy = deletedAddress.DeletedBy,
                 }, StatusCodes.Status200OK);
-                _logger.LogInformation("End DeleteAddress {@HttpResponseDto}.", httpResponseDto);
+                _logger.LogInformation("Done DeleteAddress {@HttpResponseDto}.", httpResponseDto);
                 return httpResponseDto;
             }
             catch (Exception ex)

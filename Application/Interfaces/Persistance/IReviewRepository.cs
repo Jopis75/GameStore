@@ -8,8 +8,8 @@ namespace Application.Interfaces.Persistance
 
         Task<IEnumerable<Review>> ReadByGradeAsync(int fromGrade, int toGrade, bool asNoTracking = false);
 
-        Task<Review> ReadByProductIdAsync(int videoGameId, bool asNoTracking = false);
-
         Task<IEnumerable<Review>> ReadByReviewDateAsync(DateTime fromReviewDate, DateTime toReviewDate, bool asNoTracking = false);
+
+        Task<Review> ReadByVideoGameIdAsync(int videoGameId, bool asNoTracking = false);
     }
 }

@@ -61,7 +61,7 @@ namespace Application.Features.Reviews.RequestHandlers.Commands
                     CreatedAt = createdReview.CreatedAt,
                     CreatedBy = createdReview.CreatedBy
                 }, StatusCodes.Status201Created);
-                _logger.LogInformation("End CreateReview {@HttpResponseDto}.", httpResponseDto);
+                _logger.LogInformation("Done CreateReview {@HttpResponseDto}.", httpResponseDto);
                 return httpResponseDto;
             }
             catch (Exception ex)

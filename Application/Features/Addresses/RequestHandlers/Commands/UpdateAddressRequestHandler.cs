@@ -61,7 +61,7 @@ namespace Application.Features.Addresses.RequestHandlers.Commands
                     UpdatedAt = updatedAddress.UpdatedAt,
                     UpdatedBy = updatedAddress.UpdatedBy,
                 }, StatusCodes.Status200OK);
-                _logger.LogInformation("End UpdateAddress {@HttpResponseDto}.", httpResponseDto);
+                _logger.LogInformation("Done UpdateAddress {@HttpResponseDto}.", httpResponseDto);
                 return httpResponseDto;
             }
             catch (Exception ex)

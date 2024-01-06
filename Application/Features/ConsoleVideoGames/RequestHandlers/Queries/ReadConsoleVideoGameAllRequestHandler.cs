@@ -24,25 +24,25 @@ namespace Application.Features.ConsoleVideoGames.RequestHandlers.Queries
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
-        public async Task<HttpResponseDto<ReadConsoleVideoGameResponseDto>> Handle(ReadConsoleVideoGameAllRequest readAllConsoleVideoGameRequest, CancellationToken cancellationToken)
+        public async Task<HttpResponseDto<ReadConsoleVideoGameResponseDto>> Handle(ReadConsoleVideoGameAllRequest readConsoleVideoGameAllRequest, CancellationToken cancellationToken)
         {
             try
             {
-                _logger.LogInformation("Begin ReadAllConsoleVideoGame {@ReadAllConsoleVideoGameRequest}.", readAllConsoleVideoGameRequest);
+                _logger.LogInformation("Begin ReadConsoleVideoGameAll {@ReadConsoleVideoGameAllRequest}.", readConsoleVideoGameAllRequest);
 
                 var consoleVideoGames = await _unitOfWork.ConsoleVideoGameRepository.ReadAllAsync(true);
-                var readAllConsoleVideoGameResponseDtos = consoleVideoGames
+                var readConsoleVideoGameResponseDtos = consoleVideoGames
                     .Select(_mapper.Map<ReadConsoleVideoGameResponseDto>)
                     .ToList();
 
-                var httpResponseDto = new HttpResponseDto<ReadConsoleVideoGameResponseDto>(readAllConsoleVideoGameResponseDtos, StatusCodes.Status200OK);
-                _logger.LogInformation("End ReadAllConsoleVideoGame {@HttpResponseDto}.", httpResponseDto);
+                var httpResponseDto = new HttpResponseDto<ReadConsoleVideoGameResponseDto>(readConsoleVideoGameResponseDtos, StatusCodes.Status200OK);
+                _logger.LogInformation("Done ReadConsoleVideoGameAll {@HttpResponseDto}.", httpResponseDto);
                 return httpResponseDto;
             }
             catch (Exception ex)
             {
                 var httpResponseDto1 = new HttpResponseDto<ReadConsoleVideoGameResponseDto>(ex.Message, StatusCodes.Status500InternalServerError);
-                _logger.LogError("Error ReadAllConsoleVideoGame {@HttpResponseDto}.", httpResponseDto1);
+                _logger.LogError("Error ReadConsoleVideoGameAll {@HttpResponseDto}.", httpResponseDto1);
                 return httpResponseDto1;
             }
         }

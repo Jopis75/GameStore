@@ -61,7 +61,7 @@ namespace Application.Features.ConsoleVideoGames.RequestHandlers.Commands
                     CreatedAt = createdConsoleVideoGame.CreatedAt,
                     CreatedBy = createdConsoleVideoGame.CreatedBy,
                 }, StatusCodes.Status201Created);
-                _logger.LogInformation("End CreateConsoleVideoGame {@HttpResponseDto}.", httpResponseDto);
+                _logger.LogInformation("Done CreateConsoleVideoGame {@HttpResponseDto}.", httpResponseDto);
                 return httpResponseDto;
             }
             catch (Exception ex)

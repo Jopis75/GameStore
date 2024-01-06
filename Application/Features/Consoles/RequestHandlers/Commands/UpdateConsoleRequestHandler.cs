@@ -61,7 +61,7 @@ namespace Application.Features.Consoles.RequestHandlers.Commands
                     UpdatedAt = updatedConsole.UpdatedAt,
                     UpdatedBy = updatedConsole.UpdatedBy,
                 }, StatusCodes.Status200OK);
-                _logger.LogInformation("End UpdateConsole {@HttpResponseDto}.", httpResponseDto);
+                _logger.LogInformation("Done UpdateConsole {@HttpResponseDto}.", httpResponseDto);
                 return httpResponseDto;
             }
             catch (Exception ex)

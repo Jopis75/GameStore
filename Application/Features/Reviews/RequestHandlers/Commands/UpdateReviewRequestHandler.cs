@@ -61,7 +61,7 @@ namespace Application.Features.Reviews.RequestHandlers.Commands
                     UpdatedAt = updatedReview.UpdatedAt,
                     UpdatedBy = updatedReview.UpdatedBy
                 }, StatusCodes.Status200OK);
-                _logger.LogInformation("End UpdateReview {@HttpResponseDto}.", httpResponseDto);
+                _logger.LogInformation("Done UpdateReview {@HttpResponseDto}.", httpResponseDto);
                 return httpResponseDto;
             }
             catch (Exception ex)

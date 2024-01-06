@@ -24,25 +24,25 @@ namespace Application.Features.Addresses.RequestHandlers.Queries
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
-        public async Task<HttpResponseDto<ReadAddressResponseDto>> Handle(ReadAddressAllRequest readAllAddressRequest, CancellationToken cancellationToken)
+        public async Task<HttpResponseDto<ReadAddressResponseDto>> Handle(ReadAddressAllRequest readAddressAllRequest, CancellationToken cancellationToken)
         {
             try
             {
-                _logger.LogInformation("Begin ReadAllAddress {@ReadAllAddressRequest}.", readAllAddressRequest);
+                _logger.LogInformation("Begin ReadAddressAll {@ReadAddressAllRequest}.", readAddressAllRequest);
 
                 var addresses = await _unitOfWork.AddressRepository.ReadAllAsync(true);
-                var readAllAddressResponseDtos = addresses
+                var readAddressResponseDtos = addresses
                     .Select(_mapper.Map<ReadAddressResponseDto>)
                     .ToList();
 
-                var httpResponseDto = new HttpResponseDto<ReadAddressResponseDto>(readAllAddressResponseDtos, StatusCodes.Status200OK);
-                _logger.LogInformation("End ReadAllAddress {@HttpResponseDto}.", httpResponseDto);
+                var httpResponseDto = new HttpResponseDto<ReadAddressResponseDto>(readAddressResponseDtos, StatusCodes.Status200OK);
+                _logger.LogInformation("Done ReadAddressAll {@HttpResponseDto}.", httpResponseDto);
                 return httpResponseDto;
             }
             catch (Exception ex)
             {
                 var httpResponseDto1 = new HttpResponseDto<ReadAddressResponseDto>(ex.Message, StatusCodes.Status500InternalServerError);
-                _logger.LogError("Error ReadAllAddress {@HttpResponseDto}.", httpResponseDto1);
+                _logger.LogError("Error ReadAddressAll {@HttpResponseDto}.", httpResponseDto1);
                 return httpResponseDto1;
             }
         }

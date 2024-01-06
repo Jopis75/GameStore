@@ -56,7 +56,7 @@ namespace Application.Features.Companies.RequestHandlers.Commands
                     DeletedAt = deletedCompany.DeletedAt,
                     DeletedBy = deletedCompany.DeletedBy,
                 }, StatusCodes.Status200OK);
-                _logger.LogInformation("End DeleteCompany {@HttpResponseDto}.", httpResponseDto);
+                _logger.LogInformation("Done DeleteCompany {@HttpResponseDto}.", httpResponseDto);
                 return httpResponseDto;
             }
             catch (Exception ex)

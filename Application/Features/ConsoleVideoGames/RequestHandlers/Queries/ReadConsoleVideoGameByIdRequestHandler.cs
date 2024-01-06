@@ -28,39 +28,39 @@ namespace Application.Features.ConsoleVideoGames.RequestHandlers.Queries
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
-        public async Task<HttpResponseDto<ReadConsoleVideoGameResponseDto>> Handle(ReadConsoleVideoGameByIdRequest readByIdConsoleVideoGameRequest, CancellationToken cancellationToken)
+        public async Task<HttpResponseDto<ReadConsoleVideoGameResponseDto>> Handle(ReadConsoleVideoGameByIdRequest readConsoleVideoGameByIdRequest, CancellationToken cancellationToken)
         {
             try
             {
-                _logger.LogInformation("Begin ReadByIdConsoleVideoGame {@ReadByIdConsoleVideoGameRequest}.", readByIdConsoleVideoGameRequest);
+                _logger.LogInformation("Begin ReadConsoleVideoGameById {@ReadConsoleVideoGameByIdRequest}.", readConsoleVideoGameByIdRequest);
 
-                if (readByIdConsoleVideoGameRequest.ReadByIdRequestDto == null)
+                if (readConsoleVideoGameByIdRequest.ReadByIdRequestDto == null)
                 {
-                    var httpResponseDto1 = new HttpResponseDto<ReadConsoleVideoGameResponseDto>(new ArgumentNullException(nameof(readByIdConsoleVideoGameRequest.ReadByIdRequestDto)).Message, StatusCodes.Status400BadRequest);
-                    _logger.LogError("Error ReadByIdConsoleVideoGame {@HttpResponseDto}.", httpResponseDto1);
+                    var httpResponseDto1 = new HttpResponseDto<ReadConsoleVideoGameResponseDto>(new ArgumentNullException(nameof(readConsoleVideoGameByIdRequest.ReadByIdRequestDto)).Message, StatusCodes.Status400BadRequest);
+                    _logger.LogError("Error ReadConsoleVideoGameById {@HttpResponseDto}.", httpResponseDto1);
                     return httpResponseDto1;
                 }
 
-                var validationResult = await _validator.ValidateAsync(readByIdConsoleVideoGameRequest.ReadByIdRequestDto, cancellationToken);
+                var validationResult = await _validator.ValidateAsync(readConsoleVideoGameByIdRequest.ReadByIdRequestDto, cancellationToken);
 
                 if (!validationResult.IsValid)
                 {
                     var httpResponseDto1 = new HttpResponseDto<ReadConsoleVideoGameResponseDto>(new ValidationException(validationResult.Errors).Message, StatusCodes.Status400BadRequest);
-                    _logger.LogError("Error ReadByIdConsoleVideoGame {@HttpResponseDto}.", httpResponseDto1);
+                    _logger.LogError("Error ReadConsoleVideoGameById {@HttpResponseDto}.", httpResponseDto1);
                     return httpResponseDto1;
                 }
 
-                var consoleVideoGame = await _unitOfWork.ConsoleVideoGameRepository.ReadByIdAsync(readByIdConsoleVideoGameRequest.ReadByIdRequestDto.Id, true);
-                var readByIdConsoleVideoGameResponseDto = _mapper.Map<ReadConsoleVideoGameResponseDto>(consoleVideoGame);
+                var consoleVideoGame = await _unitOfWork.ConsoleVideoGameRepository.ReadByIdAsync(readConsoleVideoGameByIdRequest.ReadByIdRequestDto.Id, true);
+                var readConsoleVideoGameResponseDto = _mapper.Map<ReadConsoleVideoGameResponseDto>(consoleVideoGame);
 
-                var httpResponseDto = new HttpResponseDto<ReadConsoleVideoGameResponseDto>(readByIdConsoleVideoGameResponseDto, StatusCodes.Status200OK);
-                _logger.LogInformation("End ReadByIdConsolevideoGame {@HttpResponseDto}.", httpResponseDto);
+                var httpResponseDto = new HttpResponseDto<ReadConsoleVideoGameResponseDto>(readConsoleVideoGameResponseDto, StatusCodes.Status200OK);
+                _logger.LogInformation("Done ReadConsoleVideoGameId {@HttpResponseDto}.", httpResponseDto);
                 return httpResponseDto;
             }
             catch (Exception ex)
             {
                 var httpResponseDto1 = new HttpResponseDto<ReadConsoleVideoGameResponseDto>(ex.Message, StatusCodes.Status500InternalServerError);
-                _logger.LogError("Error ReadByIdConsoleVideoGame {@HttpResponseDto}.", httpResponseDto1);
+                _logger.LogError("Error ReadConsoleVideoGameById {@HttpResponseDto}.", httpResponseDto1);
                 return httpResponseDto1;
             }
         }

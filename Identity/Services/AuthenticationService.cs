@@ -22,17 +22,20 @@ namespace Identity.Services
 
         private readonly SignInManager<ApplicationUser> _signInManager;
 
-        private readonly IValidator<LoginRequestDto> _validator;
+        private readonly IValidator<LoginRequestDto> _loginRequestDtoValidator;
+
+        private readonly IValidator<RegistrationRequestDto> _registrationRequestDtoValidator;
 
         private readonly ILogger<AuthenticationService> _logger;
 
         private readonly IOptions<JwtSettings> _options;
 
-        public AuthenticationService(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, IValidator<LoginRequestDto> validator, ILogger<AuthenticationService> logger, IOptions<JwtSettings> options)
+        public AuthenticationService(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, IValidator<LoginRequestDto> loginRequestDtoValidator, IValidator<RegistrationRequestDto> registrationRequestDtoValidator, ILogger<AuthenticationService> logger, IOptions<JwtSettings> options)
         {
             _userManager = userManager ?? throw new ArgumentNullException(nameof(userManager));
             _signInManager = signInManager ?? throw new ArgumentNullException(nameof(signInManager));
-            _validator = validator ?? throw new ArgumentNullException(nameof(validator));
+            _loginRequestDtoValidator = loginRequestDtoValidator ?? throw new ArgumentNullException(nameof(loginRequestDtoValidator));
+            _registrationRequestDtoValidator = registrationRequestDtoValidator ?? throw new ArgumentNullException(nameof(registrationRequestDtoValidator));
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
             _options = options ?? throw new ArgumentNullException(nameof(options));
         }
@@ -50,7 +53,7 @@ namespace Identity.Services
                     return httpResponseDto1;
                 }
 
-                var validationResult = await _validator.ValidateAsync(loginRequestDto);
+                var validationResult = await _loginRequestDtoValidator.ValidateAsync(loginRequestDto);
 
                 if (!validationResult.IsValid)
                 {
@@ -120,6 +123,22 @@ namespace Identity.Services
             {
                 _logger.LogInformation("Begin RegisterAsync {@RegistrationRequestDto}.", registrationRequestDto);
 
+                if (registrationRequestDto == null)
+                {
+                    var httpResponseDto1 = new HttpResponseDto<RegistrationResponseDto>(new ArgumentNullException(nameof(registrationRequestDto)).Message, StatusCodes.Status400BadRequest);
+                    _logger.LogError("Error RegisterAsync {@HttpResponseDto}.", httpResponseDto1);
+                    return httpResponseDto1;
+                }
+
+                var validationResult = await _registrationRequestDtoValidator.ValidateAsync(registrationRequestDto);
+
+                if (!validationResult.IsValid)
+                {
+                    var httpResponseDto1 = new HttpResponseDto<RegistrationResponseDto>(new FluentValidation.ValidationException(validationResult.Errors).Message, StatusCodes.Status400BadRequest);
+                    _logger.LogError("Error RegisterAsync {@HttpResponseDto}.", httpResponseDto1);
+                    return httpResponseDto1;
+                }
+
                 var applicationUser = new ApplicationUser
                 {
                     UserName = registrationRequestDto.UserName,
@@ -128,13 +147,6 @@ namespace Identity.Services
                     Email = registrationRequestDto.Email,
                     EmailConfirmed = true
                 };
-
-                if (registrationRequestDto == null)
-                {
-                    var httpResponseDto1 = new HttpResponseDto<RegistrationResponseDto>(new ArgumentNullException(nameof(registrationRequestDto)).Message, StatusCodes.Status400BadRequest);
-                    _logger.LogError("Error RegisterAsync {@HttpResponseDto}.", httpResponseDto1);
-                    return httpResponseDto1;
-                }
 
                 var identityResult = await _userManager.CreateAsync(applicationUser, registrationRequestDto.Password);
 

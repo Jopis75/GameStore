@@ -73,6 +73,7 @@ namespace Application
 
             // Identity.
             serviceCollection.AddScoped<IValidator<LoginRequestDto>, LoginRequestDtoValidator>();
+            serviceCollection.AddScoped<IValidator<RegistrationRequestDto>, RegistrationRequestDtoValidator>();
 
             // Reviews.
             serviceCollection.AddScoped<IValidator<CreateReviewRequestDto>, CreateReviewRequestDtoValidator>();

@@ -1,5 +1,6 @@
-﻿using Application.Interfaces.Identity;
-using Application.Models.Identity;
+﻿using Application.Dtos.Common;
+using Application.Dtos.Identity;
+using Application.Interfaces.Identity;
 using Microsoft.AspNetCore.Mvc;
 
 namespace GameStoreAPI.Controllers
@@ -17,18 +18,18 @@ namespace GameStoreAPI.Controllers
 
         [HttpPost]
         [Route("Login")]
-        public async Task<ActionResult<AuthenticationResponse>> Login(AuthenticationRequest authenticationRequest)
+        public async Task<ActionResult<HttpResponseDto<LoginResponseDto>>> Login(LoginRequestDto loginRequestDto)
         {
-            var authenticationResponse = await _authenticationService.Login(authenticationRequest);
-            return Ok(authenticationResponse);
+            var httpResponseDto = await _authenticationService.LoginAsync(loginRequestDto);
+            return StatusCode(httpResponseDto.StatusCode, httpResponseDto);
         }
 
         [HttpPost]
         [Route("Register")]
-        public async Task<ActionResult<RegistrationResponse>> Register(RegistrationRequest registrationRequest)
+        public async Task<ActionResult<HttpResponseDto<RegistrationResponseDto>>> Register(RegistrationRequestDto registrationRequestDto)
         {
-            var registrationResponse = await _authenticationService.Register(registrationRequest);
-            return Ok(registrationResponse);
+            var httpResponseDto = await _authenticationService.RegisterAsync(registrationRequestDto);
+            return StatusCode(httpResponseDto.StatusCode, httpResponseDto);
         }
     }
 }

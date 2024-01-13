@@ -3,6 +3,7 @@ using Application.Dtos.Common;
 using Application.Dtos.Companies;
 using Application.Dtos.Consoles;
 using Application.Dtos.ConsoleVideoGames;
+using Application.Dtos.Identity;
 using Application.Dtos.Reviews;
 using Application.Dtos.VideoGames;
 using Application.Validators.Addresses;
@@ -10,6 +11,7 @@ using Application.Validators.Common;
 using Application.Validators.Companies;
 using Application.Validators.Consoles;
 using Application.Validators.ConsoleVideoGames;
+using Application.Validators.Identity;
 using Application.Validators.Reviews;
 using Application.Validators.VideoGames;
 using FluentValidation;
@@ -68,6 +70,9 @@ namespace Application
             serviceCollection.AddScoped<IValidator<CreateConsoleVideoGameRequestDto>, CreateConsoleVideoGameRequestDtoValidator>();
             serviceCollection.AddScoped<IValidator<UpdateConsoleVideoGameRequestDto>, UpdateConsoleVideoGameRequestDtoValidator>();
             serviceCollection.AddScoped<IValidator<DeleteConsoleVideoGameRequestDto>, DeleteConsoleVideoGameRequestDtoValidator>();
+
+            // Identity.
+            serviceCollection.AddScoped<IValidator<LoginRequestDto>, LoginRequestDtoValidator>();
 
             // Reviews.
             serviceCollection.AddScoped<IValidator<CreateReviewRequestDto>, CreateReviewRequestDtoValidator>();

@@ -1,5 +1,5 @@
-﻿using Application.Interfaces.Identity;
-using Application.Models.Identity;
+﻿using Application.Dtos.Identity;
+using Application.Interfaces.Identity;
 using Identity.Models;
 using Microsoft.AspNetCore.Identity;
 
@@ -14,12 +14,12 @@ namespace Identity.Services
             _userManager = userManager ?? throw new ArgumentNullException(nameof(userManager));
         }
 
-        public async Task<IEnumerable<User>> ReadAllAsync()
+        public async Task<IEnumerable<UserDto>> ReadAllAsync()
         {
             var applicationUsers = await _userManager.GetUsersInRoleAsync("User");
 
             return applicationUsers
-                .Select(applicationUser => new User // ToDo: Use AutoMapper.
+                .Select(applicationUser => new UserDto // ToDo: Use AutoMapper.
                 {
                     Id = applicationUser.Id,
                     UserName = applicationUser.UserName,
@@ -29,16 +29,16 @@ namespace Identity.Services
                 .ToList();
         }
 
-        public async Task<User> ReadByIdAsync(string id)
+        public async Task<UserDto> ReadByIdAsync(string id)
         {
             var applicationUser = await _userManager.FindByIdAsync(id);
 
             if (applicationUser == null)
             {
-                return new User();
+                return new UserDto();
             }
 
-            return new User // ToDo: Use AutoMapper.
+            return new UserDto // ToDo: Use AutoMapper.
             {
                 Id = applicationUser.Id,
                 UserName = applicationUser.UserName,

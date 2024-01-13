@@ -1,6 +1,8 @@
-﻿namespace Application.Models.Identity
+﻿using Application.Dtos.Common;
+
+namespace Application.Dtos.Identity
 {
-    public class RegistrationRequest
+    public class RegistrationRequestDto : RequestDto
     {
         public string? UserName { get; set; }
 

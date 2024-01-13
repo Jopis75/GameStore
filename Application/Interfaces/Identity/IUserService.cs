@@ -1,11 +1,11 @@
-﻿using Application.Models.Identity;
+﻿using Application.Dtos.Identity;
 
 namespace Application.Interfaces.Identity
 {
     public interface IUserService
     {
-        Task<IEnumerable<User>> ReadAllAsync();
+        Task<IEnumerable<UserDto>> ReadAllAsync();
 
-        Task<User> ReadByIdAsync(string id);
+        Task<UserDto> ReadByIdAsync(string id);
     }
 }

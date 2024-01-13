@@ -1,5 +1,4 @@
-﻿using Application.Models.Identity;
-using Identity.Configurations;
+﻿using Identity.Configurations;
 using Identity.Models;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;

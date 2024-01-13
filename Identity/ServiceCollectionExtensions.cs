@@ -1,5 +1,5 @@
-﻿using Application.Interfaces.Identity;
-using Application.Models.Identity;
+﻿using Application.Dtos.Identity;
+using Application.Interfaces.Identity;
 using Identity.DbContexts;
 using Identity.Models;
 using Identity.Services;

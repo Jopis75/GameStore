@@ -1,6 +1,6 @@
-﻿namespace Application.Models.Identity
+﻿namespace Application.Dtos.Identity
 {
-    public class User
+    public class UserDto
     {
         public string? Id { get; set; }
 

@@ -1,11 +1,12 @@
-﻿using Identity.Configurations;
+﻿using Application.Models.Identity;
+using Identity.Configurations;
 using Identity.Models;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace Identity.DbContexts
 {
-    internal class GameStoreIdentityDbContext : IdentityDbContext<ApplicationUser>
+    public class GameStoreIdentityDbContext : IdentityDbContext<ApplicationUser>
     {
         public GameStoreIdentityDbContext(DbContextOptions<GameStoreIdentityDbContext> dbContextOptions)
             : base(dbContextOptions) { }

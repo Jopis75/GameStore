@@ -11,14 +11,14 @@ namespace Persistance
     {
         public static IServiceCollection AddPersistanceServices(this IServiceCollection serviceCollection, IConfiguration configuration)
         {
-            serviceCollection.AddDbContexts(configuration);
+            serviceCollection.AddDbContext(configuration);
             serviceCollection.AddRepositories();
             serviceCollection.AddUnitOfWork();
 
             return serviceCollection;
         }
 
-        private static IServiceCollection AddDbContexts(this IServiceCollection serviceCollection, IConfiguration configuration)
+        private static IServiceCollection AddDbContext(this IServiceCollection serviceCollection, IConfiguration configuration)
         {
             serviceCollection.AddDbContext<GameStoreDbContext>(optionsBuilder =>
                 optionsBuilder.UseSqlServer(configuration.GetConnectionString("GameStoreConnectionString")));

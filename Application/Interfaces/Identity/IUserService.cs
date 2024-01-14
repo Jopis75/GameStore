@@ -1,11 +1,12 @@
-﻿using Application.Dtos.Identity;
+﻿using Application.Dtos.Common;
+using Application.Dtos.Identity;
 
 namespace Application.Interfaces.Identity
 {
     public interface IUserService
     {
-        Task<IEnumerable<UserDto>> ReadAllAsync();
+        Task<HttpResponseDto<ReadUserResponseDto>> ReadAllAsync(ReadUserAllRequestDto readUserAllRequestDto);
 
-        Task<UserDto> ReadByIdAsync(string id);
+        Task<HttpResponseDto<ReadUserResponseDto>> ReadByIdAsync(ReadUserByUserIdRequestDto readUserByUserIdRequestDto);
     }
 }

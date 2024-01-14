@@ -1,7 +1,7 @@
 ﻿using Application.Dtos.Identity;
 using Application.Interfaces.Identity;
+using Application.Models.Identity;
 using Identity.DbContexts;
-using Identity.Models;
 using Identity.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
@@ -57,7 +57,7 @@ namespace Identity
         {
             serviceCollection.AddDbContext<GameStoreIdentityDbContext>(dbContextOptionsBuilder =>
                 dbContextOptionsBuilder.UseSqlServer(configuration.GetConnectionString("GameStoreIdentityConnectionString"))); //, 
-                    //sqlServerDbContextOptionsBuilder => sqlServerDbContextOptionsBuilder.MigrationsAssembly(typeof(GameStoreIdentityDbContext).Assembly.FullName)));
+                                                                                                                               //sqlServerDbContextOptionsBuilder => sqlServerDbContextOptionsBuilder.MigrationsAssembly(typeof(GameStoreIdentityDbContext).Assembly.FullName)));
 
             return serviceCollection;
         }

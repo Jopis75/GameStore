@@ -1,10 +1,9 @@
 ﻿using Application.Dtos.Common;
 using Application.Dtos.Identity;
 using Application.Exceptions;
-using Application.Features.Consoles.RequestHandlers.Queries;
 using Application.Interfaces.Identity;
+using Application.Models.Identity;
 using FluentValidation;
-using Identity.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
@@ -164,7 +163,7 @@ namespace Identity.Services
                     return httpResponseDto1;
                 }
 
-                await _userManager.AddToRoleAsync(applicationUser, "User");
+                await _userManager.AddToRoleAsync(applicationUser, registrationRequestDto.Role.ToString());
 
                 var registrationResponseDto = new RegistrationResponseDto
                 {

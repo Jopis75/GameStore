@@ -2,8 +2,10 @@
 using Application.Dtos.Companies;
 using Application.Dtos.Consoles;
 using Application.Dtos.ConsoleVideoGames;
+using Application.Dtos.Identity;
 using Application.Dtos.Reviews;
 using Application.Dtos.VideoGames;
+using Application.Models.Identity;
 using AutoMapper;
 using Domain.Entities;
 using Console = Domain.Entities.Console;
@@ -49,6 +51,9 @@ namespace Application.Profiles
             CreateMap<ConsoleVideoGame, UpdateConsoleVideoGameResponseDto>().ReverseMap();
             CreateMap<ConsoleVideoGame, DeleteConsoleVideoGameRequestDto>().ReverseMap();
             CreateMap<ConsoleVideoGame, DeleteConsoleVideoGameResponseDto>().ReverseMap();
+
+            // Identity.
+            CreateMap<ApplicationUser, ReadUserResponseDto>().ReverseMap();
 
             // Reviews.
             CreateMap<Review, CreateReviewRequestDto>().ReverseMap();

@@ -1,4 +1,5 @@
 ﻿using Application.Dtos.Common;
+using Application.Models.Identity;
 
 namespace Application.Dtos.Identity
 {
@@ -13,5 +14,7 @@ namespace Application.Dtos.Identity
         public string? FirstName { get; set; }
 
         public string? LastName { get; set; }
+
+        public Roles? Role { get; set; }
     }
 }

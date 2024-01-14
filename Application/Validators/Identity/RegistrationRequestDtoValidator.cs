@@ -28,6 +28,10 @@ namespace Application.Validators.Identity
             RuleFor(registrationRequestDto => registrationRequestDto.LastName)
                 .NotNull()
                 .NotEmpty();
+
+            RuleFor(registrationRequestDto => registrationRequestDto.Role)
+                .NotNull()
+                .NotEmpty();
         }
     }
 }

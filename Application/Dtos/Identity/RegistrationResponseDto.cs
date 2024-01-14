@@ -4,6 +4,6 @@ namespace Application.Dtos.Identity
 {
     public class RegistrationResponseDto : ResponseDto
     {
-        public string? UserId { get; set; }
+        public string UserId { get; set; } = default!;
     }
 }

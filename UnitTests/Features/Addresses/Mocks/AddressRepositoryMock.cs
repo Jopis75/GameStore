@@ -1,0 +1,74 @@
+﻿using Application.Interfaces.Persistance;
+using Domain.Entities;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using Moq;
+
+namespace UnitTests.Features.Addresses.Mocks
+{
+    public static class AddressRepositoryMock
+    {
+        public static Mock<IAddressRepository> Create()
+        {
+            var addresses = new List<Address>
+            {
+                new Address
+                {
+                    Id = 1,
+                    StreetAddress = "StreetAddress1",
+                    PostalCode = "12345",
+                    City = "City1",
+                    State = "State1",
+                    Country = "Country1",
+                    CreatedAt = DateTime.Now,
+                    CreatedBy = "System",
+                    UpdatedAt = null,
+                    UpdatedBy = null,
+                    DeletedAt = null,
+                    DeletedBy = null
+                },
+                new Address
+                {
+                    Id = 2,
+                    StreetAddress = "StreetAddress2",
+                    PostalCode = "12345",
+                    City = "City2",
+                    State = "State2",
+                    Country = "Country2",
+                    CreatedAt = DateTime.Now,
+                    CreatedBy = "System",
+                    UpdatedAt = null,
+                    UpdatedBy = null,
+                    DeletedAt = null,
+                    DeletedBy = null
+                },
+                new Address
+                {
+                    Id = 3,
+                    StreetAddress = "StreetAddress3",
+                    PostalCode = "12345",
+                    City = "City3",
+                    State = "State3",
+                    Country = "Country3",
+                    CreatedAt = DateTime.Now,
+                    CreatedBy = "System",
+                    UpdatedAt = null,
+                    UpdatedBy = null,
+                    DeletedAt = null,
+                    DeletedBy = null
+                }
+            };
+
+            var addressRepositoryMock = new Mock<IAddressRepository>();
+
+            addressRepositoryMock
+                .Setup(addressRepository => addressRepository.ReadAllAsync(false))
+                .ReturnsAsync(addresses);
+
+            return addressRepositoryMock;
+        }
+    }
+}

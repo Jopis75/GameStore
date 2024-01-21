@@ -65,8 +65,27 @@ namespace UnitTests.Features.Addresses.Mocks
             var addressRepositoryMock = new Mock<IAddressRepository>();
 
             addressRepositoryMock
+                .Setup(addressRepository => addressRepository.CreateAsync(It.IsAny<Address>()))
+                .ReturnsAsync((Address address) =>
+                {
+                    addresses.Add(address);
+                    return address;
+                });
+
+            addressRepositoryMock
                 .Setup(addressRepository => addressRepository.ReadAllAsync(false))
                 .ReturnsAsync(addresses);
+
+            addressRepositoryMock
+                .Setup(addressRepository => addressRepository.ReadByIdAsync(It.IsAny<int>(), false))
+                .ReturnsAsync((int id) => addresses.Where(address => address.Id == id).Single());
+
+            //addressRepositoryMock
+            //    .Setup(addressRepository => addressRepository.UpdateAsync(It.IsAny<Address>()))
+            //    .ReturnsAsync((Address address) =>
+            //    {
+
+            //    });
 
             return addressRepositoryMock;
         }

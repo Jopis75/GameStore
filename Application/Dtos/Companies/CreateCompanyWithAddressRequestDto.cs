@@ -3,13 +3,11 @@ using Domain.Entities;
 
 namespace Application.Dtos.Companies
 {
-    public class CreateCompanyRequestDto : CreateRequestDto
+    public class CreateCompanyWithAddressRequestDto : CreateRequestDto
     {
         public CompanyType CompanyType { get; set; }
 
         public string EmailAddress { get; set; } = default!;
-
-        public int HeadquarterId { get; set; }
 
         public Industry Industry { get; set; }
 
@@ -24,5 +22,15 @@ namespace Application.Dtos.Companies
         public string TradeName { get; set; } = default!;
 
         public string WebsiteUrl { get; set; } = default!;
+
+        public string City { get; set; } = default!;
+
+        public string Country { get; set; } = default!;
+
+        public string PostalCode { get; set; } = default!;
+
+        public string State { get; set; } = default!;
+
+        public string StreetAddress { get; set; } = default!;
     }
 }

@@ -19,6 +19,8 @@ namespace Application.Profiles
             // Addresses.
             CreateMap<Address, CreateAddressRequestDto>().ReverseMap();
             CreateMap<Address, CreateAddressResponseDto>().ReverseMap();
+            CreateMap<Address, CreateCompanyWithAddressRequestDto>().ReverseMap();
+            CreateMap<Address, CreateCompanyWithAddressResponseDto>().ReverseMap();
             CreateMap<Address, ReadAddressResponseDto>().ReverseMap();
             CreateMap<Address, UpdateAddressRequestDto>().ReverseMap();
             CreateMap<Address, UpdateAddressResponseDto>().ReverseMap();
@@ -28,6 +30,8 @@ namespace Application.Profiles
             // Companies.
             CreateMap<Company, CreateCompanyRequestDto>().ReverseMap();
             CreateMap<Company, CreateCompanyResponseDto>().ReverseMap();
+            CreateMap<Company, CreateCompanyWithAddressRequestDto>().ReverseMap();
+            CreateMap<Company, CreateCompanyWithAddressResponseDto>().ReverseMap();
             CreateMap<Company, ReadCompanyResponseDto>().ReverseMap();
             CreateMap<Company, UpdateCompanyRequestDto>().ReverseMap();
             CreateMap<Company, UpdateCompanyResponseDto>().ReverseMap();

@@ -4,9 +4,9 @@ using FluentValidation;
 
 namespace Application.Validators.Companies
 {
-    public class CreateCompanyRequestDtoValidator : AbstractValidator<CreateCompanyRequestDto>
+    public class CreateCompanyWithAddressRequestDtoValidator : AbstractValidator<CreateCompanyWithAddressRequestDto>
     {
-        public CreateCompanyRequestDtoValidator()
+        public CreateCompanyWithAddressRequestDtoValidator()
         {
             RuleFor(createCompanyRequestDto => createCompanyRequestDto.Name)
                 .NotNull()
@@ -17,10 +17,6 @@ namespace Application.Validators.Companies
                 .NotNull()
                 .NotEmpty()
                 .WithMessage("{PropertyName} is required.");
-
-            RuleFor(createCompanyRequestDto => createCompanyRequestDto.HeadquarterId)
-                .NotEqual(0)
-                .WithMessage("{PropertyName} must not equal 0.");
 
             RuleFor(createCompanyRequestDto => createCompanyRequestDto.EmailAddress)
                 .EmailAddress()
@@ -33,6 +29,26 @@ namespace Application.Validators.Companies
             RuleFor(createCompanyRequestDto => createCompanyRequestDto.ParentCompanyId)
                 .NotEqual(0)
                 .WithMessage("{PropertyName} must not equal 0.");
+
+            RuleFor(createAddressRequestDto => createAddressRequestDto.StreetAddress)
+                .NotNull()
+                .NotEmpty()
+                .WithMessage("{PropertyName} is required.");
+
+            RuleFor(createAddressRequestDto => createAddressRequestDto.City)
+                .NotNull()
+                .NotEmpty()
+                .WithMessage("{PropertyName} is required.");
+
+            RuleFor(createAddressRequestDto => createAddressRequestDto.State)
+                .NotNull()
+                .NotEmpty()
+                .WithMessage("{PropertyName} is required.");
+
+            RuleFor(createAddressRequestDto => createAddressRequestDto.PostalCode)
+                .NotNull()
+                .NotEmpty()
+                .WithMessage("{PropertyName} is required.");
         }
     }
 }

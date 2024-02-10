@@ -20,10 +20,10 @@ namespace GameStoreAPI.Controllers
 
         [HttpPost]
         [Route("Create")]
-        [ProducesResponseType(typeof(CreateConsoleResponseDto), StatusCodes.Status201Created)]
+        [ProducesResponseType(typeof(HttpResponseDto<CreateConsoleResponseDto>), StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult<CreateConsoleResponseDto>> CreateAsync([FromBody] CreateConsoleRequestDto createConsoleRequestDto)
+        public async Task<ActionResult<HttpResponseDto<CreateConsoleResponseDto>>> CreateAsync([FromBody] CreateConsoleRequestDto createConsoleRequestDto)
         {
             var httpResponseDto = await _mediator.Send(new CreateConsoleRequest
             {
@@ -34,10 +34,10 @@ namespace GameStoreAPI.Controllers
 
         [HttpDelete]
         [Route("Delete/{id}")]
-        [ProducesResponseType(typeof(DeleteConsoleResponseDto), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(HttpResponseDto<DeleteConsoleResponseDto>), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult<DeleteConsoleResponseDto>> DeleteAsync(int id)
+        public async Task<ActionResult<HttpResponseDto<DeleteConsoleResponseDto>>> DeleteAsync(int id)
         {
             var httpResponseDto = await _mediator.Send(new DeleteConsoleRequest
             {
@@ -51,9 +51,9 @@ namespace GameStoreAPI.Controllers
 
         [HttpGet]
         [Route("ReadAll")]
-        [ProducesResponseType(typeof(ReadConsoleResponseDto), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(HttpResponseDto<ReadConsoleResponseDto>), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult<ReadConsoleResponseDto>> ReadAllAsync()
+        public async Task<ActionResult<HttpResponseDto<ReadConsoleResponseDto>>> ReadAllAsync()
         {
             var httpResponseDto = await _mediator.Send(new ReadConsoleAllRequest());
             return StatusCode(httpResponseDto.StatusCode, httpResponseDto);
@@ -61,10 +61,10 @@ namespace GameStoreAPI.Controllers
 
         [HttpGet]
         [Route("ReadById/{id}")]
-        [ProducesResponseType(typeof(ReadConsoleResponseDto), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(HttpResponseDto<ReadConsoleResponseDto>), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult<ReadConsoleResponseDto>> ReadByIdAsync(int id)
+        public async Task<ActionResult<HttpResponseDto<ReadConsoleResponseDto>>> ReadByIdAsync(int id)
         {
             var httpResponseDto = await _mediator.Send(new ReadConsoleByIdRequest
             {
@@ -78,10 +78,10 @@ namespace GameStoreAPI.Controllers
 
         [HttpPut]
         [Route("Update")]
-        [ProducesResponseType(typeof(UpdateConsoleResponseDto), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(HttpResponseDto<UpdateConsoleResponseDto>), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult<UpdateConsoleResponseDto>> UpdateAsync([FromBody] UpdateConsoleRequestDto updateConsoleRequestDto)
+        public async Task<ActionResult<HttpResponseDto<UpdateConsoleResponseDto>>> UpdateAsync([FromBody] UpdateConsoleRequestDto updateConsoleRequestDto)
         {
             var httpResponseDto = await _mediator.Send(new UpdateConsoleRequest
             {

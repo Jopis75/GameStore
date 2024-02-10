@@ -20,10 +20,10 @@ namespace GameStoreAPI.Controllers
 
         [HttpPost]
         [Route("Create")]
-        [ProducesResponseType(typeof(CreateConsoleVideoGameResponseDto), StatusCodes.Status201Created)]
+        [ProducesResponseType(typeof(HttpResponseDto<CreateConsoleVideoGameResponseDto>), StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult<CreateConsoleVideoGameResponseDto>> CreateAsync([FromBody] CreateConsoleVideoGameRequestDto createConsoleVideoGameRequestDto)
+        public async Task<ActionResult<HttpResponseDto<CreateConsoleVideoGameResponseDto>>> CreateAsync([FromBody] CreateConsoleVideoGameRequestDto createConsoleVideoGameRequestDto)
         {
             var httpResponseDto = await _mediator.Send(new CreateConsoleVideoGameRequest
             {
@@ -34,10 +34,10 @@ namespace GameStoreAPI.Controllers
 
         [HttpDelete]
         [Route("Delete/{id}")]
-        [ProducesResponseType(typeof(DeleteConsoleVideoGameResponseDto), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(HttpResponseDto<DeleteConsoleVideoGameResponseDto>), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult<DeleteConsoleVideoGameResponseDto>> DeleteAsync(int id)
+        public async Task<ActionResult<HttpResponseDto<DeleteConsoleVideoGameResponseDto>>> DeleteAsync(int id)
         {
             var httpResponseDto = await _mediator.Send(new DeleteConsoleVideoGameRequest
             {
@@ -51,9 +51,9 @@ namespace GameStoreAPI.Controllers
 
         [HttpGet]
         [Route("ReadAll")]
-        [ProducesResponseType(typeof(ReadConsoleVideoGameResponseDto), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(HttpResponseDto<ReadConsoleVideoGameResponseDto>), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult<ReadConsoleVideoGameResponseDto>> ReadAllAsync()
+        public async Task<ActionResult<HttpResponseDto<ReadConsoleVideoGameResponseDto>>> ReadAllAsync()
         {
             var httpResponseDto = await _mediator.Send(new ReadConsoleVideoGameAllRequest());
             return StatusCode(httpResponseDto.StatusCode, httpResponseDto);
@@ -61,10 +61,10 @@ namespace GameStoreAPI.Controllers
 
         [HttpGet]
         [Route("ReadById/{id}")]
-        [ProducesResponseType(typeof(ReadConsoleVideoGameResponseDto), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(HttpResponseDto<ReadConsoleVideoGameResponseDto>), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult<ReadConsoleVideoGameResponseDto>> ReadByIdAsync(int id)
+        public async Task<ActionResult<HttpResponseDto<ReadConsoleVideoGameResponseDto>>> ReadByIdAsync(int id)
         {
             var httpResponseDto = await _mediator.Send(new ReadConsoleVideoGameByIdRequest
             {
@@ -78,10 +78,10 @@ namespace GameStoreAPI.Controllers
 
         [HttpPut]
         [Route("Update")]
-        [ProducesResponseType(typeof(UpdateConsoleVideoGameResponseDto), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(HttpResponseDto<UpdateConsoleVideoGameResponseDto>), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult<UpdateConsoleVideoGameResponseDto>> UpdateAsync([FromBody] UpdateConsoleVideoGameRequestDto updateConsoleVideoGameRequestDto)
+        public async Task<ActionResult<HttpResponseDto<UpdateConsoleVideoGameResponseDto>>> UpdateAsync([FromBody] UpdateConsoleVideoGameRequestDto updateConsoleVideoGameRequestDto)
         {
             var httpResponseDto = await _mediator.Send(new UpdateConsoleVideoGameRequest
             {

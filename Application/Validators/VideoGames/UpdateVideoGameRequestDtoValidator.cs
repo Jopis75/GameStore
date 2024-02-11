@@ -1,4 +1,5 @@
 ﻿using Application.Dtos.VideoGames;
+using Application.Interfaces.Persistance;
 using Application.Validators.Common;
 using FluentValidation;
 
@@ -6,14 +7,24 @@ namespace Application.Validators.VideoGames
 {
     public class UpdateVideoGameRequestDtoValidator : AbstractValidator<UpdateVideoGameRequestDto>
     {
-        public UpdateVideoGameRequestDtoValidator()
+        private readonly IUnitOfWork _unitOfWork;
+
+        public UpdateVideoGameRequestDtoValidator(IUnitOfWork unitOfWork)
         {
+            _unitOfWork = unitOfWork ?? throw new ArgumentNullException(nameof(unitOfWork));
+
             Include(new UpdateRequestDtoValidator());
 
             RuleFor(updateVideoGameRequestDto => updateVideoGameRequestDto.Title)
                 .NotNull()
                 .NotEmpty()
-                .WithMessage("{PropertyName} is required.");
+                .WithMessage("{PropertyName} is required.")
+                .MustAsync(async (title, cancellation) =>
+                {
+                    var videoGame = await _unitOfWork.VideoGameRepository.ReadByTitleAsync(title);
+                    return videoGame.Id == 0;
+                })
+                .WithMessage("{PropertyName} must be unique.");
 
             RuleFor(updateVideoGameRequestDto => updateVideoGameRequestDto.DeveloperId)
                 .NotEqual(0)

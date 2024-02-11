@@ -11,7 +11,7 @@ namespace Application.Validators.Companies
 
         public CreateCompanyRequestDtoValidator(IUnitOfWork unitOfWork)
         {
-            _unitOfWork = unitOfWork;
+            _unitOfWork = unitOfWork ?? throw new ArgumentNullException(nameof(unitOfWork));
 
             RuleFor(createCompanyRequestDto => createCompanyRequestDto.Name)
                 .NotNull()

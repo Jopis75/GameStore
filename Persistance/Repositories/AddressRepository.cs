@@ -24,6 +24,25 @@ namespace Persistance.Repositories
             return addresses;
         }
 
+        public async Task<Address> ReadByStreetAddressAsync(string streetAddress, bool asNoTracking = false)
+        {
+            var address = asNoTracking ?
+                await Entities
+                    .AsNoTracking<Address>()
+                    .Where(entity => entity.StreetAddress == streetAddress)
+                    .SingleOrDefaultAsync() :
+                await Entities
+                    .Where(entity => entity.StreetAddress == streetAddress)
+                    .SingleOrDefaultAsync();
+
+            if (address == null)
+            {
+                return new Address();
+            }
+
+            return address;
+        }
+
         public async Task<IEnumerable<Address>> ReadByZipCodeAsync(string postalCode, bool asNoTracking = false)
         {
             var addresses = asNoTracking ?

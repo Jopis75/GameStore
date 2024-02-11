@@ -55,6 +55,7 @@ namespace Application
 
             // Companies.
             serviceCollection.AddScoped<IValidator<CreateCompanyRequestDto>, CreateCompanyRequestDtoValidator>();
+            serviceCollection.AddScoped<IValidator<CreateCompanyWithAddressRequestDto>, CreateCompanyWithAddressRequestDtoValidator>();
             serviceCollection.AddScoped<IValidator<UpdateCompanyRequestDto>, UpdateCompanyRequestDtoValidator>();
             serviceCollection.AddScoped<IValidator<DeleteCompanyRequestDto>, DeleteCompanyRequestDtoValidator>();
 

@@ -53,7 +53,7 @@ namespace Application.Features.Companies.RequestHandlers.Commands
 
                 var company = _mapper.Map<Company>(createCompanyRequest.CreateCompanyRequestDto);
                 var createdCompany = await _unitOfWork.CompanyRepository.CreateAsync(company);
-                await _unitOfWork.SaveAsync();
+                //await _unitOfWork.SaveAsync();
 
                 var httpResponseDto = new HttpResponseDto<CreateCompanyResponseDto>(new CreateCompanyResponseDto
                 {

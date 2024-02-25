@@ -1,4 +1,5 @@
 ﻿using Application.Dtos.AzureBlobStorage;
+using Application.Dtos.Common;
 
 namespace Application.Interfaces.Infrastructure
 {
@@ -6,8 +7,8 @@ namespace Application.Interfaces.Infrastructure
     {
         Task CreateContainerAsync(string containerName);
 
-        Task<AzureBlobStorageDownloadResponseDto> DownloadAsync(AzureBlobStorageDownloadRequestDto azureBlobStorageDownloadRequestDto);
+        Task<HttpResponseDto<AzureBlobStorageDownloadResponseDto>> DownloadAsync(AzureBlobStorageDownloadRequestDto azureBlobStorageDownloadRequestDto);
 
-        Task<AzureBlobStorageUploadResponseDto> UploasAsync(AzureBlobStorageUploadRequestDto azureBlobStorageUploadRequestDto);
+        Task<HttpResponseDto<AzureBlobStorageUploadResponseDto>> UploasAsync(AzureBlobStorageUploadRequestDto azureBlobStorageUploadRequestDto);
     }
 }

@@ -1,6 +1,8 @@
-﻿namespace Application.Dtos.AzureBlobStorage
+﻿using Application.Dtos.Common;
+
+namespace Application.Dtos.AzureBlobStorage
 {
-    public class AzureBlobStorageDownloadResponseDto
+    public class AzureBlobStorageDownloadResponseDto : ResponseDto
     {
     }
 }

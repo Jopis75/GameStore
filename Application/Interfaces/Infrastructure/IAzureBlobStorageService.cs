@@ -9,6 +9,6 @@ namespace Application.Interfaces.Infrastructure
 
         Task<HttpResponseDto<AzureBlobStorageDownloadResponseDto>> DownloadAsync(AzureBlobStorageDownloadRequestDto azureBlobStorageDownloadRequestDto);
 
-        Task<HttpResponseDto<AzureBlobStorageUploadResponseDto>> UploasAsync(AzureBlobStorageUploadRequestDto azureBlobStorageUploadRequestDto);
+        Task<HttpResponseDto<AzureBlobStorageUploadResponseDto>> UploadAsync(AzureBlobStorageUploadRequestDto azureBlobStorageUploadRequestDto);
     }
 }

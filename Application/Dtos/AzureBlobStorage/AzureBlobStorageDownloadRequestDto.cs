@@ -2,6 +2,8 @@
 {
     public class AzureBlobStorageDownloadRequestDto
     {
-        public string FilePath { get; set; } = default!;
+        public string Path { get; set; } = default!;
+
+        public string BlobContainerName { get; set; } = default!;
     }
 }

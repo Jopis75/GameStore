@@ -24,9 +24,66 @@ namespace Infrastructure.Services
             _blobServiceClient = _azureClientFactory.CreateClient("BlobStorage");
         }
 
-        public Task CreateContainerAsync(string containerName)
+        public async Task<HttpResponseDto<AzureBlobStorageCreateContainerResponseDto>> CreateContainerAsync(AzureBlobStorageCreateContainerRequestDto azureBlobStorageCreateContainerRequestDto)
         {
-            throw new NotImplementedException();
+            try
+            {
+                _logger.LogInformation("Begin CreateContainerAsync {@AzureBlobStorageCreateContainerRequestDto}.", azureBlobStorageCreateContainerRequestDto);
+
+                if (azureBlobStorageCreateContainerRequestDto == null)
+                {
+                    var httpResponseDto1 = new HttpResponseDto<AzureBlobStorageCreateContainerResponseDto>(new ArgumentNullException(nameof(azureBlobStorageCreateContainerRequestDto)).Message, StatusCodes.Status400BadRequest);
+                    _logger.LogError("Error CreateContainerAsync {@HttpResponseDto}.", httpResponseDto1);
+                    return httpResponseDto1;
+                }
+
+                BlobContainerClient blobContainerClient = await _blobServiceClient.CreateBlobContainerAsync(azureBlobStorageCreateContainerRequestDto.ContainerName);
+
+                var azureBlobStorageCreateContainerResponseDto = new AzureBlobStorageCreateContainerResponseDto
+                {
+                    BlobContainerClient = blobContainerClient
+                };
+
+                var httpResponseDto = new HttpResponseDto<AzureBlobStorageCreateContainerResponseDto>(azureBlobStorageCreateContainerResponseDto, StatusCodes.Status200OK);
+                _logger.LogInformation("Done CreateContainerAsync {@HttpResponseDto}.", httpResponseDto);
+                return httpResponseDto;
+            }
+            catch (Exception ex)
+            {
+                var httpResponseDto1 = new HttpResponseDto<AzureBlobStorageCreateContainerResponseDto>(ex.Message, StatusCodes.Status500InternalServerError);
+                _logger.LogError("Error CreateContainerAsync {@HttpResponseDto}.", httpResponseDto1);
+                return httpResponseDto1;
+            }
+        }
+
+        public async Task<HttpResponseDto<AzureBlobStorageDeleteContainerResponseDto>> DeleteContainerAsync(AzureBlobStorageDeleteContainerRequestDto azureBlobStorageDeleteContainerRequestDto)
+        {
+            try
+            {
+                _logger.LogInformation("Begin DeleteContainerAsync {@AzureBlobStorageDeleteContainerRequestDto}.", azureBlobStorageDeleteContainerRequestDto);
+
+                if (azureBlobStorageDeleteContainerRequestDto == null)
+                {
+                    var httpResponseDto1 = new HttpResponseDto<AzureBlobStorageDeleteContainerResponseDto>(new ArgumentNullException(nameof(azureBlobStorageDeleteContainerRequestDto)).Message, StatusCodes.Status400BadRequest);
+                    _logger.LogError("Error DeleteContainerAsync {@HttpResponseDto}.", httpResponseDto1);
+                    return httpResponseDto1;
+                }
+
+                var blobContainerClient = _blobServiceClient.GetBlobContainerClient(azureBlobStorageDeleteContainerRequestDto.ContainerName);
+                await blobContainerClient.DeleteAsync();
+
+                var azureBlobStorageDeleteContainerResponseDto = new AzureBlobStorageDeleteContainerResponseDto { };
+
+                var httpResponseDto = new HttpResponseDto<AzureBlobStorageDeleteContainerResponseDto>(azureBlobStorageDeleteContainerResponseDto, StatusCodes.Status200OK);
+                _logger.LogInformation("Done DeleteContainerAsync {@HttpResponseDto}.", httpResponseDto);
+                return httpResponseDto;
+            }
+            catch (Exception ex)
+            {
+                var httpResponseDto1 = new HttpResponseDto<AzureBlobStorageDeleteContainerResponseDto>(ex.Message, StatusCodes.Status500InternalServerError);
+                _logger.LogError("Error DeleteContainerAsync {@HttpResponseDto}.", httpResponseDto1);
+                return httpResponseDto1;
+            }
         }
 
         public async Task<HttpResponseDto<AzureBlobStorageDownloadResponseDto>> DownloadAsync(AzureBlobStorageDownloadRequestDto azureBlobStorageDownloadRequestDto)
@@ -49,7 +106,9 @@ namespace Infrastructure.Services
                 {
                     await blobClient.DownloadToAsync(fileStream);
 
-                    var httpResponseDto = new HttpResponseDto<AzureBlobStorageDownloadResponseDto>(new AzureBlobStorageDownloadResponseDto(), StatusCodes.Status200OK);
+                    var azureBlobStorageDownloadResponseDto = new AzureBlobStorageDownloadResponseDto { };
+
+                    var httpResponseDto = new HttpResponseDto<AzureBlobStorageDownloadResponseDto>(azureBlobStorageDownloadResponseDto, StatusCodes.Status200OK);
                     _logger.LogInformation("Done DownloadAsync {@HttpResponseDto}.", httpResponseDto);
                     return httpResponseDto;
                 }

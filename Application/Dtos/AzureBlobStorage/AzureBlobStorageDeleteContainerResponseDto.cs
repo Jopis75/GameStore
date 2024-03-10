@@ -2,5 +2,5 @@
 
 namespace Application.Dtos.AzureBlobStorage
 {
-    public class AzureBlobStorageDownloadResponseDto : ResponseDto { }
+    public class AzureBlobStorageDeleteContainerResponseDto : ResponseDto { }
 }

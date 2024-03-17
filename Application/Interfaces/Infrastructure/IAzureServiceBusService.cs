@@ -6,5 +6,7 @@ namespace Application.Interfaces.Infrastructure
     public interface IAzureServiceBusService
     {
         Task<HttpResponseDto<AzureServiceBusSendMessagesResponseDto>> SendMessagesAsync(AzureServiceBusSendMessagesRequestDto azureServiceBusSendMessageRequestDto);
+
+        Task<HttpResponseDto<AzureServiceBusStartProcessingResponseDto>> StartProcessingAsync(AzureServiceBusStartProcessingRequestDto azureServiceBusStartProcessingRequestDto);
     }
 }

@@ -76,5 +76,48 @@ namespace Infrastructure.Services
                 }
             }
         }
+
+        public async Task<HttpResponseDto<AzureServiceBusStartProcessingResponseDto>> StartProcessingAsync(AzureServiceBusStartProcessingRequestDto azureServiceBusStartProcessingRequestDto)
+        {
+            ServiceBusProcessor serviceBusProcessor = null!;
+
+            try
+            {
+                _logger.LogInformation("Begin StartProcessingAsync {@AzureServiceBusStartProcessingRequestDto}.", azureServiceBusStartProcessingRequestDto);
+
+                if (azureServiceBusStartProcessingRequestDto == null)
+                {
+                    var httpResponseDto1 = new HttpResponseDto<AzureServiceBusStartProcessingResponseDto>(new ArgumentNullException(nameof(azureServiceBusStartProcessingRequestDto)).Message, StatusCodes.Status400BadRequest);
+                    _logger.LogError("Error StartProcessingAsync {@HttpResponseDto}.", httpResponseDto1);
+                    return httpResponseDto1;
+                }
+
+                serviceBusProcessor = _serviceBusClient.CreateProcessor(azureServiceBusStartProcessingRequestDto.QueueName, new ServiceBusProcessorOptions());
+
+                serviceBusProcessor.ProcessMessageAsync += azureServiceBusStartProcessingRequestDto.ProcessMessageAsync;
+                serviceBusProcessor.ProcessErrorAsync += azureServiceBusStartProcessingRequestDto.ProcessErrorAsync;
+
+                await serviceBusProcessor.StartProcessingAsync();
+
+                var azureServiceBusStartProcessingResponseDto = new AzureServiceBusStartProcessingResponseDto();
+
+                var httpResponseDto = new HttpResponseDto<AzureServiceBusStartProcessingResponseDto>(azureServiceBusStartProcessingResponseDto, StatusCodes.Status200OK);
+                _logger.LogInformation("Done StartProcessingAsync {@HttpResponseDto}.", httpResponseDto);
+                return httpResponseDto;
+            }
+            catch (Exception ex)
+            {
+                var httpResponseDto1 = new HttpResponseDto<AzureServiceBusStartProcessingResponseDto>(ex.Message, StatusCodes.Status500InternalServerError);
+                _logger.LogError("Error StartProcessingAsync {@HttpResponseDto}.", httpResponseDto1);
+                return httpResponseDto1;
+            }
+            finally
+            {
+                if (serviceBusProcessor != null)
+                {
+                    await serviceBusProcessor.DisposeAsync();
+                }
+            }
+        }
     }
 }

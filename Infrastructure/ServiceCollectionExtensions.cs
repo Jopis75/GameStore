@@ -25,7 +25,7 @@ namespace Infrastructure
             {
                 //azureClientFactoryBuilder.AddSecretClient(configuration.GetSection("KeyVault"));
                 azureClientFactoryBuilder.AddBlobServiceClient(configuration.GetSection("BlobStorage")).WithName("BlobStorage");
-                //azureClientFactoryBuilder.AddServiceBusClientWithNamespace(configuration["ServiceBus:Namespace"]);
+                azureClientFactoryBuilder.AddServiceBusClientWithNamespace(configuration["ServiceBus:Namespace"]).WithName("ServiceBus");
                 // Set up any default settings.
                 azureClientFactoryBuilder.ConfigureDefaults(configuration.GetSection("AzureDefaults"));
             });

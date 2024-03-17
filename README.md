@@ -1,6 +1,6 @@
 # GameStore
 
-- Onion Architecture
+- Onion Architecture.
 - Command Query Responsibility Segregation (CQRS) Pattern.
 - Mediator Pattern.
 - Unit of Work Pattern.

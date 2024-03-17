@@ -8,3 +8,5 @@
 - Repository Pattern.
 - DTO Pattern.
 - Null Object Pattern.
+- AutoMapper.
+- FluentValidation.

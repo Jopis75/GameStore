@@ -10,3 +10,4 @@
 - Null Object Pattern.
 - AutoMapper.
 - FluentValidation.
+- Serilog.

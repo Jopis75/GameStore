@@ -1,5 +1,10 @@
 # GameStore
 
+- .NET 7.
+- C# 11.
+- EF Core.
+- ASP.NET Core.
+- Web API Core.
 - Onion Architecture.
 - Command Query Responsibility Segregation (CQRS) Pattern.
 - Mediator Pattern.

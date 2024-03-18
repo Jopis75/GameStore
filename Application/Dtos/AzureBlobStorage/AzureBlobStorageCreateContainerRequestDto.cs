@@ -2,6 +2,6 @@
 {
     public class AzureBlobStorageCreateContainerRequestDto
     {
-        public string ContainerName { get; set; } = default!;
+        public string BlobContainerName { get; set; } = default!;
     }
 }

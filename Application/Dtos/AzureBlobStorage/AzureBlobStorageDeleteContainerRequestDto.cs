@@ -2,6 +2,6 @@
 {
     public class AzureBlobStorageDeleteContainerRequestDto
     {
-        public string ContainerName { get; set; } = default!;
+        public string BlobContainerName { get; set; } = default!;
     }
 }

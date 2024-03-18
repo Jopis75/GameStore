@@ -16,3 +16,4 @@
 - AutoMapper.
 - FluentValidation.
 - Serilog.
+- JWT authentication.

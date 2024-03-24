@@ -12,9 +12,9 @@ namespace Infrastructure.Services
     {
         private readonly IAzureClientFactory<BlobServiceClient> _azureClientFactory;
 
-        private readonly BlobServiceClient _blobServiceClient;
-
         private readonly ILogger<AzureBlobStorageService> _logger;
+
+        private readonly BlobServiceClient _blobServiceClient;
 
         public AzureBlobStorageService(IAzureClientFactory<BlobServiceClient> azureClientFactory, ILogger<AzureBlobStorageService> logger)
         {

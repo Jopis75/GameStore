@@ -93,10 +93,8 @@ namespace Infrastructure.Services
                 }
 
                 serviceBusProcessor = _serviceBusClient.CreateProcessor(azureServiceBusStartProcessingRequestDto.QueueName, new ServiceBusProcessorOptions());
-
                 serviceBusProcessor.ProcessMessageAsync += azureServiceBusStartProcessingRequestDto.ProcessMessageAsync;
                 serviceBusProcessor.ProcessErrorAsync += azureServiceBusStartProcessingRequestDto.ProcessErrorAsync;
-
                 await serviceBusProcessor.StartProcessingAsync();
 
                 var azureServiceBusStartProcessingResponseDto = new AzureServiceBusStartProcessingResponseDto();
@@ -109,6 +107,44 @@ namespace Infrastructure.Services
             {
                 var httpResponseDto1 = new HttpResponseDto<AzureServiceBusStartProcessingResponseDto>(ex.Message, StatusCodes.Status500InternalServerError);
                 _logger.LogError("Error StartProcessingAsync {@HttpResponseDto}.", httpResponseDto1);
+                return httpResponseDto1;
+            }
+            finally
+            {
+                if (serviceBusProcessor != null)
+                {
+                    await serviceBusProcessor.DisposeAsync();
+                }
+            }
+        }
+
+        public async Task<HttpResponseDto<AzureServiceBusStopProcessingResponseDto>> StopProcessingAsync(AzureServiceBusStopProcessingRequestDto azureServiceBusStopProcessingRequestDto)
+        {
+            ServiceBusProcessor serviceBusProcessor = null!;
+
+            try
+            {
+                _logger.LogInformation("Begin StopProcessingAsync {@AzureServiceBusStopProcessingRequestDto}.", azureServiceBusStopProcessingRequestDto);
+
+                if (azureServiceBusStopProcessingRequestDto == null || azureServiceBusStopProcessingRequestDto.ServiceBusProcessor == null)
+                {
+                    var httpResponseDto1 = new HttpResponseDto<AzureServiceBusStopProcessingResponseDto>(new ArgumentNullException(nameof(azureServiceBusStopProcessingRequestDto)).Message, StatusCodes.Status400BadRequest);
+                    _logger.LogError("Error StopProcessingAsync {@HttpResponseDto}.", httpResponseDto1);
+                    return httpResponseDto1;
+                }
+                
+                await azureServiceBusStopProcessingRequestDto.ServiceBusProcessor.StopProcessingAsync();
+
+                var azureServiceBusStopProcessingResponseDto = new AzureServiceBusStopProcessingResponseDto();
+
+                var httpResponseDto = new HttpResponseDto<AzureServiceBusStopProcessingResponseDto>(azureServiceBusStopProcessingResponseDto, StatusCodes.Status200OK);
+                _logger.LogInformation("Done StopProcessingAsync {@HttpResponseDto}.", httpResponseDto);
+                return httpResponseDto;
+            }
+            catch (Exception ex)
+            {
+                var httpResponseDto1 = new HttpResponseDto<AzureServiceBusStopProcessingResponseDto>(ex.Message, StatusCodes.Status500InternalServerError);
+                _logger.LogError("Error StopProcessingAsync {@HttpResponseDto}.", httpResponseDto1);
                 return httpResponseDto1;
             }
             finally

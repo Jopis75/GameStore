@@ -1,7 +1,6 @@
 ﻿namespace Application.Dtos.Common
 {
-    public class ResponseDto
+    public class ResponseDto : IdentityDto
     {
-        public int Id { get; set; }
     }
 }

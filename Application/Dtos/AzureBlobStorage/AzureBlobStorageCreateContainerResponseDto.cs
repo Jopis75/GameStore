@@ -1,10 +1,9 @@
-﻿using Application.Dtos.Common;
-using Azure.Storage.Blobs;
+﻿using Azure.Storage.Blobs;
 
 namespace Application.Dtos.AzureBlobStorage
 {
-    public class AzureBlobStorageCreateContainerResponseDto : ResponseDto
+    public class AzureBlobStorageCreateContainerResponseDto
     {
-        public BlobContainerClient BlobContainerClient { get; set; } = default!;
+        public BlobContainerClient? BlobContainerClient { get; set; } = null;
     }
 }

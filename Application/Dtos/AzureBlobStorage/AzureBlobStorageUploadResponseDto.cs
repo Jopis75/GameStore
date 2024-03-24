@@ -1,10 +1,9 @@
-﻿using Application.Dtos.Common;
-using Azure.Storage.Blobs.Models;
+﻿using Azure.Storage.Blobs.Models;
 
 namespace Application.Dtos.AzureBlobStorage
 {
-    public class AzureBlobStorageUploadResponseDto : ResponseDto
+    public class AzureBlobStorageUploadResponseDto
     {
-        public BlobContentInfo BlobContentInfo { get; set; } = default!;
+        public BlobContentInfo? BlobContentInfo { get; set; } = null;
     }
 }

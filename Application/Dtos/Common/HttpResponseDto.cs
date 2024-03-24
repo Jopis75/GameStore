@@ -1,7 +1,7 @@
 ﻿namespace Application.Dtos.Common
 {
     public class HttpResponseDto<TDto> : IHttpResponseDto<TDto>
-        where TDto : ResponseDto, new()
+        where TDto : new()
     {
         public bool ClientError => StatusCode >= 400 && StatusCode <= 499;
 

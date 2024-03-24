@@ -1,9 +1,8 @@
-﻿using Application.Dtos.Common;
-using Azure.Storage.Blobs.Models;
+﻿using Azure.Storage.Blobs.Models;
 
 namespace Application.Dtos.AzureBlobStorage
 {
-    public class AzureBlobStorageGetByFlatResponseDto : ResponseDto
+    public class AzureBlobStorageGetByFlatResponseDto
     {
         public List<BlobItem> BlobItems { get; set; } = new();
     }

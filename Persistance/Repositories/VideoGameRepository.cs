@@ -12,77 +12,98 @@ namespace Persistance.Repositories
 
         public async Task<IEnumerable<VideoGame>> ReadByDeveloperIdAsync(int developerId, bool asNoTracking = false)
         {
-            var products = asNoTracking ?
+            var videoGame = asNoTracking ?
                 await Entities
                     .AsNoTracking<VideoGame>()
-                    .Where(entity => entity.DeveloperId == developerId)
+                    .Where(videoGame1 => videoGame1.DeveloperId == developerId)
                     .ToListAsync() :
                 await Entities
-                    .Where(entity => entity.DeveloperId == developerId)
+                    .Where(videoGame1 => videoGame1.DeveloperId == developerId)
                     .ToListAsync();
 
-            return products;
+            return videoGame;
         }
 
         public async Task<IEnumerable<VideoGame>> ReadByPriceAsync(decimal fromPrice, decimal toPrice, bool asNoTracking = false)
         {
-            var products = asNoTracking ?
+            var videoGames = asNoTracking ?
                 await Entities
                     .AsNoTracking<VideoGame>()
-                    .Where(entity => entity.Price >= fromPrice && entity.Price <= toPrice)
+                    .Where(videoGame1 => videoGame1.Price >= fromPrice && videoGame1.Price <= toPrice)
                     .ToListAsync() :
                 await Entities
-                    .Where(entity => entity.Price >= fromPrice && entity.Price <= toPrice)
+                    .Where(videoGame1 => videoGame1.Price >= fromPrice && videoGame1.Price <= toPrice)
                     .ToListAsync();
 
-            return products;
+            return videoGames;
         }
 
         public async Task<IEnumerable<VideoGame>> ReadByPurchaseDateAsync(DateTime fromPurchaseDate, DateTime toPurchaseDate, bool asNoTracking = false)
         {
-            var products = asNoTracking ?
+            var videoGames = asNoTracking ?
                 await Entities
                     .AsNoTracking<VideoGame>()
-                    .Where(entity => entity.PurchaseDate >= fromPurchaseDate && entity.PurchaseDate <= toPurchaseDate)
+                    .Where(videoGame1 => videoGame1.PurchaseDate >= fromPurchaseDate && videoGame1.PurchaseDate <= toPurchaseDate)
                     .ToListAsync() :
                 await Entities
-                    .Where(entity => entity.PurchaseDate >= fromPurchaseDate && entity.PurchaseDate <= toPurchaseDate)
+                    .Where(videoGame1 => videoGame1.PurchaseDate >= fromPurchaseDate && videoGame1.PurchaseDate <= toPurchaseDate)
                     .ToListAsync();
 
-            return products;
+            return videoGames;
         }
 
         public async Task<IEnumerable<VideoGame>> ReadByReleaseDateAsync(DateTime fromReleaseDate, DateTime toReleaseDate, bool asNoTracking = false)
         {
-            var products = asNoTracking ?
+            var videoGames = asNoTracking ?
                 await Entities
                     .AsNoTracking<VideoGame>()
-                    .Where(entity => entity.ReleaseDate >= fromReleaseDate && entity.ReleaseDate <= toReleaseDate)
+                    .Where(videoGame1 => videoGame1.ReleaseDate >= fromReleaseDate && videoGame1.ReleaseDate <= toReleaseDate)
                     .ToListAsync() :
                 await Entities
-                    .Where(entity => entity.ReleaseDate >= fromReleaseDate && entity.ReleaseDate <= toReleaseDate)
+                    .Where(videoGame1 => videoGame1.ReleaseDate >= fromReleaseDate && videoGame1.ReleaseDate <= toReleaseDate)
                     .ToListAsync();
 
-            return products;
+            return videoGames;
         }
 
         public async Task<VideoGame> ReadByTitleAsync(string title, bool asNoTracking = false)
         {
-            var product = asNoTracking ?
+            var videoGame = asNoTracking ?
                 await Entities
                     .AsNoTracking<VideoGame>()
-                    .Where(entity => entity.Title == title)
+                    .Where(videoGame1 => videoGame1.Title == title)
                     .SingleOrDefaultAsync() :
                 await Entities
-                    .Where(entity => entity.Title == title)
+                    .Where(videoGame1 => videoGame1.Title == title)
                     .SingleOrDefaultAsync();
 
-            if (product == null)
+            if (videoGame == null)
             {
                 return new VideoGame();
             }
 
-            return product;
+            return videoGame;
+        }
+
+        public async Task<VideoGame> ReadMostPlayedByConsoleIdAsync(int consoleId, bool asNoTracking = false)
+        {
+            var videoGame = asNoTracking ?
+                await Entities
+                    .AsNoTracking<VideoGame>()
+                    .Where(videoGame1 => videoGame1.ConsoleVideoGames.Any(consoleVideoGame => consoleVideoGame.ConsoleId == consoleId))
+                    .OrderByDescending(x => x.TotalTimePlayed)
+                    .FirstOrDefaultAsync() :
+                await Entities
+                    .Where(videoGame1 => videoGame1.ConsoleVideoGames.Any(consoleVideoGame => consoleVideoGame.ConsoleId == consoleId))
+                    .OrderByDescending(x => x.TotalTimePlayed)
+                    .FirstOrDefaultAsync();
+
+            if (videoGame == null)
+            {
+                return new VideoGame();
+            }
+
+            return videoGame;
         }
     }
 }

@@ -13,5 +13,7 @@ namespace Application.Interfaces.Persistance
         Task<IEnumerable<VideoGame>> ReadByReleaseDateAsync(DateTime fromReleaseDate, DateTime toReleaseDate, bool asNoTracking = false);
 
         Task<VideoGame> ReadByTitleAsync(string title, bool asNoTracking = false);
+
+        Task<VideoGame> ReadMostPlayedByConsoleIdAsync(int consoleId, bool asNoTracking = false);
     }
 }

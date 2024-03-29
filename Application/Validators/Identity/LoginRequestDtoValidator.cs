@@ -7,11 +7,11 @@ namespace Application.Validators.Identity
     {
         public LoginRequestDtoValidator()
         {
-            RuleFor(x => x.UserName)
+            RuleFor(loginRequestDto => loginRequestDto.UserName)
                 .NotNull()
                 .NotEmpty();
 
-            RuleFor(x => x.Password)
+            RuleFor(loginRequestDto => loginRequestDto.Password)
                 .NotNull()
                 .NotEmpty()
                 .MinimumLength(16);

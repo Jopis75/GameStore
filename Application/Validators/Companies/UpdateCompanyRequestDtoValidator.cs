@@ -38,8 +38,8 @@ namespace Application.Validators.Companies
                 .WithMessage("{PropertyName} must be unique.");
 
             RuleFor(updateCompanyRequestDto => updateCompanyRequestDto.HeadquarterId)
-                .NotEqual(0)
-                .WithMessage("{PropertyName} must not equal 0.");
+                .GreaterThan(0)
+                .WithMessage("{PropertyName} must be greater than 0.");
 
             RuleFor(updateCompanyRequestDto => updateCompanyRequestDto.EmailAddress)
                 .EmailAddress()
@@ -62,8 +62,8 @@ namespace Application.Validators.Companies
                 .WithMessage("{PropertyName} must be unique.");
 
             RuleFor(updateCompanyRequestDto => updateCompanyRequestDto.ParentCompanyId)
-                .NotEqual(0)
-                .WithMessage("{PropertyName} must not equal 0.");
+                .GreaterThan(0)
+                .WithMessage("{PropertyName} must be greater than 0.");
         }
     }
 }

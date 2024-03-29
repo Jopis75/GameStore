@@ -27,8 +27,8 @@ namespace Application.Validators.VideoGames
                 .WithMessage("{PropertyName} must be unique.");
 
             RuleFor(updateVideoGameRequestDto => updateVideoGameRequestDto.DeveloperId)
-                .NotEqual(0)
-                .WithMessage("{PropertyName} must not equal 0.");
+                .GreaterThan(0)
+                .WithMessage("{PropertyName} must be greater than 0.");
 
             RuleFor(updateVideoGameRequestDto => updateVideoGameRequestDto.ReleaseDate)
                 .LessThanOrEqualTo(updateVideoGameRequestDto => updateVideoGameRequestDto.PurchaseDate)

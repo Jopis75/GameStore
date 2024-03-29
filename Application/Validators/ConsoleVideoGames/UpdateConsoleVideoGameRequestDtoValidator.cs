@@ -11,12 +11,12 @@ namespace Application.Validators.ConsoleVideoGames
             Include(new UpdateRequestDtoValidator());
 
             RuleFor(createConsoleVideoGameRequestDto => createConsoleVideoGameRequestDto.ConsoleId)
-                .NotEqual(0)
-                .WithMessage("{PropertyName} must not equal 0.");
+                .GreaterThan(0)
+                .WithMessage("{PropertyName} must be greater than 0.");
 
             RuleFor(createConsoleVideoGameRequestDto => createConsoleVideoGameRequestDto.VideoGameId)
-                .NotEqual(0)
-                .WithMessage("{PropertyName} must not equal 0.");
+                .GreaterThan(0)
+                .WithMessage("{PropertyName} must be greater than 0.");
         }
     }
 }

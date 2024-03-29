@@ -27,8 +27,8 @@ namespace Application.Validators.Consoles
                 .WithMessage("{PropertyName} must be unique.");
 
             RuleFor(createConsoleRequestDto => createConsoleRequestDto.DeveloperId)
-                .NotEqual(0)
-                .WithMessage("{PropertyName} must not equal 0.");
+                .GreaterThan(0)
+                .WithMessage("{PropertyName} must be greater than 0.");
 
             RuleFor(createConsoleRequestDto => createConsoleRequestDto.ReleaseDate)
                 .LessThanOrEqualTo(createConsoleRequestDto => createConsoleRequestDto.PurchaseDate)

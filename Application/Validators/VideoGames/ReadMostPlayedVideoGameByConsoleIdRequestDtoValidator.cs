@@ -8,8 +8,8 @@ namespace Application.Validators.VideoGames
         public ReadMostPlayedVideoGameByConsoleIdRequestDtoValidator()
         {
             RuleFor(readMostPlayedVideoGameByConsoleIdRequestDto => readMostPlayedVideoGameByConsoleIdRequestDto.ConsoleId)
-                .NotEqual(0)
-                .WithMessage("{PropertyName} must not equal 0.");
+                .GreaterThan(0)
+                .WithMessage("{PropertyName} must be greater than 0.");
         }
     }
 }

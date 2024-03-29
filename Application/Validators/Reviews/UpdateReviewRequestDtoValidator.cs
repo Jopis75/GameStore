@@ -18,8 +18,8 @@ namespace Application.Validators.Reviews
 
             RuleFor(createReviewRequestDto => createReviewRequestDto.VideoGameId)
                 .NotNull()
-                .NotEqual(0)
-                .WithMessage("{PropertyName} must not equal 0.");
+                .GreaterThan(0)
+                .WithMessage("{PropertyName} must be greater than 0.");
 
             RuleFor(createReviewRequestDto => createReviewRequestDto.ReviewText)
                 .NotNull()

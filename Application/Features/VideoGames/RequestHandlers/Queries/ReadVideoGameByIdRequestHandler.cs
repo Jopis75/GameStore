@@ -51,9 +51,9 @@ namespace Application.Features.VideoGames.RequestHandlers.Queries
                 }
 
                 var videoGame = await _unitOfWork.VideoGameRepository.ReadByIdAsync(readByIdVideoGameRequest.ReadByIdRequestDto.Id, true);
-                var readByIdVideoGameResponseDto = _mapper.Map<ReadVideoGameResponseDto>(videoGame);
+                var readVideoGameResponseDto = _mapper.Map<ReadVideoGameResponseDto>(videoGame);
 
-                var httpResponseDto = new HttpResponseDto<ReadVideoGameResponseDto>(readByIdVideoGameResponseDto, StatusCodes.Status200OK);
+                var httpResponseDto = new HttpResponseDto<ReadVideoGameResponseDto>(readVideoGameResponseDto, StatusCodes.Status200OK);
                 _logger.LogInformation("End ReadByIdVideoGame {@HttpResponseDto}.", httpResponseDto);
                 return httpResponseDto;
             }

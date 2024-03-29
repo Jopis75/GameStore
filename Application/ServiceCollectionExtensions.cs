@@ -85,6 +85,7 @@ namespace Application
 
             // VideoGames.
             serviceCollection.AddScoped<IValidator<CreateVideoGameRequestDto>, CreateVideoGameRequestDtoValidator>();
+            serviceCollection.AddScoped<IValidator<ReadMostPlayedVideoGameByConsoleIdRequestDto>, ReadMostPlayedVideoGameByConsoleIdRequestDtoValidator>();
             serviceCollection.AddScoped<IValidator<UpdateVideoGameRequestDto>, UpdateVideoGameRequestDtoValidator>();
             serviceCollection.AddScoped<IValidator<DeleteVideoGameRequestDto>, DeleteVideoGameRequestDtoValidator>();
 

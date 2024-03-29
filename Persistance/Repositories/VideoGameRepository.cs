@@ -91,11 +91,11 @@ namespace Persistance.Repositories
                 await Entities
                     .AsNoTracking<VideoGame>()
                     .Where(videoGame1 => videoGame1.ConsoleVideoGames.Any(consoleVideoGame => consoleVideoGame.ConsoleId == consoleId))
-                    .OrderByDescending(x => x.TotalTimePlayed)
+                    .OrderByDescending(videoGame1 => videoGame1.TotalTimePlayed)
                     .FirstOrDefaultAsync() :
                 await Entities
                     .Where(videoGame1 => videoGame1.ConsoleVideoGames.Any(consoleVideoGame => consoleVideoGame.ConsoleId == consoleId))
-                    .OrderByDescending(x => x.TotalTimePlayed)
+                    .OrderByDescending(videoGame1 => videoGame1.TotalTimePlayed)
                     .FirstOrDefaultAsync();
 
             if (videoGame == null)

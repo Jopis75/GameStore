@@ -79,7 +79,7 @@ namespace Application
 
             // Reviews.
             serviceCollection.AddScoped<IValidator<CreateReviewRequestDto>, CreateReviewRequestDtoValidator>();
-            serviceCollection.AddScoped<IValidator<ReadReviewByVideoGameIdRequestDto>, ReadReviewByVideoGameIdRequestDtoValidator>();
+            serviceCollection.AddScoped<IValidator<ReadReviewsByVideoGameIdRequestDto>, ReadReviewByVideoGameIdRequestDtoValidator>();
             serviceCollection.AddScoped<IValidator<UpdateReviewRequestDto>, UpdateReviewRequestDtoValidator>();
             serviceCollection.AddScoped<IValidator<DeleteReviewRequestDto>, DeleteReviewRequestDtoValidator>();
 

@@ -6,6 +6,7 @@
 
         public int? ConsoleId { get; set; }
 
+        // Grade between 0 and 100.
         public int Grade { get; set; }
 
         public DateTime ReviewDate { get; set; }

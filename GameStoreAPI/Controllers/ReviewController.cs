@@ -83,9 +83,9 @@ namespace GameStoreAPI.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<ActionResult<HttpResponseDto<ReadReviewResponseDto>>> ReadByVideoGameIdAsync(int videoGameId)
         {
-            var httpResponseDto = await _mediator.Send(new ReadReviewByVideoGameIdRequest
+            var httpResponseDto = await _mediator.Send(new ReadReviewsByVideoGameIdRequest
             {
-                ReadReviewByVideoGameIdRequestDto = new ReadReviewByVideoGameIdRequestDto
+                ReadReviewsByVideoGameIdRequestDto = new ReadReviewsByVideoGameIdRequestDto
                 {
                     VideoGameId = videoGameId
                 }

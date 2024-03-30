@@ -10,6 +10,6 @@ namespace Application.Interfaces.Persistance
 
         Task<IEnumerable<Review>> ReadByReviewDateAsync(DateTime fromReviewDate, DateTime toReviewDate, bool asNoTracking = false);
 
-        Task<Review> ReadByVideoGameIdAsync(int videoGameId, bool asNoTracking = false);
+        Task<IEnumerable<Review>> ReadByVideoGameIdAsync(int videoGameId, bool asNoTracking = false);
     }
 }

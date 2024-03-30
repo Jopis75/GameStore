@@ -8,17 +8,18 @@ namespace Persistance.Repositories
     public class ReviewRepository : RepositoryBase<Review>, IReviewRepository
     {
         public ReviewRepository(GameStoreDbContext gameStoreDbContext)
-            : base(gameStoreDbContext) { }
+            : base(gameStoreDbContext)
+        { }
 
         public async Task<IEnumerable<Review>> ReadByGradeAsync(int grade, bool asNoTracking = false)
         {
             var reviews = asNoTracking ?
                 await Entities
                     .AsNoTracking<Review>()
-                    .Where(entity => entity.Grade == grade)
+                    .Where(review => review.Grade == grade)
                     .ToListAsync() :
                 await Entities
-                    .Where(entity => entity.Grade == grade)
+                    .Where(review => review.Grade == grade)
                     .ToListAsync();
 
             return reviews;
@@ -29,10 +30,10 @@ namespace Persistance.Repositories
             var reviews = asNoTracking ?
                 await Entities
                     .AsNoTracking<Review>()
-                    .Where(entity => entity.Grade >= fromGrade && entity.Grade <= toGrade)
+                    .Where(review => review.Grade >= fromGrade && review.Grade <= toGrade)
                     .ToListAsync() :
                 await Entities
-                    .Where(entity => entity.Grade >= fromGrade && entity.Grade <= toGrade)
+                    .Where(review => review.Grade >= fromGrade && review.Grade <= toGrade)
                     .ToListAsync();
 
             return reviews;
@@ -43,32 +44,27 @@ namespace Persistance.Repositories
             var reviews = asNoTracking ?
                 await Entities
                     .AsNoTracking<Review>()
-                    .Where(entity => entity.ReviewDate >= fromReviewDate && entity.ReviewDate <= toReviewDate)
+                    .Where(review => review.ReviewDate >= fromReviewDate && review.ReviewDate <= toReviewDate)
                     .ToListAsync() :
                 await Entities
-                    .Where(entity => entity.ReviewDate >= fromReviewDate && entity.ReviewDate <= toReviewDate)
+                    .Where(review => review.ReviewDate >= fromReviewDate && review.ReviewDate <= toReviewDate)
                     .ToListAsync();
 
             return reviews;
         }
 
-        public async Task<Review> ReadByVideoGameIdAsync(int videoGameId, bool asNoTracking = false)
+        public async Task<IEnumerable<Review>> ReadByVideoGameIdAsync(int videoGameId, bool asNoTracking = false)
         {
-            var review = asNoTracking ?
+            var reviews = asNoTracking ?
                 await Entities
                     .AsNoTracking<Review>()
-                    .Where(entity => entity.VideoGameId == videoGameId)
-                    .SingleOrDefaultAsync() :
+                    .Where(review => review.VideoGameId == videoGameId)
+                    .ToListAsync() :
                 await Entities
-                    .Where(entity => entity.VideoGameId == videoGameId)
-                    .SingleOrDefaultAsync();
+                    .Where(review => review.VideoGameId == videoGameId)
+                    .ToListAsync();
 
-            if (review == null)
-            {
-                return new Review();
-            }
-
-            return review;
+            return reviews;
         }
     }
 }

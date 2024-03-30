@@ -8,17 +8,18 @@ namespace Persistance.Repositories
     public class CompanyRepository : RepositoryBase<Company>, ICompanyRepository
     {
         public CompanyRepository(GameStoreDbContext gameStoreDbContext)
-            : base(gameStoreDbContext) { }
+            : base(gameStoreDbContext)
+        { }
 
         public async Task<Company> ReadByEmailAddressAsync(string emailAddress, bool asNoTracking = false)
         {
             var company = asNoTracking ?
                 await Entities
                     .AsNoTracking<Company>()
-                    .Where(entity => entity.EmailAddress == emailAddress)
+                    .Where(company => company.EmailAddress == emailAddress)
                     .SingleOrDefaultAsync() :
                 await Entities
-                    .Where(entity => entity.EmailAddress == emailAddress)
+                    .Where(company => company.EmailAddress == emailAddress)
                     .SingleOrDefaultAsync();
 
             if (company == null)
@@ -34,10 +35,10 @@ namespace Persistance.Repositories
             var company = asNoTracking ?
                 await Entities
                     .AsNoTracking<Company>()
-                    .Where(entity => entity.Name == name)
+                    .Where(company => company.Name == name)
                     .SingleOrDefaultAsync() :
                 await Entities
-                    .Where(entity => entity.Name == name)
+                    .Where(company => company.Name == name)
                     .SingleOrDefaultAsync();
 
             if (company == null)
@@ -53,10 +54,10 @@ namespace Persistance.Repositories
             var company = asNoTracking ?
                 await Entities
                     .AsNoTracking<Company>()
-                    .Where(entity => entity.PhoneNumber == phoneNumber)
+                    .Where(company => company.PhoneNumber == phoneNumber)
                     .SingleOrDefaultAsync() :
                 await Entities
-                    .Where(entity => entity.PhoneNumber == phoneNumber)
+                    .Where(company => company.PhoneNumber == phoneNumber)
                     .SingleOrDefaultAsync();
 
             if (company == null)
@@ -72,10 +73,10 @@ namespace Persistance.Repositories
             var company = asNoTracking ?
                 await Entities
                     .AsNoTracking<Company>()
-                    .Where(entity => entity.TradeName == tradeName)
+                    .Where(company => company.TradeName == tradeName)
                     .SingleOrDefaultAsync() :
                 await Entities
-                    .Where(entity => entity.TradeName == tradeName)
+                    .Where(company => company.TradeName == tradeName)
                     .SingleOrDefaultAsync();
 
             if (company == null)

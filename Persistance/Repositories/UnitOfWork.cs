@@ -1,5 +1,4 @@
 ﻿using Application.Interfaces.Persistance;
-using Microsoft.AspNetCore.Http;
 using Persistance.DbContexts;
 
 namespace Persistance.Repositories

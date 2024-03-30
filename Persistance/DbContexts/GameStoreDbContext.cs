@@ -20,9 +20,11 @@ namespace Persistance.DbContexts
         public DbSet<Review> Reviews { get; set; }
 
         public GameStoreDbContext(DbContextOptions<GameStoreDbContext> dbContextOptions) 
-            : base(dbContextOptions) { }
+            : base(dbContextOptions)
+        { }
 
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) { }
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        { }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -44,8 +46,8 @@ namespace Persistance.DbContexts
             modelBuilder
                 .Entity<Company>()
                 .HasMany(company => company.VideoGames)
-                .WithOne(Product => Product.Developer)
-                .HasForeignKey(product => product.DeveloperId);
+                .WithOne(videoGame => videoGame.Developer)
+                .HasForeignKey(videoGame => videoGame.DeveloperId);
             modelBuilder
                 .Entity<Company>()
                 .HasOne(company => company.Headquarter)
@@ -66,9 +68,9 @@ namespace Persistance.DbContexts
                 .HasForeignKey(console => console.DeveloperId);
             modelBuilder
                 .Entity<Console>()
-                .HasOne(console => console.Review)
+                .HasMany(console => console.Reviews)
                 .WithOne(review => review.Console)
-                .HasForeignKey<Console>(product => product.ReviewId);
+                .HasForeignKey(review => review.ConsoleId);
             modelBuilder
                 .Entity<Console>()
                 .Property(console => console.Price)
@@ -88,9 +90,9 @@ namespace Persistance.DbContexts
                 .HasForeignKey(videoGame => videoGame.DeveloperId);
             modelBuilder
                 .Entity<VideoGame>()
-                .HasOne(videoGame => videoGame.Review)
+                .HasMany(videoGame => videoGame.Reviews)
                 .WithOne(review => review.VideoGame)
-                .HasForeignKey<VideoGame>(videoGame => videoGame.ReviewId);
+                .HasForeignKey(review => review.VideoGameId);
             modelBuilder
                 .Entity<VideoGame>()
                 .Property(videoGame => videoGame.Price)
@@ -126,8 +128,8 @@ namespace Persistance.DbContexts
             modelBuilder
                 .Entity<Review>()
                 .HasOne(review => review.VideoGame)
-                .WithOne(product => product.Review)
-                .HasForeignKey<Review>(review => review.VideoGameId);
+                .WithMany(videoGame => videoGame.Reviews)
+                .HasForeignKey(review => review.VideoGameId);
 
             // Configurations.
             modelBuilder.ApplyConfiguration(new AddressConfiguration());

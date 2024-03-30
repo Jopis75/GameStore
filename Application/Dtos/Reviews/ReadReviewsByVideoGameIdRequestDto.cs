@@ -2,7 +2,7 @@
 
 namespace Application.Dtos.Reviews
 {
-    public class ReadReviewByVideoGameIdRequestDto : ReadRequestDto
+    public class ReadReviewsByVideoGameIdRequestDto : ReadRequestDto
     {
         public int VideoGameId { get; set; }
     }

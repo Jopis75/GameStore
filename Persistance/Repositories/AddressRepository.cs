@@ -8,17 +8,18 @@ namespace Persistance.Repositories
     public class AddressRepository : RepositoryBase<Address>, IAddressRepository
     {
         public AddressRepository(GameStoreDbContext gameStoreDbContext)
-            : base(gameStoreDbContext) { }
+            : base(gameStoreDbContext)
+        { }
 
         public async Task<IEnumerable<Address>> ReadByCityAsync(string city, bool asNoTracking = false)
         {
             var addresses = asNoTracking ?
                 await Entities
                     .AsNoTracking<Address>()
-                    .Where(entity => entity.City == city)
+                    .Where(address => address.City == city)
                     .ToListAsync() :
                 await Entities
-                    .Where(entity => entity.City == city)
+                    .Where(address => address.City == city)
                     .ToListAsync();
 
             return addresses;
@@ -29,10 +30,10 @@ namespace Persistance.Repositories
             var address = asNoTracking ?
                 await Entities
                     .AsNoTracking<Address>()
-                    .Where(entity => entity.StreetAddress == streetAddress)
+                    .Where(address => address.StreetAddress == streetAddress)
                     .SingleOrDefaultAsync() :
                 await Entities
-                    .Where(entity => entity.StreetAddress == streetAddress)
+                    .Where(address => address.StreetAddress == streetAddress)
                     .SingleOrDefaultAsync();
 
             if (address == null)
@@ -48,10 +49,10 @@ namespace Persistance.Repositories
             var addresses = asNoTracking ?
                 await Entities
                     .AsNoTracking<Address>()
-                    .Where(entity => entity.PostalCode == postalCode)
+                    .Where(address => address.PostalCode == postalCode)
                     .ToListAsync() :
                 await Entities
-                    .Where(entity => entity.PostalCode == postalCode)
+                    .Where(address => address.PostalCode == postalCode)
                     .ToListAsync();
 
             return addresses;

@@ -9,7 +9,7 @@ using Microsoft.Extensions.Logging;
 
 namespace Application.Features.ConsoleVideoGames.RequestHandlers.Queries
 {
-    public class ReadConsoleVideoGameAllRequestHandler : IRequestHandler<ReadConsoleVideoGameAllRequest, HttpResponseDto<ReadConsoleVideoGameResponseDto>>
+    public class ReadConsoleVideoGameAllRequestHandler : IRequestHandler<ReadConsoleVideoGameAllRequest, HttpResponseDto<List<ReadConsoleVideoGameResponseDto>>>
     {
         private readonly IUnitOfWork _unitOfWork;
 
@@ -24,7 +24,7 @@ namespace Application.Features.ConsoleVideoGames.RequestHandlers.Queries
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
-        public async Task<HttpResponseDto<ReadConsoleVideoGameResponseDto>> Handle(ReadConsoleVideoGameAllRequest readConsoleVideoGameAllRequest, CancellationToken cancellationToken)
+        public async Task<HttpResponseDto<List<ReadConsoleVideoGameResponseDto>>> Handle(ReadConsoleVideoGameAllRequest readConsoleVideoGameAllRequest, CancellationToken cancellationToken)
         {
             try
             {
@@ -35,13 +35,13 @@ namespace Application.Features.ConsoleVideoGames.RequestHandlers.Queries
                     .Select(_mapper.Map<ReadConsoleVideoGameResponseDto>)
                     .ToList();
 
-                var httpResponseDto = new HttpResponseDto<ReadConsoleVideoGameResponseDto>(readConsoleVideoGameResponseDtos, StatusCodes.Status200OK);
+                var httpResponseDto = new HttpResponseDto<List<ReadConsoleVideoGameResponseDto>>(readConsoleVideoGameResponseDtos, StatusCodes.Status200OK);
                 _logger.LogInformation("Done ReadConsoleVideoGameAll {@HttpResponseDto}.", httpResponseDto);
                 return httpResponseDto;
             }
             catch (Exception ex)
             {
-                var httpResponseDto1 = new HttpResponseDto<ReadConsoleVideoGameResponseDto>(ex.Message, StatusCodes.Status500InternalServerError);
+                var httpResponseDto1 = new HttpResponseDto<List<ReadConsoleVideoGameResponseDto>>(ex.Message, StatusCodes.Status500InternalServerError);
                 _logger.LogError("Error ReadConsoleVideoGameAll {@HttpResponseDto}.", httpResponseDto1);
                 return httpResponseDto1;
             }

@@ -62,7 +62,7 @@ namespace Application.Profiles
             // Reviews.
             CreateMap<Review, CreateReviewRequestDto>().ReverseMap();
             CreateMap<Review, CreateReviewResponseDto>().ReverseMap();
-            CreateMap<Review, ReadReviewByVideoGameIdRequestDto>().ReverseMap();
+            CreateMap<Review, ReadReviewsByVideoGameIdRequestDto>().ReverseMap();
             CreateMap<Review, ReadReviewResponseDto>().ReverseMap();
             CreateMap<Review, UpdateReviewRequestDto>().ReverseMap();
             CreateMap<Review, UpdateReviewResponseDto>().ReverseMap();

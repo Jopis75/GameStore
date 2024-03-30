@@ -9,7 +9,7 @@ using Microsoft.Extensions.Logging;
 
 namespace Application.Features.Companies.RequestHandlers.Queries
 {
-    public class ReadCompanyAllRequestHandler : IRequestHandler<ReadCompanyAllRequest, HttpResponseDto<ReadCompanyResponseDto>>
+    public class ReadCompanyAllRequestHandler : IRequestHandler<ReadCompanyAllRequest, HttpResponseDto<List<ReadCompanyResponseDto>>>
     {
         private readonly IUnitOfWork _unitOfWork;
 
@@ -24,7 +24,7 @@ namespace Application.Features.Companies.RequestHandlers.Queries
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
-        public async Task<HttpResponseDto<ReadCompanyResponseDto>> Handle(ReadCompanyAllRequest readCompanyAllRequest, CancellationToken cancellationToken)
+        public async Task<HttpResponseDto<List<ReadCompanyResponseDto>>> Handle(ReadCompanyAllRequest readCompanyAllRequest, CancellationToken cancellationToken)
         {
             try
             {
@@ -35,13 +35,13 @@ namespace Application.Features.Companies.RequestHandlers.Queries
                     .Select(_mapper.Map<ReadCompanyResponseDto>)
                     .ToList();
 
-                var httpResponseDto = new HttpResponseDto<ReadCompanyResponseDto>(readCompanyAllResponseDtos, StatusCodes.Status200OK);
+                var httpResponseDto = new HttpResponseDto<List<ReadCompanyResponseDto>>(readCompanyAllResponseDtos, StatusCodes.Status200OK);
                 _logger.LogInformation("Done ReadCompanyAll {@HttpResponseDto}.", httpResponseDto);
                 return httpResponseDto;
             }
             catch (Exception ex)
             {
-                var httpResponseDto1 = new HttpResponseDto<ReadCompanyResponseDto>(ex.Message, StatusCodes.Status500InternalServerError);
+                var httpResponseDto1 = new HttpResponseDto<List<ReadCompanyResponseDto>>(ex.Message, StatusCodes.Status500InternalServerError);
                 _logger.LogError("Error ReadCompanyAll {@HttpResponseDto}.", httpResponseDto1);
                 return httpResponseDto1;
             }

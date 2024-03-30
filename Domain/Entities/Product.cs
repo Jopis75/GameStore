@@ -6,7 +6,7 @@
 
         public int DeveloperId { get; set; }
 
-        public string ImageUri { get; set; } = default!;
+        public string? ImageUri { get; set; }
 
         public string Name { get; set; } = default!;
 
@@ -16,11 +16,8 @@
 
         public DateTime ReleaseDate { get; set; }
 
-        public virtual Review? Review { get; set; }
+        public virtual ICollection<Review> Reviews { get; set; } = new List<Review>();
 
-        public int? ReviewId { get; set; }
-
-        public string Url { get; set; } = default!;
-
+        public string? Url { get; set; }
     }
 }

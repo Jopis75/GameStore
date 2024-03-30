@@ -9,7 +9,7 @@ using Microsoft.Extensions.Logging;
 
 namespace Application.Features.VideoGames.RequestHandlers.Queries
 {
-    public class ReadVideoGameAllRequestHandler : IRequestHandler<ReadVideoGameAllRequest, HttpResponseDto<ReadVideoGameResponseDto>>
+    public class ReadVideoGameAllRequestHandler : IRequestHandler<ReadVideoGameAllRequest, HttpResponseDto<List<ReadVideoGameResponseDto>>>
     {
         private readonly IUnitOfWork _unitOfWork;
 
@@ -24,7 +24,7 @@ namespace Application.Features.VideoGames.RequestHandlers.Queries
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
-        public async Task<HttpResponseDto<ReadVideoGameResponseDto>> Handle(ReadVideoGameAllRequest readAllVideoGameRequest, CancellationToken cancellationToken)
+        public async Task<HttpResponseDto<List<ReadVideoGameResponseDto>>> Handle(ReadVideoGameAllRequest readAllVideoGameRequest, CancellationToken cancellationToken)
         {
             try
             {
@@ -35,13 +35,13 @@ namespace Application.Features.VideoGames.RequestHandlers.Queries
                     .Select(_mapper.Map<ReadVideoGameResponseDto>)
                     .ToList();
 
-                var httpResponseDto = new HttpResponseDto<ReadVideoGameResponseDto>(readAllVideoGamesResponseDtos, StatusCodes.Status200OK);
-                _logger.LogInformation("End ReadAllVideoGame {@HttpResponseDto}.", httpResponseDto);
+                var httpResponseDto = new HttpResponseDto<List<ReadVideoGameResponseDto>>(readAllVideoGamesResponseDtos, StatusCodes.Status200OK);
+                _logger.LogInformation("Done ReadAllVideoGame {@HttpResponseDto}.", httpResponseDto);
                 return httpResponseDto;
             }
             catch (Exception ex)
             {
-                var httpResponseDto1 = new HttpResponseDto<ReadVideoGameResponseDto>(ex.Message, StatusCodes.Status500InternalServerError);
+                var httpResponseDto1 = new HttpResponseDto<List<ReadVideoGameResponseDto>>(ex.Message, StatusCodes.Status500InternalServerError);
                 _logger.LogError("Error ReadAllVideoGame {@HttpResponseDto}.", httpResponseDto1);
                 return httpResponseDto1;
             }

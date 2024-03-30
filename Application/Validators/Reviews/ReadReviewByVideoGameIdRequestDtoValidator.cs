@@ -3,7 +3,7 @@ using FluentValidation;
 
 namespace Application.Validators.Reviews
 {
-    public class ReadReviewByVideoGameIdRequestDtoValidator : AbstractValidator<ReadReviewByVideoGameIdRequestDto>
+    public class ReadReviewByVideoGameIdRequestDtoValidator : AbstractValidator<ReadReviewsByVideoGameIdRequestDto>
     {
         public ReadReviewByVideoGameIdRequestDtoValidator()
         {

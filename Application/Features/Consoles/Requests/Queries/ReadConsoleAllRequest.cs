@@ -4,7 +4,7 @@ using MediatR;
 
 namespace Application.Features.Consoles.Requests.Queries
 {
-    public class ReadConsoleAllRequest : IRequest<HttpResponseDto<ReadConsoleResponseDto>>
+    public class ReadConsoleAllRequest : IRequest<HttpResponseDto<List<ReadConsoleResponseDto>>>
     {
     }
 }

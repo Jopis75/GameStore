@@ -4,7 +4,7 @@ using MediatR;
 
 namespace Application.Features.Reviews.Requests.Queries
 {
-    public class ReadReviewAllRequest : IRequest<HttpResponseDto<ReadReviewResponseDto>>
+    public class ReadReviewAllRequest : IRequest<HttpResponseDto<List<ReadReviewResponseDto>>>
     {
     }
 }

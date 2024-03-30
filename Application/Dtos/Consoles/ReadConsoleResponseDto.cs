@@ -9,7 +9,7 @@ namespace Application.Dtos.Consoles
     {
         public ReadCompanyResponseDto Developer { get; set; } = new();
 
-        public string ImageUri { get; set; } = default!;
+        public string? ImageUri { get; set; }
 
         public string Name { get; set; } = default!;
 
@@ -19,9 +19,9 @@ namespace Application.Dtos.Consoles
 
         public DateTime ReleaseDate { get; set; }
 
-        public ReadReviewResponseDto? Review { get; set; }
+        public List<ReadReviewResponseDto> Review { get; set; } = new();
 
-        public string Url { get; set; } = default!;
+        public string? Url { get; set; }
 
         public List<ReadVideoGameResponseDto> VideoGames { get; set; } = new();
     }

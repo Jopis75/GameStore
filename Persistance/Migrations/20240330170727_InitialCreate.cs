@@ -76,6 +76,37 @@ namespace Persistance.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Console",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    DeletedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    DeletedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    UpdatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    DeveloperId = table.Column<int>(type: "int", nullable: false),
+                    ImageUri = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Price = table.Column<decimal>(type: "decimal(18,2)", precision: 18, scale: 2, nullable: false),
+                    PurchaseDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    ReleaseDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Url = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Console", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Console_Company_DeveloperId",
+                        column: x => x.DeveloperId,
+                        principalTable: "Company",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "VideoGame",
                 columns: table => new
                 {
@@ -90,13 +121,12 @@ namespace Persistance.Migrations
                     UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
                     UpdatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     DeveloperId = table.Column<int>(type: "int", nullable: false),
-                    ImageUri = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ImageUri = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Price = table.Column<decimal>(type: "decimal(18,2)", precision: 18, scale: 2, nullable: false),
                     PurchaseDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     ReleaseDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    ReviewId = table.Column<int>(type: "int", nullable: true),
-                    Url = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    Url = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -107,71 +137,6 @@ namespace Persistance.Migrations
                         principalTable: "Company",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Review",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    ConsoleId = table.Column<int>(type: "int", nullable: true),
-                    Grade = table.Column<int>(type: "int", nullable: false),
-                    ReviewDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    ReviewText = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    VideoGameId = table.Column<int>(type: "int", nullable: true),
-                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    DeletedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    DeletedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    UpdatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Review", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Review_VideoGame_VideoGameId",
-                        column: x => x.VideoGameId,
-                        principalTable: "VideoGame",
-                        principalColumn: "Id");
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Console",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    DeletedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    DeletedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    UpdatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    DeveloperId = table.Column<int>(type: "int", nullable: false),
-                    ImageUri = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Price = table.Column<decimal>(type: "decimal(18,2)", precision: 18, scale: 2, nullable: false),
-                    PurchaseDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    ReleaseDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    ReviewId = table.Column<int>(type: "int", nullable: true),
-                    Url = table.Column<string>(type: "nvarchar(max)", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Console", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Console_Company_DeveloperId",
-                        column: x => x.DeveloperId,
-                        principalTable: "Company",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_Console_Review_ReviewId",
-                        column: x => x.ReviewId,
-                        principalTable: "Review",
-                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -204,15 +169,48 @@ namespace Persistance.Migrations
                         principalColumn: "Id");
                 });
 
+            migrationBuilder.CreateTable(
+                name: "Review",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    ConsoleId = table.Column<int>(type: "int", nullable: true),
+                    Grade = table.Column<int>(type: "int", nullable: false),
+                    ReviewDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    ReviewText = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    VideoGameId = table.Column<int>(type: "int", nullable: true),
+                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    DeletedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    DeletedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    UpdatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Review", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Review_Console_ConsoleId",
+                        column: x => x.ConsoleId,
+                        principalTable: "Console",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_Review_VideoGame_VideoGameId",
+                        column: x => x.VideoGameId,
+                        principalTable: "VideoGame",
+                        principalColumn: "Id");
+                });
+
             migrationBuilder.InsertData(
                 table: "Address",
                 columns: new[] { "Id", "City", "Country", "CreatedAt", "CreatedBy", "DeletedAt", "DeletedBy", "PostalCode", "State", "StreetAddress", "UpdatedAt", "UpdatedBy" },
                 values: new object[,]
                 {
-                    { 1, "San Mateo", "USA", new DateTime(2023, 12, 26, 14, 27, 49, 684, DateTimeKind.Local).AddTicks(4646), "System", null, "", "94404", "California", "2207 Bridgepointe Pkwy", null, "" },
-                    { 2, "San Mateo", "United States", new DateTime(2023, 12, 26, 14, 27, 49, 684, DateTimeKind.Local).AddTicks(4691), "System", null, "", "94404", "California", "2207 Bridgepointe Pkwy", null, "" },
-                    { 3, "Amsterdam", "The Netherlands", new DateTime(2023, 12, 26, 14, 27, 49, 684, DateTimeKind.Local).AddTicks(4695), "System", null, "", "1012 RL", "", "Nieuwezijds Voorburgwal 225", null, "" },
-                    { 4, "Bellevue", "United States", new DateTime(2023, 12, 26, 14, 27, 49, 684, DateTimeKind.Local).AddTicks(4697), "System", null, "", "98004", "Washington", "500 108th Avenue North East Suite 2600", null, "" }
+                    { 1, "San Mateo", "USA", new DateTime(2024, 3, 30, 18, 7, 27, 853, DateTimeKind.Local).AddTicks(9522), "System", null, "", "94404", "California", "2207 Bridgepointe Pkwy", null, "" },
+                    { 2, "San Mateo", "United States", new DateTime(2024, 3, 30, 18, 7, 27, 853, DateTimeKind.Local).AddTicks(9566), "System", null, "", "94404", "California", "2207 Bridgepointe Pkwy", null, "" },
+                    { 3, "Amsterdam", "The Netherlands", new DateTime(2024, 3, 30, 18, 7, 27, 853, DateTimeKind.Local).AddTicks(9569), "System", null, "", "1012 RL", "", "Nieuwezijds Voorburgwal 225", null, "" },
+                    { 4, "Bellevue", "United States", new DateTime(2024, 3, 30, 18, 7, 27, 853, DateTimeKind.Local).AddTicks(9572), "System", null, "", "98004", "Washington", "500 108th Avenue North East Suite 2600", null, "" }
                 });
 
             migrationBuilder.InsertData(
@@ -220,24 +218,24 @@ namespace Persistance.Migrations
                 columns: new[] { "Id", "CompanyType", "CreatedAt", "CreatedBy", "DeletedAt", "DeletedBy", "EmailAddress", "HeadquarterId", "Industry", "LogoImageUri", "Name", "ParentCompanyId", "PhoneNumber", "TradeName", "UpdatedAt", "UpdatedBy", "WebsiteUrl" },
                 values: new object[,]
                 {
-                    { 1, 0, new DateTime(2023, 12, 26, 14, 27, 49, 684, DateTimeKind.Local).AddTicks(5637), "System", null, "", "johan.steinrud@gmail.com", 1, 0, "", "Sony Interactive Entertainment", null, "46702651007", "Sony Interactive Entertainment", null, "", "https://sonyinteractive.com/en/" },
-                    { 2, 2, new DateTime(2023, 12, 26, 14, 27, 49, 684, DateTimeKind.Local).AddTicks(5643), "System", null, "", "johan.steinrud@gmail.com", 2, 0, "", "PlayStation Studios", 2, "46702651007", "PlayStation Studios", null, "", "https://www.playstation.com/en-us/corporate/playstation-studios/" },
-                    { 3, 0, new DateTime(2023, 12, 26, 14, 27, 49, 684, DateTimeKind.Local).AddTicks(5646), "System", null, "", "johan.steinrud@gmail.com", 3, 0, "", "Guerrilla", 2, "46702651007", "Guerrilla Games", null, "", "https://www.guerrilla-games.com/" },
-                    { 4, 0, new DateTime(2023, 12, 26, 14, 27, 49, 684, DateTimeKind.Local).AddTicks(5649), "System", null, "", "johan.steinrud@gmail.com", 4, 0, "", "Sucker Punch", 2, "46702651007", "Sucker Punch Productions", null, "", "https://www.suckerpunch.com/" }
+                    { 1, 0, new DateTime(2024, 3, 30, 18, 7, 27, 854, DateTimeKind.Local).AddTicks(382), "System", null, "", "johan.steinrud@gmail.com", 1, 0, "", "Sony Interactive Entertainment", null, "46702651007", "Sony Interactive Entertainment", null, "", "https://sonyinteractive.com/en/" },
+                    { 2, 2, new DateTime(2024, 3, 30, 18, 7, 27, 854, DateTimeKind.Local).AddTicks(389), "System", null, "", "johan.steinrud@gmail.com", 2, 0, "", "PlayStation Studios", 2, "46702651007", "PlayStation Studios", null, "", "https://www.playstation.com/en-us/corporate/playstation-studios/" },
+                    { 3, 0, new DateTime(2024, 3, 30, 18, 7, 27, 854, DateTimeKind.Local).AddTicks(392), "System", null, "", "johan.steinrud@gmail.com", 3, 0, "", "Guerrilla", 2, "46702651007", "Guerrilla Games", null, "", "https://www.guerrilla-games.com/" },
+                    { 4, 0, new DateTime(2024, 3, 30, 18, 7, 27, 854, DateTimeKind.Local).AddTicks(395), "System", null, "", "johan.steinrud@gmail.com", 4, 0, "", "Sucker Punch", 2, "46702651007", "Sucker Punch Productions", null, "", "https://www.suckerpunch.com/" }
                 });
 
             migrationBuilder.InsertData(
                 table: "Console",
-                columns: new[] { "Id", "CreatedAt", "CreatedBy", "DeletedAt", "DeletedBy", "DeveloperId", "ImageUri", "Name", "Price", "PurchaseDate", "ReleaseDate", "ReviewId", "UpdatedAt", "UpdatedBy", "Url" },
-                values: new object[] { 1, new DateTime(2023, 12, 26, 14, 27, 49, 684, DateTimeKind.Local).AddTicks(5044), "System", null, "", 1, "", "PlayStation®5 Console", 9988.00m, new DateTime(2022, 1, 29, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2020, 11, 12, 0, 0, 0, 0, DateTimeKind.Unspecified), null, null, "", "https://direct.playstation.com/en-us/buy-consoles/playstation5-console/" });
+                columns: new[] { "Id", "CreatedAt", "CreatedBy", "DeletedAt", "DeletedBy", "DeveloperId", "ImageUri", "Name", "Price", "PurchaseDate", "ReleaseDate", "UpdatedAt", "UpdatedBy", "Url" },
+                values: new object[] { 1, new DateTime(2024, 3, 30, 18, 7, 27, 853, DateTimeKind.Local).AddTicks(9900), "System", null, "", 1, "", "PlayStation®5 Console", 9988.00m, new DateTime(2022, 1, 29, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2020, 11, 12, 0, 0, 0, 0, DateTimeKind.Unspecified), null, "", "https://direct.playstation.com/en-us/buy-consoles/playstation5-console/" });
 
             migrationBuilder.InsertData(
                 table: "VideoGame",
-                columns: new[] { "Id", "CreatedAt", "CreatedBy", "DeletedAt", "DeletedBy", "DeveloperId", "ImageUri", "Name", "Price", "PurchaseDate", "ReleaseDate", "ReviewId", "Title", "TotalTimePlayed", "UpdatedAt", "UpdatedBy", "Url" },
+                columns: new[] { "Id", "CreatedAt", "CreatedBy", "DeletedAt", "DeletedBy", "DeveloperId", "ImageUri", "Name", "Price", "PurchaseDate", "ReleaseDate", "Title", "TotalTimePlayed", "UpdatedAt", "UpdatedBy", "Url" },
                 values: new object[,]
                 {
-                    { 1, new DateTime(2023, 12, 26, 14, 27, 49, 684, DateTimeKind.Local).AddTicks(5224), "System", null, "", 2, "", "Horizon Forbidden West", 69.99m, new DateTime(2022, 7, 18, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2022, 2, 18, 0, 0, 0, 0, DateTimeKind.Unspecified), null, "Horizon Forbidden West", new TimeSpan(0, 0, 0, 0, 0), null, "", "https://www.playstation.com/sv-se/games/horizon-forbidden-west/" },
-                    { 2, new DateTime(2023, 12, 26, 14, 27, 49, 684, DateTimeKind.Local).AddTicks(5233), "System", null, "", 2, "", "Horizon Call of the Mountain", 59.99m, new DateTime(2023, 2, 24, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2023, 2, 22, 0, 0, 0, 0, DateTimeKind.Unspecified), null, "Horizon Call of the Mountain", new TimeSpan(0, 0, 0, 0, 0), null, "", "https://www.playstation.com/en-se/games/horizon-call-of-the-mountain/" }
+                    { 1, new DateTime(2024, 3, 30, 18, 7, 27, 854, DateTimeKind.Local).AddTicks(62), "System", null, "", 2, "", "Horizon Forbidden West", 69.99m, new DateTime(2022, 7, 18, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2022, 2, 18, 0, 0, 0, 0, DateTimeKind.Unspecified), "Horizon Forbidden West", new TimeSpan(0, 0, 0, 0, 0), null, "", "https://www.playstation.com/sv-se/games/horizon-forbidden-west/" },
+                    { 2, new DateTime(2024, 3, 30, 18, 7, 27, 854, DateTimeKind.Local).AddTicks(71), "System", null, "", 2, "", "Horizon Call of the Mountain", 59.99m, new DateTime(2023, 2, 24, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2023, 2, 22, 0, 0, 0, 0, DateTimeKind.Unspecified), "Horizon Call of the Mountain", new TimeSpan(0, 0, 0, 0, 0), null, "", "https://www.playstation.com/en-se/games/horizon-call-of-the-mountain/" }
                 });
 
             migrationBuilder.InsertData(
@@ -250,14 +248,30 @@ namespace Persistance.Migrations
                 });
 
             migrationBuilder.InsertData(
+                table: "Review",
+                columns: new[] { "Id", "ConsoleId", "CreatedAt", "CreatedBy", "DeletedAt", "DeletedBy", "Grade", "ReviewDate", "ReviewText", "UpdatedAt", "UpdatedBy", "VideoGameId" },
+                values: new object[,]
+                {
+                    { 1, 1, new DateTime(2024, 3, 30, 18, 7, 27, 854, DateTimeKind.Local).AddTicks(548), "System", null, "", 100, new DateTime(2024, 3, 30, 18, 7, 27, 854, DateTimeKind.Local).AddTicks(545), "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.", null, "", null },
+                    { 2, null, new DateTime(2024, 3, 30, 18, 7, 27, 854, DateTimeKind.Local).AddTicks(553), "System", null, "", 100, new DateTime(2024, 3, 30, 18, 7, 27, 854, DateTimeKind.Local).AddTicks(551), "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.", null, "", 1 },
+                    { 3, null, new DateTime(2024, 3, 30, 18, 7, 27, 854, DateTimeKind.Local).AddTicks(556), "System", null, "", 100, new DateTime(2024, 3, 30, 18, 7, 27, 854, DateTimeKind.Local).AddTicks(555), "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.", null, "", 1 },
+                    { 4, null, new DateTime(2024, 3, 30, 18, 7, 27, 854, DateTimeKind.Local).AddTicks(559), "System", null, "", 100, new DateTime(2024, 3, 30, 18, 7, 27, 854, DateTimeKind.Local).AddTicks(558), "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.", null, "", 1 }
+                });
+
+            migrationBuilder.InsertData(
                 table: "VideoGame",
-                columns: new[] { "Id", "CreatedAt", "CreatedBy", "DeletedAt", "DeletedBy", "DeveloperId", "ImageUri", "Name", "Price", "PurchaseDate", "ReleaseDate", "ReviewId", "Title", "TotalTimePlayed", "UpdatedAt", "UpdatedBy", "Url" },
-                values: new object[] { 3, new DateTime(2023, 12, 26, 14, 27, 49, 684, DateTimeKind.Local).AddTicks(5241), "System", null, "", 3, "", "Ghost of Tsushima DIRECTOR’S CUT", 69.99m, new DateTime(2022, 5, 3, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2020, 7, 17, 0, 0, 0, 0, DateTimeKind.Unspecified), null, "Ghost of Tsushima DIRECTOR’S CUT", new TimeSpan(0, 0, 0, 0, 0), null, "", "https://www.playstation.com/en-se/games/ghost-of-tsushima/" });
+                columns: new[] { "Id", "CreatedAt", "CreatedBy", "DeletedAt", "DeletedBy", "DeveloperId", "ImageUri", "Name", "Price", "PurchaseDate", "ReleaseDate", "Title", "TotalTimePlayed", "UpdatedAt", "UpdatedBy", "Url" },
+                values: new object[] { 3, new DateTime(2024, 3, 30, 18, 7, 27, 854, DateTimeKind.Local).AddTicks(79), "System", null, "", 3, "", "Ghost of Tsushima DIRECTOR’S CUT", 69.99m, new DateTime(2022, 5, 3, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2020, 7, 17, 0, 0, 0, 0, DateTimeKind.Unspecified), "Ghost of Tsushima DIRECTOR’S CUT", new TimeSpan(0, 0, 0, 0, 0), null, "", "https://www.playstation.com/en-se/games/ghost-of-tsushima/" });
 
             migrationBuilder.InsertData(
                 table: "ConsoleVideoGame",
                 columns: new[] { "Id", "ConsoleId", "CreatedAt", "CreatedBy", "DeletedAt", "DeletedBy", "UpdatedAt", "UpdatedBy", "VideoGameId" },
                 values: new object[] { 3, 1, null, null, null, null, null, null, 3 });
+
+            migrationBuilder.InsertData(
+                table: "Review",
+                columns: new[] { "Id", "ConsoleId", "CreatedAt", "CreatedBy", "DeletedAt", "DeletedBy", "Grade", "ReviewDate", "ReviewText", "UpdatedAt", "UpdatedBy", "VideoGameId" },
+                values: new object[] { 5, null, new DateTime(2024, 3, 30, 18, 7, 27, 854, DateTimeKind.Local).AddTicks(562), "System", null, "", 100, new DateTime(2024, 3, 30, 18, 7, 27, 854, DateTimeKind.Local).AddTicks(561), "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.", null, "", 3 });
 
             migrationBuilder.CreateIndex(
                 name: "IX_Company_HeadquarterId",
@@ -276,13 +290,6 @@ namespace Persistance.Migrations
                 column: "DeveloperId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Console_ReviewId",
-                table: "Console",
-                column: "ReviewId",
-                unique: true,
-                filter: "[ReviewId] IS NOT NULL");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_ConsoleVideoGame_ConsoleId",
                 table: "ConsoleVideoGame",
                 column: "ConsoleId");
@@ -293,11 +300,14 @@ namespace Persistance.Migrations
                 column: "VideoGameId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Review_ConsoleId",
+                table: "Review",
+                column: "ConsoleId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Review_VideoGameId",
                 table: "Review",
-                column: "VideoGameId",
-                unique: true,
-                filter: "[VideoGameId] IS NOT NULL");
+                column: "VideoGameId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_VideoGame_DeveloperId",
@@ -312,10 +322,10 @@ namespace Persistance.Migrations
                 name: "ConsoleVideoGame");
 
             migrationBuilder.DropTable(
-                name: "Console");
+                name: "Review");
 
             migrationBuilder.DropTable(
-                name: "Review");
+                name: "Console");
 
             migrationBuilder.DropTable(
                 name: "VideoGame");

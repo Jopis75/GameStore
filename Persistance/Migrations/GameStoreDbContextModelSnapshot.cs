@@ -78,7 +78,7 @@ namespace Persistance.Migrations
                             Id = 1,
                             City = "San Mateo",
                             Country = "USA",
-                            CreatedAt = new DateTime(2023, 12, 26, 14, 27, 49, 684, DateTimeKind.Local).AddTicks(4646),
+                            CreatedAt = new DateTime(2024, 3, 30, 18, 7, 27, 853, DateTimeKind.Local).AddTicks(9522),
                             CreatedBy = "System",
                             DeletedBy = "",
                             PostalCode = "94404",
@@ -91,7 +91,7 @@ namespace Persistance.Migrations
                             Id = 2,
                             City = "San Mateo",
                             Country = "United States",
-                            CreatedAt = new DateTime(2023, 12, 26, 14, 27, 49, 684, DateTimeKind.Local).AddTicks(4691),
+                            CreatedAt = new DateTime(2024, 3, 30, 18, 7, 27, 853, DateTimeKind.Local).AddTicks(9566),
                             CreatedBy = "System",
                             DeletedBy = "",
                             PostalCode = "94404",
@@ -104,7 +104,7 @@ namespace Persistance.Migrations
                             Id = 3,
                             City = "Amsterdam",
                             Country = "The Netherlands",
-                            CreatedAt = new DateTime(2023, 12, 26, 14, 27, 49, 684, DateTimeKind.Local).AddTicks(4695),
+                            CreatedAt = new DateTime(2024, 3, 30, 18, 7, 27, 853, DateTimeKind.Local).AddTicks(9569),
                             CreatedBy = "System",
                             DeletedBy = "",
                             PostalCode = "1012 RL",
@@ -117,7 +117,7 @@ namespace Persistance.Migrations
                             Id = 4,
                             City = "Bellevue",
                             Country = "United States",
-                            CreatedAt = new DateTime(2023, 12, 26, 14, 27, 49, 684, DateTimeKind.Local).AddTicks(4697),
+                            CreatedAt = new DateTime(2024, 3, 30, 18, 7, 27, 853, DateTimeKind.Local).AddTicks(9572),
                             CreatedBy = "System",
                             DeletedBy = "",
                             PostalCode = "98004",
@@ -203,7 +203,7 @@ namespace Persistance.Migrations
                         {
                             Id = 1,
                             CompanyType = 0,
-                            CreatedAt = new DateTime(2023, 12, 26, 14, 27, 49, 684, DateTimeKind.Local).AddTicks(5637),
+                            CreatedAt = new DateTime(2024, 3, 30, 18, 7, 27, 854, DateTimeKind.Local).AddTicks(382),
                             CreatedBy = "System",
                             DeletedBy = "",
                             EmailAddress = "johan.steinrud@gmail.com",
@@ -220,7 +220,7 @@ namespace Persistance.Migrations
                         {
                             Id = 2,
                             CompanyType = 2,
-                            CreatedAt = new DateTime(2023, 12, 26, 14, 27, 49, 684, DateTimeKind.Local).AddTicks(5643),
+                            CreatedAt = new DateTime(2024, 3, 30, 18, 7, 27, 854, DateTimeKind.Local).AddTicks(389),
                             CreatedBy = "System",
                             DeletedBy = "",
                             EmailAddress = "johan.steinrud@gmail.com",
@@ -238,7 +238,7 @@ namespace Persistance.Migrations
                         {
                             Id = 3,
                             CompanyType = 0,
-                            CreatedAt = new DateTime(2023, 12, 26, 14, 27, 49, 684, DateTimeKind.Local).AddTicks(5646),
+                            CreatedAt = new DateTime(2024, 3, 30, 18, 7, 27, 854, DateTimeKind.Local).AddTicks(392),
                             CreatedBy = "System",
                             DeletedBy = "",
                             EmailAddress = "johan.steinrud@gmail.com",
@@ -256,7 +256,7 @@ namespace Persistance.Migrations
                         {
                             Id = 4,
                             CompanyType = 0,
-                            CreatedAt = new DateTime(2023, 12, 26, 14, 27, 49, 684, DateTimeKind.Local).AddTicks(5649),
+                            CreatedAt = new DateTime(2024, 3, 30, 18, 7, 27, 854, DateTimeKind.Local).AddTicks(395),
                             CreatedBy = "System",
                             DeletedBy = "",
                             EmailAddress = "johan.steinrud@gmail.com",
@@ -296,7 +296,6 @@ namespace Persistance.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("ImageUri")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Name")
@@ -313,9 +312,6 @@ namespace Persistance.Migrations
                     b.Property<DateTime>("ReleaseDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<int?>("ReviewId")
-                        .HasColumnType("int");
-
                     b.Property<DateTime?>("UpdatedAt")
                         .HasColumnType("datetime2");
 
@@ -323,16 +319,11 @@ namespace Persistance.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Url")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
                     b.HasIndex("DeveloperId");
-
-                    b.HasIndex("ReviewId")
-                        .IsUnique()
-                        .HasFilter("[ReviewId] IS NOT NULL");
 
                     b.ToTable("Console", (string)null);
 
@@ -340,7 +331,7 @@ namespace Persistance.Migrations
                         new
                         {
                             Id = 1,
-                            CreatedAt = new DateTime(2023, 12, 26, 14, 27, 49, 684, DateTimeKind.Local).AddTicks(5044),
+                            CreatedAt = new DateTime(2024, 3, 30, 18, 7, 27, 853, DateTimeKind.Local).AddTicks(9900),
                             CreatedBy = "System",
                             DeletedBy = "",
                             DeveloperId = 1,
@@ -459,11 +450,73 @@ namespace Persistance.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("VideoGameId")
-                        .IsUnique()
-                        .HasFilter("[VideoGameId] IS NOT NULL");
+                    b.HasIndex("ConsoleId");
+
+                    b.HasIndex("VideoGameId");
 
                     b.ToTable("Review", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            ConsoleId = 1,
+                            CreatedAt = new DateTime(2024, 3, 30, 18, 7, 27, 854, DateTimeKind.Local).AddTicks(548),
+                            CreatedBy = "System",
+                            DeletedBy = "",
+                            Grade = 100,
+                            ReviewDate = new DateTime(2024, 3, 30, 18, 7, 27, 854, DateTimeKind.Local).AddTicks(545),
+                            ReviewText = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
+                            UpdatedBy = ""
+                        },
+                        new
+                        {
+                            Id = 2,
+                            CreatedAt = new DateTime(2024, 3, 30, 18, 7, 27, 854, DateTimeKind.Local).AddTicks(553),
+                            CreatedBy = "System",
+                            DeletedBy = "",
+                            Grade = 100,
+                            ReviewDate = new DateTime(2024, 3, 30, 18, 7, 27, 854, DateTimeKind.Local).AddTicks(551),
+                            ReviewText = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
+                            UpdatedBy = "",
+                            VideoGameId = 1
+                        },
+                        new
+                        {
+                            Id = 3,
+                            CreatedAt = new DateTime(2024, 3, 30, 18, 7, 27, 854, DateTimeKind.Local).AddTicks(556),
+                            CreatedBy = "System",
+                            DeletedBy = "",
+                            Grade = 100,
+                            ReviewDate = new DateTime(2024, 3, 30, 18, 7, 27, 854, DateTimeKind.Local).AddTicks(555),
+                            ReviewText = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
+                            UpdatedBy = "",
+                            VideoGameId = 1
+                        },
+                        new
+                        {
+                            Id = 4,
+                            CreatedAt = new DateTime(2024, 3, 30, 18, 7, 27, 854, DateTimeKind.Local).AddTicks(559),
+                            CreatedBy = "System",
+                            DeletedBy = "",
+                            Grade = 100,
+                            ReviewDate = new DateTime(2024, 3, 30, 18, 7, 27, 854, DateTimeKind.Local).AddTicks(558),
+                            ReviewText = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
+                            UpdatedBy = "",
+                            VideoGameId = 1
+                        },
+                        new
+                        {
+                            Id = 5,
+                            CreatedAt = new DateTime(2024, 3, 30, 18, 7, 27, 854, DateTimeKind.Local).AddTicks(562),
+                            CreatedBy = "System",
+                            DeletedBy = "",
+                            Grade = 100,
+                            ReviewDate = new DateTime(2024, 3, 30, 18, 7, 27, 854, DateTimeKind.Local).AddTicks(561),
+                            ReviewText = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
+                            UpdatedBy = "",
+                            VideoGameId = 3
+                        });
                 });
 
             modelBuilder.Entity("Domain.Entities.VideoGame", b =>
@@ -490,7 +543,6 @@ namespace Persistance.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("ImageUri")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Name")
@@ -507,9 +559,6 @@ namespace Persistance.Migrations
                     b.Property<DateTime>("ReleaseDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<int?>("ReviewId")
-                        .HasColumnType("int");
-
                     b.Property<string>("Title")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -524,7 +573,6 @@ namespace Persistance.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Url")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
@@ -537,7 +585,7 @@ namespace Persistance.Migrations
                         new
                         {
                             Id = 1,
-                            CreatedAt = new DateTime(2023, 12, 26, 14, 27, 49, 684, DateTimeKind.Local).AddTicks(5224),
+                            CreatedAt = new DateTime(2024, 3, 30, 18, 7, 27, 854, DateTimeKind.Local).AddTicks(62),
                             CreatedBy = "System",
                             DeletedBy = "",
                             DeveloperId = 2,
@@ -554,7 +602,7 @@ namespace Persistance.Migrations
                         new
                         {
                             Id = 2,
-                            CreatedAt = new DateTime(2023, 12, 26, 14, 27, 49, 684, DateTimeKind.Local).AddTicks(5233),
+                            CreatedAt = new DateTime(2024, 3, 30, 18, 7, 27, 854, DateTimeKind.Local).AddTicks(71),
                             CreatedBy = "System",
                             DeletedBy = "",
                             DeveloperId = 2,
@@ -571,7 +619,7 @@ namespace Persistance.Migrations
                         new
                         {
                             Id = 3,
-                            CreatedAt = new DateTime(2023, 12, 26, 14, 27, 49, 684, DateTimeKind.Local).AddTicks(5241),
+                            CreatedAt = new DateTime(2024, 3, 30, 18, 7, 27, 854, DateTimeKind.Local).AddTicks(79),
                             CreatedBy = "System",
                             DeletedBy = "",
                             DeveloperId = 3,
@@ -612,13 +660,7 @@ namespace Persistance.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Domain.Entities.Review", "Review")
-                        .WithOne("Console")
-                        .HasForeignKey("Domain.Entities.Console", "ReviewId");
-
                     b.Navigation("Developer");
-
-                    b.Navigation("Review");
                 });
 
             modelBuilder.Entity("Domain.Entities.ConsoleVideoGame", b =>
@@ -640,9 +682,15 @@ namespace Persistance.Migrations
 
             modelBuilder.Entity("Domain.Entities.Review", b =>
                 {
+                    b.HasOne("Domain.Entities.Console", "Console")
+                        .WithMany("Reviews")
+                        .HasForeignKey("ConsoleId");
+
                     b.HasOne("Domain.Entities.VideoGame", "VideoGame")
-                        .WithOne("Review")
-                        .HasForeignKey("Domain.Entities.Review", "VideoGameId");
+                        .WithMany("Reviews")
+                        .HasForeignKey("VideoGameId");
+
+                    b.Navigation("Console");
 
                     b.Navigation("VideoGame");
                 });
@@ -673,18 +721,15 @@ namespace Persistance.Migrations
             modelBuilder.Entity("Domain.Entities.Console", b =>
                 {
                     b.Navigation("ConsoleVideoGames");
-                });
 
-            modelBuilder.Entity("Domain.Entities.Review", b =>
-                {
-                    b.Navigation("Console");
+                    b.Navigation("Reviews");
                 });
 
             modelBuilder.Entity("Domain.Entities.VideoGame", b =>
                 {
                     b.Navigation("ConsoleVideoGames");
 
-                    b.Navigation("Review");
+                    b.Navigation("Reviews");
                 });
 #pragma warning restore 612, 618
         }

@@ -137,11 +137,14 @@ namespace Persistance.DbContexts
             modelBuilder.ApplyConfiguration(new VideoGameConfiguration());
             modelBuilder.ApplyConfiguration(new ConsoleVideoGameConfiguration());
             modelBuilder.ApplyConfiguration(new CompanyConfiguration());
+            modelBuilder.ApplyConfiguration(new ReviewConfiguration());
         }
 
         public virtual async Task<int> SaveChangesAsync(string userName = "System")
         {
-            var entries = base.ChangeTracker.Entries<EntityBase>()
+            var entries = base
+                .ChangeTracker
+                .Entries<EntityBase>()
                 .Where(entry => entry.State == EntityState.Added || entry.State == EntityState.Modified || entry.State == EntityState.Deleted);
 
             foreach (var entry in entries)

@@ -8,8 +8,7 @@ namespace Persistance.Repositories
     public class VideoGameRepository : RepositoryBase<VideoGame>, IVideoGameRepository
     {
         public VideoGameRepository(GameStoreDbContext gameStoreDbContext)
-            : base(gameStoreDbContext)
-        { }
+            : base(gameStoreDbContext) { }
         
         public async Task<IEnumerable<VideoGame>> ReadByConsoleIdAsync(int consoleId, bool asNoTracking = false)
         {

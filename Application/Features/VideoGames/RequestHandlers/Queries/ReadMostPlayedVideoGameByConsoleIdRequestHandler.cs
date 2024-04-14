@@ -54,7 +54,7 @@ namespace Application.Features.VideoGames.RequestHandlers.Queries
                 var readVideoGameResponseDto = _mapper.Map<ReadVideoGameResponseDto>(videoGame);
 
                 var httpResponseDto = new HttpResponseDto<ReadVideoGameResponseDto>(readVideoGameResponseDto, StatusCodes.Status200OK);
-                _logger.LogInformation("End ReadMostPlayedVideoGameByConsoleId {@HttpResponseDto}.", httpResponseDto);
+                _logger.LogInformation("Done ReadMostPlayedVideoGameByConsoleId {@HttpResponseDto}.", httpResponseDto);
                 return httpResponseDto;
             }
             catch (Exception ex)

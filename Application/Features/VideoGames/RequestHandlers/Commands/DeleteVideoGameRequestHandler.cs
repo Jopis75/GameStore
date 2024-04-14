@@ -54,9 +54,9 @@ namespace Application.Features.VideoGames.RequestHandlers.Commands
                 {
                     Id = deletedVideoGame.Id,
                     DeletedAt = deletedVideoGame.DeletedAt,
-                    DeletedBy = string.Empty
+                    DeletedBy = deletedVideoGame.DeletedBy,
                 }, StatusCodes.Status200OK);
-                _logger.LogInformation("End DeleteVideoGame {@HttpResponseDto}.", httpResponseDto);
+                _logger.LogInformation("Done DeleteVideoGame {@HttpResponseDto}.", httpResponseDto);
                 return httpResponseDto;
             }
             catch (Exception ex)

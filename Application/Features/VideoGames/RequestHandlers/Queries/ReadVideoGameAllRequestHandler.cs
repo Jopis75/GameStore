@@ -24,11 +24,11 @@ namespace Application.Features.VideoGames.RequestHandlers.Queries
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
-        public async Task<HttpResponseDto<List<ReadVideoGameResponseDto>>> Handle(ReadVideoGameAllRequest readAllVideoGameRequest, CancellationToken cancellationToken)
+        public async Task<HttpResponseDto<List<ReadVideoGameResponseDto>>> Handle(ReadVideoGameAllRequest readVideoGameAllRequest, CancellationToken cancellationToken)
         {
             try
             {
-                _logger.LogInformation("Begin ReadAllVideoGame {@ReadAllVideoGameRequest}.", readAllVideoGameRequest);
+                _logger.LogInformation("Begin ReadVideoGameAll {@ReadVideoGameAllRequest}.", readVideoGameAllRequest);
 
                 var videoGames = await _unitOfWork.VideoGameRepository.ReadAllAsync(true);
                 var readAllVideoGamesResponseDtos = videoGames
@@ -36,13 +36,13 @@ namespace Application.Features.VideoGames.RequestHandlers.Queries
                     .ToList();
 
                 var httpResponseDto = new HttpResponseDto<List<ReadVideoGameResponseDto>>(readAllVideoGamesResponseDtos, StatusCodes.Status200OK);
-                _logger.LogInformation("Done ReadAllVideoGame {@HttpResponseDto}.", httpResponseDto);
+                _logger.LogInformation("Done ReadVideoGameAll {@HttpResponseDto}.", httpResponseDto);
                 return httpResponseDto;
             }
             catch (Exception ex)
             {
                 var httpResponseDto1 = new HttpResponseDto<List<ReadVideoGameResponseDto>>(ex.Message, StatusCodes.Status500InternalServerError);
-                _logger.LogError("Error ReadAllVideoGame {@HttpResponseDto}.", httpResponseDto1);
+                _logger.LogError("Error ReadVideoGameAll {@HttpResponseDto}.", httpResponseDto1);
                 return httpResponseDto1;
             }
         }

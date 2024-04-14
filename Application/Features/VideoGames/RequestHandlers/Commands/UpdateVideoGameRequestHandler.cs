@@ -59,9 +59,9 @@ namespace Application.Features.VideoGames.RequestHandlers.Commands
                 {
                     Id = updatedVideoGame.Id,
                     UpdatedAt = updatedVideoGame.UpdatedAt,
-                    UpdatedBy = string.Empty
+                    UpdatedBy = updatedVideoGame.UpdatedBy
                 }, StatusCodes.Status200OK);
-                _logger.LogInformation("End UpdateVideoGame {@HttpResponseDto}.", httpResponseDto);
+                _logger.LogInformation("Done UpdateVideoGame {@HttpResponseDto}.", httpResponseDto);
                 return httpResponseDto;
             }
             catch (Exception ex)

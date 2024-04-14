@@ -59,9 +59,9 @@ namespace Application.Features.VideoGames.RequestHandlers.Commands
                 {
                     Id = createdVideoGame.Id,
                     CreatedAt = createdVideoGame.CreatedAt,
-                    CreatedBy = string.Empty
+                    CreatedBy = createdVideoGame.CreatedBy
                 }, StatusCodes.Status201Created);
-                _logger.LogInformation("End CreateVideoGame {@HttpResponseDto}.", httpResponseDto);
+                _logger.LogInformation("Done CreateVideoGame {@HttpResponseDto}.", httpResponseDto);
                 return httpResponseDto;
             }
             catch (Exception ex)

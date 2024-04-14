@@ -1,5 +1,4 @@
-﻿using Application.Dtos.Addresses;
-using Application.Dtos.Common;
+﻿using Application.Dtos.Common;
 using Application.Dtos.Companies;
 using Application.Dtos.Reviews;
 

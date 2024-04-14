@@ -19,7 +19,7 @@ namespace Application.Dtos.Consoles
 
         public DateTime ReleaseDate { get; set; }
 
-        public List<ReadReviewResponseDto> Review { get; set; } = new();
+        public List<ReadReviewResponseDto> Reviews { get; set; } = new();
 
         public string? Url { get; set; }
 

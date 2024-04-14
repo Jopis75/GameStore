@@ -11,7 +11,7 @@ namespace Application.Dtos.Companies
 
         public Industry Industry { get; set; }
 
-        public string LogoImageUri { get; set; } = default!;
+        public string? LogoImageUri { get; set; }
 
         public string Name { get; set; } = default!;
 
@@ -21,7 +21,7 @@ namespace Application.Dtos.Companies
 
         public string TradeName { get; set; } = default!;
 
-        public string WebsiteUrl { get; set; } = default!;
+        public string? WebsiteUrl { get; set; }
 
         public string City { get; set; } = default!;
 

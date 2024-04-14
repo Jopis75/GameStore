@@ -20,11 +20,9 @@ namespace Persistance.DbContexts
         public DbSet<Review> Reviews { get; set; }
 
         public GameStoreDbContext(DbContextOptions<GameStoreDbContext> dbContextOptions) 
-            : base(dbContextOptions)
-        { }
+            : base(dbContextOptions) { }
 
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        { }
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) { }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -138,35 +136,6 @@ namespace Persistance.DbContexts
             modelBuilder.ApplyConfiguration(new ConsoleVideoGameConfiguration());
             modelBuilder.ApplyConfiguration(new CompanyConfiguration());
             modelBuilder.ApplyConfiguration(new ReviewConfiguration());
-        }
-
-        public virtual async Task<int> SaveChangesAsync(string userName = "System")
-        {
-            var entries = base
-                .ChangeTracker
-                .Entries<EntityBase>()
-                .Where(entry => entry.State == EntityState.Added || entry.State == EntityState.Modified || entry.State == EntityState.Deleted);
-
-            foreach (var entry in entries)
-            {
-                if (entry.State == EntityState.Added)
-                {
-                    entry.Entity.CreatedAt = DateTime.Now;
-                    entry.Entity.CreatedBy = userName;
-                }
-                else if (entry.State == EntityState.Modified)
-                {
-                    entry.Entity.UpdatedAt = DateTime.Now;
-                    entry.Entity.UpdatedBy = userName;
-                }
-                else if (entry.State == EntityState.Deleted)
-                {
-                    entry.Entity.DeletedAt = DateTime.Now;
-                    entry.Entity.DeletedBy = userName;
-                }
-            }
-
-            return await base.SaveChangesAsync();
         }
     }
 }

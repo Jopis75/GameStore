@@ -7,6 +7,11 @@ namespace Application.Validators.Common
     {
         public UpdateRequestDtoValidator()
         {
+            RuleFor(updateRequestDto => updateRequestDto.UpdatedBy)
+                .NotNull()
+                .NotEmpty()
+                .WithMessage("{PropertyName} is required.");
+
             RuleFor(updateRequestDto => updateRequestDto.Id)
                 .GreaterThan(0)
                 .WithMessage("{PropertyName} must be greater than 0.");

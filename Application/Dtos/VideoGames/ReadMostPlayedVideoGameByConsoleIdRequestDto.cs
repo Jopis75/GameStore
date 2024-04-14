@@ -1,6 +1,8 @@
-﻿namespace Application.Dtos.VideoGames
+﻿using Application.Dtos.Common;
+
+namespace Application.Dtos.VideoGames
 {
-    public class ReadMostPlayedVideoGameByConsoleIdRequestDto
+    public class ReadMostPlayedVideoGameByConsoleIdRequestDto : RequestDto
     {
         public int ConsoleId { get; set; }
     }

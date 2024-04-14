@@ -4,6 +4,8 @@ namespace Application.Interfaces.Persistance
 {
     public interface IVideoGameRepository : IRepositoryBase<VideoGame>
     {
+        Task<IEnumerable<VideoGame>> ReadByConsoleIdAsync(int consoleId, bool asNoTracking = false);
+
         Task<IEnumerable<VideoGame>> ReadByDeveloperIdAsync(int developerId, bool asNoTracking = false);
 
         Task<IEnumerable<VideoGame>> ReadByPriceAsync(decimal fromPrice, decimal toPrice, bool asNoTracking = false);

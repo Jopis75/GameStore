@@ -2,7 +2,7 @@
 
 namespace Application.Dtos.Identity
 {
-    public class ReadUserByUserIdRequestDto : ReadRequestDto
+    public class ReadUserByUserIdRequestDto : RequestDto
     {
         public string? UserId { get; set; }
     }

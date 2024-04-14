@@ -10,6 +10,27 @@ namespace Persistance.Repositories
         public VideoGameRepository(GameStoreDbContext gameStoreDbContext)
             : base(gameStoreDbContext)
         { }
+        
+        public async Task<IEnumerable<VideoGame>> ReadByConsoleIdAsync(int consoleId, bool asNoTracking = false)
+        {
+            var query = Entities.AsQueryable();
+
+            if (asNoTracking)
+            {
+                query = query.AsNoTracking();
+            }
+
+            var videoGames = await query
+                .Include(videoGame => videoGame.ConsoleVideoGames)
+                    .ThenInclude(consoleVideoGame => consoleVideoGame.Console)
+                .Include(videoGame => videoGame.Reviews)
+                .Include(videoGame => videoGame.Developer)
+                    .ThenInclude(developer => developer.Headquarter)
+                .Where(videoGame => videoGame.ConsoleVideoGames.Any(consoleVideoGame => consoleVideoGame.ConsoleId == consoleId))
+                .ToListAsync();
+
+            return videoGames;
+        }
 
         public async Task<IEnumerable<VideoGame>> ReadByDeveloperIdAsync(int developerId, bool asNoTracking = false)
         {

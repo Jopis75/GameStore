@@ -14,7 +14,7 @@
 
         public Industry Industry { get; set; }
 
-        public string LogoImageUri { get; set; } = default!;
+        public string? LogoImageUri { get; set; }
 
         public string Name { get; set; } = default!;
 
@@ -28,6 +28,6 @@
 
         public virtual ICollection<VideoGame> VideoGames { get; set; } = new List<VideoGame>();
 
-        public string WebsiteUrl { get; set; } = default!;
+        public string? WebsiteUrl { get; set; }
     }
 }

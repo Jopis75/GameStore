@@ -15,7 +15,7 @@ namespace Application.Dtos.Companies
 
         public Industry Industry { get; set; }
 
-        public string LogoImageUri { get; set; } = default!;
+        public string? LogoImageUri { get; set; }
 
         public string Name { get; set; } = default!;
 
@@ -27,6 +27,6 @@ namespace Application.Dtos.Companies
 
         public List<ReadVideoGameResponseDto> VideoGames { get; set; } = new();
 
-        public string WebsiteUrl { get; set; } = default!;
+        public string? WebsiteUrl { get; set; }
     }
 }

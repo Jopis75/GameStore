@@ -8,52 +8,52 @@ namespace Persistance.Repositories
     public class AddressRepository : RepositoryBase<Address>, IAddressRepository
     {
         public AddressRepository(GameStoreDbContext gameStoreDbContext)
-            : base(gameStoreDbContext)
-        { }
+            : base(gameStoreDbContext) { }
 
         public async Task<IEnumerable<Address>> ReadByCityAsync(string city, bool asNoTracking = false)
         {
-            var addresses = asNoTracking ?
-                await Entities
-                    .AsNoTracking<Address>()
-                    .Where(address => address.City == city)
-                    .ToListAsync() :
-                await Entities
-                    .Where(address => address.City == city)
-                    .ToListAsync();
+            var query = Entities.AsQueryable();
+
+            if (asNoTracking)
+            {
+                query = query.AsNoTracking();
+            }
+
+            var addresses = await query
+                .Where(address => EF.Functions.Like(address.City, $"{city}%"))
+                .ToListAsync();
 
             return addresses;
         }
 
-        public async Task<Address> ReadByStreetAddressAsync(string streetAddress, bool asNoTracking = false)
+        public async Task<IEnumerable<Address>> ReadByStreetAddressAsync(string streetAddress, bool asNoTracking = false)
         {
-            var address = asNoTracking ?
-                await Entities
-                    .AsNoTracking<Address>()
-                    .Where(address => address.StreetAddress == streetAddress)
-                    .SingleOrDefaultAsync() :
-                await Entities
-                    .Where(address => address.StreetAddress == streetAddress)
-                    .SingleOrDefaultAsync();
+            var query = Entities.AsQueryable();
 
-            if (address == null)
+            if (asNoTracking)
             {
-                return new Address();
+                query = query.AsNoTracking();
             }
 
-            return address;
+            var addresses = await query
+                .Where(address => EF.Functions.Like(address.StreetAddress, $"{streetAddress}%"))
+                .ToListAsync();
+
+            return addresses;
         }
 
         public async Task<IEnumerable<Address>> ReadByZipCodeAsync(string postalCode, bool asNoTracking = false)
         {
-            var addresses = asNoTracking ?
-                await Entities
-                    .AsNoTracking<Address>()
-                    .Where(address => address.PostalCode == postalCode)
-                    .ToListAsync() :
-                await Entities
-                    .Where(address => address.PostalCode == postalCode)
-                    .ToListAsync();
+            var query = Entities.AsQueryable();
+
+            if (asNoTracking)
+            {
+                query = query.AsNoTracking();
+            }
+
+            var addresses = await query
+                .Where(address => EF.Functions.Like(address.PostalCode, $"{postalCode}%"))
+                .ToListAsync();
 
             return addresses;
         }

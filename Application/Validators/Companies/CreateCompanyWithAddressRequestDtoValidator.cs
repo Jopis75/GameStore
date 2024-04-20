@@ -65,8 +65,8 @@ namespace Application.Validators.Companies
                 .WithMessage("{PropertyName} is required.")
                 .MustAsync(async (streetAddress, cancellation) =>
                 {
-                    var address = await _unitOfWork.AddressRepository.ReadByStreetAddressAsync(streetAddress);
-                    return address.Id == 0;
+                    var addresses = await _unitOfWork.AddressRepository.ReadByStreetAddressAsync(streetAddress);
+                    return addresses.Count() == 0;
                 })
                 .WithMessage("{PropertyName} must be unique.");
 

@@ -1,6 +1,6 @@
 ﻿namespace Domain.Filters.Interfaces
 {
-    public interface IFilter
+    public interface IFilterBase
     {
         DateTime? CreatedAt { get; }
 

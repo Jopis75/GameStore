@@ -2,7 +2,7 @@
 
 namespace Domain.Filters
 {
-    public class FilterBase : IFilter
+    public class FilterBase : IFilterBase
     {
         public DateTime? CreatedAt { get; set; }
 

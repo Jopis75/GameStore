@@ -69,6 +69,8 @@ namespace Persistance.Repositories
             return entities;
         }
 
+        public abstract Task<IEnumerable<TEntity>> ReadByFilterAsync(TFilter filter, bool asNoTracking = false);
+
         public async Task<TEntity> ReadByIdAsync(int id, bool asNoTracking = false)
         {
             var query = _entities.AsQueryable();
@@ -89,8 +91,6 @@ namespace Persistance.Repositories
 
             return entity;
         }
-
-        public abstract Task<IEnumerable<TEntity>> ReadByFilterAsync(TFilter filter, bool asNoTracking = false);
 
         public Task<TEntity> UpdateAsync(TEntity entity)
         {

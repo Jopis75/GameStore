@@ -1,7 +1,9 @@
-﻿using Application.Interfaces.Persistance;
+﻿using Abp.Linq.Expressions;
+using Application.Interfaces.Persistance;
 using Domain.Entities;
 using Domain.Filters;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Query.SqlExpressions;
 using Persistance.DbContexts;
 
 namespace Persistance.Repositories
@@ -27,9 +29,51 @@ namespace Persistance.Repositories
             return addresses;
         }
 
-        public override Task<IEnumerable<Address>> ReadByFilterAsync(AddressFilter filter, bool asNoTracking = false)
+        public override async Task<IEnumerable<Address>> ReadByFilterAsync(AddressFilter filter, bool asNoTracking = false)
         {
-            throw new NotImplementedException();
+            var query = Entities.AsQueryable();
+
+            if (asNoTracking)
+            {
+                query = query.AsNoTracking();
+            }
+
+            if (filter != null)
+            {
+                var predicateBuilder = PredicateBuilder.New<Address>();
+
+                if (filter.StreetAddress != null)
+                {
+                    predicateBuilder = predicateBuilder.And(address => EF.Functions.Like(address.StreetAddress, $"{filter.StreetAddress}%"));
+                }
+
+                if (filter.City != null)
+                {
+                    predicateBuilder = predicateBuilder.And(address => EF.Functions.Like(address.City, $"{filter.City}%"));
+                }
+
+                if (filter.State != null)
+                {
+                    predicateBuilder = predicateBuilder.And(address => EF.Functions.Like(address.State, $"{filter.State}%"));
+                }
+
+                if (filter.PostalCode != null)
+                {
+                    predicateBuilder = predicateBuilder.And(address => EF.Functions.Like(address.PostalCode, $"{filter.PostalCode}%"));
+                }
+
+                if (filter.Country != null)
+                {
+                    predicateBuilder = predicateBuilder.And(address => EF.Functions.Like(address.Country, $"{filter.Country}%"));
+                }
+
+                query = query.Where(predicateBuilder);
+            }
+
+            var addresses = await query
+                .ToListAsync();
+
+            return addresses;
         }
 
         public async Task<IEnumerable<Address>> ReadByStreetAddressAsync(string streetAddress, bool asNoTracking = false)

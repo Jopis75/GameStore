@@ -28,13 +28,12 @@ namespace Persistance
 
         private static IServiceCollection AddRepositories(this IServiceCollection serviceCollection)
         {
-            serviceCollection.AddScoped(typeof(IRepositoryBase<>), typeof(RepositoryBase<>));
             serviceCollection.AddScoped<IAddressRepository, AddressRepository>();
             serviceCollection.AddScoped<ICompanyRepository, CompanyRepository>();
             serviceCollection.AddScoped<IConsoleVideoGameRepository, ConsoleVideoGameRepository>();
             serviceCollection.AddScoped<IConsoleRepository, ConsoleRepository>();
-            serviceCollection.AddScoped<IVideoGameRepository, VideoGameRepository>();
             serviceCollection.AddScoped<IReviewRepository, ReviewRepository>();
+            serviceCollection.AddScoped<IVideoGameRepository, VideoGameRepository>();
 
             return serviceCollection;
         }

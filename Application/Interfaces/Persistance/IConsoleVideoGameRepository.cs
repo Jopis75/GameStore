@@ -1,8 +1,9 @@
 ﻿using Domain.Entities;
+using Domain.Filters;
 
 namespace Application.Interfaces.Persistance
 {
-    public interface IConsoleVideoGameRepository : IRepositoryBase<ConsoleVideoGame>
+    public interface IConsoleVideoGameRepository : IRepositoryBase<ConsoleVideoGame, ConsoleVideoGameFilter>
     {
         Task<IEnumerable<ConsoleVideoGame>> ReadByConsoleIdAsync(int consoleId, bool asNoTracking = false);
 

@@ -1,9 +1,10 @@
-﻿using Console = Domain.Entities.Console;
+﻿using Domain.Filters;
+using Console = Domain.Entities.Console;
 
 namespace Application.Interfaces.Persistance
 {
-    public interface IConsoleRepository : IRepositoryBase<Console>
+    public interface IConsoleRepository : IRepositoryBase<Console, ConsoleFilter>
     {
-        Task<Console> ReadByNameAsync(string name, bool asNoTracking = false);
+        Task<IEnumerable<Console>> ReadByNameAsync(string name, bool asNoTracking = false);
     }
 }

@@ -1,90 +1,84 @@
 ﻿using Application.Interfaces.Persistance;
 using Domain.Entities;
+using Domain.Filters;
 using Microsoft.EntityFrameworkCore;
 using Persistance.DbContexts;
+using System.Formats.Asn1;
 
 namespace Persistance.Repositories
 {
-    public class CompanyRepository : RepositoryBase<Company>, ICompanyRepository
+    public class CompanyRepository : RepositoryBase<Company, CompanyFilter>, ICompanyRepository
     {
         public CompanyRepository(GameStoreDbContext gameStoreDbContext)
-            : base(gameStoreDbContext)
-        { }
+            : base(gameStoreDbContext) { }
 
-        public async Task<Company> ReadByEmailAddressAsync(string emailAddress, bool asNoTracking = false)
+        public async Task<IEnumerable<Company>> ReadByEmailAddressAsync(string emailAddress, bool asNoTracking = false)
         {
-            var company = asNoTracking ?
-                await Entities
-                    .AsNoTracking<Company>()
-                    .Where(company => company.EmailAddress == emailAddress)
-                    .SingleOrDefaultAsync() :
-                await Entities
-                    .Where(company => company.EmailAddress == emailAddress)
-                    .SingleOrDefaultAsync();
+            var query = Entities.AsQueryable();
 
-            if (company == null)
+            if (asNoTracking)
             {
-                return new Company();
+                query = query.AsNoTracking();
             }
 
-            return company;
+            var companies = await query
+                .Where(company => EF.Functions.Like(company.EmailAddress, $"{emailAddress}%"))
+                .ToListAsync();
+
+            return companies;
         }
 
-        public async Task<Company> ReadByNameAsync(string name, bool asNoTracking = false)
+        public override Task<IEnumerable<Company>> ReadByFilterAsync(CompanyFilter filter, bool asNoTracking = false)
         {
-            var company = asNoTracking ?
-                await Entities
-                    .AsNoTracking<Company>()
-                    .Where(company => company.Name == name)
-                    .SingleOrDefaultAsync() :
-                await Entities
-                    .Where(company => company.Name == name)
-                    .SingleOrDefaultAsync();
-
-            if (company == null)
-            {
-                return new Company();
-            }
-
-            return company;
+            throw new NotImplementedException();
         }
 
-        public async Task<Company> ReadByPhoneNumberAsync(string phoneNumber, bool asNoTracking = false)
+        public async Task<IEnumerable<Company>> ReadByNameAsync(string name, bool asNoTracking = false)
         {
-            var company = asNoTracking ?
-                await Entities
-                    .AsNoTracking<Company>()
-                    .Where(company => company.PhoneNumber == phoneNumber)
-                    .SingleOrDefaultAsync() :
-                await Entities
-                    .Where(company => company.PhoneNumber == phoneNumber)
-                    .SingleOrDefaultAsync();
+            var query = Entities.AsQueryable();
 
-            if (company == null)
+            if (asNoTracking)
             {
-                return new Company();
+                query = query.AsNoTracking();
             }
 
-            return company;
+            var companies = await query
+                .Where(company => EF.Functions.Like(company.Name, $"{name}%"))
+                .ToListAsync();
+
+            return companies;
         }
 
-        public async Task<Company> ReadByTradeNameAsync(string tradeName, bool asNoTracking = false)
+        public async Task<IEnumerable<Company>> ReadByPhoneNumberAsync(string phoneNumber, bool asNoTracking = false)
         {
-            var company = asNoTracking ?
-                await Entities
-                    .AsNoTracking<Company>()
-                    .Where(company => company.TradeName == tradeName)
-                    .SingleOrDefaultAsync() :
-                await Entities
-                    .Where(company => company.TradeName == tradeName)
-                    .SingleOrDefaultAsync();
+            var query = Entities.AsQueryable();
 
-            if (company == null)
+            if (asNoTracking)
             {
-                return new Company();
+                query = query.AsNoTracking();
             }
 
-            return company;
+            var companies = await query
+                .Where(company => EF.Functions.Like(company.PhoneNumber, $"{phoneNumber}%"))
+                .ToListAsync();
+
+            return companies;
+        }
+
+        public async Task<IEnumerable<Company>> ReadByTradeNameAsync(string tradeName, bool asNoTracking = false)
+        {
+            var query = Entities.AsQueryable();
+
+            if (asNoTracking)
+            {
+                query = query.AsNoTracking();
+            }
+
+            var companies = await query
+                .Where(company => EF.Functions.Like(company.TradeName, $"{tradeName}%"))
+                .ToListAsync();
+
+            return companies;
         }
     }
 }

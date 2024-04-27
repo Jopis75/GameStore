@@ -1,8 +1,9 @@
 ﻿using Domain.Entities;
+using Domain.Filters;
 
 namespace Application.Interfaces.Persistance
 {
-    public interface IReviewRepository : IRepositoryBase<Review>
+    public interface IReviewRepository : IRepositoryBase<Review, ReviewFilter>
     {
         Task<IEnumerable<Review>> ReadByGradeAsync(int grade, bool asNoTracking = false);
 

@@ -1,11 +1,12 @@
 ﻿using Application.Interfaces.Persistance;
 using Domain.Entities;
+using Domain.Filters;
 using Microsoft.EntityFrameworkCore;
 using Persistance.DbContexts;
 
 namespace Persistance.Repositories
 {
-    public class AddressRepository : RepositoryBase<Address>, IAddressRepository
+    public class AddressRepository : RepositoryBase<Address, AddressFilter>, IAddressRepository
     {
         public AddressRepository(GameStoreDbContext gameStoreDbContext)
             : base(gameStoreDbContext) { }
@@ -24,6 +25,11 @@ namespace Persistance.Repositories
                 .ToListAsync();
 
             return addresses;
+        }
+
+        public override Task<IEnumerable<Address>> ReadByFilterAsync(AddressFilter filter, bool asNoTracking = false)
+        {
+            throw new NotImplementedException();
         }
 
         public async Task<IEnumerable<Address>> ReadByStreetAddressAsync(string streetAddress, bool asNoTracking = false)

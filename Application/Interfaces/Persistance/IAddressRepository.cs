@@ -1,8 +1,9 @@
 ﻿using Domain.Entities;
+using Domain.Filters;
 
 namespace Application.Interfaces.Persistance
 {
-    public interface IAddressRepository : IRepositoryBase<Address>
+    public interface IAddressRepository : IRepositoryBase<Address, AddressFilter>
     {
         Task<IEnumerable<Address>> ReadByCityAsync(string city, bool asNoTracking = false);
 

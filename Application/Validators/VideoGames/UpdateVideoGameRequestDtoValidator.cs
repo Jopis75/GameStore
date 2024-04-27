@@ -21,8 +21,8 @@ namespace Application.Validators.VideoGames
                 .WithMessage("{PropertyName} is required.")
                 .MustAsync(async (title, cancellation) =>
                 {
-                    var videoGame = await _unitOfWork.VideoGameRepository.ReadByTitleAsync(title);
-                    return videoGame.Id == 0;
+                    var videoGames = await _unitOfWork.VideoGameRepository.ReadByTitleAsync(title);
+                    return videoGames.Count() == 0;
                 })
                 .WithMessage("{PropertyName} must be unique.");
 

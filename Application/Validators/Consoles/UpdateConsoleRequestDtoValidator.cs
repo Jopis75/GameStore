@@ -21,8 +21,8 @@ namespace Application.Validators.Consoles
                 .WithMessage("{PropertyName} is required.")
                 .MustAsync(async (name, cancellation) =>
                 {
-                    var console = await _unitOfWork.ConsoleRepository.ReadByNameAsync(name);
-                    return console.Id == 0;
+                    var consoles = await _unitOfWork.ConsoleRepository.ReadByNameAsync(name);
+                    return consoles.Count() == 0;
                 })
                 .WithMessage("{PropertyName} must be unique.");
 

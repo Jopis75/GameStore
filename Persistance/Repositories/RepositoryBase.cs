@@ -1,13 +1,15 @@
 ﻿using Application.Interfaces.Persistance;
 using Domain.Entities;
+using Domain.Filters;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Persistance.DbContexts;
 
 namespace Persistance.Repositories
 {
-    public class RepositoryBase<TEntity> : IRepositoryBase<TEntity>
+    public abstract class RepositoryBase<TEntity, TFilter> : IRepositoryBase<TEntity, TFilter>
         where TEntity : EntityBase, new()
+        where TFilter : FilterBase, new()
     {
         private readonly GameStoreDbContext _gameStoreDbContext;
 
@@ -54,26 +56,31 @@ namespace Persistance.Repositories
 
         public async Task<IEnumerable<TEntity>> ReadAllAsync(bool asNoTracking = false)
         {
-            var entities = asNoTracking ?
-                await Entities
-                    .AsNoTracking<TEntity>()
-                    .ToListAsync() :
-                await Entities
-                    .ToListAsync();
+            var query = _entities.AsQueryable();
+
+            if (asNoTracking)
+            {
+                query = query.AsNoTracking();
+            }
+
+            var entities = await query
+                .ToListAsync();
 
             return entities;
         }
 
         public async Task<TEntity> ReadByIdAsync(int id, bool asNoTracking = false)
         {
-            var entity = asNoTracking ?
-                await Entities
-                    .AsNoTracking<TEntity>()
-                    .Where(entity => entity.Id == id)
-                    .SingleOrDefaultAsync() :
-                await Entities
-                    .Where(entity => entity.Id == id)
-                    .SingleOrDefaultAsync();
+            var query = _entities.AsQueryable();
+
+            if (asNoTracking)
+            {
+                query = query.AsNoTracking();
+            }
+
+            var entity = await query
+                .Where(entity => entity.Id == id)
+                .SingleOrDefaultAsync();
 
             if (entity == null)
             {
@@ -82,6 +89,8 @@ namespace Persistance.Repositories
 
             return entity;
         }
+
+        public abstract Task<IEnumerable<TEntity>> ReadByFilterAsync(TFilter filter, bool asNoTracking = false);
 
         public Task<TEntity> UpdateAsync(TEntity entity)
         {

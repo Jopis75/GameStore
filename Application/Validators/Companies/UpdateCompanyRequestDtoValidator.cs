@@ -21,8 +21,8 @@ namespace Application.Validators.Companies
                 .WithMessage("{PropertyName} is required.")
                 .MustAsync(async (name, cancellation) =>
                 {
-                    var company = await _unitOfWork.CompanyRepository.ReadByNameAsync(name);
-                    return company.Id == 0;
+                    var companies = await _unitOfWork.CompanyRepository.ReadByNameAsync(name);
+                    return companies.Count() == 0;
                 })
                 .WithMessage("{PropertyName} must be unique.");
 
@@ -32,8 +32,8 @@ namespace Application.Validators.Companies
                 .WithMessage("{PropertyName} is required.")
                 .MustAsync(async (tradeName, cancellation) =>
                 {
-                    var company = await _unitOfWork.CompanyRepository.ReadByTradeNameAsync(tradeName);
-                    return company.Id == 0;
+                    var companies = await _unitOfWork.CompanyRepository.ReadByTradeNameAsync(tradeName);
+                    return companies.Count() == 0;
                 })
                 .WithMessage("{PropertyName} must be unique.");
 
@@ -46,8 +46,8 @@ namespace Application.Validators.Companies
                 .WithMessage("{PropertyName} is not valid.")
                 .MustAsync(async (emailAddress, cancellation) =>
                 {
-                    var company = await _unitOfWork.CompanyRepository.ReadByEmailAddressAsync(emailAddress);
-                    return company.Id == 0;
+                    var companies = await _unitOfWork.CompanyRepository.ReadByEmailAddressAsync(emailAddress);
+                    return companies.Count() == 0;
                 })
                 .WithMessage("{PropertyName} must be unique.");
 
@@ -56,8 +56,8 @@ namespace Application.Validators.Companies
                 .WithMessage("{PropertyName} is not valid.")
                 .MustAsync(async (phoneNumber, cancellation) =>
                 {
-                    var company = await _unitOfWork.CompanyRepository.ReadByPhoneNumberAsync(phoneNumber ?? String.Empty);
-                    return company.Id == 0;
+                    var companies = await _unitOfWork.CompanyRepository.ReadByPhoneNumberAsync(phoneNumber ?? String.Empty);
+                    return companies.Count() == 0;
                 })
                 .WithMessage("{PropertyName} must be unique.");
 

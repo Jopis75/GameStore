@@ -4,8 +4,6 @@
     {
         public string? City { get; set; }
 
-        //public virtual Company? Company { get; set; }
-
         public string? Country { get; set; }
 
         public string? PostalCode { get; set; }

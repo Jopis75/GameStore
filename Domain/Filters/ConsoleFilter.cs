@@ -1,7 +1,6 @@
 ﻿namespace Domain.Filters
 {
-    public class ConsoleFilter : FilterBase
+    public class ConsoleFilter : ProductFilter
     {
-        public string? Name { get; set; }
     }
 }

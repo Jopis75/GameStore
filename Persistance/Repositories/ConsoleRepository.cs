@@ -2,6 +2,7 @@
 using Domain.Filters;
 using Microsoft.EntityFrameworkCore;
 using Persistance.DbContexts;
+using System.Linq.Expressions;
 using Console = Domain.Entities.Console;
 
 namespace Persistance.Repositories
@@ -11,7 +12,7 @@ namespace Persistance.Repositories
         public ConsoleRepository(GameStoreDbContext gameStoreDbContext)
             : base(gameStoreDbContext) { }
 
-        public override Task<IEnumerable<Console>> ReadByFilterAsync(ConsoleFilter filter, bool asNoTracking = false)
+        protected override Task<IEnumerable<Console>> ReadByFilterAsync(ConsoleFilter filter, IQueryable<Console> query, Expression<Func<Console, bool>> predicate)
         {
             throw new NotImplementedException();
         }

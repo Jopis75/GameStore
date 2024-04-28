@@ -9,6 +9,6 @@ namespace Application.Interfaces.Persistance
 
         Task<IEnumerable<Address>> ReadByStreetAddressAsync(string streetAddress, bool asNoTracking = false);
 
-        Task<IEnumerable<Address>> ReadByZipCodeAsync(string postalCode, bool asNoTracking = false);
+        Task<IEnumerable<Address>> ReadByPostalCodeAsync(string postalCode, bool asNoTracking = false);
     }
 }

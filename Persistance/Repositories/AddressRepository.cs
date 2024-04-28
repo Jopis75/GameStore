@@ -3,8 +3,8 @@ using Application.Interfaces.Persistance;
 using Domain.Entities;
 using Domain.Filters;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Query.SqlExpressions;
 using Persistance.DbContexts;
+using System.Linq.Expressions;
 
 namespace Persistance.Repositories
 {
@@ -29,48 +29,35 @@ namespace Persistance.Repositories
             return addresses;
         }
 
-        public override async Task<IEnumerable<Address>> ReadByFilterAsync(AddressFilter filter, bool asNoTracking = false)
+        protected override async Task<IEnumerable<Address>> ReadByFilterAsync(AddressFilter filter, IQueryable<Address> query, Expression<Func<Address, bool>> predicate)
         {
-            var query = Entities.AsQueryable();
-
-            if (asNoTracking)
+            if (filter.City != null)
             {
-                query = query.AsNoTracking();
+                predicate = predicate.And(address => EF.Functions.Like(address.City, $"{filter.City}%"));
             }
 
-            if (filter != null)
+            if (filter.Country != null)
             {
-                var predicateBuilder = PredicateBuilder.New<Address>();
+                predicate = predicate.And(address => EF.Functions.Like(address.Country, $"{filter.Country}%"));
+            }
 
-                if (filter.StreetAddress != null)
-                {
-                    predicateBuilder = predicateBuilder.And(address => EF.Functions.Like(address.StreetAddress, $"{filter.StreetAddress}%"));
-                }
+            if (filter.PostalCode != null)
+            {
+                predicate = predicate.And(address => EF.Functions.Like(address.PostalCode, $"{filter.PostalCode}%"));
+            }
 
-                if (filter.City != null)
-                {
-                    predicateBuilder = predicateBuilder.And(address => EF.Functions.Like(address.City, $"{filter.City}%"));
-                }
+            if (filter.State != null)
+            {
+                predicate = predicate.And(address => EF.Functions.Like(address.State, $"{filter.State}%"));
+            }
 
-                if (filter.State != null)
-                {
-                    predicateBuilder = predicateBuilder.And(address => EF.Functions.Like(address.State, $"{filter.State}%"));
-                }
-
-                if (filter.PostalCode != null)
-                {
-                    predicateBuilder = predicateBuilder.And(address => EF.Functions.Like(address.PostalCode, $"{filter.PostalCode}%"));
-                }
-
-                if (filter.Country != null)
-                {
-                    predicateBuilder = predicateBuilder.And(address => EF.Functions.Like(address.Country, $"{filter.Country}%"));
-                }
-
-                query = query.Where(predicateBuilder);
+            if (filter.StreetAddress != null)
+            {
+                predicate = predicate.And(address => EF.Functions.Like(address.StreetAddress, $"{filter.StreetAddress}%"));
             }
 
             var addresses = await query
+                .Where(predicate)
                 .ToListAsync();
 
             return addresses;
@@ -92,7 +79,7 @@ namespace Persistance.Repositories
             return addresses;
         }
 
-        public async Task<IEnumerable<Address>> ReadByZipCodeAsync(string postalCode, bool asNoTracking = false)
+        public async Task<IEnumerable<Address>> ReadByPostalCodeAsync(string postalCode, bool asNoTracking = false)
         {
             var query = Entities.AsQueryable();
 

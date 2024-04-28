@@ -3,6 +3,7 @@ using Domain.Entities;
 using Domain.Filters;
 using Microsoft.EntityFrameworkCore;
 using Persistance.DbContexts;
+using System.Linq.Expressions;
 
 namespace Persistance.Repositories
 {
@@ -11,7 +12,7 @@ namespace Persistance.Repositories
         public ReviewRepository(GameStoreDbContext gameStoreDbContext)
             : base(gameStoreDbContext) { }
 
-        public override Task<IEnumerable<Review>> ReadByFilterAsync(ReviewFilter filter, bool asNoTracking = false)
+        protected override Task<IEnumerable<Review>> ReadByFilterAsync(ReviewFilter filter, IQueryable<Review> query, Expression<Func<Review, bool>> predicate)
         {
             throw new NotImplementedException();
         }

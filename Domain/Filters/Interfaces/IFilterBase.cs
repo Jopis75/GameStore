@@ -10,7 +10,7 @@
 
         string? DeletedBy { get; }
 
-        int Id { get; }
+        int? Id { get; }
 
         DateTime? UpdatedAt { get; }
 

@@ -1,4 +1,5 @@
-﻿using Application.Interfaces.Persistance;
+﻿using Abp.Linq.Expressions;
+using Application.Interfaces.Persistance;
 using Domain.Filters;
 using Microsoft.EntityFrameworkCore;
 using Persistance.DbContexts;
@@ -12,9 +13,48 @@ namespace Persistance.Repositories
         public ConsoleRepository(GameStoreDbContext gameStoreDbContext)
             : base(gameStoreDbContext) { }
 
-        protected override Task<IEnumerable<Console>> ReadByFilterAsync(ConsoleFilter filter, IQueryable<Console> query, Expression<Func<Console, bool>> predicate)
+        protected override async Task<IEnumerable<Console>> ReadByFilterAsync(ConsoleFilter filter, IQueryable<Console> query, Expression<Func<Console, bool>> predicate)
         {
-            throw new NotImplementedException();
+            if (filter.DeveloperId != null)
+            {
+                predicate = predicate.And(console => console.DeveloperId == filter.DeveloperId);
+            }
+
+            if (filter.ImageUri!= null)
+            {
+                predicate = predicate.And(console => console.ImageUri != null && EF.Functions.Like(console.ImageUri, $"{filter.ImageUri}%"));
+            }
+
+            if (filter.Name != null)
+            {
+                predicate = predicate.And(console => EF.Functions.Like(console.Name, $"{filter.Name}%"));
+            }
+
+            if (filter.Price != null)
+            {
+                predicate = predicate.And(console => console.Price == filter.Price);
+            }
+
+            if (filter.PurchaseDate != null)
+            {
+                predicate = predicate.And(console => console.PurchaseDate.Date == filter.PurchaseDate.Value.Date);
+            }
+
+            if (filter.ReleaseDate != null)
+            {
+                predicate = predicate.And(console => console.ReleaseDate.Date == filter.ReleaseDate.Value.Date);
+            }
+
+            if (filter.Url != null)
+            {
+                predicate = predicate.And(console => console.Url != null && EF.Functions.Like(console.Url, $"{filter.Url}%"));
+            }
+
+            var consoles = await query
+                .Where(predicate)
+                .ToListAsync();
+
+            return consoles;
         }
 
         public async Task<IEnumerable<Console>> ReadByNameAsync(string name, bool asNoTracking = false)

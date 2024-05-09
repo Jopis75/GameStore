@@ -1,4 +1,5 @@
-﻿using Application.Dtos.Common;
+﻿using Application.Dtos.Addresses;
+using Application.Dtos.Common;
 using Application.Dtos.Companies;
 using Application.Features.Companies.Requests.Commands;
 using Application.Interfaces.Persistance;
@@ -35,6 +36,8 @@ namespace Application.Features.Companies.RequestHandlers.Commands
             {
                 _logger.LogInformation("Begin CreateCompany {@CreateCompanyRequest}.", createCompanyRequest);
 
+                cancellationToken.ThrowIfCancellationRequested();
+
                 if (createCompanyRequest.CreateCompanyRequestDto == null)
                 {
                     var httpResponseDto1 = new HttpResponseDto<CreateCompanyResponseDto>(new ArgumentNullException(nameof(createCompanyRequest.CreateCompanyRequestDto)).Message, StatusCodes.Status400BadRequest);
@@ -53,7 +56,7 @@ namespace Application.Features.Companies.RequestHandlers.Commands
 
                 var company = _mapper.Map<Company>(createCompanyRequest.CreateCompanyRequestDto);
                 var createdCompany = await _unitOfWork.CompanyRepository.CreateAsync(company);
-                //await _unitOfWork.SaveAsync();
+                await _unitOfWork.SaveAsync();
 
                 var httpResponseDto = new HttpResponseDto<CreateCompanyResponseDto>(new CreateCompanyResponseDto
                 {
@@ -63,6 +66,12 @@ namespace Application.Features.Companies.RequestHandlers.Commands
                 }, StatusCodes.Status201Created);
                 _logger.LogInformation("Done CreateCompany {@HttpResponseDto}.", httpResponseDto);
                 return httpResponseDto;
+            }
+            catch (OperationCanceledException ex)
+            {
+                var httpResponseDto1 = new HttpResponseDto<CreateCompanyResponseDto>(ex.Message, StatusCodes.Status500InternalServerError);
+                _logger.LogError("Canceled CreateCompany {@HttpResponseDto}.", httpResponseDto1);
+                return httpResponseDto1;
             }
             catch (Exception ex)
             {

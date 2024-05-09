@@ -35,6 +35,8 @@ namespace Application.Features.Companies.RequestHandlers.Commands
             {
                 _logger.LogInformation("Begin CreateCompanyWithAddress {@CreateCompanyWithRequest}.", createCompanyWithAddressRequest);
 
+                cancellationToken.ThrowIfCancellationRequested();
+
                 if (createCompanyWithAddressRequest.CreateCompanyWithAddressRequestDto == null)
                 {
                     var httpResponseDto1 = new HttpResponseDto<CreateCompanyWithAddressResponseDto>(new ArgumentNullException(nameof(createCompanyWithAddressRequest.CreateCompanyWithAddressRequestDto)).Message, StatusCodes.Status400BadRequest);
@@ -67,6 +69,12 @@ namespace Application.Features.Companies.RequestHandlers.Commands
                 }, StatusCodes.Status201Created);
                 _logger.LogInformation("Done CreateCompanyWithAddress {@HttpResponseDto}.", httpResponseDto);
                 return httpResponseDto;
+            }
+            catch (OperationCanceledException ex)
+            {
+                var httpResponseDto1 = new HttpResponseDto<CreateCompanyWithAddressResponseDto>(ex.Message, StatusCodes.Status500InternalServerError);
+                _logger.LogError("Canceled CreateCompanyWithAddress {@HttpResponseDto}.", httpResponseDto1);
+                return httpResponseDto1;
             }
             catch (Exception ex)
             {

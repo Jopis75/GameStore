@@ -34,6 +34,8 @@ namespace Application.Features.Companies.RequestHandlers.Queries
             {
                 _logger.LogInformation("Begin ReadCompanyById {@ReadCompanyByIdRequest}.", readCompanyByIdRequest);
 
+                cancellationToken.ThrowIfCancellationRequested();
+
                 if (readCompanyByIdRequest.ReadByIdRequestDto == null)
                 {
                     var httpResponseDto1 = new HttpResponseDto<ReadCompanyResponseDto>(new ArgumentNullException(nameof(readCompanyByIdRequest.ReadByIdRequestDto)).Message, StatusCodes.Status400BadRequest);
@@ -56,6 +58,12 @@ namespace Application.Features.Companies.RequestHandlers.Queries
                 var httpResponseDto = new HttpResponseDto<ReadCompanyResponseDto>(readCompanyResponseDto, StatusCodes.Status200OK);
                 _logger.LogInformation("Done ReadCompanyById {@HttpResponseDto}.", httpResponseDto);
                 return httpResponseDto;
+            }
+            catch (OperationCanceledException ex)
+            {
+                var httpResponseDto1 = new HttpResponseDto<ReadCompanyResponseDto>(ex.Message, StatusCodes.Status500InternalServerError);
+                _logger.LogError("Canceled ReadCompanyById {@HttpResponseDto}.", httpResponseDto1);
+                return httpResponseDto1;
             }
             catch (Exception ex)
             {

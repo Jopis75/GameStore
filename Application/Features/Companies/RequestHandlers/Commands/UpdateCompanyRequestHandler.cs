@@ -34,6 +34,8 @@ namespace Application.Features.Companies.RequestHandlers.Commands
             {
                 _logger.LogInformation("Begin UpdateCompany {@UpdateCompanyRequest}.", updateCompanyRequest);
 
+                cancellationToken.ThrowIfCancellationRequested();
+
                 if (updateCompanyRequest.UpdateCompanyRequestDto == null)
                 {
                     var httpResponseDto1 = new HttpResponseDto<UpdateCompanyResponseDto>(new ArgumentNullException(nameof(updateCompanyRequest.UpdateCompanyRequestDto)).Message, StatusCodes.Status400BadRequest);
@@ -63,6 +65,12 @@ namespace Application.Features.Companies.RequestHandlers.Commands
                 }, StatusCodes.Status200OK);
                 _logger.LogInformation("Done UpdateCompany {@HttpResponseDto}.", httpResponseDto);
                 return httpResponseDto;
+            }
+            catch (OperationCanceledException ex)
+            {
+                var httpResponseDto1 = new HttpResponseDto<UpdateCompanyResponseDto>(ex.Message, StatusCodes.Status500InternalServerError);
+                _logger.LogError("Canceled UpdateCompany {@HttpResponseDto}.", httpResponseDto1);
+                return httpResponseDto1;
             }
             catch (Exception ex)
             {

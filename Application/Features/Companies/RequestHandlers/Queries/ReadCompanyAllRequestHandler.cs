@@ -30,6 +30,8 @@ namespace Application.Features.Companies.RequestHandlers.Queries
             {
                 _logger.LogInformation("Begin ReadCompanyAll {@ReadCompanyAllRequest}.", readCompanyAllRequest);
 
+                cancellationToken.ThrowIfCancellationRequested();
+
                 var companies = await _unitOfWork.CompanyRepository.ReadAllAsync(true);
                 var readCompanyAllResponseDtos = companies
                     .Select(_mapper.Map<ReadCompanyResponseDto>)
@@ -38,6 +40,12 @@ namespace Application.Features.Companies.RequestHandlers.Queries
                 var httpResponseDto = new HttpResponseDto<List<ReadCompanyResponseDto>>(readCompanyAllResponseDtos, StatusCodes.Status200OK);
                 _logger.LogInformation("Done ReadCompanyAll {@HttpResponseDto}.", httpResponseDto);
                 return httpResponseDto;
+            }
+            catch (OperationCanceledException ex)
+            {
+                var httpResponseDto1 = new HttpResponseDto<List<ReadCompanyResponseDto>>(ex.Message, StatusCodes.Status500InternalServerError);
+                _logger.LogError("Canceled ReadCompanyAll {@HttpResponseDto}.", httpResponseDto1);
+                return httpResponseDto1;
             }
             catch (Exception ex)
             {

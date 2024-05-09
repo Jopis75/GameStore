@@ -30,6 +30,8 @@ namespace Application.Features.Companies.RequestHandlers.Commands
             {
                 _logger.LogInformation("Begin DeleteCompany {@DeleteCompanyRequest}.", deleteCompanyRequest);
 
+                cancellationToken.ThrowIfCancellationRequested();
+
                 if (deleteCompanyRequest.DeleteCompanyRequestDto == null)
                 {
                     var httpResponseDto1 = new HttpResponseDto<DeleteCompanyResponseDto>(new ArgumentNullException(nameof(deleteCompanyRequest.DeleteCompanyRequestDto)).Message, StatusCodes.Status400BadRequest);
@@ -58,6 +60,12 @@ namespace Application.Features.Companies.RequestHandlers.Commands
                 }, StatusCodes.Status200OK);
                 _logger.LogInformation("Done DeleteCompany {@HttpResponseDto}.", httpResponseDto);
                 return httpResponseDto;
+            }
+            catch (OperationCanceledException ex)
+            {
+                var httpResponseDto1 = new HttpResponseDto<DeleteCompanyResponseDto>(ex.Message, StatusCodes.Status500InternalServerError);
+                _logger.LogError("Canceled DeleteCompany {@HttpResponseDto}.", httpResponseDto1);
+                return httpResponseDto1;
             }
             catch (Exception ex)
             {

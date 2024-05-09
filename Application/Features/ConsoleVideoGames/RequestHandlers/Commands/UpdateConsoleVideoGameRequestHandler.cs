@@ -34,6 +34,8 @@ namespace Application.Features.ConsoleVideoGames.RequestHandlers.Commands
             {
                 _logger.LogInformation("Begin UpdateConsoleVideoGame {@UpdateConsoleVideoGameRequest}.", updateConsoleVideoGameRequest);
 
+                cancellationToken.ThrowIfCancellationRequested();
+
                 if (updateConsoleVideoGameRequest.UpdateConsoleVideoGameRequestDto == null)
                 {
                     var httpResponseDto1 = new HttpResponseDto<UpdateConsoleVideoGameResponseDto>(new ArgumentNullException(nameof(updateConsoleVideoGameRequest.UpdateConsoleVideoGameRequestDto)).Message, StatusCodes.Status400BadRequest);
@@ -63,6 +65,12 @@ namespace Application.Features.ConsoleVideoGames.RequestHandlers.Commands
                 }, StatusCodes.Status200OK);
                 _logger.LogInformation("Done UpdateConsoleVideoGame {@HttpResponseDto}.", httpResponseDto);
                 return httpResponseDto;
+            }
+            catch (OperationCanceledException ex)
+            {
+                var httpResponseDto1 = new HttpResponseDto<UpdateConsoleVideoGameResponseDto>(ex.Message, StatusCodes.Status500InternalServerError);
+                _logger.LogError("Canceled UpdateConsoleVideoGame {@HttpResponseDto}.", httpResponseDto1);
+                return httpResponseDto1;
             }
             catch (Exception ex)
             {

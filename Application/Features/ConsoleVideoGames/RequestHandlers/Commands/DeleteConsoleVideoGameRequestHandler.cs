@@ -31,6 +31,8 @@ namespace Application.Features.ConsoleVideoGames.RequestHandlers.Commands
             {
                 _logger.LogInformation("Begin DeleteConsoleVideoGame {@DeleteConsoleVideoGameRequest}.", deleteConsoleVideoGameRequest);
 
+                cancellationToken.ThrowIfCancellationRequested();
+
                 if (deleteConsoleVideoGameRequest.DeleteConsoleVideoGameRequestDto == null)
                 {
                     var httpResponseDto1 = new HttpResponseDto<DeleteConsoleVideoGameResponseDto>(new ArgumentNullException(nameof(deleteConsoleVideoGameRequest.DeleteConsoleVideoGameRequestDto)).Message, StatusCodes.Status400BadRequest);
@@ -59,6 +61,12 @@ namespace Application.Features.ConsoleVideoGames.RequestHandlers.Commands
                 }, StatusCodes.Status200OK);
                 _logger.LogInformation("Done DeleteConsoleVideoGame {@HttpResponseDto}.", httpResponseDto);
                 return httpResponseDto;
+            }
+            catch (OperationCanceledException ex)
+            {
+                var httpResponseDto1 = new HttpResponseDto<DeleteConsoleVideoGameResponseDto>(ex.Message, StatusCodes.Status500InternalServerError);
+                _logger.LogError("Canceled DeleteConsoleVideoGame {@HttpResponseDto}.", httpResponseDto1);
+                return httpResponseDto1;
             }
             catch (Exception ex)
             {

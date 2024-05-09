@@ -30,6 +30,8 @@ namespace Application.Features.ConsoleVideoGames.RequestHandlers.Queries
             {
                 _logger.LogInformation("Begin ReadConsoleVideoGameAll {@ReadConsoleVideoGameAllRequest}.", readConsoleVideoGameAllRequest);
 
+                cancellationToken.ThrowIfCancellationRequested();
+
                 var consoleVideoGames = await _unitOfWork.ConsoleVideoGameRepository.ReadAllAsync(true);
                 var readConsoleVideoGameResponseDtos = consoleVideoGames
                     .Select(_mapper.Map<ReadConsoleVideoGameResponseDto>)
@@ -38,6 +40,12 @@ namespace Application.Features.ConsoleVideoGames.RequestHandlers.Queries
                 var httpResponseDto = new HttpResponseDto<List<ReadConsoleVideoGameResponseDto>>(readConsoleVideoGameResponseDtos, StatusCodes.Status200OK);
                 _logger.LogInformation("Done ReadConsoleVideoGameAll {@HttpResponseDto}.", httpResponseDto);
                 return httpResponseDto;
+            }
+            catch (OperationCanceledException ex)
+            {
+                var httpResponseDto1 = new HttpResponseDto<List<ReadConsoleVideoGameResponseDto>>(ex.Message, StatusCodes.Status500InternalServerError);
+                _logger.LogError("Canceled ReadConsoleVideoGameAll {@HttpResponseDto}.", httpResponseDto1);
+                return httpResponseDto1;
             }
             catch (Exception ex)
             {

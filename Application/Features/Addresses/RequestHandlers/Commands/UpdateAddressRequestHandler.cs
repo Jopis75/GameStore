@@ -34,6 +34,8 @@ namespace Application.Features.Addresses.RequestHandlers.Commands
             {
                 _logger.LogInformation("Begin UpdateAddress {@UpdateAddressRequest}.", updateAddressRequest);
 
+                cancellationToken.ThrowIfCancellationRequested();
+
                 if (updateAddressRequest.UpdateAddressRequestDto == null)
                 {
                     var httpResponseDto1 = new HttpResponseDto<UpdateAddressResponseDto>(new ArgumentNullException(nameof(updateAddressRequest.UpdateAddressRequestDto)).Message, StatusCodes.Status400BadRequest);
@@ -63,6 +65,12 @@ namespace Application.Features.Addresses.RequestHandlers.Commands
                 }, StatusCodes.Status200OK);
                 _logger.LogInformation("Done UpdateAddress {@HttpResponseDto}.", httpResponseDto);
                 return httpResponseDto;
+            }
+            catch (OperationCanceledException ex)
+            {
+                var httpResponseDto1 = new HttpResponseDto<UpdateAddressResponseDto>(ex.Message, StatusCodes.Status500InternalServerError);
+                _logger.LogError("Canceled UpdateAddress {@HttpResponseDto}.", httpResponseDto1);
+                return httpResponseDto1;
             }
             catch (Exception ex)
             {

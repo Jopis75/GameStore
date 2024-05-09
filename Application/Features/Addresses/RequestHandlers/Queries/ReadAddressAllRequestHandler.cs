@@ -30,6 +30,8 @@ namespace Application.Features.Addresses.RequestHandlers.Queries
             {
                 _logger.LogInformation("Begin ReadAddressAll {@ReadAddressAllRequest}.", readAddressAllRequest);
 
+                cancellationToken.ThrowIfCancellationRequested();
+
                 var addresses = await _unitOfWork.AddressRepository.ReadAllAsync(true);
                 var readAddressResponseDtos = addresses
                     .Select(_mapper.Map<ReadAddressResponseDto>)
@@ -38,6 +40,12 @@ namespace Application.Features.Addresses.RequestHandlers.Queries
                 var httpResponseDto = new HttpResponseDto<List<ReadAddressResponseDto>>(readAddressResponseDtos, StatusCodes.Status200OK);
                 _logger.LogInformation("Done ReadAddressAll {@HttpResponseDto}.", httpResponseDto);
                 return httpResponseDto;
+            }
+            catch (OperationCanceledException ex)
+            {
+                var httpResponseDto1 = new HttpResponseDto<List<ReadAddressResponseDto>>(ex.Message, StatusCodes.Status500InternalServerError);
+                _logger.LogError("Canceled ReadAddressAll {@HttpResponseDto}.", httpResponseDto1);
+                return httpResponseDto1;
             }
             catch (Exception ex)
             {

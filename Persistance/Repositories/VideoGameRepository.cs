@@ -1,4 +1,5 @@
-﻿using Application.Interfaces.Persistance;
+﻿using Abp.Linq.Expressions;
+using Application.Interfaces.Persistance;
 using Domain.Entities;
 using Domain.Filters;
 using Microsoft.EntityFrameworkCore;
@@ -49,9 +50,53 @@ namespace Persistance.Repositories
             return videoGames;
         }
 
-        protected override Task<IEnumerable<VideoGame>> ReadByFilterAsync(VideoGameFilter filter, IQueryable<VideoGame> query, Expression<Func<VideoGame, bool>> predicate)
+        protected override async Task<IEnumerable<VideoGame>> ReadByFilterAsync(VideoGameFilter filter, IQueryable<VideoGame> query, Expression<Func<VideoGame, bool>> predicate)
         {
-            throw new NotImplementedException();
+            if (filter.DeveloperId != null)
+            {
+                predicate = predicate.And(console => console.DeveloperId == filter.DeveloperId);
+            }
+
+            if (filter.ImageUri != null)
+            {
+                predicate = predicate.And(console => console.ImageUri != null && EF.Functions.Like(console.ImageUri, $"{filter.ImageUri}%"));
+            }
+
+            if (filter.Name != null)
+            {
+                predicate = predicate.And(console => EF.Functions.Like(console.Name, $"{filter.Name}%"));
+            }
+
+            if (filter.Price != null)
+            {
+                predicate = predicate.And(console => console.Price == filter.Price);
+            }
+
+            if (filter.PurchaseDate != null)
+            {
+                predicate = predicate.And(console => console.PurchaseDate.Date == filter.PurchaseDate.Value.Date);
+            }
+
+            if (filter.ReleaseDate != null)
+            {
+                predicate = predicate.And(console => console.ReleaseDate.Date == filter.ReleaseDate.Value.Date);
+            }
+
+            if (filter.Url != null)
+            {
+                predicate = predicate.And(console => console.Url != null && EF.Functions.Like(console.Url, $"{filter.Url}%"));
+            }
+
+            if (filter.Title != null)
+            {
+                predicate = predicate.And(videoGame => EF.Functions.Like(videoGame.Title, $"{filter.Title}%"));
+            }
+
+            var videoGames = await query
+                .Where(predicate)
+                .ToListAsync();
+
+            return videoGames;
         }
 
         public async Task<IEnumerable<VideoGame>> ReadByPriceAsync(decimal fromPrice, decimal toPrice, bool asNoTracking = false)

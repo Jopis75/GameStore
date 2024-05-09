@@ -35,6 +35,8 @@ namespace Application.Features.Addresses.RequestHandlers.Commands
             {
                 _logger.LogInformation("Begin CreateAddress {@CreateAddressRequest}.", createAddressRequest);
 
+                cancellationToken.ThrowIfCancellationRequested();
+
                 if (createAddressRequest.CreateAddressRequestDto == null)
                 {
                     var httpResponseDto1 = new HttpResponseDto<CreateAddressResponseDto>(new ArgumentNullException(nameof(createAddressRequest.CreateAddressRequestDto)).Message, StatusCodes.Status400BadRequest);
@@ -63,6 +65,12 @@ namespace Application.Features.Addresses.RequestHandlers.Commands
                 }, StatusCodes.Status201Created);
                 _logger.LogInformation("Done CreateAddress {@HttpResponseDto}.", httpResponseDto);
                 return httpResponseDto;
+            }
+            catch (OperationCanceledException ex)
+            {
+                var httpResponseDto1 = new HttpResponseDto<CreateAddressResponseDto>(ex.Message, StatusCodes.Status500InternalServerError);
+                _logger.LogError("Canceled CreateAddress {@HttpResponseDto}.", httpResponseDto1);
+                return httpResponseDto1;
             }
             catch (Exception ex)
             {

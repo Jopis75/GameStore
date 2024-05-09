@@ -30,6 +30,8 @@ namespace Application.Features.Addresses.RequestHandlers.Commands
             {
                 _logger.LogInformation("Begin DeleteAddress {@DeleteAddressRequest}.", deleteAddressRequest);
 
+                cancellationToken.ThrowIfCancellationRequested();
+
                 if (deleteAddressRequest.DeleteAddressRequestDto == null)
                 {
                     var httpResponseDto1 = new HttpResponseDto<DeleteAddressResponseDto>(new ArgumentNullException(nameof(deleteAddressRequest.DeleteAddressRequestDto)).Message, StatusCodes.Status400BadRequest);
@@ -58,6 +60,12 @@ namespace Application.Features.Addresses.RequestHandlers.Commands
                 }, StatusCodes.Status200OK);
                 _logger.LogInformation("Done DeleteAddress {@HttpResponseDto}.", httpResponseDto);
                 return httpResponseDto;
+            }
+            catch (OperationCanceledException ex)
+            {
+                var httpResponseDto1 = new HttpResponseDto<DeleteAddressResponseDto>(ex.Message, StatusCodes.Status500InternalServerError);
+                _logger.LogError("Canceled DeleteAddress {@HttpResponseDto}.", httpResponseDto1);
+                return httpResponseDto1;
             }
             catch (Exception ex)
             {

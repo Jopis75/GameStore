@@ -1,4 +1,5 @@
-﻿using Application.Interfaces.Persistance;
+﻿using Abp.Linq.Expressions;
+using Application.Interfaces.Persistance;
 using Domain.Entities;
 using Domain.Filters;
 using Microsoft.EntityFrameworkCore;
@@ -12,9 +13,23 @@ namespace Persistance.Repositories
         public ReviewRepository(GameStoreDbContext gameStoreDbContext)
             : base(gameStoreDbContext) { }
 
-        protected override Task<IEnumerable<Review>> ReadByFilterAsync(ReviewFilter filter, IQueryable<Review> query, Expression<Func<Review, bool>> predicate)
+        protected override async Task<IEnumerable<Review>> ReadByFilterAsync(ReviewFilter filter, IQueryable<Review> query, Expression<Func<Review, bool>> predicate)
         {
-            throw new NotImplementedException();
+            if (filter.Grade != null)
+            {
+                predicate = predicate.And(review => review.Grade == filter.Grade);
+            }
+
+            if (filter.ReviewDate != null)
+            {
+                predicate = predicate.And(review => review.ReviewDate.Date == filter.ReviewDate.Value.Date);
+            }
+
+            var reviews = await query
+                .Where(predicate)
+                .ToListAsync();
+
+            return reviews;
         }
 
         public async Task<IEnumerable<Review>> ReadByGradeAsync(int grade, bool asNoTracking = false)

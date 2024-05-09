@@ -34,6 +34,8 @@ namespace Application.Features.Addresses.RequestHandlers.Queries
             {
                 _logger.LogInformation("Begin ReadAddressById {@ReadAddressByIdRequest}.", readAddressByIdRequest);
 
+                cancellationToken.ThrowIfCancellationRequested();
+
                 if (readAddressByIdRequest.ReadByIdRequestDto == null)
                 {
                     var httpResponseDto1 = new HttpResponseDto<ReadAddressResponseDto>(new ArgumentNullException(nameof(readAddressByIdRequest.ReadByIdRequestDto)).Message, StatusCodes.Status400BadRequest);
@@ -56,6 +58,12 @@ namespace Application.Features.Addresses.RequestHandlers.Queries
                 var httpResponseDto = new HttpResponseDto<ReadAddressResponseDto>(readAddressResponseDto, StatusCodes.Status200OK);
                 _logger.LogInformation("Done ReadAddressById {@HttpResponseDto}.", httpResponseDto);
                 return httpResponseDto;
+            }
+            catch (OperationCanceledException ex)
+            {
+                var httpResponseDto1 = new HttpResponseDto<ReadAddressResponseDto>(ex.Message, StatusCodes.Status500InternalServerError);
+                _logger.LogError("Canceled ReadAddressById {@HttpResponseDto}.", httpResponseDto1);
+                return httpResponseDto1;
             }
             catch (Exception ex)
             {

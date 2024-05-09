@@ -1,6 +1,6 @@
 ﻿namespace Domain.Filters
 {
-    public class VideoGameFilter : FilterBase
+    public class VideoGameFilter : ProductFilter
     {
         public string? Title { get; set; }
     }

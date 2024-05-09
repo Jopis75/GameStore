@@ -20,7 +20,7 @@ namespace Persistance.Repositories
                 predicate = predicate.And(console => console.DeveloperId == filter.DeveloperId);
             }
 
-            if (filter.ImageUri!= null)
+            if (filter.ImageUri != null)
             {
                 predicate = predicate.And(console => console.ImageUri != null && EF.Functions.Like(console.ImageUri, $"{filter.ImageUri}%"));
             }

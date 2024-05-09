@@ -1,4 +1,5 @@
-﻿using Application.Interfaces.Persistance;
+﻿using Abp.Linq.Expressions;
+using Application.Interfaces.Persistance;
 using Domain.Entities;
 using Domain.Filters;
 using Microsoft.EntityFrameworkCore;
@@ -12,9 +13,23 @@ namespace Persistance.Repositories
         public ConsoleVideoGameRepository(GameStoreDbContext gameStoreDbContext)
             : base(gameStoreDbContext) { }
 
-        protected override Task<IEnumerable<ConsoleVideoGame>> ReadByFilterAsync(ConsoleVideoGameFilter filter, IQueryable<ConsoleVideoGame> query, Expression<Func<ConsoleVideoGame, bool>> predicate)
+        protected override async Task<IEnumerable<ConsoleVideoGame>> ReadByFilterAsync(ConsoleVideoGameFilter filter, IQueryable<ConsoleVideoGame> query, Expression<Func<ConsoleVideoGame, bool>> predicate)
         {
-            throw new NotImplementedException();
+            if (filter.ConsoleId != null)
+            {
+                predicate = predicate.And(consoleVideoGame => consoleVideoGame.ConsoleId == filter.ConsoleId);
+            }
+
+            if (filter.VideoGameId != null)
+            {
+                predicate = predicate.And(consoleVideoGame => consoleVideoGame.VideoGameId == filter.VideoGameId);
+            }
+
+            var consoleVideoGames = await query
+                .Where(predicate)
+                .ToListAsync();
+
+            return consoleVideoGames;
         }
 
         public async Task<IEnumerable<ConsoleVideoGame>> ReadByConsoleIdAsync(int consoleId, bool asNoTracking = false)

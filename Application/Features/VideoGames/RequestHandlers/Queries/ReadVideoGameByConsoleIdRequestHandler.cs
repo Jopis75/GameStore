@@ -34,6 +34,8 @@ namespace Application.Features.VideoGames.RequestHandlers.Queries
             {
                 _logger.LogInformation("Begin ReadVideoGameByConsoleId {@ReadVideoGameByConsoleIdRequest}.", readVideoGameByConsoleIdRequest);
 
+                cancellationToken.ThrowIfCancellationRequested();
+
                 if (readVideoGameByConsoleIdRequest.ReadVideoGameByConsoleIdRequestDto == null)
                 {
                     var httpResponseDto1 = new HttpResponseDto<List<ReadVideoGameResponseDto>>(new ArgumentNullException(nameof(readVideoGameByConsoleIdRequest.ReadVideoGameByConsoleIdRequestDto)).Message, StatusCodes.Status400BadRequest);
@@ -58,6 +60,12 @@ namespace Application.Features.VideoGames.RequestHandlers.Queries
                 var httpResponseDto = new HttpResponseDto<List<ReadVideoGameResponseDto>>(readVideoGameResponseDtos, StatusCodes.Status200OK);
                 _logger.LogInformation("Done ReadVideoGameByConsoleId {@HttpResponseDto}.", httpResponseDto);
                 return httpResponseDto;
+            }
+            catch (OperationCanceledException ex)
+            {
+                var httpResponseDto1 = new HttpResponseDto<List<ReadVideoGameResponseDto>>(ex.Message, StatusCodes.Status500InternalServerError);
+                _logger.LogError("Canceled ReadVideoGameByConsoleId {@HttpResponseDto}.", httpResponseDto1);
+                return httpResponseDto1;
             }
             catch (Exception ex)
             {

@@ -34,6 +34,8 @@ namespace Application.Features.VideoGames.RequestHandlers.Queries
             {
                 _logger.LogInformation("Begin ReadMostPlayedVideoGameByConsoleId {@ReadMostPlayedVideoGameByConsoleIdRequest}.", readMostPlayedVideoGameByConsoleIdRequest);
 
+                cancellationToken.ThrowIfCancellationRequested();
+
                 if (readMostPlayedVideoGameByConsoleIdRequest.ReadMostPlayedVideoGameByConsoleIdRequestDto == null)
                 {
                     var httpResponseDto1 = new HttpResponseDto<ReadVideoGameResponseDto>(new ArgumentNullException(nameof(readMostPlayedVideoGameByConsoleIdRequest.ReadMostPlayedVideoGameByConsoleIdRequestDto)).Message, StatusCodes.Status400BadRequest);
@@ -56,6 +58,12 @@ namespace Application.Features.VideoGames.RequestHandlers.Queries
                 var httpResponseDto = new HttpResponseDto<ReadVideoGameResponseDto>(readVideoGameResponseDto, StatusCodes.Status200OK);
                 _logger.LogInformation("Done ReadMostPlayedVideoGameByConsoleId {@HttpResponseDto}.", httpResponseDto);
                 return httpResponseDto;
+            }
+            catch (OperationCanceledException ex)
+            {
+                var httpResponseDto1 = new HttpResponseDto<ReadVideoGameResponseDto>(ex.Message, StatusCodes.Status500InternalServerError);
+                _logger.LogError("Canceled ReadMostPlayedVideoGameByConsoleId {@HttpResponseDto}.", httpResponseDto1);
+                return httpResponseDto1;
             }
             catch (Exception ex)
             {

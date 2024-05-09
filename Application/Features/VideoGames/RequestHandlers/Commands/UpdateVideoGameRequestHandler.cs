@@ -34,6 +34,8 @@ namespace Application.Features.VideoGames.RequestHandlers.Commands
             {
                 _logger.LogInformation("Begin UpdateVideoGame {@UpdateVideoGameRequest}.", updateVideoGameRequest);
 
+                cancellationToken.ThrowIfCancellationRequested();
+
                 if (updateVideoGameRequest.UpdateVideoGameRequestDto == null)
                 {
                     var httpResponseDto1 = new HttpResponseDto<UpdateVideoGameResponseDto>(new ArgumentNullException(nameof(updateVideoGameRequest.UpdateVideoGameRequestDto)).Message, StatusCodes.Status400BadRequest);
@@ -63,6 +65,12 @@ namespace Application.Features.VideoGames.RequestHandlers.Commands
                 }, StatusCodes.Status200OK);
                 _logger.LogInformation("Done UpdateVideoGame {@HttpResponseDto}.", httpResponseDto);
                 return httpResponseDto;
+            }
+            catch (OperationCanceledException ex)
+            {
+                var httpResponseDto1 = new HttpResponseDto<UpdateVideoGameResponseDto>(ex.Message, StatusCodes.Status500InternalServerError);
+                _logger.LogError("Canceled UpdateVideoGame {@HttpResponseDto}.", httpResponseDto1);
+                return httpResponseDto1;
             }
             catch (Exception ex)
             {

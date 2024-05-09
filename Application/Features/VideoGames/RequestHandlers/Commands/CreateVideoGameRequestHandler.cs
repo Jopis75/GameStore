@@ -1,4 +1,5 @@
 ﻿using Application.Dtos.Common;
+using Application.Dtos.Reviews;
 using Application.Dtos.VideoGames;
 using Application.Features.VideoGames.Requests.Commands;
 using Application.Interfaces.Persistance;
@@ -35,6 +36,8 @@ namespace Application.Features.VideoGames.RequestHandlers.Commands
             {
                 _logger.LogInformation("Begin CreateVideoGame {@CreateVideoGameRequest}.", createVideoGameRequest);
 
+                cancellationToken.ThrowIfCancellationRequested();
+
                 if (createVideoGameRequest.CreateVideoGameRequestDto == null)
                 {
                     var httpResponseDto1 = new HttpResponseDto<CreateVideoGameResponseDto>(new ArgumentNullException(nameof(createVideoGameRequest.CreateVideoGameRequestDto)).Message, StatusCodes.Status400BadRequest);
@@ -63,6 +66,12 @@ namespace Application.Features.VideoGames.RequestHandlers.Commands
                 }, StatusCodes.Status201Created);
                 _logger.LogInformation("Done CreateVideoGame {@HttpResponseDto}.", httpResponseDto);
                 return httpResponseDto;
+            }
+            catch (OperationCanceledException ex)
+            {
+                var httpResponseDto1 = new HttpResponseDto<CreateVideoGameResponseDto>(ex.Message, StatusCodes.Status500InternalServerError);
+                _logger.LogError("Canceled CreateVideoGame {@HttpResponseDto}.", httpResponseDto1);
+                return httpResponseDto1;
             }
             catch (Exception ex)
             {

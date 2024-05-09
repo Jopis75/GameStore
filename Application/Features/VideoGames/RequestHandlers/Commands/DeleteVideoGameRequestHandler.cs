@@ -30,6 +30,8 @@ namespace Application.Features.VideoGames.RequestHandlers.Commands
             {
                 _logger.LogInformation("Begin DeleteVideoGame {@DeleteVideoGameRequest}.", deleteVideoGameRequest);
 
+                cancellationToken.ThrowIfCancellationRequested();
+
                 if (deleteVideoGameRequest.DeleteVideoGameRequestDto == null)
                 {
                     var httpResponseDto1 = new HttpResponseDto<DeleteVideoGameResponseDto>(new ArgumentNullException(nameof(deleteVideoGameRequest.DeleteVideoGameRequestDto)).Message, StatusCodes.Status400BadRequest);
@@ -58,6 +60,12 @@ namespace Application.Features.VideoGames.RequestHandlers.Commands
                 }, StatusCodes.Status200OK);
                 _logger.LogInformation("Done DeleteVideoGame {@HttpResponseDto}.", httpResponseDto);
                 return httpResponseDto;
+            }
+            catch (OperationCanceledException ex)
+            {
+                var httpResponseDto1 = new HttpResponseDto<DeleteVideoGameResponseDto>(ex.Message, StatusCodes.Status500InternalServerError);
+                _logger.LogError("Canceled DeleteVideoGame {@HttpResponseDto}.", httpResponseDto1);
+                return httpResponseDto1;
             }
             catch (Exception ex)
             {

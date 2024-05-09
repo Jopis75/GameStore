@@ -1,4 +1,5 @@
 ﻿using Application.Dtos.Common;
+using Application.Dtos.Companies;
 using Application.Dtos.Consoles;
 using Application.Features.Consoles.Requests.Commands;
 using Application.Interfaces.Persistance;
@@ -30,6 +31,8 @@ namespace Application.Features.Consoles.RequestHandlers.Commands
             {
                 _logger.LogInformation("Begin DeleteConsole {@DeleteConsoleRequest}.", deleteConsoleRequest);
 
+                cancellationToken.ThrowIfCancellationRequested();
+
                 if (deleteConsoleRequest.DeleteConsoleRequestDto == null)
                 {
                     var httpResponseDto1 = new HttpResponseDto<DeleteConsoleResponseDto>(new ArgumentNullException(nameof(deleteConsoleRequest.DeleteConsoleRequestDto)).Message, StatusCodes.Status400BadRequest);
@@ -58,6 +61,12 @@ namespace Application.Features.Consoles.RequestHandlers.Commands
                 }, StatusCodes.Status200OK);
                 _logger.LogInformation("Done DeleteConsole {@HttpResponseDto}.", httpResponseDto);
                 return httpResponseDto;
+            }
+            catch (OperationCanceledException ex)
+            {
+                var httpResponseDto1 = new HttpResponseDto<DeleteConsoleResponseDto>(ex.Message, StatusCodes.Status500InternalServerError);
+                _logger.LogError("Canceled DeleteConsole {@HttpResponseDto}.", httpResponseDto1);
+                return httpResponseDto1;
             }
             catch (Exception ex)
             {

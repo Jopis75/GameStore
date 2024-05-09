@@ -1,4 +1,5 @@
 ﻿using Application.Dtos.Common;
+using Application.Dtos.Companies;
 using Application.Dtos.Consoles;
 using Application.Features.Consoles.Requests.Commands;
 using Application.Interfaces.Persistance;
@@ -35,6 +36,8 @@ namespace Application.Features.Consoles.RequestHandlers.Commands
             {
                 _logger.LogInformation("Begin CreateConsole {@CreateConsoleRequest}.", createConsoleRequest);
 
+                cancellationToken.ThrowIfCancellationRequested();
+
                 if (createConsoleRequest.CreateConsoleRequestDto == null)
                 {
                     var httpResponseDto1 = new HttpResponseDto<CreateConsoleResponseDto>(new ArgumentNullException(nameof(createConsoleRequest.CreateConsoleRequestDto)).Message, StatusCodes.Status400BadRequest);
@@ -63,6 +66,12 @@ namespace Application.Features.Consoles.RequestHandlers.Commands
                 }, StatusCodes.Status201Created);
                 _logger.LogInformation("Done CreateConsole {@HttpResponseDto}.", httpResponseDto);
                 return httpResponseDto;
+            }
+            catch (OperationCanceledException ex)
+            {
+                var httpResponseDto1 = new HttpResponseDto<CreateConsoleResponseDto>(ex.Message, StatusCodes.Status500InternalServerError);
+                _logger.LogError("Canceled CreateConsole {@HttpResponseDto}.", httpResponseDto1);
+                return httpResponseDto1;
             }
             catch (Exception ex)
             {

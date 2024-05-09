@@ -34,6 +34,8 @@ namespace Application.Features.Consoles.RequestHandlers.Commands
             {
                 _logger.LogInformation("Begin UpdateConsole {@UpdateConsoleRequest}.", updateConsoleRequest);
 
+                cancellationToken.ThrowIfCancellationRequested();
+
                 if (updateConsoleRequest.UpdateConsoleRequestDto == null)
                 {
                     var httpResponseDto1 = new HttpResponseDto<UpdateConsoleResponseDto>(new ArgumentNullException(nameof(updateConsoleRequest.UpdateConsoleRequestDto)).Message, StatusCodes.Status400BadRequest);
@@ -63,6 +65,12 @@ namespace Application.Features.Consoles.RequestHandlers.Commands
                 }, StatusCodes.Status200OK);
                 _logger.LogInformation("Done UpdateConsole {@HttpResponseDto}.", httpResponseDto);
                 return httpResponseDto;
+            }
+            catch (OperationCanceledException ex)
+            {
+                var httpResponseDto1 = new HttpResponseDto<UpdateConsoleResponseDto>(ex.Message, StatusCodes.Status500InternalServerError);
+                _logger.LogError("Canceled UpdateConsole {@HttpResponseDto}.", httpResponseDto1);
+                return httpResponseDto1;
             }
             catch (Exception ex)
             {

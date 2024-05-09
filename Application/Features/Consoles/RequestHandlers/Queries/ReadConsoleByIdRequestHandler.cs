@@ -34,6 +34,8 @@ namespace Application.Features.Consoles.RequestHandlers.Queries
             {
                 _logger.LogInformation("Begin ReadConsoleById {@ReadConsoleByIdRequest}.", readConsoleByIdRequest);
 
+                cancellationToken.ThrowIfCancellationRequested();
+
                 if (readConsoleByIdRequest.ReadByIdRequestDto == null)
                 {
                     var httpResponseDto1 = new HttpResponseDto<ReadConsoleResponseDto>(new ArgumentNullException(nameof(readConsoleByIdRequest.ReadByIdRequestDto)).Message, StatusCodes.Status400BadRequest);
@@ -56,6 +58,12 @@ namespace Application.Features.Consoles.RequestHandlers.Queries
                 var httpResponseDto = new HttpResponseDto<ReadConsoleResponseDto>(readConsoleResponseDto, StatusCodes.Status200OK);
                 _logger.LogInformation("Done ReadConsoleById {@HttpResponseDto}.", httpResponseDto);
                 return httpResponseDto;
+            }
+            catch (OperationCanceledException ex)
+            {
+                var httpResponseDto1 = new HttpResponseDto<ReadConsoleResponseDto>(ex.Message, StatusCodes.Status500InternalServerError);
+                _logger.LogError("Canceled ReadConsole {@HttpResponseDto}.", httpResponseDto1);
+                return httpResponseDto1;
             }
             catch (Exception ex)
             {

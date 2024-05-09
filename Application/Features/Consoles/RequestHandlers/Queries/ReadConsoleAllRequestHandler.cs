@@ -30,6 +30,8 @@ namespace Application.Features.Consoles.RequestHandlers.Queries
             {
                 _logger.LogInformation("Begin ReadConsoleAll {@ReadConsoleAllRequest}.", readConsoleAllRequest);
 
+                cancellationToken.ThrowIfCancellationRequested();
+
                 var consoles = await _unitOfWork.ConsoleRepository.ReadAllAsync(true);
                 var readConsoleResponseDtos = consoles
                     .Select(_mapper.Map<ReadConsoleResponseDto>)
@@ -38,6 +40,12 @@ namespace Application.Features.Consoles.RequestHandlers.Queries
                 var httpResponseDto = new HttpResponseDto<List<ReadConsoleResponseDto>>(readConsoleResponseDtos, StatusCodes.Status200OK);
                 _logger.LogInformation("Done ReadConsoleAll {@HttpResponseDto}.", httpResponseDto);
                 return httpResponseDto;
+            }
+            catch (OperationCanceledException ex)
+            {
+                var httpResponseDto1 = new HttpResponseDto<List<ReadConsoleResponseDto>>(ex.Message, StatusCodes.Status500InternalServerError);
+                _logger.LogError("Canceled ReadConsoleAll {@HttpResponseDto}.", httpResponseDto1);
+                return httpResponseDto1;
             }
             catch (Exception ex)
             {

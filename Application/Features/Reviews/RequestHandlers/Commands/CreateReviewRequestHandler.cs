@@ -1,4 +1,5 @@
 ﻿using Application.Dtos.Common;
+using Application.Dtos.ConsoleVideoGames;
 using Application.Dtos.Reviews;
 using Application.Features.Reviews.Requests.Commands;
 using Application.Interfaces.Persistance;
@@ -35,6 +36,8 @@ namespace Application.Features.Reviews.RequestHandlers.Commands
             {
                 _logger.LogInformation("Begin CreateReview {@CreateReviewRequest}.", createReviewRequest);
 
+                cancellationToken.ThrowIfCancellationRequested();
+
                 if (createReviewRequest.CreateReviewRequestDto == null)
                 {
                     var httpResponseDto1 = new HttpResponseDto<CreateReviewResponseDto>(new ArgumentNullException(nameof(createReviewRequest.CreateReviewRequestDto)).Message, StatusCodes.Status400BadRequest);
@@ -63,6 +66,12 @@ namespace Application.Features.Reviews.RequestHandlers.Commands
                 }, StatusCodes.Status201Created);
                 _logger.LogInformation("Done CreateReview {@HttpResponseDto}.", httpResponseDto);
                 return httpResponseDto;
+            }
+            catch (OperationCanceledException ex)
+            {
+                var httpResponseDto1 = new HttpResponseDto<CreateReviewResponseDto>(ex.Message, StatusCodes.Status500InternalServerError);
+                _logger.LogError("Canceled CreateReview {@HttpResponseDto}.", httpResponseDto1);
+                return httpResponseDto1;
             }
             catch (Exception ex)
             {

@@ -1,4 +1,5 @@
 ﻿using Application.Dtos.Common;
+using Application.Dtos.ConsoleVideoGames;
 using Application.Dtos.Reviews;
 using Application.Features.Reviews.Requests.Queries;
 using Application.Interfaces.Persistance;
@@ -30,14 +31,22 @@ namespace Application.Features.Reviews.RequestHandlers.Queries
             {
                 _logger.LogInformation("Begin ReadReviewAll {@ReadReviewAllRequest}.", readReviewAllRequest);
 
+                cancellationToken.ThrowIfCancellationRequested();
+
                 var reviews = await _unitOfWork.ReviewRepository.ReadAllAsync(true);
                 var readReviewResponseDtos = reviews
                     .Select(_mapper.Map<ReadReviewResponseDto>)
                     .ToList();
 
                 var httpResponseDto = new HttpResponseDto<List<ReadReviewResponseDto>>(readReviewResponseDtos, StatusCodes.Status200OK);
-                _logger.LogInformation("Done ReadReview {@HttpResponseDto}.", httpResponseDto);
+                _logger.LogInformation("Done ReadReviewAll {@HttpResponseDto}.", httpResponseDto);
                 return httpResponseDto;
+            }
+            catch (OperationCanceledException ex)
+            {
+                var httpResponseDto1 = new HttpResponseDto<List<ReadReviewResponseDto>>(ex.Message, StatusCodes.Status500InternalServerError);
+                _logger.LogError("Canceled ReadReviewAll {@HttpResponseDto}.", httpResponseDto1);
+                return httpResponseDto1;
             }
             catch (Exception ex)
             {

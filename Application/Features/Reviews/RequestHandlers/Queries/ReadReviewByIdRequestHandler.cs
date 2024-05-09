@@ -1,4 +1,5 @@
 ﻿using Application.Dtos.Common;
+using Application.Dtos.ConsoleVideoGames;
 using Application.Dtos.Reviews;
 using Application.Features.Reviews.Requests.Queries;
 using Application.Interfaces.Persistance;
@@ -34,6 +35,8 @@ namespace Application.Features.Reviews.RequestHandlers.Queries
             {
                 _logger.LogInformation("Begin ReadReviewById {@ReadReviewByIdRequest}.", readReviewByIdRequest);
 
+                cancellationToken.ThrowIfCancellationRequested();
+
                 if (readReviewByIdRequest.ReadByIdRequestDto == null)
                 {
                     var httpResponseDto1 = new HttpResponseDto<ReadReviewResponseDto>(new ArgumentNullException(nameof(readReviewByIdRequest.ReadByIdRequestDto)).Message, StatusCodes.Status400BadRequest);
@@ -56,6 +59,12 @@ namespace Application.Features.Reviews.RequestHandlers.Queries
                 var httpResponseDto = new HttpResponseDto<ReadReviewResponseDto>(readReviewResponseDto, StatusCodes.Status200OK);
                 _logger.LogInformation("Done ReadReviewById {@HttpResponseDto}.", httpResponseDto);
                 return httpResponseDto;
+            }
+            catch (OperationCanceledException ex)
+            {
+                var httpResponseDto1 = new HttpResponseDto<ReadReviewResponseDto>(ex.Message, StatusCodes.Status500InternalServerError);
+                _logger.LogError("Canceled ReadReviewById {@HttpResponseDto}.", httpResponseDto1);
+                return httpResponseDto1;
             }
             catch (Exception ex)
             {

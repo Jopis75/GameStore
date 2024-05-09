@@ -1,4 +1,5 @@
 ﻿using Application.Dtos.Common;
+using Application.Dtos.ConsoleVideoGames;
 using Application.Dtos.Reviews;
 using Application.Features.Reviews.Requests.Commands;
 using Application.Interfaces.Persistance;
@@ -30,6 +31,8 @@ namespace Application.Features.Reviews.RequestHandlers.Commands
             {
                 _logger.LogInformation("Begin DeleteReview {@DeleteReviewRequest}.", deleteReviewRequest);
 
+                cancellationToken.ThrowIfCancellationRequested();
+
                 if (deleteReviewRequest.DeleteReviewRequestDto == null)
                 {
                     var httpResponseDto1 = new HttpResponseDto<DeleteReviewResponseDto>(new ArgumentNullException(nameof(deleteReviewRequest.DeleteReviewRequestDto)).Message, StatusCodes.Status400BadRequest);
@@ -58,6 +61,12 @@ namespace Application.Features.Reviews.RequestHandlers.Commands
                 }, StatusCodes.Status200OK);
                 _logger.LogInformation("Done DeleteReview {@HttpResponseDto}.", httpResponseDto);
                 return httpResponseDto;
+            }
+            catch (OperationCanceledException ex)
+            {
+                var httpResponseDto1 = new HttpResponseDto<DeleteReviewResponseDto>(ex.Message, StatusCodes.Status500InternalServerError);
+                _logger.LogError("Canceled DeleteReview {@HttpResponseDto}.", httpResponseDto1);
+                return httpResponseDto1;
             }
             catch (Exception ex)
             {

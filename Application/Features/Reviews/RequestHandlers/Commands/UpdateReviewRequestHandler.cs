@@ -1,4 +1,5 @@
 ﻿using Application.Dtos.Common;
+using Application.Dtos.ConsoleVideoGames;
 using Application.Dtos.Reviews;
 using Application.Features.Reviews.Requests.Commands;
 using Application.Interfaces.Persistance;
@@ -34,6 +35,8 @@ namespace Application.Features.Reviews.RequestHandlers.Commands
             {
                 _logger.LogInformation("Begin UpdateReview {@UpdateReviewRequest}.", updateReviewRequest);
 
+                cancellationToken.ThrowIfCancellationRequested();
+
                 if (updateReviewRequest.UpdateReviewRequestDto == null)
                 {
                     var httpResponseDto1 = new HttpResponseDto<UpdateReviewResponseDto>(new ArgumentNullException(nameof(updateReviewRequest.UpdateReviewRequestDto)).Message, StatusCodes.Status400BadRequest);
@@ -63,6 +66,12 @@ namespace Application.Features.Reviews.RequestHandlers.Commands
                 }, StatusCodes.Status200OK);
                 _logger.LogInformation("Done UpdateReview {@HttpResponseDto}.", httpResponseDto);
                 return httpResponseDto;
+            }
+            catch (OperationCanceledException ex)
+            {
+                var httpResponseDto1 = new HttpResponseDto<UpdateReviewResponseDto>(ex.Message, StatusCodes.Status500InternalServerError);
+                _logger.LogError("Canceled UpdateReview {@HttpResponseDto}.", httpResponseDto1);
+                return httpResponseDto1;
             }
             catch (Exception ex)
             {

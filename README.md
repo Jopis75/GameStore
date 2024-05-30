@@ -19,8 +19,9 @@
 - JWT authentication.
 
 
-ToDo
+Next up:
 - Create Entity Framework Dtos for every entity in the GameStore.Domain project.
 - Add a TDto generic parameter to the IRepositoryBase interface and RepositoryBase class and all other repository interfaces and classes. That parameter will be used to return the Entity Framework Dto for the actual entity in repository queries and commands instead of the actual entity.
 - Convert the solution and all projects to .NET 8.
 - Add paging to repository queries.
+- Add Category entity that relates to VideoGame.

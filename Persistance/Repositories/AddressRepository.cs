@@ -1,5 +1,7 @@
 ﻿using Abp.Linq.Expressions;
 using Application.Interfaces.Persistance;
+using AutoMapper;
+using Domain.Dtos;
 using Domain.Entities;
 using Domain.Filters;
 using Microsoft.EntityFrameworkCore;
@@ -8,12 +10,14 @@ using System.Linq.Expressions;
 
 namespace Persistance.Repositories
 {
-    public class AddressRepository : RepositoryBase<Address, AddressFilter>, IAddressRepository
+    public class AddressRepository : RepositoryBase<Address, AddressDto, AddressFilter>, IAddressRepository
     {
-        public AddressRepository(GameStoreDbContext gameStoreDbContext)
-            : base(gameStoreDbContext) { }
+        public AddressRepository(GameStoreDbContext gameStoreDbContext, IMapper mapper)
+            : base(gameStoreDbContext, mapper)
+        {
+        }
 
-        public async Task<IEnumerable<Address>> ReadByCityAsync(string city, bool asNoTracking = false)
+        public async Task<IEnumerable<AddressDto>> ReadByCityAsync(string city, bool asNoTracking = false)
         {
             var query = Entities.AsQueryable();
 
@@ -26,10 +30,10 @@ namespace Persistance.Repositories
                 .Where(address => EF.Functions.Like(address.City, $"{city}%"))
                 .ToListAsync();
 
-            return addresses;
+            return addresses.Select(Mapper.Map<AddressDto>);
         }
 
-        protected override async Task<IEnumerable<Address>> ReadByFilterAsync(AddressFilter filter, IQueryable<Address> query, Expression<Func<Address, bool>> predicate)
+        protected override async Task<IEnumerable<AddressDto>> ReadByFilterAsync(AddressFilter filter, IQueryable<Address> query, Expression<Func<Address, bool>> predicate)
         {
             if (filter.City != null)
             {
@@ -60,10 +64,10 @@ namespace Persistance.Repositories
                 .Where(predicate)
                 .ToListAsync();
 
-            return addresses;
+            return addresses.Select(Mapper.Map<AddressDto>);
         }
 
-        public async Task<IEnumerable<Address>> ReadByStreetAddressAsync(string streetAddress, bool asNoTracking = false)
+        public async Task<IEnumerable<AddressDto>> ReadByStreetAddressAsync(string streetAddress, bool asNoTracking = false)
         {
             var query = Entities.AsQueryable();
 
@@ -76,10 +80,10 @@ namespace Persistance.Repositories
                 .Where(address => EF.Functions.Like(address.StreetAddress, $"{streetAddress}%"))
                 .ToListAsync();
 
-            return addresses;
+            return addresses.Select(Mapper.Map<AddressDto>);
         }
 
-        public async Task<IEnumerable<Address>> ReadByPostalCodeAsync(string postalCode, bool asNoTracking = false)
+        public async Task<IEnumerable<AddressDto>> ReadByPostalCodeAsync(string postalCode, bool asNoTracking = false)
         {
             var query = Entities.AsQueryable();
 
@@ -92,7 +96,7 @@ namespace Persistance.Repositories
                 .Where(address => EF.Functions.Like(address.PostalCode, $"{postalCode}%"))
                 .ToListAsync();
 
-            return addresses;
+            return addresses.Select(Mapper.Map<AddressDto>);
         }
     }
 }

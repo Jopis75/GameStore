@@ -1,11 +1,11 @@
-﻿using Application.Dtos.Addresses;
-using Application.Dtos.Common;
+﻿using Application.Dtos.Common;
+using Domain.Dtos;
 using MediatR;
 
 namespace Application.Features.Addresses.Requests.Commands
 {
-    public class CreateAddressRequest : IRequest<HttpResponseDto<CreateAddressResponseDto>>
+    public class CreateAddressRequest : IRequest<HttpResponseDto<AddressDto>>
     {
-        public CreateAddressRequestDto? CreateAddressRequestDto { get; set; }
+        public AddressDto? AddressDto { get; set; }
     }
 }

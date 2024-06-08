@@ -1,11 +1,11 @@
-﻿using Application.Dtos.Addresses;
-using Application.Dtos.Common;
+﻿using Application.Dtos.Common;
+using Domain.Dtos;
 using MediatR;
 
 namespace Application.Features.Addresses.Requests.Commands
 {
-    public class DeleteAddressRequest : IRequest<HttpResponseDto<DeleteAddressResponseDto>>
+    public class DeleteAddressRequest : IRequest<HttpResponseDto<AddressDto>>
     {
-        public DeleteAddressRequestDto? DeleteAddressRequestDto { get; set; }
+        public int? Id { get; set; }
     }
 }

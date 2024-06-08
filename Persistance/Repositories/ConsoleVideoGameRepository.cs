@@ -1,5 +1,7 @@
 ﻿using Abp.Linq.Expressions;
 using Application.Interfaces.Persistance;
+using AutoMapper;
+using Domain.Dtos;
 using Domain.Entities;
 using Domain.Filters;
 using Microsoft.EntityFrameworkCore;
@@ -8,12 +10,14 @@ using System.Linq.Expressions;
 
 namespace Persistance.Repositories
 {
-    public class ConsoleVideoGameRepository : RepositoryBase<ConsoleVideoGame, ConsoleVideoGameFilter>, IConsoleVideoGameRepository
+    public class ConsoleVideoGameRepository : RepositoryBase<ConsoleVideoGame, ConsoleVideoGameDto, ConsoleVideoGameFilter>, IConsoleVideoGameRepository
     {
-        public ConsoleVideoGameRepository(GameStoreDbContext gameStoreDbContext)
-            : base(gameStoreDbContext) { }
+        public ConsoleVideoGameRepository(GameStoreDbContext gameStoreDbContext, IMapper mapper)
+            : base(gameStoreDbContext, mapper)
+        {
+        }
 
-        protected override async Task<IEnumerable<ConsoleVideoGame>> ReadByFilterAsync(ConsoleVideoGameFilter filter, IQueryable<ConsoleVideoGame> query, Expression<Func<ConsoleVideoGame, bool>> predicate)
+        protected override async Task<IEnumerable<ConsoleVideoGameDto>> ReadByFilterAsync(ConsoleVideoGameFilter filter, IQueryable<ConsoleVideoGame> query, Expression<Func<ConsoleVideoGame, bool>> predicate)
         {
             if (filter.ConsoleId != null)
             {
@@ -29,10 +33,10 @@ namespace Persistance.Repositories
                 .Where(predicate)
                 .ToListAsync();
 
-            return consoleVideoGames;
+            return consoleVideoGames.Select(Mapper.Map<ConsoleVideoGameDto>);
         }
 
-        public async Task<IEnumerable<ConsoleVideoGame>> ReadByConsoleIdAsync(int consoleId, bool asNoTracking = false)
+        public async Task<IEnumerable<ConsoleVideoGameDto>> ReadByConsoleIdAsync(int consoleId, bool asNoTracking = false)
         {
             var query = Entities.AsQueryable();
 
@@ -45,10 +49,10 @@ namespace Persistance.Repositories
                 .Where(consoleVideoGame => consoleVideoGame.ConsoleId == consoleId)
                 .ToListAsync();
 
-            return consoleVideoGames;
+            return consoleVideoGames.Select(Mapper.Map<ConsoleVideoGameDto>);
         }
 
-        public async Task<IEnumerable<ConsoleVideoGame>> ReadByVideoGameIdAsync(int videoGameId, bool asNoTracking = false)
+        public async Task<IEnumerable<ConsoleVideoGameDto>> ReadByVideoGameIdAsync(int videoGameId, bool asNoTracking = false)
         {
             var query = Entities.AsQueryable();
 
@@ -61,7 +65,7 @@ namespace Persistance.Repositories
                 .Where(consoleVideoGame => consoleVideoGame.VideoGameId == videoGameId)
                 .ToListAsync();
 
-            return consoleVideoGames;
+            return consoleVideoGames.Select(Mapper.Map<ConsoleVideoGameDto>);
         }
     }
 }

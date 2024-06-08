@@ -2,7 +2,7 @@
 
 namespace Domain.Dtos
 {
-    public class DtoBase : IDtoBase
+    public abstract class DtoBase : IDtoBase
     {
         public DateTime? CreatedAt { get; set; }
 

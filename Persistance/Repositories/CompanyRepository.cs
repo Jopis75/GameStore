@@ -1,20 +1,23 @@
 ﻿using Abp.Linq.Expressions;
 using Application.Interfaces.Persistance;
+using AutoMapper;
+using Domain.Dtos;
 using Domain.Entities;
 using Domain.Filters;
 using Microsoft.EntityFrameworkCore;
 using Persistance.DbContexts;
-using System.Formats.Asn1;
 using System.Linq.Expressions;
 
 namespace Persistance.Repositories
 {
-    public class CompanyRepository : RepositoryBase<Company, CompanyFilter>, ICompanyRepository
+    public class CompanyRepository : RepositoryBase<Company, CompanyDto, CompanyFilter>, ICompanyRepository
     {
-        public CompanyRepository(GameStoreDbContext gameStoreDbContext)
-            : base(gameStoreDbContext) { }
+        public CompanyRepository(GameStoreDbContext gameStoreDbContext, IMapper mapper)
+            : base(gameStoreDbContext, mapper)
+        {
+        }
 
-        public async Task<IEnumerable<Company>> ReadByEmailAddressAsync(string emailAddress, bool asNoTracking = false)
+        public async Task<IEnumerable<CompanyDto>> ReadByEmailAddressAsync(string emailAddress, bool asNoTracking = false)
         {
             var query = Entities.AsQueryable();
 
@@ -27,10 +30,10 @@ namespace Persistance.Repositories
                 .Where(company => EF.Functions.Like(company.EmailAddress, $"{emailAddress}%"))
                 .ToListAsync();
 
-            return companies;
+            return companies.Select(Mapper.Map<CompanyDto>);
         }
 
-        protected override async Task<IEnumerable<Company>> ReadByFilterAsync(CompanyFilter filter, IQueryable<Company> query, Expression<Func<Company, bool>> predicate)
+        protected override async Task<IEnumerable<CompanyDto>> ReadByFilterAsync(CompanyFilter filter, IQueryable<Company> query, Expression<Func<Company, bool>> predicate)
         {
             if (filter.CompanyType != null)
             {
@@ -86,10 +89,10 @@ namespace Persistance.Repositories
                 .Where(predicate)
                 .ToListAsync();
 
-            return companies;
+            return companies.Select(Mapper.Map<CompanyDto>);
         }
 
-        public async Task<IEnumerable<Company>> ReadByNameAsync(string name, bool asNoTracking = false)
+        public async Task<IEnumerable<CompanyDto>> ReadByNameAsync(string name, bool asNoTracking = false)
         {
             var query = Entities.AsQueryable();
 
@@ -102,10 +105,10 @@ namespace Persistance.Repositories
                 .Where(company => EF.Functions.Like(company.Name, $"{name}%"))
                 .ToListAsync();
 
-            return companies;
+            return companies.Select(Mapper.Map<CompanyDto>);
         }
 
-        public async Task<IEnumerable<Company>> ReadByPhoneNumberAsync(string phoneNumber, bool asNoTracking = false)
+        public async Task<IEnumerable<CompanyDto>> ReadByPhoneNumberAsync(string phoneNumber, bool asNoTracking = false)
         {
             var query = Entities.AsQueryable();
 
@@ -118,10 +121,10 @@ namespace Persistance.Repositories
                 .Where(company => EF.Functions.Like(company.PhoneNumber, $"{phoneNumber}%"))
                 .ToListAsync();
 
-            return companies;
+            return companies.Select(Mapper.Map<CompanyDto>);
         }
 
-        public async Task<IEnumerable<Company>> ReadByTradeNameAsync(string tradeName, bool asNoTracking = false)
+        public async Task<IEnumerable<CompanyDto>> ReadByTradeNameAsync(string tradeName, bool asNoTracking = false)
         {
             var query = Entities.AsQueryable();
 
@@ -134,7 +137,7 @@ namespace Persistance.Repositories
                 .Where(company => EF.Functions.Like(company.TradeName, $"{tradeName}%"))
                 .ToListAsync();
 
-            return companies;
+            return companies.Select(Mapper.Map<CompanyDto>);
         }
     }
 }

@@ -27,7 +27,7 @@ namespace GameStoreAPI.Controllers
         {
             var httpResponseDto = await _mediator.Send(new CreateAddressRequest
             {
-                CreateAddressRequestDto = createAddressRequestDto
+                AddressDto = createAddressRequestDto
             });
             return StatusCode(httpResponseDto.StatusCode, httpResponseDto);
         }
@@ -41,7 +41,7 @@ namespace GameStoreAPI.Controllers
         {
             var httpResponseDto = await _mediator.Send(new DeleteAddressRequest
             {
-                DeleteAddressRequestDto = new DeleteAddressRequestDto
+                Id = new DeleteAddressRequestDto
                 {
                     Id = id
                 }
@@ -68,7 +68,7 @@ namespace GameStoreAPI.Controllers
         {
             var httpResponseDto = await _mediator.Send(new ReadAddressByIdRequest
             {
-                ReadByIdRequestDto = new ReadByIdRequestDto
+                Id = new ReadByIdRequestDto
                 {
                     Id = id
                 }
@@ -85,7 +85,7 @@ namespace GameStoreAPI.Controllers
         {
             var httpResponseDto = await _mediator.Send(new UpdateAddressRequest
             {
-                UpdateAddressRequestDto = updateAddressRequestDto
+                AddressDto = updateAddressRequestDto
             });
             return StatusCode(httpResponseDto.StatusCode, httpResponseDto);
         }

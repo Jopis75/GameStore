@@ -1,5 +1,7 @@
 ﻿using Abp.Linq.Expressions;
 using Application.Interfaces.Persistance;
+using AutoMapper;
+using Domain.Dtos;
 using Domain.Entities;
 using Domain.Filters;
 using Microsoft.EntityFrameworkCore;
@@ -8,12 +10,14 @@ using System.Linq.Expressions;
 
 namespace Persistance.Repositories
 {
-    public class VideoGameRepository : RepositoryBase<VideoGame, VideoGameFilter>, IVideoGameRepository
+    public class VideoGameRepository : RepositoryBase<VideoGame, VideoGameDto, VideoGameFilter>, IVideoGameRepository
     {
-        public VideoGameRepository(GameStoreDbContext gameStoreDbContext)
-            : base(gameStoreDbContext) { }
-        
-        public async Task<IEnumerable<VideoGame>> ReadByConsoleIdAsync(int consoleId, bool asNoTracking = false)
+        public VideoGameRepository(GameStoreDbContext gameStoreDbContext, IMapper mapper)
+            : base(gameStoreDbContext, mapper)
+        {
+        }
+
+        public async Task<IEnumerable<VideoGameDto>> ReadByConsoleIdAsync(int consoleId, bool asNoTracking = false)
         {
             var query = Entities.AsQueryable();
 
@@ -31,10 +35,10 @@ namespace Persistance.Repositories
                 .Where(videoGame => videoGame.ConsoleVideoGames.Any(consoleVideoGame => consoleVideoGame.ConsoleId == consoleId))
                 .ToListAsync();
 
-            return videoGames;
+            return videoGames.Select(Mapper.Map<VideoGameDto>);
         }
 
-        public async Task<IEnumerable<VideoGame>> ReadByDeveloperIdAsync(int developerId, bool asNoTracking = false)
+        public async Task<IEnumerable<VideoGameDto>> ReadByDeveloperIdAsync(int developerId, bool asNoTracking = false)
         {
             var query = Entities.AsQueryable();
 
@@ -47,10 +51,10 @@ namespace Persistance.Repositories
                 .Where(videoGame => videoGame.DeveloperId == developerId)
                 .ToListAsync();
 
-            return videoGames;
+            return videoGames.Select(Mapper.Map<VideoGameDto>);
         }
 
-        protected override async Task<IEnumerable<VideoGame>> ReadByFilterAsync(VideoGameFilter filter, IQueryable<VideoGame> query, Expression<Func<VideoGame, bool>> predicate)
+        protected override async Task<IEnumerable<VideoGameDto>> ReadByFilterAsync(VideoGameFilter filter, IQueryable<VideoGame> query, Expression<Func<VideoGame, bool>> predicate)
         {
             if (filter.DeveloperId != null)
             {
@@ -96,10 +100,10 @@ namespace Persistance.Repositories
                 .Where(predicate)
                 .ToListAsync();
 
-            return videoGames;
+            return videoGames.Select(Mapper.Map<VideoGameDto>);
         }
 
-        public async Task<IEnumerable<VideoGame>> ReadByPriceAsync(decimal fromPrice, decimal toPrice, bool asNoTracking = false)
+        public async Task<IEnumerable<VideoGameDto>> ReadByPriceAsync(decimal fromPrice, decimal toPrice, bool asNoTracking = false)
         {
             var query = Entities.AsQueryable();
 
@@ -112,10 +116,10 @@ namespace Persistance.Repositories
                 .Where(videoGame => videoGame.Price >= fromPrice && videoGame.Price <= toPrice)
                 .ToListAsync();
 
-            return videoGames;
+            return videoGames.Select(Mapper.Map<VideoGameDto>);
         }
 
-        public async Task<IEnumerable<VideoGame>> ReadByPurchaseDateAsync(DateTime fromPurchaseDate, DateTime toPurchaseDate, bool asNoTracking = false)
+        public async Task<IEnumerable<VideoGameDto>> ReadByPurchaseDateAsync(DateTime fromPurchaseDate, DateTime toPurchaseDate, bool asNoTracking = false)
         {
             var query = Entities.AsQueryable();
 
@@ -128,10 +132,10 @@ namespace Persistance.Repositories
                 .Where(videoGame => videoGame.PurchaseDate.Date >= fromPurchaseDate.Date && videoGame.PurchaseDate.Date <= toPurchaseDate.Date)
                 .ToListAsync();
 
-            return videoGames;
+            return videoGames.Select(Mapper.Map<VideoGameDto>);
         }
 
-        public async Task<IEnumerable<VideoGame>> ReadByReleaseDateAsync(DateTime fromReleaseDate, DateTime toReleaseDate, bool asNoTracking = false)
+        public async Task<IEnumerable<VideoGameDto>> ReadByReleaseDateAsync(DateTime fromReleaseDate, DateTime toReleaseDate, bool asNoTracking = false)
         {
             var query = Entities.AsQueryable();
 
@@ -144,10 +148,10 @@ namespace Persistance.Repositories
                 .Where(videoGame => videoGame.ReleaseDate.Date >= fromReleaseDate.Date && videoGame.ReleaseDate.Date <= toReleaseDate.Date)
                 .ToListAsync();
 
-            return videoGames;
+            return videoGames.Select(Mapper.Map<VideoGameDto>);
         }
 
-        public async Task<IEnumerable<VideoGame>> ReadByTitleAsync(string title, bool asNoTracking = false)
+        public async Task<IEnumerable<VideoGameDto>> ReadByTitleAsync(string title, bool asNoTracking = false)
         {
             var query = Entities.AsQueryable();
 
@@ -160,10 +164,10 @@ namespace Persistance.Repositories
                 .Where(videoGame => EF.Functions.Like(videoGame.Title, $"{title}%"))
                 .ToListAsync();
 
-            return videoGames;
+            return videoGames.Select(Mapper.Map<VideoGameDto>);
         }
 
-        public async Task<VideoGame> ReadMostPlayedByConsoleIdAsync(int consoleId, bool asNoTracking = false)
+        public async Task<VideoGameDto> ReadMostPlayedByConsoleIdAsync(int consoleId, bool asNoTracking = false)
         {
             var query = Entities.AsQueryable();
 
@@ -179,10 +183,10 @@ namespace Persistance.Repositories
 
             if (videoGame == null)
             {
-                return new VideoGame();
+                return new VideoGameDto();
             }
 
-            return videoGame;
+            return Mapper.Map<VideoGameDto>(videoGame);
         }
     }
 }

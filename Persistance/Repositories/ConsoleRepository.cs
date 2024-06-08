@@ -1,5 +1,7 @@
 ﻿using Abp.Linq.Expressions;
 using Application.Interfaces.Persistance;
+using AutoMapper;
+using Domain.Dtos;
 using Domain.Filters;
 using Microsoft.EntityFrameworkCore;
 using Persistance.DbContexts;
@@ -8,12 +10,14 @@ using Console = Domain.Entities.Console;
 
 namespace Persistance.Repositories
 {
-    public class ConsoleRepository : RepositoryBase<Console, ConsoleFilter>, IConsoleRepository
+    public class ConsoleRepository : RepositoryBase<Console, ConsoleDto, ConsoleFilter>, IConsoleRepository
     {
-        public ConsoleRepository(GameStoreDbContext gameStoreDbContext)
-            : base(gameStoreDbContext) { }
+        public ConsoleRepository(GameStoreDbContext gameStoreDbContext, IMapper mapper)
+            : base(gameStoreDbContext, mapper)
+        {
+        }
 
-        protected override async Task<IEnumerable<Console>> ReadByFilterAsync(ConsoleFilter filter, IQueryable<Console> query, Expression<Func<Console, bool>> predicate)
+        protected override async Task<IEnumerable<ConsoleDto>> ReadByFilterAsync(ConsoleFilter filter, IQueryable<Console> query, Expression<Func<Console, bool>> predicate)
         {
             if (filter.DeveloperId != null)
             {
@@ -54,10 +58,10 @@ namespace Persistance.Repositories
                 .Where(predicate)
                 .ToListAsync();
 
-            return consoles;
+            return consoles.Select(Mapper.Map<ConsoleDto>);
         }
 
-        public async Task<IEnumerable<Console>> ReadByNameAsync(string name, bool asNoTracking = false)
+        public async Task<IEnumerable<ConsoleDto>> ReadByNameAsync(string name, bool asNoTracking = false)
         {
             var query = Entities.AsQueryable();
 
@@ -70,7 +74,7 @@ namespace Persistance.Repositories
                 .Where(console => EF.Functions.Like(console.Name, $"{name}%"))
                 .ToListAsync();
 
-            return consoles;
+            return consoles.Select(Mapper.Map<ConsoleDto>);
         }
     }
 }

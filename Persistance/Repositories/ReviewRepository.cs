@@ -1,5 +1,7 @@
 ﻿using Abp.Linq.Expressions;
 using Application.Interfaces.Persistance;
+using AutoMapper;
+using Domain.Dtos;
 using Domain.Entities;
 using Domain.Filters;
 using Microsoft.EntityFrameworkCore;
@@ -8,12 +10,14 @@ using System.Linq.Expressions;
 
 namespace Persistance.Repositories
 {
-    public class ReviewRepository : RepositoryBase<Review, ReviewFilter>, IReviewRepository
+    public class ReviewRepository : RepositoryBase<Review, ReviewDto, ReviewFilter>, IReviewRepository
     {
-        public ReviewRepository(GameStoreDbContext gameStoreDbContext)
-            : base(gameStoreDbContext) { }
+        public ReviewRepository(GameStoreDbContext gameStoreDbContext, IMapper mapper)
+            : base(gameStoreDbContext, mapper)
+        {
+        }
 
-        protected override async Task<IEnumerable<Review>> ReadByFilterAsync(ReviewFilter filter, IQueryable<Review> query, Expression<Func<Review, bool>> predicate)
+        protected override async Task<IEnumerable<ReviewDto>> ReadByFilterAsync(ReviewFilter filter, IQueryable<Review> query, Expression<Func<Review, bool>> predicate)
         {
             if (filter.Grade != null)
             {
@@ -29,10 +33,10 @@ namespace Persistance.Repositories
                 .Where(predicate)
                 .ToListAsync();
 
-            return reviews;
+            return reviews.Select(Mapper.Map<ReviewDto>);
         }
 
-        public async Task<IEnumerable<Review>> ReadByGradeAsync(int grade, bool asNoTracking = false)
+        public async Task<IEnumerable<ReviewDto>> ReadByGradeAsync(int grade, bool asNoTracking = false)
         {
             var query = Entities.AsQueryable();
 
@@ -45,10 +49,10 @@ namespace Persistance.Repositories
                 .Where(review => review.Grade == grade)
                 .ToListAsync();
 
-            return reviews;
+            return reviews.Select(Mapper.Map<ReviewDto>);
         }
 
-        public async Task<IEnumerable<Review>> ReadByGradeAsync(int fromGrade, int toGrade, bool asNoTracking = false)
+        public async Task<IEnumerable<ReviewDto>> ReadByGradeAsync(int fromGrade, int toGrade, bool asNoTracking = false)
         {
             var query = Entities.AsQueryable();
 
@@ -61,10 +65,10 @@ namespace Persistance.Repositories
                 .Where(review => review.Grade >= fromGrade && review.Grade <= toGrade)
                 .ToListAsync();
 
-            return reviews;
+            return reviews.Select(Mapper.Map<ReviewDto>);
         }
 
-        public async Task<IEnumerable<Review>> ReadByReviewDateAsync(DateTime fromReviewDate, DateTime toReviewDate, bool asNoTracking = false)
+        public async Task<IEnumerable<ReviewDto>> ReadByReviewDateAsync(DateTime fromReviewDate, DateTime toReviewDate, bool asNoTracking = false)
         {
             var query = Entities.AsQueryable();
 
@@ -77,10 +81,10 @@ namespace Persistance.Repositories
                 .Where(review => review.ReviewDate.Date >= fromReviewDate.Date && review.ReviewDate.Date <= toReviewDate.Date)
                 .ToListAsync();
 
-            return reviews;
+            return reviews.Select(Mapper.Map<ReviewDto>);
         }
 
-        public async Task<IEnumerable<Review>> ReadByVideoGameIdAsync(int videoGameId, bool asNoTracking = false)
+        public async Task<IEnumerable<ReviewDto>> ReadByVideoGameIdAsync(int videoGameId, bool asNoTracking = false)
         {
             var query = Entities.AsQueryable();
 
@@ -93,7 +97,7 @@ namespace Persistance.Repositories
                 .Where(review => review.VideoGameId == videoGameId)
                 .ToListAsync();
 
-            return reviews;
+            return reviews.Select(Mapper.Map<ReviewDto>);
         }
     }
 }

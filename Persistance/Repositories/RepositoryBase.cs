@@ -1,23 +1,30 @@
 ﻿using Abp.Linq.Expressions;
 using Application.Interfaces.Persistance;
+using AutoMapper;
+using Domain.Dtos;
 using Domain.Entities;
 using Domain.Filters;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
+using Microsoft.EntityFrameworkCore.Internal;
 using Persistance.DbContexts;
 using System.Linq.Expressions;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace Persistance.Repositories
 {
-    public abstract class RepositoryBase<TEntity, TFilter> : IRepositoryBase<TEntity, TFilter>
+    public abstract class RepositoryBase<TEntity, TDto, TFilter> : IRepositoryBase<TEntity, TDto, TFilter>
         where TEntity : EntityBase, new()
+        where TDto : DtoBase, new()
         where TFilter : FilterBase, new()
     {
         private readonly GameStoreDbContext _gameStoreDbContext;
 
         private readonly DbSet<TEntity> _entities;
 
-        public GameStoreDbContext DbContext
+        private readonly IMapper _mapper;
+
+        protected GameStoreDbContext DbContext
         {
             get
             {
@@ -25,7 +32,7 @@ namespace Persistance.Repositories
             }
         }
 
-        public DbSet<TEntity> Entities
+        protected DbSet<TEntity> Entities
         {
             get
             {
@@ -33,22 +40,50 @@ namespace Persistance.Repositories
             }
         }
 
-        public RepositoryBase(GameStoreDbContext gameStoreDbContext)
+        protected IMapper Mapper
+        {
+            get
+            {
+                return _mapper;
+            }
+        }
+
+        public RepositoryBase(GameStoreDbContext gameStoreDbContext, IMapper mapper)
         {
             _gameStoreDbContext = gameStoreDbContext ?? throw new ArgumentNullException(nameof(gameStoreDbContext));
             _entities = _gameStoreDbContext.Set<TEntity>();
+            _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
         }
 
-        public async Task<TEntity> CreateAsync(TEntity entity)
+        public async Task<TDto> CreateAsync(TDto dto)
         {
+            var entity = _mapper.Map<TEntity>(dto);
             EntityEntry<TEntity> entityEntry = await _gameStoreDbContext.AddAsync<TEntity>(entity);
-            return entityEntry.Entity;
+            return _mapper.Map<TDto>(entityEntry.Entity);
         }
 
-        public Task<TEntity> DeleteAsync(TEntity entity)
+        public Task<TDto> DeleteAsync(TDto dto)
         {
+            var entity = _mapper.Map<TEntity>(dto);
             EntityEntry<TEntity> entityEntry = _gameStoreDbContext.Remove<TEntity>(entity);
-            return Task.FromResult<TEntity>(entityEntry.Entity);
+            return Task.FromResult<TDto>(_mapper.Map<TDto>(entityEntry.Entity));
+        }
+
+        public async Task<TDto> DeleteByIdAsync(int id)
+        {
+            var query = Entities.AsQueryable();
+
+            var entity = await query
+                .Where(entity => entity.Id == id)
+                .SingleOrDefaultAsync();
+
+            if (entity == null)
+            {
+                return new TDto();
+            }
+
+            var entityEntry = _gameStoreDbContext.Remove<TEntity>(entity);
+            return _mapper.Map<TDto>(entityEntry.Entity);
         }
 
         public async Task<bool> ExistsAsync(int id)
@@ -56,7 +91,7 @@ namespace Persistance.Repositories
             return await Entities.AnyAsync(entity => entity.Id == id);
         }
 
-        public async Task<IEnumerable<TEntity>> ReadAllAsync(bool asNoTracking = false)
+        public async Task<IEnumerable<TDto>> ReadAllAsync(bool asNoTracking = false)
         {
             var query = _entities.AsQueryable();
 
@@ -65,13 +100,12 @@ namespace Persistance.Repositories
                 query = query.AsNoTracking();
             }
 
-            var entities = await query
-                .ToListAsync();
+            var entities = await query.ToListAsync();
 
-            return entities;
+            return entities.Select(_mapper.Map<TDto>);
         }
 
-        public async Task<IEnumerable<TEntity>> ReadByFilterAsync(TFilter filter, bool asNoTracking = false)
+        public async Task<IEnumerable<TDto>> ReadByFilterAsync(TFilter filter, bool asNoTracking = false)
         {
             var query = Entities.AsQueryable();
 
@@ -120,9 +154,9 @@ namespace Persistance.Repositories
             return await ReadByFilterAsync(filter, query, predicate);
         }
 
-        protected abstract Task<IEnumerable<TEntity>> ReadByFilterAsync(TFilter filter, IQueryable<TEntity> query, Expression<Func<TEntity, bool>> predicate);
+        protected abstract Task<IEnumerable<TDto>> ReadByFilterAsync(TFilter filter, IQueryable<TEntity> query, Expression<Func<TEntity, bool>> predicate);
 
-        public async Task<TEntity> ReadByIdAsync(int id, bool asNoTracking = false)
+        public async Task<TDto> ReadByIdAsync(int id, bool asNoTracking = false)
         {
             var query = _entities.AsQueryable();
 
@@ -137,16 +171,17 @@ namespace Persistance.Repositories
 
             if (entity == null)
             {
-                return new TEntity();
+                return new TDto();
             }
 
-            return entity;
+            return _mapper.Map<TDto>(entity);
         }
 
-        public Task<TEntity> UpdateAsync(TEntity entity)
+        public Task<TDto> UpdateAsync(TDto dto)
         {
+            var entity = _mapper.Map<TEntity>(dto);
             EntityEntry<TEntity> entityEntry = _gameStoreDbContext.Update<TEntity>(entity);
-            return Task.FromResult(entityEntry.Entity);
+            return Task.FromResult(_mapper.Map<TDto>(entityEntry.Entity));
         }
     }
 }

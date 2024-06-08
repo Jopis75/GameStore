@@ -28,7 +28,7 @@ namespace GameStoreAPI.Controllers
         {
             var httpResponseDto = await _mediator.Send(new CreateCompanyRequest
             {
-                CreateCompanyRequestDto = createCompanyRequestDto
+                CompanyDto = createCompanyRequestDto
             });
             return StatusCode(httpResponseDto.StatusCode, httpResponseDto);
         }
@@ -56,7 +56,7 @@ namespace GameStoreAPI.Controllers
         {
             var httpResponseDto = await _mediator.Send(new DeleteCompanyRequest
             {
-                DeleteCompanyRequestDto = new DeleteCompanyRequestDto
+                Id = new DeleteCompanyRequestDto
                 {
                     Id = id
                 }
@@ -83,7 +83,7 @@ namespace GameStoreAPI.Controllers
         {
             var httpResponseDto = await _mediator.Send(new ReadCompanyByIdRequest
             {
-                ReadByIdRequestDto = new ReadByIdRequestDto
+                Id = new ReadByIdRequestDto
                 {
                     Id = id
                 }

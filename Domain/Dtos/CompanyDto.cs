@@ -10,6 +10,8 @@
 
         public AddressDto Headquarter { get; set; } = new();
 
+        public int HeadquarterId { get; set; }
+
         public IndustryEnum Industry { get; set; } = new();
 
         public string? LogoImageUri { get; set; }
@@ -17,6 +19,8 @@
         public string Name { get; set; } = default!;
 
         public CompanyDto? ParentCompany { get; set; } = new();
+
+        public int? ParentCompanyId { get; set; }
 
         public string PhoneNumber { get; set; } = default!;
 

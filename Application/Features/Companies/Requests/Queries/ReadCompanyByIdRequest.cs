@@ -1,11 +1,11 @@
 ﻿using Application.Dtos.Common;
-using Application.Dtos.Companies;
+using Domain.Dtos;
 using MediatR;
 
 namespace Application.Features.Companies.Requests.Queries
 {
-    public class ReadCompanyByIdRequest : IRequest<HttpResponseDto<ReadCompanyResponseDto>>
+    public class ReadCompanyByIdRequest : IRequest<HttpResponseDto<CompanyDto>>
     {
-        public ReadByIdRequestDto? ReadByIdRequestDto { get; set; }
+        public int? Id { get; set; }
     }
 }

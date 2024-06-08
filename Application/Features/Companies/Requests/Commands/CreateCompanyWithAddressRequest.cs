@@ -1,11 +1,11 @@
 ﻿using Application.Dtos.Common;
-using Application.Dtos.Companies;
+using Domain.Dtos;
 using MediatR;
 
 namespace Application.Features.Companies.Requests.Commands
 {
-    public class CreateCompanyWithAddressRequest : IRequest<HttpResponseDto<CreateCompanyWithAddressResponseDto>>
+    public class CreateCompanyWithAddressRequest : IRequest<HttpResponseDto<CompanyDto>>
     {
-        public CreateCompanyWithAddressRequestDto? CreateCompanyWithAddressRequestDto { get; set; }
+        public CompanyDto? CompanyDto { get; set; }
     }
 }

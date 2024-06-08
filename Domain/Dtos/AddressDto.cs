@@ -4,8 +4,6 @@
     {
         public string City { get; set; } = default!;
 
-        public CompanyDto? Company { get; set; } = new();
-
         public string Country { get; set; } = default!;
 
         public string PostalCode { get; set; } = default!;

@@ -1,7 +1,7 @@
 ﻿using Application.Dtos.Common;
-using Application.Dtos.Companies;
 using Application.Features.Companies.Requests.Commands;
 using Application.Interfaces.Persistance;
+using Domain.Dtos;
 using FluentValidation;
 using MediatR;
 using Microsoft.AspNetCore.Http;
@@ -9,22 +9,22 @@ using Microsoft.Extensions.Logging;
 
 namespace Application.Features.Companies.RequestHandlers.Commands
 {
-    public class DeleteCompanyRequestHandler : IRequestHandler<DeleteCompanyRequest, HttpResponseDto<DeleteCompanyResponseDto>>
+    public class DeleteCompanyRequestHandler : IRequestHandler<DeleteCompanyRequest, HttpResponseDto<CompanyDto>>
     {
         private readonly IUnitOfWork _unitOfWork;
 
-        private readonly IValidator<DeleteCompanyRequestDto> _validator;
+        private readonly IValidator<CompanyDto> _validator;
 
         private readonly ILogger<DeleteCompanyRequestHandler> _logger;
 
-        public DeleteCompanyRequestHandler(IUnitOfWork unitOfWork, IValidator<DeleteCompanyRequestDto> validator, ILogger<DeleteCompanyRequestHandler> logger)
+        public DeleteCompanyRequestHandler(IUnitOfWork unitOfWork, IValidator<CompanyDto> validator, ILogger<DeleteCompanyRequestHandler> logger)
         {
             _unitOfWork = unitOfWork ?? throw new ArgumentNullException(nameof(unitOfWork));
             _validator = validator ?? throw new ArgumentNullException(nameof(validator));
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
-        public async Task<HttpResponseDto<DeleteCompanyResponseDto>> Handle(DeleteCompanyRequest deleteCompanyRequest, CancellationToken cancellationToken)
+        public async Task<HttpResponseDto<CompanyDto>> Handle(DeleteCompanyRequest deleteCompanyRequest, CancellationToken cancellationToken)
         {
             try
             {
@@ -32,44 +32,38 @@ namespace Application.Features.Companies.RequestHandlers.Commands
 
                 cancellationToken.ThrowIfCancellationRequested();
 
-                if (deleteCompanyRequest.DeleteCompanyRequestDto == null)
+                if (deleteCompanyRequest.Id == null)
                 {
-                    var httpResponseDto1 = new HttpResponseDto<DeleteCompanyResponseDto>(new ArgumentNullException(nameof(deleteCompanyRequest.DeleteCompanyRequestDto)).Message, StatusCodes.Status400BadRequest);
+                    var httpResponseDto1 = new HttpResponseDto<CompanyDto>(new ArgumentNullException(nameof(deleteCompanyRequest.Id)).Message, StatusCodes.Status400BadRequest);
                     _logger.LogError("Error DeleteCompany {@HttpResponseDto}.", httpResponseDto1);
                     return httpResponseDto1;
                 }
 
-                var validationResult = await _validator.ValidateAsync(deleteCompanyRequest.DeleteCompanyRequestDto, cancellationToken);
+                var validationResult = await _validator.ValidateAsync(deleteCompanyRequest.Id, cancellationToken);
 
                 if (!validationResult.IsValid)
                 {
-                    var httpResponseDto1 = new HttpResponseDto<DeleteCompanyResponseDto>(new ValidationException(validationResult.Errors).Message, StatusCodes.Status400BadRequest);
+                    var httpResponseDto1 = new HttpResponseDto<CompanyDto>(new ValidationException(validationResult.Errors).Message, StatusCodes.Status400BadRequest);
                     _logger.LogError("Error DeleteCompany {@HttpResponseDto}.", httpResponseDto1);
                     return httpResponseDto1;
                 }
 
-                var company = await _unitOfWork.CompanyRepository.ReadByIdAsync(deleteCompanyRequest.DeleteCompanyRequestDto.Id);
-                var deletedCompany = await _unitOfWork.CompanyRepository.DeleteAsync(company);
+                var deletedCompanyDto = await _unitOfWork.CompanyRepository.DeleteByIdAsync(deleteCompanyRequest.Id ?? 0);
                 await _unitOfWork.SaveAsync();
 
-                var httpResponseDto = new HttpResponseDto<DeleteCompanyResponseDto>(new DeleteCompanyResponseDto
-                {
-                    Id = deletedCompany.Id,
-                    DeletedAt = deletedCompany.DeletedAt,
-                    DeletedBy = deletedCompany.DeletedBy,
-                }, StatusCodes.Status200OK);
+                var httpResponseDto = new HttpResponseDto<CompanyDto>(deletedCompanyDto, StatusCodes.Status200OK);
                 _logger.LogInformation("Done DeleteCompany {@HttpResponseDto}.", httpResponseDto);
                 return httpResponseDto;
             }
             catch (OperationCanceledException ex)
             {
-                var httpResponseDto1 = new HttpResponseDto<DeleteCompanyResponseDto>(ex.Message, StatusCodes.Status500InternalServerError);
+                var httpResponseDto1 = new HttpResponseDto<CompanyDto>(ex.Message, StatusCodes.Status500InternalServerError);
                 _logger.LogError("Canceled DeleteCompany {@HttpResponseDto}.", httpResponseDto1);
                 return httpResponseDto1;
             }
             catch (Exception ex)
             {
-                var httpResponseDto1 = new HttpResponseDto<DeleteCompanyResponseDto>(ex.Message, StatusCodes.Status500InternalServerError);
+                var httpResponseDto1 = new HttpResponseDto<CompanyDto>(ex.Message, StatusCodes.Status500InternalServerError);
                 _logger.LogError("Error DeleteCompany {@HttpResponseDto}.", httpResponseDto1);
                 return httpResponseDto1;
             }

@@ -4,6 +4,8 @@
     {
         public CompanyDto Developer { get; set; } = new();
 
+        public int DeveloperId { get; set; }
+
         public string? ImageUri { get; set; }
 
         public string Name { get; set; } = default!;

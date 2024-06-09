@@ -27,7 +27,7 @@ namespace GameStoreAPI.Controllers
         {
             var httpResponseDto = await _mediator.Send(new CreateReviewRequest
             {
-                CreateReviewRequestDto = createReviewRequestDto
+                ReviewDto = createReviewRequestDto
             });
             return StatusCode(httpResponseDto.StatusCode, httpResponseDto);
         }
@@ -68,7 +68,7 @@ namespace GameStoreAPI.Controllers
         {
             var httpResponseDto = await _mediator.Send(new ReadReviewByIdRequest
             {
-                ReadByIdRequestDto = new ReadByIdRequestDto
+                Id = new ReadByIdRequestDto
                 {
                     Id = id
                 }
@@ -85,7 +85,7 @@ namespace GameStoreAPI.Controllers
         {
             var httpResponseDto = await _mediator.Send(new ReadReviewsByVideoGameIdRequest
             {
-                ReadReviewsByVideoGameIdRequestDto = new ReadReviewsByVideoGameIdRequestDto
+                VideoGameId = new ReadReviewsByVideoGameIdRequestDto
                 {
                     VideoGameId = videoGameId
                 }
@@ -102,7 +102,7 @@ namespace GameStoreAPI.Controllers
         {
             var httpResponseDto = await _mediator.Send(new UpdateReviewRequest
             {
-                UpdateReviewRequestDto = updateReviewRequestDto
+                ReviewDto = updateReviewRequestDto
             });
             return StatusCode(httpResponseDto.StatusCode, httpResponseDto);
         }

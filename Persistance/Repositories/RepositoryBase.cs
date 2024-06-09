@@ -75,12 +75,7 @@ namespace Persistance.Repositories
 
             var entity = await query
                 .Where(entity => entity.Id == id)
-                .SingleOrDefaultAsync();
-
-            if (entity == null)
-            {
-                return new TDto();
-            }
+                .SingleAsync();
 
             var entityEntry = _gameStoreDbContext.Remove<TEntity>(entity);
             return _mapper.Map<TDto>(entityEntry.Entity);

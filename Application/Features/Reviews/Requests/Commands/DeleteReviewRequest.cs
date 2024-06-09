@@ -1,11 +1,11 @@
 ﻿using Application.Dtos.Common;
-using Application.Dtos.Reviews;
+using Domain.Dtos;
 using MediatR;
 
 namespace Application.Features.Reviews.Requests.Commands
 {
-    public class DeleteReviewRequest : IRequest<HttpResponseDto<DeleteReviewResponseDto>>
+    public class DeleteReviewRequest : IRequest<HttpResponseDto<ReviewDto>>
     {
-        public DeleteReviewRequestDto? DeleteReviewRequestDto { get; set; }
+        public int? Id { get; set; }
     }
 }

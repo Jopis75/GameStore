@@ -1,10 +1,7 @@
 ﻿using Application.Dtos.Common;
-using Application.Dtos.ConsoleVideoGames;
-using Application.Dtos.Reviews;
 using Application.Features.Reviews.Requests.Commands;
 using Application.Interfaces.Persistance;
-using AutoMapper;
-using Domain.Entities;
+using Domain.Dtos;
 using FluentValidation;
 using MediatR;
 using Microsoft.AspNetCore.Http;
@@ -12,25 +9,22 @@ using Microsoft.Extensions.Logging;
 
 namespace Application.Features.Reviews.RequestHandlers.Commands
 {
-    public class CreateReviewRequestHandler : IRequestHandler<CreateReviewRequest, HttpResponseDto<CreateReviewResponseDto>>
+    public class CreateReviewRequestHandler : IRequestHandler<CreateReviewRequest, HttpResponseDto<ReviewDto>>
     {
         private readonly IUnitOfWork _unitOfWork;
 
-        private readonly IMapper _mapper;
-
-        private readonly IValidator<CreateReviewRequestDto> _validator;
+        private readonly IValidator<ReviewDto> _validator;
 
         private readonly ILogger<CreateReviewRequestHandler> _logger;
 
-        public CreateReviewRequestHandler(IUnitOfWork unitOfWork, IMapper mapper, IValidator<CreateReviewRequestDto> validator, ILogger<CreateReviewRequestHandler> logger)
+        public CreateReviewRequestHandler(IUnitOfWork unitOfWork, IValidator<ReviewDto> validator, ILogger<CreateReviewRequestHandler> logger)
         {
             _unitOfWork = unitOfWork ?? throw new ArgumentNullException(nameof(unitOfWork));
-            _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
             _validator = validator ?? throw new ArgumentNullException(nameof(validator));
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
-        public async Task<HttpResponseDto<CreateReviewResponseDto>> Handle(CreateReviewRequest createReviewRequest, CancellationToken cancellationToken)
+        public async Task<HttpResponseDto<ReviewDto>> Handle(CreateReviewRequest createReviewRequest, CancellationToken cancellationToken)
         {
             try
             {
@@ -38,44 +32,38 @@ namespace Application.Features.Reviews.RequestHandlers.Commands
 
                 cancellationToken.ThrowIfCancellationRequested();
 
-                if (createReviewRequest.CreateReviewRequestDto == null)
+                if (createReviewRequest.ReviewDto == null)
                 {
-                    var httpResponseDto1 = new HttpResponseDto<CreateReviewResponseDto>(new ArgumentNullException(nameof(createReviewRequest.CreateReviewRequestDto)).Message, StatusCodes.Status400BadRequest);
+                    var httpResponseDto1 = new HttpResponseDto<ReviewDto>(new ArgumentNullException(nameof(createReviewRequest.ReviewDto)).Message, StatusCodes.Status400BadRequest);
                     _logger.LogError("Error CreateReview {@HttpResponseDto}.", httpResponseDto1);
                     return httpResponseDto1;
                 }
 
-                var validationResult = await _validator.ValidateAsync(createReviewRequest.CreateReviewRequestDto, cancellationToken);
+                var validationResult = await _validator.ValidateAsync(createReviewRequest.ReviewDto, cancellationToken);
 
                 if (!validationResult.IsValid)
                 {
-                    var httpResponseDto1 = new HttpResponseDto<CreateReviewResponseDto>(new ValidationException(validationResult.Errors).Message, StatusCodes.Status400BadRequest);
+                    var httpResponseDto1 = new HttpResponseDto<ReviewDto>(new ValidationException(validationResult.Errors).Message, StatusCodes.Status400BadRequest);
                     _logger.LogError("Error CreateReview {@HttpResponseDto}.", httpResponseDto1);
                     return httpResponseDto1;
                 }
 
-                var review = _mapper.Map<Review>(createReviewRequest.CreateReviewRequestDto);
-                var createdReview = await _unitOfWork.ReviewRepository.CreateAsync(review);
+                var createdReviewDto = await _unitOfWork.ReviewRepository.CreateAsync(createReviewRequest.ReviewDto);
                 await _unitOfWork.SaveAsync();
 
-                var httpResponseDto = new HttpResponseDto<CreateReviewResponseDto>(new CreateReviewResponseDto
-                {
-                    Id = createdReview.Id,
-                    CreatedAt = createdReview.CreatedAt,
-                    CreatedBy = createdReview.CreatedBy
-                }, StatusCodes.Status201Created);
+                var httpResponseDto = new HttpResponseDto<ReviewDto>(createdReviewDto, StatusCodes.Status201Created);
                 _logger.LogInformation("Done CreateReview {@HttpResponseDto}.", httpResponseDto);
                 return httpResponseDto;
             }
             catch (OperationCanceledException ex)
             {
-                var httpResponseDto1 = new HttpResponseDto<CreateReviewResponseDto>(ex.Message, StatusCodes.Status500InternalServerError);
+                var httpResponseDto1 = new HttpResponseDto<ReviewDto>(ex.Message, StatusCodes.Status500InternalServerError);
                 _logger.LogError("Canceled CreateReview {@HttpResponseDto}.", httpResponseDto1);
                 return httpResponseDto1;
             }
             catch (Exception ex)
             {
-                var httpResponseDto1 = new HttpResponseDto<CreateReviewResponseDto>(ex.Message, StatusCodes.Status500InternalServerError);
+                var httpResponseDto1 = new HttpResponseDto<ReviewDto>(ex.Message, StatusCodes.Status500InternalServerError);
                 _logger.LogError("Error CreateReview {@HttpResponseDto}.", httpResponseDto1);
                 return httpResponseDto1;
             }

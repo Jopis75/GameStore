@@ -1,11 +1,11 @@
 ﻿using Application.Dtos.Common;
-using Application.Dtos.Reviews;
+using Domain.Dtos;
 using MediatR;
 
 namespace Application.Features.Reviews.Requests.Commands
 {
-    public class UpdateReviewRequest : IRequest<HttpResponseDto<UpdateReviewResponseDto>>
+    public class UpdateReviewRequest : IRequest<HttpResponseDto<ReviewDto>>
     {
-        public UpdateReviewRequestDto? UpdateReviewRequestDto { get; set; }
+        public ReviewDto? ReviewDto { get; set; }
     }
 }

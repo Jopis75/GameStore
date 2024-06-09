@@ -1,10 +1,10 @@
 ﻿using Application.Dtos.Common;
-using Application.Dtos.Reviews;
+using Domain.Dtos;
 using MediatR;
 
 namespace Application.Features.Reviews.Requests.Queries
 {
-    public class ReadReviewAllRequest : IRequest<HttpResponseDto<List<ReadReviewResponseDto>>>
+    public class ReadReviewAllRequest : IRequest<HttpResponseDto<List<ReviewDto>>>
     {
     }
 }

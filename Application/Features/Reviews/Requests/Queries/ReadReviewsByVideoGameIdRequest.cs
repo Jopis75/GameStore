@@ -1,11 +1,11 @@
 ﻿using Application.Dtos.Common;
-using Application.Dtos.Reviews;
+using Domain.Dtos;
 using MediatR;
 
 namespace Application.Features.Reviews.Requests.Queries
 {
-    public class ReadReviewsByVideoGameIdRequest : IRequest<HttpResponseDto<List<ReadReviewResponseDto>>>
+    public class ReadReviewsByVideoGameIdRequest : IRequest<HttpResponseDto<List<ReviewDto>>>
     {
-        public ReadReviewsByVideoGameIdRequestDto? ReadReviewsByVideoGameIdRequestDto { get; set; }
+        public int? VideoGameId { get; set; }
     }
 }

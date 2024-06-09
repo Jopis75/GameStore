@@ -1,11 +1,11 @@
 ﻿using Application.Dtos.Common;
-using Application.Dtos.Consoles;
+using Domain.Dtos;
 using MediatR;
 
 namespace Application.Features.Consoles.Requests.Commands
 {
-    public class UpdateConsoleRequest : IRequest<HttpResponseDto<UpdateConsoleResponseDto>>
+    public class UpdateConsoleRequest : IRequest<HttpResponseDto<ConsoleDto>>
     {
-        public UpdateConsoleRequestDto? UpdateConsoleRequestDto { get; set; }
+        public ConsoleDto? ConsoleDto { get; set; }
     }
 }

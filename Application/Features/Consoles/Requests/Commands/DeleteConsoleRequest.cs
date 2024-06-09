@@ -1,11 +1,11 @@
 ﻿using Application.Dtos.Common;
-using Application.Dtos.Consoles;
+using Domain.Dtos;
 using MediatR;
 
 namespace Application.Features.Consoles.Requests.Commands
 {
-    public class DeleteConsoleRequest : IRequest<HttpResponseDto<DeleteConsoleResponseDto>>
+    public class DeleteConsoleRequest : IRequest<HttpResponseDto<ConsoleDto>>
     {
-        public DeleteConsoleRequestDto? DeleteConsoleRequestDto { get; set; }
+        public int? Id { get; set; }
     }
 }

@@ -1,11 +1,11 @@
 ﻿using Application.Dtos.Common;
-using Application.Dtos.Consoles;
+using Domain.Dtos;
 using MediatR;
 
 namespace Application.Features.Consoles.Requests.Queries
 {
-    public class ReadConsoleByIdRequest : IRequest<HttpResponseDto<ReadConsoleResponseDto>>
+    public class ReadConsoleByIdRequest : IRequest<HttpResponseDto<ConsoleDto>>
     {
-        public ReadByIdRequestDto? ReadByIdRequestDto { get; set; }
+        public int? Id { get; set; }
     }
 }

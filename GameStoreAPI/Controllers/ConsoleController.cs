@@ -27,7 +27,7 @@ namespace GameStoreAPI.Controllers
         {
             var httpResponseDto = await _mediator.Send(new CreateConsoleRequest
             {
-                CreateConsoleRequestDto = createConsoleRequestDto
+                ConsoleDto = createConsoleRequestDto
             });
             return StatusCode(httpResponseDto.StatusCode, httpResponseDto);
         }

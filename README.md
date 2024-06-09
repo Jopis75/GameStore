@@ -25,3 +25,5 @@ Next up:
 - Convert the solution and all projects to .NET 8.
 - Add paging to repository queries.
 - Add Category entity that relates to VideoGame.
+- Return an Array of Dto objects instead of a List of Dto objects.
+- Add an parameter of type CancellationToken to repository methods to make it possible to cancel repository method calls.

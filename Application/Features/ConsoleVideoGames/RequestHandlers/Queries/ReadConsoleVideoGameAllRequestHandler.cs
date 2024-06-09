@@ -1,30 +1,26 @@
 ﻿using Application.Dtos.Common;
-using Application.Dtos.ConsoleVideoGames;
 using Application.Features.ConsoleVideoGames.Requests.Queries;
 using Application.Interfaces.Persistance;
-using AutoMapper;
+using Domain.Dtos;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 
 namespace Application.Features.ConsoleVideoGames.RequestHandlers.Queries
 {
-    public class ReadConsoleVideoGameAllRequestHandler : IRequestHandler<ReadConsoleVideoGameAllRequest, HttpResponseDto<List<ReadConsoleVideoGameResponseDto>>>
+    public class ReadConsoleVideoGameAllRequestHandler : IRequestHandler<ReadConsoleVideoGameAllRequest, HttpResponseDto<List<ConsoleVideoGameDto>>>
     {
         private readonly IUnitOfWork _unitOfWork;
 
-        private readonly IMapper _mapper;
-
         private readonly ILogger<ReadConsoleVideoGameAllRequestHandler> _logger;
 
-        public ReadConsoleVideoGameAllRequestHandler(IUnitOfWork unitOfWork, IMapper mapper, ILogger<ReadConsoleVideoGameAllRequestHandler> logger)
+        public ReadConsoleVideoGameAllRequestHandler(IUnitOfWork unitOfWork, ILogger<ReadConsoleVideoGameAllRequestHandler> logger)
         {
             _unitOfWork = unitOfWork ?? throw new ArgumentNullException(nameof(unitOfWork));
-            _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
-        public async Task<HttpResponseDto<List<ReadConsoleVideoGameResponseDto>>> Handle(ReadConsoleVideoGameAllRequest readConsoleVideoGameAllRequest, CancellationToken cancellationToken)
+        public async Task<HttpResponseDto<List<ConsoleVideoGameDto>>> Handle(ReadConsoleVideoGameAllRequest readConsoleVideoGameAllRequest, CancellationToken cancellationToken)
         {
             try
             {
@@ -32,24 +28,21 @@ namespace Application.Features.ConsoleVideoGames.RequestHandlers.Queries
 
                 cancellationToken.ThrowIfCancellationRequested();
 
-                var consoleVideoGames = await _unitOfWork.ConsoleVideoGameRepository.ReadAllAsync(true);
-                var readConsoleVideoGameResponseDtos = consoleVideoGames
-                    .Select(_mapper.Map<ReadConsoleVideoGameResponseDto>)
-                    .ToList();
+                var consoleVideoGameDtos = await _unitOfWork.ConsoleVideoGameRepository.ReadAllAsync(true);
 
-                var httpResponseDto = new HttpResponseDto<List<ReadConsoleVideoGameResponseDto>>(readConsoleVideoGameResponseDtos, StatusCodes.Status200OK);
+                var httpResponseDto = new HttpResponseDto<List<ConsoleVideoGameDto>>(consoleVideoGameDtos.ToList(), StatusCodes.Status200OK);
                 _logger.LogInformation("Done ReadConsoleVideoGameAll {@HttpResponseDto}.", httpResponseDto);
                 return httpResponseDto;
             }
             catch (OperationCanceledException ex)
             {
-                var httpResponseDto1 = new HttpResponseDto<List<ReadConsoleVideoGameResponseDto>>(ex.Message, StatusCodes.Status500InternalServerError);
+                var httpResponseDto1 = new HttpResponseDto<List<ConsoleVideoGameDto>>(ex.Message, StatusCodes.Status500InternalServerError);
                 _logger.LogError("Canceled ReadConsoleVideoGameAll {@HttpResponseDto}.", httpResponseDto1);
                 return httpResponseDto1;
             }
             catch (Exception ex)
             {
-                var httpResponseDto1 = new HttpResponseDto<List<ReadConsoleVideoGameResponseDto>>(ex.Message, StatusCodes.Status500InternalServerError);
+                var httpResponseDto1 = new HttpResponseDto<List<ConsoleVideoGameDto>>(ex.Message, StatusCodes.Status500InternalServerError);
                 _logger.LogError("Error ReadConsoleVideoGameAll {@HttpResponseDto}.", httpResponseDto1);
                 return httpResponseDto1;
             }

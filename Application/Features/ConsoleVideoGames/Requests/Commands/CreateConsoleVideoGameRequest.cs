@@ -1,11 +1,11 @@
 ﻿using Application.Dtos.Common;
-using Application.Dtos.ConsoleVideoGames;
+using Domain.Dtos;
 using MediatR;
 
 namespace Application.Features.ConsoleVideoGames.Requests.Commands
 {
-    public class CreateConsoleVideoGameRequest : IRequest<HttpResponseDto<CreateConsoleVideoGameResponseDto>>
+    public class CreateConsoleVideoGameRequest : IRequest<HttpResponseDto<ConsoleVideoGameDto>>
     {
-        public CreateConsoleVideoGameRequestDto? CreateConsoleVideoGameRequestDto { get; set; }
+        public ConsoleVideoGameDto? ConsoleVideoGameDto { get; set; }
     }
 }

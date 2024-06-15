@@ -27,7 +27,7 @@ namespace GameStoreAPI.Controllers
         {
             var httpResponseDto = await _mediator.Send(new CreateVideoGameRequest
             {
-                CreateVideoGameRequestDto = createVideoGameRequestDto
+                VideoGameDto = createVideoGameRequestDto
             });
             return StatusCode(httpResponseDto.StatusCode, httpResponseDto);
         }
@@ -41,7 +41,7 @@ namespace GameStoreAPI.Controllers
         {
             var httpResponseDto = await _mediator.Send(new DeleteVideoGameRequest
             {
-                DeleteVideoGameRequestDto = new DeleteVideoGameRequestDto
+                Id = new DeleteVideoGameRequestDto
                 {
                     Id = id
                 }
@@ -68,7 +68,7 @@ namespace GameStoreAPI.Controllers
         {
             var httpResponseDto = await _mediator.Send(new ReadVideoGameByIdRequest
             {
-                ReadByIdRequestDto = new ReadByIdRequestDto
+                Id = new ReadByIdRequestDto
                 {
                     Id = id
                 }
@@ -85,7 +85,7 @@ namespace GameStoreAPI.Controllers
         {
             var httpResponseDto = await _mediator.Send(new UpdateVideoGameRequest
             {
-                UpdateVideoGameRequestDto = updateVideoGameRequestDto
+                VideoGameDto = updateVideoGameRequestDto
             });
             return StatusCode(httpResponseDto.StatusCode, httpResponseDto);
         }

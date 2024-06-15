@@ -1,7 +1,7 @@
 ﻿using Application.Dtos.Common;
-using Application.Dtos.VideoGames;
 using Application.Features.VideoGames.Requests.Commands;
 using Application.Interfaces.Persistance;
+using Domain.Dtos;
 using FluentValidation;
 using MediatR;
 using Microsoft.AspNetCore.Http;
@@ -9,22 +9,22 @@ using Microsoft.Extensions.Logging;
 
 namespace Application.Features.VideoGames.RequestHandlers.Commands
 {
-    public class DeleteVideoGameRequestHandler : IRequestHandler<DeleteVideoGameRequest, HttpResponseDto<DeleteVideoGameResponseDto>>
+    public class DeleteVideoGameRequestHandler : IRequestHandler<DeleteVideoGameRequest, HttpResponseDto<VideoGameDto>>
     {
         private readonly IUnitOfWork _unitOfWork;
 
-        private readonly IValidator<DeleteVideoGameRequestDto> _validator;
+        private readonly IValidator<VideoGameDto> _validator;
 
         private readonly ILogger<DeleteVideoGameRequestHandler> _logger;
 
-        public DeleteVideoGameRequestHandler(IUnitOfWork unitOfWork, IValidator<DeleteVideoGameRequestDto> validator, ILogger<DeleteVideoGameRequestHandler> logger)
+        public DeleteVideoGameRequestHandler(IUnitOfWork unitOfWork, IValidator<VideoGameDto> validator, ILogger<DeleteVideoGameRequestHandler> logger)
         {
             _unitOfWork = unitOfWork ?? throw new ArgumentNullException(nameof(unitOfWork));
             _validator = validator ?? throw new ArgumentNullException(nameof(validator));
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
-        public async Task<HttpResponseDto<DeleteVideoGameResponseDto>> Handle(DeleteVideoGameRequest deleteVideoGameRequest, CancellationToken cancellationToken)
+        public async Task<HttpResponseDto<VideoGameDto>> Handle(DeleteVideoGameRequest deleteVideoGameRequest, CancellationToken cancellationToken)
         {
             try
             {
@@ -32,44 +32,38 @@ namespace Application.Features.VideoGames.RequestHandlers.Commands
 
                 cancellationToken.ThrowIfCancellationRequested();
 
-                if (deleteVideoGameRequest.DeleteVideoGameRequestDto == null)
+                if (deleteVideoGameRequest.Id == null)
                 {
-                    var httpResponseDto1 = new HttpResponseDto<DeleteVideoGameResponseDto>(new ArgumentNullException(nameof(deleteVideoGameRequest.DeleteVideoGameRequestDto)).Message, StatusCodes.Status400BadRequest);
+                    var httpResponseDto1 = new HttpResponseDto<VideoGameDto>(new ArgumentNullException(nameof(deleteVideoGameRequest.Id)).Message, StatusCodes.Status400BadRequest);
                     _logger.LogError("Error DeleteVideoGame {@HttpResponseDto}.", httpResponseDto1);
                     return httpResponseDto1;
                 }
 
-                var validationResult = await _validator.ValidateAsync(deleteVideoGameRequest.DeleteVideoGameRequestDto, cancellationToken);
+                var validationResult = await _validator.ValidateAsync(deleteVideoGameRequest.Id, cancellationToken);
 
                 if (!validationResult.IsValid)
                 {
-                    var httpResponseDto1 = new HttpResponseDto<DeleteVideoGameResponseDto>(new ValidationException(validationResult.Errors).Message, StatusCodes.Status400BadRequest);
+                    var httpResponseDto1 = new HttpResponseDto<VideoGameDto>(new ValidationException(validationResult.Errors).Message, StatusCodes.Status400BadRequest);
                     _logger.LogError("Error DeleteVideoGame {@HttpResponseDto}.", httpResponseDto1);
                     return httpResponseDto1;
                 }
 
-                var videoGame = await _unitOfWork.VideoGameRepository.ReadByIdAsync(deleteVideoGameRequest.DeleteVideoGameRequestDto.Id);
-                var deletedVideoGame = await _unitOfWork.VideoGameRepository.DeleteAsync(videoGame);
+                var deleteVideoGameDto = await _unitOfWork.VideoGameRepository.DeleteByIdAsync(deleteVideoGameRequest.Id ?? 0);
                 await _unitOfWork.SaveAsync();
 
-                var httpResponseDto = new HttpResponseDto<DeleteVideoGameResponseDto>(new DeleteVideoGameResponseDto
-                {
-                    Id = deletedVideoGame.Id,
-                    DeletedAt = deletedVideoGame.DeletedAt,
-                    DeletedBy = deletedVideoGame.DeletedBy,
-                }, StatusCodes.Status200OK);
+                var httpResponseDto = new HttpResponseDto<VideoGameDto>(deleteVideoGameDto, StatusCodes.Status200OK);
                 _logger.LogInformation("Done DeleteVideoGame {@HttpResponseDto}.", httpResponseDto);
                 return httpResponseDto;
             }
             catch (OperationCanceledException ex)
             {
-                var httpResponseDto1 = new HttpResponseDto<DeleteVideoGameResponseDto>(ex.Message, StatusCodes.Status500InternalServerError);
+                var httpResponseDto1 = new HttpResponseDto<VideoGameDto>(ex.Message, StatusCodes.Status500InternalServerError);
                 _logger.LogError("Canceled DeleteVideoGame {@HttpResponseDto}.", httpResponseDto1);
                 return httpResponseDto1;
             }
             catch (Exception ex)
             {
-                var httpResponseDto1 = new HttpResponseDto<DeleteVideoGameResponseDto>(ex.Message, StatusCodes.Status500InternalServerError);
+                var httpResponseDto1 = new HttpResponseDto<VideoGameDto>(ex.Message, StatusCodes.Status500InternalServerError);
                 _logger.LogError("Error DeleteVideoGame {@HttpResponseDto}.", httpResponseDto1);
                 return httpResponseDto1;
             }

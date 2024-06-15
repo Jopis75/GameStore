@@ -1,30 +1,26 @@
 ﻿using Application.Dtos.Common;
-using Application.Dtos.VideoGames;
 using Application.Features.VideoGames.Requests.Queries;
 using Application.Interfaces.Persistance;
-using AutoMapper;
+using Domain.Dtos;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 
 namespace Application.Features.VideoGames.RequestHandlers.Queries
 {
-    public class ReadVideoGameAllRequestHandler : IRequestHandler<ReadVideoGameAllRequest, HttpResponseDto<List<ReadVideoGameResponseDto>>>
+    public class ReadVideoGameAllRequestHandler : IRequestHandler<ReadVideoGameAllRequest, HttpResponseDto<List<VideoGameDto>>>
     {
         private readonly IUnitOfWork _unitOfWork;
 
-        private readonly IMapper _mapper;
-
         private readonly ILogger<ReadVideoGameAllRequestHandler> _logger;
 
-        public ReadVideoGameAllRequestHandler(IUnitOfWork unitOfWork, IMapper mapper, ILogger<ReadVideoGameAllRequestHandler> logger)
+        public ReadVideoGameAllRequestHandler(IUnitOfWork unitOfWork, ILogger<ReadVideoGameAllRequestHandler> logger)
         {
             _unitOfWork = unitOfWork ?? throw new ArgumentNullException(nameof(unitOfWork));
-            _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
-        public async Task<HttpResponseDto<List<ReadVideoGameResponseDto>>> Handle(ReadVideoGameAllRequest readVideoGameAllRequest, CancellationToken cancellationToken)
+        public async Task<HttpResponseDto<List<VideoGameDto>>> Handle(ReadVideoGameAllRequest readVideoGameAllRequest, CancellationToken cancellationToken)
         {
             try
             {
@@ -32,24 +28,21 @@ namespace Application.Features.VideoGames.RequestHandlers.Queries
 
                 cancellationToken.ThrowIfCancellationRequested();
 
-                var videoGames = await _unitOfWork.VideoGameRepository.ReadAllAsync(true);
-                var readAllVideoGamesResponseDtos = videoGames
-                    .Select(_mapper.Map<ReadVideoGameResponseDto>)
-                    .ToList();
+                var videoGameDtos = await _unitOfWork.VideoGameRepository.ReadAllAsync(true);
 
-                var httpResponseDto = new HttpResponseDto<List<ReadVideoGameResponseDto>>(readAllVideoGamesResponseDtos, StatusCodes.Status200OK);
+                var httpResponseDto = new HttpResponseDto<List<VideoGameDto>>(videoGameDtos.ToList(), StatusCodes.Status200OK);
                 _logger.LogInformation("Done ReadVideoGameAll {@HttpResponseDto}.", httpResponseDto);
                 return httpResponseDto;
             }
             catch (OperationCanceledException ex)
             {
-                var httpResponseDto1 = new HttpResponseDto<List<ReadVideoGameResponseDto>>(ex.Message, StatusCodes.Status500InternalServerError);
+                var httpResponseDto1 = new HttpResponseDto<List<VideoGameDto>>(ex.Message, StatusCodes.Status500InternalServerError);
                 _logger.LogError("Canceled ReadVideoGameAll {@HttpResponseDto}.", httpResponseDto1);
                 return httpResponseDto1;
             }
             catch (Exception ex)
             {
-                var httpResponseDto1 = new HttpResponseDto<List<ReadVideoGameResponseDto>>(ex.Message, StatusCodes.Status500InternalServerError);
+                var httpResponseDto1 = new HttpResponseDto<List<VideoGameDto>>(ex.Message, StatusCodes.Status500InternalServerError);
                 _logger.LogError("Error ReadVideoGameAll {@HttpResponseDto}.", httpResponseDto1);
                 return httpResponseDto1;
             }

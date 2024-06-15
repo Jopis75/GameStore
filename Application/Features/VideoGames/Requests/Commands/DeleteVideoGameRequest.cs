@@ -1,11 +1,11 @@
 ﻿using Application.Dtos.Common;
-using Application.Dtos.VideoGames;
+using Domain.Dtos;
 using MediatR;
 
 namespace Application.Features.VideoGames.Requests.Commands
 {
-    public class DeleteVideoGameRequest : IRequest<HttpResponseDto<DeleteVideoGameResponseDto>>
+    public class DeleteVideoGameRequest : IRequest<HttpResponseDto<VideoGameDto>>
     {
-        public DeleteVideoGameRequestDto? DeleteVideoGameRequestDto { get; set; }
+        public int? Id { get; set; }
     }
 }

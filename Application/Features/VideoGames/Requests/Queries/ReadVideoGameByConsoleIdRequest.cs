@@ -1,11 +1,11 @@
 ﻿using Application.Dtos.Common;
-using Application.Dtos.VideoGames;
+using Domain.Dtos;
 using MediatR;
 
 namespace Application.Features.VideoGames.Requests.Queries
 {
-    public class ReadVideoGameByConsoleIdRequest : IRequest<HttpResponseDto<List<ReadVideoGameResponseDto>>>
+    public class ReadVideoGameByConsoleIdRequest : IRequest<HttpResponseDto<List<VideoGameDto>>>
     {
-        public ReadVideoGameByConsoleIdRequestDto? ReadVideoGameByConsoleIdRequestDto { get; set; }
+        public int? ConsoleId { get; set; }
     }
 }

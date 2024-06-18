@@ -27,3 +27,5 @@ Next up:
 - Add Category entity that relates to VideoGame.
 - Return an Array of Dto objects instead of a List of Dto objects in Handler and RequestHandler classes.
 - Add an parameter of type CancellationToken to repository methods to make it possible to cancel repository method calls.
+
+* * * Note: the develop branch does not build at the moment * * *

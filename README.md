@@ -28,4 +28,4 @@ Next up:
 - Return an Array of Dto objects instead of a List of Dto objects in Handler and RequestHandler classes.
 - Add an parameter of type CancellationToken to repository methods to make it possible to cancel repository method calls.
 
-__ Note: the develop branch does not build at the moment. __
+**Note: the develop branch does not build at the moment.**

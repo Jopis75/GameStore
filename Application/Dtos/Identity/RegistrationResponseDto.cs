@@ -1,8 +1,6 @@
-﻿using Application.Dtos.Common;
-
-namespace Application.Dtos.Identity
+﻿namespace Application.Dtos.Identity
 {
-    public class RegistrationResponseDto : ResponseDto
+    public class RegistrationResponseDto
     {
         public string UserId { get; set; } = default!;
     }

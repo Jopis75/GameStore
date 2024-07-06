@@ -17,24 +17,22 @@ namespace Persistance.Repositories
         {
         }
 
-        public async Task<IEnumerable<AddressDto>> ReadByCityAsync(string city, bool asNoTracking = false)
+        public async Task<IEnumerable<AddressDto>> ReadByCityAsync(string city, CancellationToken cancellationToken)
         {
-            var query = Entities.AsQueryable();
+            cancellationToken.ThrowIfCancellationRequested();
 
-            if (asNoTracking)
-            {
-                query = query.AsNoTracking();
-            }
-
-            var addresses = await query
+            var addresses = await Entities
+                .AsNoTracking()
                 .Where(address => EF.Functions.Like(address.City, $"{city}%"))
-                .ToListAsync();
+                .ToArrayAsync();
 
             return addresses.Select(Mapper.Map<AddressDto>);
         }
 
-        protected override async Task<IEnumerable<AddressDto>> ReadByFilterAsync(AddressFilter filter, IQueryable<Address> query, Expression<Func<Address, bool>> predicate)
+        protected override async Task<IEnumerable<AddressDto>> ReadByFilterAsync(AddressFilter filter, Expression<Func<Address, bool>> predicate, CancellationToken cancellationToken)
         {
+            cancellationToken.ThrowIfCancellationRequested();
+
             if (filter.City != null)
             {
                 predicate = predicate.And(address => EF.Functions.Like(address.City, $"{filter.City}%"));
@@ -60,41 +58,34 @@ namespace Persistance.Repositories
                 predicate = predicate.And(address => EF.Functions.Like(address.StreetAddress, $"{filter.StreetAddress}%"));
             }
 
-            var addresses = await query
+            var addresses = await Entities
+                .AsNoTracking()
                 .Where(predicate)
-                .ToListAsync();
+                .ToArrayAsync();
 
             return addresses.Select(Mapper.Map<AddressDto>);
         }
 
-        public async Task<IEnumerable<AddressDto>> ReadByStreetAddressAsync(string streetAddress, bool asNoTracking = false)
+        public async Task<IEnumerable<AddressDto>> ReadByStreetAddressAsync(string streetAddress, CancellationToken cancellationToken)
         {
-            var query = Entities.AsQueryable();
+            cancellationToken.ThrowIfCancellationRequested();
 
-            if (asNoTracking)
-            {
-                query = query.AsNoTracking();
-            }
-
-            var addresses = await query
+            var addresses = await Entities
+                .AsNoTracking()
                 .Where(address => EF.Functions.Like(address.StreetAddress, $"{streetAddress}%"))
-                .ToListAsync();
+                .ToArrayAsync();
 
             return addresses.Select(Mapper.Map<AddressDto>);
         }
 
-        public async Task<IEnumerable<AddressDto>> ReadByPostalCodeAsync(string postalCode, bool asNoTracking = false)
+        public async Task<IEnumerable<AddressDto>> ReadByPostalCodeAsync(string postalCode, CancellationToken cancellationToken)
         {
-            var query = Entities.AsQueryable();
+           cancellationToken.ThrowIfCancellationRequested();
 
-            if (asNoTracking)
-            {
-                query = query.AsNoTracking();
-            }
-
-            var addresses = await query
+            var addresses = await Entities
+                .AsNoTracking()
                 .Where(address => EF.Functions.Like(address.PostalCode, $"{postalCode}%"))
-                .ToListAsync();
+                .ToArrayAsync();
 
             return addresses.Select(Mapper.Map<AddressDto>);
         }

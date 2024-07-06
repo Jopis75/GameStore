@@ -1,4 +1,4 @@
-﻿using Application.Dtos.Common;
+﻿using Application.Dtos.General;
 using Application.Features.Addresses.Requests.Queries;
 using Application.Interfaces.Persistance;
 using Domain.Dtos;
@@ -13,11 +13,11 @@ namespace Application.Features.Addresses.RequestHandlers.Queries
     {
         private readonly IUnitOfWork _unitOfWork;
 
-        private readonly IValidator<ReadByIdRequestDto> _validator;
+        private readonly IValidator<ReadAddressByIdRequest> _validator;
 
         private readonly ILogger<ReadAddressByIdRequestHandler> _logger;
 
-        public ReadAddressByIdRequestHandler(IUnitOfWork unitOfWork, IValidator<ReadByIdRequestDto> validator, ILogger<ReadAddressByIdRequestHandler> logger)
+        public ReadAddressByIdRequestHandler(IUnitOfWork unitOfWork, IValidator<ReadAddressByIdRequest> validator, ILogger<ReadAddressByIdRequestHandler> logger)
         {
             _unitOfWork = unitOfWork ?? throw new ArgumentNullException(nameof(unitOfWork));
             _validator = validator ?? throw new ArgumentNullException(nameof(validator));
@@ -32,23 +32,23 @@ namespace Application.Features.Addresses.RequestHandlers.Queries
 
                 cancellationToken.ThrowIfCancellationRequested();
 
-                if (readAddressByIdRequest.Id == null)
+                if (readAddressByIdRequest == null)
                 {
-                    var httpResponseDto1 = new HttpResponseDto<AddressDto>(new ArgumentNullException(nameof(readAddressByIdRequest.Id)).Message, StatusCodes.Status400BadRequest);
+                    var httpResponseDto1 = new HttpResponseDto<AddressDto>(new ArgumentNullException(nameof(readAddressByIdRequest)).Message, StatusCodes.Status400BadRequest);
                     _logger.LogError("Error ReadAddressById {@HttpResponseDto}.", httpResponseDto1);
                     return httpResponseDto1;
                 }
 
-                var validationResult = await _validator.ValidateAsync(readAddressByIdRequest.Id, cancellationToken);
+                var validationResult = await _validator.ValidateAsync(readAddressByIdRequest, cancellationToken);
 
-                if (!validationResult.IsValid)
+                if (validationResult.IsValid == false)
                 {
                     var httpResponseDto1 = new HttpResponseDto<AddressDto>(new ValidationException(validationResult.Errors).Message, StatusCodes.Status400BadRequest);
                     _logger.LogError("Error ReadAddressById {@HttpResponseDto}.", httpResponseDto1);
                     return httpResponseDto1;
                 }
 
-                var addressDto = await _unitOfWork.AddressRepository.ReadByIdAsync(readAddressByIdRequest.Id.Id, true);
+                var addressDto = await _unitOfWork.AddressRepository.ReadByIdAsync(readAddressByIdRequest.Id, cancellationToken);
 
                 var httpResponseDto = new HttpResponseDto<AddressDto>(addressDto, StatusCodes.Status200OK);
                 _logger.LogInformation("Done ReadAddressById {@HttpResponseDto}.", httpResponseDto);

@@ -1,4 +1,4 @@
-﻿using Application.Dtos.Common;
+﻿using Application.Dtos.General;
 using Application.Dtos.Identity;
 using Application.Exceptions;
 using Application.Interfaces.Identity;

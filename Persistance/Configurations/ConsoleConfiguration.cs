@@ -18,12 +18,12 @@ namespace Persistance.Configurations
                     ReleaseDate = DateTime.Parse("2020-11-12"),
                     PurchaseDate = DateTime.Parse("2022-01-29"),
                     Url = "https://direct.playstation.com/en-us/buy-consoles/playstation5-console/",
-                    ImageUri = string.Empty,
+                    ImageUri = String.Empty,
                     CreatedBy = "System",
                     CreatedAt = DateTime.Now,
-                    UpdatedBy = string.Empty,
+                    UpdatedBy = String.Empty,
                     UpdatedAt = null,
-                    DeletedBy = string.Empty,
+                    DeletedBy = String.Empty,
                     DeletedAt = null
                 }
             );

@@ -1,4 +1,4 @@
-﻿using Application.Dtos.Common;
+﻿using Application.Dtos.General;
 using Application.Features.Addresses.Requests.Commands;
 using Application.Interfaces.Persistance;
 using Domain.Dtos;
@@ -13,11 +13,11 @@ namespace Application.Features.Addresses.RequestHandlers.Commands
     {
         private readonly IUnitOfWork _unitOfWork;
 
-        private readonly IValidator<AddressDto> _validator;
+        private readonly IValidator<UpdateAddressRequest> _validator;
 
         private readonly ILogger<UpdateAddressRequestHandler> _logger;
 
-        public UpdateAddressRequestHandler(IUnitOfWork unitOfWork, IValidator<AddressDto> validator, ILogger<UpdateAddressRequestHandler> logger)
+        public UpdateAddressRequestHandler(IUnitOfWork unitOfWork, IValidator<UpdateAddressRequest> validator, ILogger<UpdateAddressRequestHandler> logger)
         {
             _unitOfWork = unitOfWork ?? throw new ArgumentNullException(nameof(unitOfWork));
             _validator = validator ?? throw new ArgumentNullException(nameof(validator));
@@ -32,23 +32,23 @@ namespace Application.Features.Addresses.RequestHandlers.Commands
 
                 cancellationToken.ThrowIfCancellationRequested();
 
-                if (updateAddressRequest.AddressDto == null)
+                if (updateAddressRequest == null)
                 {
-                    var httpResponseDto1 = new HttpResponseDto<AddressDto>(new ArgumentNullException(nameof(updateAddressRequest.AddressDto)).Message, StatusCodes.Status400BadRequest);
+                    var httpResponseDto1 = new HttpResponseDto<AddressDto>(new ArgumentNullException(nameof(updateAddressRequest)).Message, StatusCodes.Status400BadRequest);
                     _logger.LogError("Error UpdateAddress {@HttpResponseDto}.", httpResponseDto1);
                     return httpResponseDto1;
                 }
 
-                var validationResult = await _validator.ValidateAsync(updateAddressRequest.AddressDto, cancellationToken);
+                var validationResult = await _validator.ValidateAsync(updateAddressRequest, cancellationToken);
 
-                if (!validationResult.IsValid)
+                if (validationResult.IsValid == false)
                 {
                     var httpResponseDto1 = new HttpResponseDto<AddressDto>(new ValidationException(validationResult.Errors).Message, StatusCodes.Status400BadRequest);
                     _logger.LogError("Error UpdateAddress {@HttpResponseDto}.", httpResponseDto1);
                     return httpResponseDto1;
                 }
 
-                var updatedAddressDto = await _unitOfWork.AddressRepository.UpdateAsync(updateAddressRequest.AddressDto);
+                var updatedAddressDto = await _unitOfWork.AddressRepository.UpdateAsync(updateAddressRequest.AddressDto, cancellationToken);
                 await _unitOfWork.SaveAsync();
 
                 var httpResponseDto = new HttpResponseDto<AddressDto>(updatedAddressDto, StatusCodes.Status200OK);

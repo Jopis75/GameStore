@@ -1,4 +1,4 @@
-﻿using Application.Dtos.Common;
+﻿using Application.Dtos.General;
 using Application.Features.Companies.Requests.Commands;
 using Application.Interfaces.Persistance;
 using Domain.Dtos;
@@ -13,11 +13,11 @@ namespace Application.Features.Companies.RequestHandlers.Commands
     {
         private readonly IUnitOfWork _unitOfWork;
 
-        private readonly IValidator<CompanyDto> _validator;
+        private readonly IValidator<UpdateCompanyRequest> _validator;
 
         private readonly ILogger<UpdateCompanyRequestHandler> _logger;
 
-        public UpdateCompanyRequestHandler(IUnitOfWork unitOfWork, IValidator<CompanyDto> validator, ILogger<UpdateCompanyRequestHandler> logger)
+        public UpdateCompanyRequestHandler(IUnitOfWork unitOfWork, IValidator<UpdateCompanyRequest> validator, ILogger<UpdateCompanyRequestHandler> logger)
         {
             _unitOfWork = unitOfWork ?? throw new ArgumentNullException(nameof(unitOfWork));
             _validator = validator ?? throw new ArgumentNullException(nameof(validator));
@@ -32,16 +32,16 @@ namespace Application.Features.Companies.RequestHandlers.Commands
 
                 cancellationToken.ThrowIfCancellationRequested();
 
-                if (updateCompanyRequest.CompanyDto == null)
+                if (updateCompanyRequest == null)
                 {
-                    var httpResponseDto1 = new HttpResponseDto<CompanyDto>(new ArgumentNullException(nameof(updateCompanyRequest.UpdateCompanyRequestDto)).Message, StatusCodes.Status400BadRequest);
+                    var httpResponseDto1 = new HttpResponseDto<CompanyDto>(new ArgumentNullException(nameof(updateCompanyRequest)).Message, StatusCodes.Status400BadRequest);
                     _logger.LogError("Error UpdateCompany {@HttpResponseDto}.", httpResponseDto1);
                     return httpResponseDto1;
                 }
 
-                var validationResult = await _validator.ValidateAsync(updateCompanyRequest.CompanyDto, cancellationToken);
+                var validationResult = await _validator.ValidateAsync(updateCompanyRequest, cancellationToken);
 
-                if (!validationResult.IsValid)
+                if (validationResult.IsValid == false)
                 {
                     var httpResponseDto1 = new HttpResponseDto<CompanyDto>(new ValidationException(validationResult.Errors).Message, StatusCodes.Status400BadRequest);
                     _logger.LogError("Error UpdateCompany {@HttpResponseDto}.", httpResponseDto1);

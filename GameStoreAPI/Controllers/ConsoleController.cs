@@ -1,5 +1,5 @@
-﻿using Application.Dtos.Common;
-using Application.Dtos.Consoles;
+﻿using Application.Dtos.Consoles;
+using Application.Dtos.General;
 using Application.Features.Consoles.Requests.Commands;
 using Application.Features.Consoles.Requests.Queries;
 using MediatR;

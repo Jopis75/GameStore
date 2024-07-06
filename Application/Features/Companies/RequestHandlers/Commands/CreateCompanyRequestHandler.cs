@@ -1,4 +1,4 @@
-﻿using Application.Dtos.Common;
+﻿using Application.Dtos.General;
 using Application.Features.Companies.Requests.Commands;
 using Application.Interfaces.Persistance;
 using Domain.Dtos;
@@ -13,11 +13,11 @@ namespace Application.Features.Companies.RequestHandlers.Commands
     {
         private readonly IUnitOfWork _unitOfWork;
 
-        private readonly IValidator<CompanyDto> _validator;
+        private readonly IValidator<CreateCompanyRequest> _validator;
 
         private readonly ILogger<CreateCompanyRequestHandler> _logger;
 
-        public CreateCompanyRequestHandler(IUnitOfWork unitOfWork, IValidator<CompanyDto> validator, ILogger<CreateCompanyRequestHandler> logger)
+        public CreateCompanyRequestHandler(IUnitOfWork unitOfWork, IValidator<CreateCompanyRequest> validator, ILogger<CreateCompanyRequestHandler> logger)
         {
             _unitOfWork = unitOfWork ?? throw new ArgumentNullException(nameof(unitOfWork));
             _validator = validator ?? throw new ArgumentNullException(nameof(validator));
@@ -32,23 +32,23 @@ namespace Application.Features.Companies.RequestHandlers.Commands
 
                 cancellationToken.ThrowIfCancellationRequested();
 
-                if (createCompanyRequest.CompanyDto == null)
+                if (createCompanyRequest == null)
                 {
-                    var httpResponseDto1 = new HttpResponseDto<CompanyDto>(new ArgumentNullException(nameof(createCompanyRequest.CompanyDto)).Message, StatusCodes.Status400BadRequest);
+                    var httpResponseDto1 = new HttpResponseDto<CompanyDto>(new ArgumentNullException(nameof(createCompanyRequest)).Message, StatusCodes.Status400BadRequest);
                     _logger.LogError("Error CreateCompany {@HttpResponseDto}.", httpResponseDto1);
                     return httpResponseDto1;
                 }
 
-                var validationResult = await _validator.ValidateAsync(createCompanyRequest.CompanyDto, cancellationToken);
+                var validationResult = await _validator.ValidateAsync(createCompanyRequest, cancellationToken);
 
-                if (!validationResult.IsValid)
+                if (validationResult.IsValid == false)
                 {
                     var httpResponseDto1 = new HttpResponseDto<CompanyDto>(new ValidationException(validationResult.Errors).Message, StatusCodes.Status400BadRequest);
                     _logger.LogError("Error CreateCompany {@HttpResponseDto}.", httpResponseDto1);
                     return httpResponseDto1;
                 }
 
-                var createdCompanyDto = await _unitOfWork.CompanyRepository.CreateAsync(createCompanyRequest.CompanyDto);
+                var createdCompanyDto = await _unitOfWork.CompanyRepository.CreateAsync(createCompanyRequest.CompanyDto, cancellationToken);
                 await _unitOfWork.SaveAsync();
 
                 var httpResponseDto = new HttpResponseDto<CompanyDto>(createdCompanyDto, StatusCodes.Status201Created);

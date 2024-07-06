@@ -1,4 +1,4 @@
-﻿using Application.Dtos.Common;
+﻿using Application.Dtos.General;
 using Application.Features.Consoles.Requests.Commands;
 using Application.Interfaces.Persistance;
 using Domain.Dtos;

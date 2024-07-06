@@ -1,4 +1,4 @@
-﻿using Application.Dtos.Common;
+﻿using Application.Dtos.General;
 using Application.Dtos.Identity;
 using Application.Interfaces.Identity;
 using Microsoft.AspNetCore.Mvc;

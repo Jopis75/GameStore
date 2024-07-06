@@ -1,12 +1,10 @@
-﻿using Application.Dtos.Common;
-
-namespace Application.Dtos.Identity
+﻿namespace Application.Dtos.Identity
 {
-    public class LoginResponseDto : ResponseDto
+    public class LoginResponseDto
     {
-        public string? UserId { get; set; }
+        public string UserId { get; set; } = default!;
 
-        public string? JwtSecurityToken { get; set; }
+        public string JwtSecurityToken { get; set; } = default!;
 
         public string? UserName { get; set; }
 

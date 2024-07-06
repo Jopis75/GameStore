@@ -17,24 +17,22 @@ namespace Persistance.Repositories
         {
         }
 
-        public async Task<IEnumerable<CompanyDto>> ReadByEmailAddressAsync(string emailAddress, bool asNoTracking = false)
+        public async Task<IEnumerable<CompanyDto>> ReadByEmailAddressAsync(string emailAddress, CancellationToken cancellationToken)
         {
-            var query = Entities.AsQueryable();
+            cancellationToken.ThrowIfCancellationRequested();
 
-            if (asNoTracking)
-            {
-                query = query.AsNoTracking();
-            }
-
-            var companies = await query
+            var companies = await Entities
+                .AsNoTracking()
                 .Where(company => EF.Functions.Like(company.EmailAddress, $"{emailAddress}%"))
-                .ToListAsync();
+                .ToArrayAsync();
 
             return companies.Select(Mapper.Map<CompanyDto>);
         }
 
-        protected override async Task<IEnumerable<CompanyDto>> ReadByFilterAsync(CompanyFilter filter, IQueryable<Company> query, Expression<Func<Company, bool>> predicate)
+        protected override async Task<IEnumerable<CompanyDto>> ReadByFilterAsync(CompanyFilter filter, Expression<Func<Company, bool>> predicate, CancellationToken cancellationToken)
         {
+            cancellationToken.ThrowIfCancellationRequested();
+
             if (filter.CompanyType != null)
             {
                 predicate = predicate.And(company => company.CompanyType == filter.CompanyType);
@@ -85,57 +83,46 @@ namespace Persistance.Repositories
                 predicate = predicate.And(company => company.WebsiteUrl != null && EF.Functions.Like(company.WebsiteUrl, $"{filter.WebsiteUrl}%"));
             }
 
-            var companies = await query
+            var companies = await Entities
+                .AsNoTracking()
                 .Where(predicate)
-                .ToListAsync();
+                .ToArrayAsync();
 
             return companies.Select(Mapper.Map<CompanyDto>);
         }
 
-        public async Task<IEnumerable<CompanyDto>> ReadByNameAsync(string name, bool asNoTracking = false)
+        public async Task<IEnumerable<CompanyDto>> ReadByNameAsync(string name, CancellationToken cancellationToken)
         {
-            var query = Entities.AsQueryable();
+            cancellationToken.ThrowIfCancellationRequested();
 
-            if (asNoTracking)
-            {
-                query = query.AsNoTracking();
-            }
-
-            var companies = await query
+            var companies = await Entities
+                .AsNoTracking()
                 .Where(company => EF.Functions.Like(company.Name, $"{name}%"))
-                .ToListAsync();
+                .ToArrayAsync();
 
             return companies.Select(Mapper.Map<CompanyDto>);
         }
 
-        public async Task<IEnumerable<CompanyDto>> ReadByPhoneNumberAsync(string phoneNumber, bool asNoTracking = false)
+        public async Task<IEnumerable<CompanyDto>> ReadByPhoneNumberAsync(string phoneNumber, CancellationToken cancellationToken)
         {
-            var query = Entities.AsQueryable();
+            cancellationToken.ThrowIfCancellationRequested();
 
-            if (asNoTracking)
-            {
-                query = query.AsNoTracking();
-            }
-
-            var companies = await query
+            var companies = await Entities
+                .AsNoTracking()
                 .Where(company => EF.Functions.Like(company.PhoneNumber, $"{phoneNumber}%"))
-                .ToListAsync();
+                .ToArrayAsync();
 
             return companies.Select(Mapper.Map<CompanyDto>);
         }
 
-        public async Task<IEnumerable<CompanyDto>> ReadByTradeNameAsync(string tradeName, bool asNoTracking = false)
+        public async Task<IEnumerable<CompanyDto>> ReadByTradeNameAsync(string tradeName, CancellationToken cancellationToken)
         {
-            var query = Entities.AsQueryable();
+            cancellationToken.ThrowIfCancellationRequested();
 
-            if (asNoTracking)
-            {
-                query = query.AsNoTracking();
-            }
-
-            var companies = await query
+            var companies = await Entities
+                .AsNoTracking()
                 .Where(company => EF.Functions.Like(company.TradeName, $"{tradeName}%"))
-                .ToListAsync();
+                .ToArrayAsync();
 
             return companies.Select(Mapper.Map<CompanyDto>);
         }

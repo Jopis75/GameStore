@@ -17,8 +17,10 @@ namespace Persistance.Repositories
         {
         }
 
-        protected override async Task<IEnumerable<ConsoleDto>> ReadByFilterAsync(ConsoleFilter filter, IQueryable<Console> query, Expression<Func<Console, bool>> predicate)
+        protected override async Task<IEnumerable<ConsoleDto>> ReadByFilterAsync(ConsoleFilter filter, Expression<Func<Console, bool>> predicate, CancellationToken cancellationToken)
         {
+            cancellationToken.ThrowIfCancellationRequested();
+
             if (filter.DeveloperId != null)
             {
                 predicate = predicate.And(console => console.DeveloperId == filter.DeveloperId);
@@ -54,25 +56,22 @@ namespace Persistance.Repositories
                 predicate = predicate.And(console => console.Url != null && EF.Functions.Like(console.Url, $"{filter.Url}%"));
             }
 
-            var consoles = await query
+            var consoles = await Entities
+                .AsNoTracking()
                 .Where(predicate)
-                .ToListAsync();
+                .ToArrayAsync();
 
             return consoles.Select(Mapper.Map<ConsoleDto>);
         }
 
-        public async Task<IEnumerable<ConsoleDto>> ReadByNameAsync(string name, bool asNoTracking = false)
+        public async Task<IEnumerable<ConsoleDto>> ReadByNameAsync(string name, CancellationToken cancellationToken)
         {
-            var query = Entities.AsQueryable();
+            cancellationToken.ThrowIfCancellationRequested();
 
-            if (asNoTracking)
-            {
-                query = query.AsNoTracking();
-            }
-
-            var consoles = await query
+            var consoles = await Entities
+                .AsNoTracking()
                 .Where(console => EF.Functions.Like(console.Name, $"{name}%"))
-                .ToListAsync();
+                .ToArrayAsync();
 
             return consoles.Select(Mapper.Map<ConsoleDto>);
         }

@@ -53,7 +53,7 @@ namespace Persistance.Repositories
 
         public async Task SaveAsync()
         {
-            //var userName = _httpContextAccessor.HttpContext.User.FindFirst(string.Empty)?.Value;
+            //var userName = _httpContextAccessor.HttpContext.User.FindFirst(String.Empty)?.Value;
             await _gameStoreDbContext.SaveChangesAsync();
         }
     }

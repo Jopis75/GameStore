@@ -6,6 +6,6 @@ namespace Application.Interfaces.Persistance
 {
     public interface IConsoleRepository : IRepositoryBase<Console, ConsoleDto, ConsoleFilter>
     {
-        Task<IEnumerable<ConsoleDto>> ReadByNameAsync(string name, bool asNoTracking = false);
+        Task<IEnumerable<ConsoleDto>> ReadByNameAsync(string name, CancellationToken cancellationToken);
     }
 }

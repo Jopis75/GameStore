@@ -19,9 +19,9 @@ namespace Persistance.Configurations
                     Country = "USA",
                     CreatedBy = "System",
                     CreatedAt = DateTime.Now,
-                    UpdatedBy = string.Empty,
+                    UpdatedBy = String.Empty,
                     UpdatedAt = null,
-                    DeletedBy = string.Empty,
+                    DeletedBy = String.Empty,
                     DeletedAt = null
                 },
                 new Address
@@ -34,9 +34,9 @@ namespace Persistance.Configurations
                     Country = "United States",
                     CreatedBy = "System",
                     CreatedAt = DateTime.Now,
-                    UpdatedBy = string.Empty,
+                    UpdatedBy = String.Empty,
                     UpdatedAt = null,
-                    DeletedBy = string.Empty,
+                    DeletedBy = String.Empty,
                     DeletedAt = null
                 },
                 new Address
@@ -45,13 +45,13 @@ namespace Persistance.Configurations
                     StreetAddress = "Nieuwezijds Voorburgwal 225",
                     PostalCode = "1012 RL",
                     City = "Amsterdam",
-                    State = string.Empty,
+                    State = String.Empty,
                     Country = "The Netherlands",
                     CreatedBy = "System",
                     CreatedAt = DateTime.Now,
-                    UpdatedBy = string.Empty,
+                    UpdatedBy = String.Empty,
                     UpdatedAt = null,
-                    DeletedBy = string.Empty,
+                    DeletedBy = String.Empty,
                     DeletedAt = null
                 },
                 new Address
@@ -64,9 +64,9 @@ namespace Persistance.Configurations
                     Country = "United States",
                     CreatedBy = "System",
                     CreatedAt = DateTime.Now,
-                    UpdatedBy = string.Empty,
+                    UpdatedBy = String.Empty,
                     UpdatedAt = null,
-                    DeletedBy = string.Empty,
+                    DeletedBy = String.Empty,
                     DeletedAt = null
                 }
             );

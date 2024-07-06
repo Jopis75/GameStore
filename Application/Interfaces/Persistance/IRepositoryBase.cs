@@ -9,20 +9,20 @@ namespace Application.Interfaces.Persistance
         where TDto : DtoBase, new()
         where TFilter : FilterBase, new()
     {
-        Task<TDto> CreateAsync(TDto dto);
+        Task<TDto> CreateAsync(TDto dto, CancellationToken cancellationToken);
 
-        Task<TDto> DeleteAsync(TDto dto);
+        Task<TDto> DeleteAsync(TDto dto, CancellationToken cancellationToken);
 
-        Task<TDto> DeleteByIdAsync(int id);
+        Task<TDto> DeleteByIdAsync(int id, CancellationToken cancellationToken);
 
         Task<bool> ExistsAsync(int id);
 
-        Task<IEnumerable<TDto>> ReadAllAsync(bool asNoTracking = false);
+        Task<IEnumerable<TDto>> ReadAllAsync(CancellationToken cancellationToken);
 
-        Task<TDto> ReadByIdAsync(int id, bool asNoTracking = false);
+        Task<TDto> ReadByIdAsync(int id, CancellationToken cancellationToken);
 
-        Task<IEnumerable<TDto>> ReadByFilterAsync(TFilter filter, bool asNoTracking = false);
+        Task<IEnumerable<TDto>> ReadByFilterAsync(TFilter filter, CancellationToken cancellationToken);
 
-        Task<TDto> UpdateAsync(TDto dto);
+        Task<TDto> UpdateAsync(TDto dto, CancellationToken cancellationToken);
     }
 }

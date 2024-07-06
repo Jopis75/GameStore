@@ -1,5 +1,5 @@
 ﻿using Application.Dtos.Addresses;
-using Application.Dtos.Common;
+using Application.Dtos.General;
 using Application.Features.Addresses.Requests.Commands;
 using Application.Features.Addresses.Requests.Queries;
 using MediatR;

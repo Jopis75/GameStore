@@ -1,4 +1,4 @@
-﻿using Application.Dtos.Common;
+﻿using Application.Dtos.General;
 using Application.Features.Addresses.Requests.Queries;
 using Application.Interfaces.Persistance;
 using Domain.Dtos;
@@ -28,7 +28,7 @@ namespace Application.Features.Addresses.RequestHandlers.Queries
 
                 cancellationToken.ThrowIfCancellationRequested();
 
-                var addressDtos = await _unitOfWork.AddressRepository.ReadAllAsync(true);
+                var addressDtos = await _unitOfWork.AddressRepository.ReadAllAsync(cancellationToken);
 
                 var httpResponseDto = new HttpResponseDto<List<AddressDto>>(addressDtos.ToList(), StatusCodes.Status200OK);
                 _logger.LogInformation("Done ReadAddressAll {@HttpResponseDto}.", httpResponseDto);

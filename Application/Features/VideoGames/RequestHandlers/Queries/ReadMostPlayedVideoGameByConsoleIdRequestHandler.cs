@@ -1,4 +1,4 @@
-﻿using Application.Dtos.Common;
+﻿using Application.Dtos.General;
 using Application.Features.VideoGames.Requests.Queries;
 using Application.Interfaces.Persistance;
 using Domain.Dtos;

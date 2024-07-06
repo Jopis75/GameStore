@@ -1,20 +1,19 @@
-﻿using Application.Dtos.Common;
-using Application.Models.Identity;
+﻿using Application.Models.Identity;
 
 namespace Application.Dtos.Identity
 {
-    public class RegistrationRequestDto : RequestDto
+    public class RegistrationRequestDto
     {
-        public string? UserName { get; set; }
+        public string UserName { get; set; } = default!;
 
-        public string? Password { get; set; }
+        public string Password { get; set; } = default!;
 
-        public string? Email { get; set; }
+        public string Email { get; set; } = default!;
 
-        public string? FirstName { get; set; }
+        public string FirstName { get; set; } = default!;
 
-        public string? LastName { get; set; }
+        public string LastName { get; set; } = default!;
 
-        public Roles? Role { get; set; }
+        public Roles Role { get; set; }
     }
 }

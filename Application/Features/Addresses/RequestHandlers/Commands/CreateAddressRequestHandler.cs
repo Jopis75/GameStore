@@ -1,4 +1,4 @@
-﻿using Application.Dtos.Common;
+﻿using Application.Dtos.General;
 using Application.Features.Addresses.Requests.Commands;
 using Application.Interfaces.Persistance;
 using Domain.Dtos;
@@ -13,11 +13,11 @@ namespace Application.Features.Addresses.RequestHandlers.Commands
     {
         private readonly IUnitOfWork _unitOfWork;
 
-        private readonly IValidator<AddressDto> _validator;
+        private readonly IValidator<CreateAddressRequest> _validator;
 
         private readonly ILogger<CreateAddressRequestHandler> _logger;
 
-        public CreateAddressRequestHandler(IUnitOfWork unitOfWork, IValidator<AddressDto> validator, ILogger<CreateAddressRequestHandler> logger)
+        public CreateAddressRequestHandler(IUnitOfWork unitOfWork, IValidator<CreateAddressRequest> validator, ILogger<CreateAddressRequestHandler> logger)
         {
             _unitOfWork = unitOfWork ?? throw new ArgumentNullException(nameof(unitOfWork));
             _validator = validator ?? throw new ArgumentNullException(nameof(validator));
@@ -32,23 +32,23 @@ namespace Application.Features.Addresses.RequestHandlers.Commands
 
                 cancellationToken.ThrowIfCancellationRequested();
 
-                if (createAddressRequest.AddressDto == null)
+                if (createAddressRequest == null)
                 {
-                    var httpResponseDto1 = new HttpResponseDto<AddressDto>(new ArgumentNullException(nameof(createAddressRequest.AddressDto)).Message, StatusCodes.Status400BadRequest);
+                    var httpResponseDto1 = new HttpResponseDto<AddressDto>(new ArgumentNullException(nameof(createAddressRequest)).Message, StatusCodes.Status400BadRequest);
                     _logger.LogError("Error CreateAddress {@HttpResponseDto}.", httpResponseDto1);
                     return httpResponseDto1;
                 }
 
-                var validationResult = await _validator.ValidateAsync(createAddressRequest.AddressDto, cancellationToken);
+                var validationResult = await _validator.ValidateAsync(createAddressRequest, cancellationToken);
 
-                if (!validationResult.IsValid)
+                if (validationResult.IsValid == false)
                 {
                     var httpResponseDto1 = new HttpResponseDto<AddressDto>(new ValidationException(validationResult.Errors).Message, StatusCodes.Status400BadRequest);
                     _logger.LogError("Error CreateAddress {@HttpResponseDto}.", httpResponseDto1);
                     return httpResponseDto1;
                 }
 
-                var createdAddressDto = await _unitOfWork.AddressRepository.CreateAsync(createAddressRequest.AddressDto);
+                var createdAddressDto = await _unitOfWork.AddressRepository.CreateAsync(createAddressRequest.AddressDto, cancellationToken);
                 await _unitOfWork.SaveAsync();
 
                 var httpResponseDto = new HttpResponseDto<AddressDto>(createdAddressDto, StatusCodes.Status201Created);

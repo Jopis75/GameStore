@@ -20,7 +20,7 @@ namespace Persistance.Configurations
                     Id = 1,
                     Name = "Horizon Forbidden West",
                     Title = "Horizon Forbidden West",
-                    ImageUri = string.Empty,
+                    ImageUri = String.Empty,
                     DeveloperId = 2,
                     Price = 69.99M,
                     ReleaseDate = DateTime.Parse("2022-02-18"),
@@ -29,9 +29,9 @@ namespace Persistance.Configurations
                     Url = "https://www.playstation.com/sv-se/games/horizon-forbidden-west/",
                     CreatedBy = "System",
                     CreatedAt = DateTime.Now,
-                    UpdatedBy = string.Empty,
+                    UpdatedBy = String.Empty,
                     UpdatedAt = null,
-                    DeletedBy = string.Empty,
+                    DeletedBy = String.Empty,
                     DeletedAt = null
                 },
                 new VideoGame
@@ -39,7 +39,7 @@ namespace Persistance.Configurations
                     Id = 2,
                     Name = "Horizon Call of the Mountain",
                     Title = "Horizon Call of the Mountain",
-                    ImageUri = string.Empty,
+                    ImageUri = String.Empty,
                     DeveloperId = 2,
                     Price = 59.99M,
                     ReleaseDate = DateTime.Parse("2023-02-22"),
@@ -48,9 +48,9 @@ namespace Persistance.Configurations
                     Url = "https://www.playstation.com/en-se/games/horizon-call-of-the-mountain/",
                     CreatedBy = "System",
                     CreatedAt = DateTime.Now,
-                    UpdatedBy = string.Empty,
+                    UpdatedBy = String.Empty,
                     UpdatedAt = null,
-                    DeletedBy = string.Empty,
+                    DeletedBy = String.Empty,
                     DeletedAt = null
                 },
                 new VideoGame
@@ -58,7 +58,7 @@ namespace Persistance.Configurations
                     Id = 3,
                     Name = "Ghost of Tsushima DIRECTOR’S CUT",
                     Title = "Ghost of Tsushima DIRECTOR’S CUT",
-                    ImageUri = string.Empty,
+                    ImageUri = String.Empty,
                     DeveloperId = 3,
                     Price = 69.99M,
                     ReleaseDate = DateTime.Parse("2020-07-17"),
@@ -67,9 +67,9 @@ namespace Persistance.Configurations
                     Url = "https://www.playstation.com/en-se/games/ghost-of-tsushima/",
                     CreatedBy = "System",
                     CreatedAt = DateTime.Now,
-                    UpdatedBy = string.Empty,
+                    UpdatedBy = String.Empty,
                     UpdatedAt = null,
-                    DeletedBy = string.Empty,
+                    DeletedBy = String.Empty,
                     DeletedAt = null
                 }
             );

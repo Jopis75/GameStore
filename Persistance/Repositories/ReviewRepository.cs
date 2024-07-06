@@ -17,8 +17,10 @@ namespace Persistance.Repositories
         {
         }
 
-        protected override async Task<IEnumerable<ReviewDto>> ReadByFilterAsync(ReviewFilter filter, IQueryable<Review> query, Expression<Func<Review, bool>> predicate)
+        protected override async Task<IEnumerable<ReviewDto>> ReadByFilterAsync(ReviewFilter filter, Expression<Func<Review, bool>> predicate, CancellationToken cancellationToken)
         {
+            cancellationToken.ThrowIfCancellationRequested();
+
             if (filter.Grade != null)
             {
                 predicate = predicate.And(review => review.Grade == filter.Grade);
@@ -29,73 +31,58 @@ namespace Persistance.Repositories
                 predicate = predicate.And(review => review.ReviewDate.Date == filter.ReviewDate.Value.Date);
             }
 
-            var reviews = await query
+            var reviews = await Entities
+                .AsNoTracking()
                 .Where(predicate)
-                .ToListAsync();
+                .ToArrayAsync();
 
             return reviews.Select(Mapper.Map<ReviewDto>);
         }
 
-        public async Task<IEnumerable<ReviewDto>> ReadByGradeAsync(int grade, bool asNoTracking = false)
+        public async Task<IEnumerable<ReviewDto>> ReadByGradeAsync(int grade, CancellationToken cancellationToken)
         {
-            var query = Entities.AsQueryable();
+            cancellationToken.ThrowIfCancellationRequested();
 
-            if (asNoTracking)
-            {
-                query = query.AsNoTracking();
-            }
-
-            var reviews = await query
+            var reviews = await Entities
+                .AsNoTracking()
                 .Where(review => review.Grade == grade)
-                .ToListAsync();
+                .ToArrayAsync();
 
             return reviews.Select(Mapper.Map<ReviewDto>);
         }
 
-        public async Task<IEnumerable<ReviewDto>> ReadByGradeAsync(int fromGrade, int toGrade, bool asNoTracking = false)
+        public async Task<IEnumerable<ReviewDto>> ReadByGradeAsync(int fromGrade, int toGrade, CancellationToken cancellationToken)
         {
-            var query = Entities.AsQueryable();
+            cancellationToken.ThrowIfCancellationRequested();
 
-            if (asNoTracking)
-            {
-                query = query.AsNoTracking();
-            }
-
-            var reviews = await query
+            var reviews = await Entities
+                .AsNoTracking()
                 .Where(review => review.Grade >= fromGrade && review.Grade <= toGrade)
-                .ToListAsync();
+                .ToArrayAsync();
 
             return reviews.Select(Mapper.Map<ReviewDto>);
         }
 
-        public async Task<IEnumerable<ReviewDto>> ReadByReviewDateAsync(DateTime fromReviewDate, DateTime toReviewDate, bool asNoTracking = false)
+        public async Task<IEnumerable<ReviewDto>> ReadByReviewDateAsync(DateTime fromReviewDate, DateTime toReviewDate, CancellationToken cancellationToken)
         {
-            var query = Entities.AsQueryable();
+            cancellationToken.ThrowIfCancellationRequested();
 
-            if (asNoTracking)
-            {
-                query = query.AsNoTracking();
-            }
-
-            var reviews = await query
+            var reviews = await Entities
+                .AsNoTracking()
                 .Where(review => review.ReviewDate.Date >= fromReviewDate.Date && review.ReviewDate.Date <= toReviewDate.Date)
-                .ToListAsync();
+                .ToArrayAsync();
 
             return reviews.Select(Mapper.Map<ReviewDto>);
         }
 
-        public async Task<IEnumerable<ReviewDto>> ReadByVideoGameIdAsync(int videoGameId, bool asNoTracking = false)
+        public async Task<IEnumerable<ReviewDto>> ReadByVideoGameIdAsync(int videoGameId, CancellationToken cancellationToken)
         {
-            var query = Entities.AsQueryable();
+            cancellationToken.ThrowIfCancellationRequested();
 
-            if (asNoTracking)
-            {
-                query = query.AsNoTracking();
-            }
-
-            var reviews = await query
+            var reviews = await Entities
+                .AsNoTracking()
                 .Where(review => review.VideoGameId == videoGameId)
-                .ToListAsync();
+                .ToArrayAsync();
 
             return reviews.Select(Mapper.Map<ReviewDto>);
         }

@@ -1,5 +1,5 @@
-﻿using Application.Dtos.AzureServiceBus;
-using Application.Dtos.Common;
+﻿using Application.Dtos.Azure.ServiceBus;
+using Application.Dtos.General;
 using Application.Interfaces.Infrastructure;
 using Azure.Messaging.ServiceBus;
 using Microsoft.AspNetCore.Http;

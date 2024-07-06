@@ -1,6 +1,6 @@
 ﻿using Application.Dtos.Addresses;
-using Application.Dtos.Common;
 using Application.Dtos.Companies;
+using Application.Dtos.General;
 using Application.Features.Companies.Requests.Commands;
 using Application.Features.Companies.Requests.Queries;
 using MediatR;
@@ -40,7 +40,7 @@ namespace GameStoreAPI.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<ActionResult<HttpResponseDto<CreateCompanyResponseDto>>> CreateWithAddress([FromBody] CreateCompanyWithAddressRequestDto createCompanyWithAddressRequestDto)
         {
-            var httpResponseDto = await _mediator.Send(new CreateCompanyWithAddressRequest
+            var httpResponseDto = await _mediator.Send(new CreateCompanyWithHeadquarterRequest
             {
                 CreateCompanyWithAddressRequestDto = createCompanyWithAddressRequestDto
             });

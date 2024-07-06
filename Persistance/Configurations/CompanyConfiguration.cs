@@ -20,12 +20,12 @@ namespace Persistance.Configurations
                     EmailAddress = "johan.steinrud@gmail.com",
                     PhoneNumber = "46702651007",
                     WebsiteUrl = "https://sonyinteractive.com/en/",
-                    LogoImageUri = string.Empty,
+                    LogoImageUri = String.Empty,
                     CreatedBy = "System",
                     CreatedAt = DateTime.Now,
-                    UpdatedBy = string.Empty,
+                    UpdatedBy = String.Empty,
                     UpdatedAt = null,
-                    DeletedBy = string.Empty,
+                    DeletedBy = String.Empty,
                     DeletedAt = null
                 },
                 new Company
@@ -39,12 +39,12 @@ namespace Persistance.Configurations
                     EmailAddress = "johan.steinrud@gmail.com",
                     PhoneNumber = "46702651007",
                     WebsiteUrl = "https://www.playstation.com/en-us/corporate/playstation-studios/",
-                    LogoImageUri = string.Empty,
+                    LogoImageUri = String.Empty,
                     CreatedBy = "System",
                     CreatedAt = DateTime.Now,
-                    UpdatedBy = string.Empty,
+                    UpdatedBy = String.Empty,
                     UpdatedAt = null,
-                    DeletedBy = string.Empty,
+                    DeletedBy = String.Empty,
                     DeletedAt = null
                 },
                 new Company
@@ -58,12 +58,12 @@ namespace Persistance.Configurations
                     EmailAddress = "johan.steinrud@gmail.com",
                     PhoneNumber = "46702651007",
                     WebsiteUrl = "https://www.guerrilla-games.com/",
-                    LogoImageUri = string.Empty,
+                    LogoImageUri = String.Empty,
                     CreatedBy = "System",
                     CreatedAt = DateTime.Now,
-                    UpdatedBy = string.Empty,
+                    UpdatedBy = String.Empty,
                     UpdatedAt = null,
-                    DeletedBy = string.Empty,
+                    DeletedBy = String.Empty,
                     DeletedAt = null
                 },
                 new Company
@@ -77,12 +77,12 @@ namespace Persistance.Configurations
                     EmailAddress = "johan.steinrud@gmail.com",
                     PhoneNumber = "46702651007",
                     WebsiteUrl = "https://www.suckerpunch.com/",
-                    LogoImageUri = string.Empty,
+                    LogoImageUri = String.Empty,
                     CreatedBy = "System",
                     CreatedAt = DateTime.Now,
-                    UpdatedBy = string.Empty,
+                    UpdatedBy = String.Empty,
                     UpdatedAt = null,
-                    DeletedBy = string.Empty,
+                    DeletedBy = String.Empty,
                     DeletedAt = null
                 }
             );

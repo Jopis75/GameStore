@@ -1,5 +1,5 @@
-﻿using Application.Dtos.AzureBlobStorage;
-using Application.Dtos.Common;
+﻿using Application.Dtos.Azure.BlobStorage;
+using Application.Dtos.General;
 
 namespace Application.Interfaces.Infrastructure
 {

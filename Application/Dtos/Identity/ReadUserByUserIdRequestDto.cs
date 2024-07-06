@@ -1,8 +1,6 @@
-﻿using Application.Dtos.Common;
-
-namespace Application.Dtos.Identity
+﻿namespace Application.Dtos.Identity
 {
-    public class ReadUserByUserIdRequestDto : RequestDto
+    public class ReadUserByUserIdRequestDto
     {
         public string? UserId { get; set; }
     }

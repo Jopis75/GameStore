@@ -6,6 +6,6 @@ namespace Application.Features.VideoGames.Requests.Commands
 {
     public class DeleteVideoGameRequest : IRequest<HttpResponseDto<VideoGameDto>>
     {
-        public int? Id { get; set; }
+        public int Id { get; set; }
     }
 }

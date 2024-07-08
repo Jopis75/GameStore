@@ -6,6 +6,6 @@ namespace Application.Features.VideoGames.Requests.Queries
 {
     public class ReadMostPlayedVideoGameByConsoleIdRequest : IRequest<HttpResponseDto<VideoGameDto>>
     {
-        public int? ConsoleId { get; set; }
+        public int ConsoleId { get; set; }
     }
 }

@@ -13,11 +13,11 @@ namespace Application.Features.VideoGames.RequestHandlers.Commands
     {
         private readonly IUnitOfWork _unitOfWork;
 
-        private readonly IValidator<VideoGameDto> _validator;
+        private readonly IValidator<UpdateVideoGameRequest> _validator;
 
         private readonly ILogger<UpdateVideoGameRequestHandler> _logger;
 
-        public UpdateVideoGameRequestHandler(IUnitOfWork unitOfWork, IValidator<VideoGameDto> validator, ILogger<UpdateVideoGameRequestHandler> logger)
+        public UpdateVideoGameRequestHandler(IUnitOfWork unitOfWork, IValidator<UpdateVideoGameRequest> validator, ILogger<UpdateVideoGameRequestHandler> logger)
         {
             _unitOfWork = unitOfWork ?? throw new ArgumentNullException(nameof(unitOfWork));
             _validator = validator ?? throw new ArgumentNullException(nameof(validator));
@@ -32,23 +32,23 @@ namespace Application.Features.VideoGames.RequestHandlers.Commands
 
                 cancellationToken.ThrowIfCancellationRequested();
 
-                if (updateVideoGameRequest.VideoGameDto == null)
+                if (updateVideoGameRequest == null)
                 {
-                    var httpResponseDto1 = new HttpResponseDto<VideoGameDto>(new ArgumentNullException(nameof(updateVideoGameRequest.VideoGameDto)).Message, StatusCodes.Status400BadRequest);
+                    var httpResponseDto1 = new HttpResponseDto<VideoGameDto>(new ArgumentNullException(nameof(updateVideoGameRequest)).Message, StatusCodes.Status400BadRequest);
                     _logger.LogError("Error UpdateVideoGame {@HttpResponseDto}.", httpResponseDto1);
                     return httpResponseDto1;
                 }
 
-                var validationResult = await _validator.ValidateAsync(updateVideoGameRequest.VideoGameDto, cancellationToken);
+                var validationResult = await _validator.ValidateAsync(updateVideoGameRequest, cancellationToken);
 
-                if (!validationResult.IsValid)
+                if (validationResult.IsValid == false)
                 {
                     var httpResponseDto1 = new HttpResponseDto<VideoGameDto>(new ValidationException(validationResult.Errors).Message, StatusCodes.Status400BadRequest);
                     _logger.LogError("Error UpdateVideoGame {@HttpResponseDto}.", httpResponseDto1);
                     return httpResponseDto1;
                 }
 
-                var updatedVideoGameDto = await _unitOfWork.VideoGameRepository.UpdateAsync(updateVideoGameRequest.VideoGameDto);
+                var updatedVideoGameDto = await _unitOfWork.VideoGameRepository.UpdateAsync(updateVideoGameRequest.VideoGameDto, cancellationToken);
                 await _unitOfWork.SaveAsync();
 
                 var httpResponseDto = new HttpResponseDto<VideoGameDto>(updatedVideoGameDto, StatusCodes.Status200OK);

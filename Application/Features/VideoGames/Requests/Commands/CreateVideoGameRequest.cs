@@ -6,6 +6,6 @@ namespace Application.Features.VideoGames.Requests.Commands
 {
     public class CreateVideoGameRequest : IRequest<HttpResponseDto<VideoGameDto>>
     {
-        public VideoGameDto? VideoGameDto { get; set; }
+        public VideoGameDto VideoGameDto { get; set; } = new();
     }
 }

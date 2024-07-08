@@ -6,6 +6,6 @@ namespace Application.Features.VideoGames.Requests.Queries
 {
     public class ReadVideoGameByIdRequest : IRequest<HttpResponseDto<VideoGameDto>>
     {
-        public int? Id { get; set; }
+        public int Id { get; set; }
     }
 }

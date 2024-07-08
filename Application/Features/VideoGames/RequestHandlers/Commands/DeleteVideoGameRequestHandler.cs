@@ -13,11 +13,11 @@ namespace Application.Features.VideoGames.RequestHandlers.Commands
     {
         private readonly IUnitOfWork _unitOfWork;
 
-        private readonly IValidator<VideoGameDto> _validator;
+        private readonly IValidator<DeleteVideoGameRequest> _validator;
 
         private readonly ILogger<DeleteVideoGameRequestHandler> _logger;
 
-        public DeleteVideoGameRequestHandler(IUnitOfWork unitOfWork, IValidator<VideoGameDto> validator, ILogger<DeleteVideoGameRequestHandler> logger)
+        public DeleteVideoGameRequestHandler(IUnitOfWork unitOfWork, IValidator<DeleteVideoGameRequest> validator, ILogger<DeleteVideoGameRequestHandler> logger)
         {
             _unitOfWork = unitOfWork ?? throw new ArgumentNullException(nameof(unitOfWork));
             _validator = validator ?? throw new ArgumentNullException(nameof(validator));
@@ -32,23 +32,23 @@ namespace Application.Features.VideoGames.RequestHandlers.Commands
 
                 cancellationToken.ThrowIfCancellationRequested();
 
-                if (deleteVideoGameRequest.Id == null)
+                if (deleteVideoGameRequest == null)
                 {
-                    var httpResponseDto1 = new HttpResponseDto<VideoGameDto>(new ArgumentNullException(nameof(deleteVideoGameRequest.Id)).Message, StatusCodes.Status400BadRequest);
+                    var httpResponseDto1 = new HttpResponseDto<VideoGameDto>(new ArgumentNullException(nameof(deleteVideoGameRequest)).Message, StatusCodes.Status400BadRequest);
                     _logger.LogError("Error DeleteVideoGame {@HttpResponseDto}.", httpResponseDto1);
                     return httpResponseDto1;
                 }
 
-                var validationResult = await _validator.ValidateAsync(deleteVideoGameRequest.Id, cancellationToken);
+                var validationResult = await _validator.ValidateAsync(deleteVideoGameRequest, cancellationToken);
 
-                if (!validationResult.IsValid)
+                if (validationResult.IsValid == false)
                 {
                     var httpResponseDto1 = new HttpResponseDto<VideoGameDto>(new ValidationException(validationResult.Errors).Message, StatusCodes.Status400BadRequest);
                     _logger.LogError("Error DeleteVideoGame {@HttpResponseDto}.", httpResponseDto1);
                     return httpResponseDto1;
                 }
 
-                var deleteVideoGameDto = await _unitOfWork.VideoGameRepository.DeleteByIdAsync(deleteVideoGameRequest.Id ?? 0);
+                var deleteVideoGameDto = await _unitOfWork.VideoGameRepository.DeleteByIdAsync(deleteVideoGameRequest.Id, cancellationToken);
                 await _unitOfWork.SaveAsync();
 
                 var httpResponseDto = new HttpResponseDto<VideoGameDto>(deleteVideoGameDto, StatusCodes.Status200OK);

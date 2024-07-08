@@ -13,11 +13,11 @@ namespace Application.Features.VideoGames.RequestHandlers.Queries
     {
         private readonly IUnitOfWork _unitOfWork;
 
-        private readonly IValidator<VideoGameDto> _validator;
+        private readonly IValidator<ReadMostPlayedVideoGameByConsoleIdRequest> _validator;
 
         private readonly ILogger<ReadMostPlayedVideoGameByConsoleIdRequestHandler> _logger;
 
-        public ReadMostPlayedVideoGameByConsoleIdRequestHandler(IUnitOfWork unitOfWork, IValidator<VideoGameDto> validator, ILogger<ReadMostPlayedVideoGameByConsoleIdRequestHandler> logger)
+        public ReadMostPlayedVideoGameByConsoleIdRequestHandler(IUnitOfWork unitOfWork, IValidator<ReadMostPlayedVideoGameByConsoleIdRequest> validator, ILogger<ReadMostPlayedVideoGameByConsoleIdRequestHandler> logger)
         {
             _unitOfWork = unitOfWork ?? throw new ArgumentNullException(nameof(unitOfWork));
             _validator = validator ?? throw new ArgumentNullException(nameof(validator));
@@ -32,23 +32,23 @@ namespace Application.Features.VideoGames.RequestHandlers.Queries
 
                 cancellationToken.ThrowIfCancellationRequested();
 
-                if (readMostPlayedVideoGameByConsoleIdRequest.ConsoleId == null)
+                if (readMostPlayedVideoGameByConsoleIdRequest == null)
                 {
-                    var httpResponseDto1 = new HttpResponseDto<VideoGameDto>(new ArgumentNullException(nameof(readMostPlayedVideoGameByConsoleIdRequest.ConsoleId)).Message, StatusCodes.Status400BadRequest);
+                    var httpResponseDto1 = new HttpResponseDto<VideoGameDto>(new ArgumentNullException(nameof(readMostPlayedVideoGameByConsoleIdRequest)).Message, StatusCodes.Status400BadRequest);
                     _logger.LogError("Error ReadMostPlayedVideoGameByConsoleId {@HttpResponseDto}.", httpResponseDto1);
                     return httpResponseDto1;
                 }
 
-                var validationResult = await _validator.ValidateAsync(readMostPlayedVideoGameByConsoleIdRequest.ConsoleId, cancellationToken);
+                var validationResult = await _validator.ValidateAsync(readMostPlayedVideoGameByConsoleIdRequest, cancellationToken);
 
-                if (!validationResult.IsValid)
+                if (validationResult.IsValid == false)
                 {
                     var httpResponseDto1 = new HttpResponseDto<VideoGameDto>(new ValidationException(validationResult.Errors).Message, StatusCodes.Status400BadRequest);
                     _logger.LogError("Error ReadMostPlayedVideoGameByConsoleId {@HttpResponseDto}.", httpResponseDto1);
                     return httpResponseDto1;
                 }
 
-                var videoGameDto = await _unitOfWork.VideoGameRepository.ReadMostPlayedByConsoleIdAsync(readMostPlayedVideoGameByConsoleIdRequest.ConsoleId ?? 0);
+                var videoGameDto = await _unitOfWork.VideoGameRepository.ReadMostPlayedByConsoleIdAsync(readMostPlayedVideoGameByConsoleIdRequest.ConsoleId, cancellationToken);
 
                 var httpResponseDto = new HttpResponseDto<VideoGameDto>(videoGameDto, StatusCodes.Status200OK);
                 _logger.LogInformation("Done ReadMostPlayedVideoGameByConsoleId {@HttpResponseDto}.", httpResponseDto);

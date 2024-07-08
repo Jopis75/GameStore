@@ -9,6 +9,8 @@ using Application.Features.ConsoleVideoGames.Requests.Commands;
 using Application.Features.ConsoleVideoGames.Requests.Queries;
 using Application.Features.Reviews.Requests.Commands;
 using Application.Features.Reviews.Requests.Queries;
+using Application.Features.VideoGames.Requests.Commands;
+using Application.Features.VideoGames.Requests.Queries;
 using Application.Validators.Dtos;
 using Application.Validators.Identity;
 using Application.Validators.Requests.Addresses.Commands;
@@ -21,6 +23,8 @@ using Application.Validators.Requests.ConsoleVideoGame.Commands;
 using Application.Validators.Requests.ConsoleVideoGame.Queries;
 using Application.Validators.Requests.Reviews.Commands;
 using Application.Validators.Requests.Reviews.Queries;
+using Application.Validators.Requests.VideoGames.Commands;
+using Application.Validators.Requests.VideoGames.Queries;
 using Domain.Dtos;
 using FluentValidation;
 using MediatR;
@@ -99,6 +103,14 @@ namespace Application
             serviceCollection.AddScoped<IValidator<UpdateReviewRequest>, UpdateReviewRequestValidator>();
             serviceCollection.AddScoped<IValidator<ReadReviewByIdRequest>, ReadReviewByIdRequestValidator>();
             serviceCollection.AddScoped<IValidator<ReadReviewsByVideoGameIdRequest>, ReadReviewsByVideoGameIdRequestValidator>();
+
+            // Features.VideoGames.Requests.
+            serviceCollection.AddScoped<IValidator<CreateVideoGameRequest>, CreateVideoGameRequestValidator>();
+            serviceCollection.AddScoped<IValidator<DeleteVideoGameRequest>, DeleteVideoGameRequestValidator>();
+            serviceCollection.AddScoped<IValidator<UpdateVideoGameRequest>, UpdateVideoGameRequestValidator>();
+            serviceCollection.AddScoped<IValidator<ReadMostPlayedVideoGameByConsoleIdRequest>, ReadMostPlayedVideoGameByConsoleIdRequestValidator>();
+            serviceCollection.AddScoped<IValidator<ReadVideoGameByIdRequest>, ReadVideoGameByIdRequestValidator>();
+            serviceCollection.AddScoped<IValidator<ReadVideoGamesByConsoleIdRequest>, ReadVideoGamesByConsoleIdRequestValidator>();
 
             return serviceCollection;
         }

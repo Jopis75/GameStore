@@ -6,6 +6,6 @@ namespace Application.Features.Reviews.Requests.Queries
 {
     public class ReadReviewByIdRequest : IRequest<HttpResponseDto<ReviewDto>>
     {
-        public int? Id { get; set; }
+        public int Id { get; set; }
     }
 }

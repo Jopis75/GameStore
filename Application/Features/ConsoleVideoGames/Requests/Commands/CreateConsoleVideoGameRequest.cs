@@ -6,6 +6,6 @@ namespace Application.Features.ConsoleVideoGames.Requests.Commands
 {
     public class CreateConsoleVideoGameRequest : IRequest<HttpResponseDto<ConsoleVideoGameDto>>
     {
-        public ConsoleVideoGameDto? ConsoleVideoGameDto { get; set; }
+        public ConsoleVideoGameDto ConsoleVideoGameDto { get; set; } = new();
     }
 }

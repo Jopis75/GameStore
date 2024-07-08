@@ -6,6 +6,6 @@ namespace Application.Features.Reviews.Requests.Commands
 {
     public class UpdateReviewRequest : IRequest<HttpResponseDto<ReviewDto>>
     {
-        public ReviewDto? ReviewDto { get; set; }
+        public ReviewDto ReviewDto { get; set; } = new();
     }
 }

@@ -6,6 +6,6 @@ namespace Application.Features.Reviews.Requests.Commands
 {
     public class DeleteReviewRequest : IRequest<HttpResponseDto<ReviewDto>>
     {
-        public int? Id { get; set; }
+        public int Id { get; set; }
     }
 }

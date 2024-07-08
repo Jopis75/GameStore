@@ -3,9 +3,9 @@ using FluentValidation;
 
 namespace Application.Validators.Dtos
 {
-    public class CreateReviewRequestDtoValidator : AbstractValidator<ReviewDto>
+    public class ReviewDtoValidator : AbstractValidator<ReviewDto>
     {
-        public CreateReviewRequestDtoValidator()
+        public ReviewDtoValidator()
         {
             RuleFor(reviewDto => reviewDto.Grade)
                 .GreaterThanOrEqualTo(0)

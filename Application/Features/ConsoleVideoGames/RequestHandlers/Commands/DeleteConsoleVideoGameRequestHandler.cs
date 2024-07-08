@@ -13,11 +13,11 @@ namespace Application.Features.ConsoleVideoGames.RequestHandlers.Commands
     {
         private readonly IUnitOfWork _unitOfWork;
 
-        private readonly IValidator<ConsoleVideoGameDto> _validator;
+        private readonly IValidator<DeleteConsoleVideoGameRequest> _validator;
 
         private readonly ILogger<DeleteConsoleVideoGameRequestHandler> _logger;
 
-        public DeleteConsoleVideoGameRequestHandler(IUnitOfWork unitOfWork, IValidator<ConsoleVideoGameDto> validator, ILogger<DeleteConsoleVideoGameRequestHandler> logger)
+        public DeleteConsoleVideoGameRequestHandler(IUnitOfWork unitOfWork, IValidator<DeleteConsoleVideoGameRequest> validator, ILogger<DeleteConsoleVideoGameRequestHandler> logger)
         {
             _unitOfWork = unitOfWork ?? throw new ArgumentNullException(nameof(unitOfWork));
             _validator = validator ?? throw new ArgumentNullException(nameof(validator));
@@ -32,23 +32,23 @@ namespace Application.Features.ConsoleVideoGames.RequestHandlers.Commands
 
                 cancellationToken.ThrowIfCancellationRequested();
 
-                if (deleteConsoleVideoGameRequest.Id == null)
+                if (deleteConsoleVideoGameRequest == null)
                 {
-                    var httpResponseDto1 = new HttpResponseDto<ConsoleVideoGameDto>(new ArgumentNullException(nameof(deleteConsoleVideoGameRequest.Id)).Message, StatusCodes.Status400BadRequest);
+                    var httpResponseDto1 = new HttpResponseDto<ConsoleVideoGameDto>(new ArgumentNullException(nameof(deleteConsoleVideoGameRequest)).Message, StatusCodes.Status400BadRequest);
                     _logger.LogError("Error DeleteConsoleVideoGame {@HttpResponseDto}.", httpResponseDto1);
                     return httpResponseDto1;
                 }
 
-                var validationResult = await _validator.ValidateAsync(deleteConsoleVideoGameRequest.Id, cancellationToken);
+                var validationResult = await _validator.ValidateAsync(deleteConsoleVideoGameRequest, cancellationToken);
 
-                if (!validationResult.IsValid)
+                if (validationResult.IsValid == false)
                 {
                     var httpResponseDto1 = new HttpResponseDto<ConsoleVideoGameDto>(new ValidationException(validationResult.Errors).Message, StatusCodes.Status400BadRequest);
                     _logger.LogError("Error DeleteConsoleVideoGame {@HttpResponseDto}.", httpResponseDto1);
                     return httpResponseDto1;
                 }
 
-                var deletedConsoleVideoGameDto = await _unitOfWork.ConsoleVideoGameRepository.DeleteByIdAsync(deleteConsoleVideoGameRequest.Id ?? 0);
+                var deletedConsoleVideoGameDto = await _unitOfWork.ConsoleVideoGameRepository.DeleteByIdAsync(deleteConsoleVideoGameRequest.Id, cancellationToken);
                 await _unitOfWork.SaveAsync();
 
                 var httpResponseDto = new HttpResponseDto<ConsoleVideoGameDto>(deletedConsoleVideoGameDto, StatusCodes.Status200OK);

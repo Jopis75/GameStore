@@ -6,6 +6,6 @@ namespace Application.Features.Consoles.Requests.Commands
 {
     public class CreateConsoleRequest : IRequest<HttpResponseDto<ConsoleDto>>
     {
-        public ConsoleDto? ConsoleDto { get; set; }
+        public ConsoleDto ConsoleDto { get; set; } = new();
     }
 }

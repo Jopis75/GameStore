@@ -13,11 +13,11 @@ namespace Application.Features.Reviews.RequestHandlers.Queries
     {
         private readonly IUnitOfWork _unitOfWork;
 
-        private readonly IValidator<ReviewDto> _validator;
+        private readonly IValidator<ReadReviewsByVideoGameIdRequest> _validator;
 
         private readonly ILogger<ReadReviewsByVideoGameIdRequestHandler> _logger;
 
-        public ReadReviewsByVideoGameIdRequestHandler(IUnitOfWork unitOfWork, IValidator<ReviewDto> validator, ILogger<ReadReviewsByVideoGameIdRequestHandler> logger)
+        public ReadReviewsByVideoGameIdRequestHandler(IUnitOfWork unitOfWork, IValidator<ReadReviewsByVideoGameIdRequest> validator, ILogger<ReadReviewsByVideoGameIdRequestHandler> logger)
         {
             _unitOfWork = unitOfWork ?? throw new ArgumentNullException(nameof(unitOfWork));
             _validator = validator ?? throw new ArgumentNullException(nameof(validator));
@@ -32,23 +32,23 @@ namespace Application.Features.Reviews.RequestHandlers.Queries
 
                 cancellationToken.ThrowIfCancellationRequested();
 
-                if (readReviewsByVideoGameIdRequest.VideoGameId == null)
+                if (readReviewsByVideoGameIdRequest == null)
                 {
-                    var httpResponseDto1 = new HttpResponseDto<List<ReviewDto>>(new ArgumentNullException(nameof(readReviewsByVideoGameIdRequest.VideoGameId)).Message, StatusCodes.Status400BadRequest);
+                    var httpResponseDto1 = new HttpResponseDto<List<ReviewDto>>(new ArgumentNullException(nameof(readReviewsByVideoGameIdRequest)).Message, StatusCodes.Status400BadRequest);
                     _logger.LogError("Error ReadReviewsByVideoGameId {@HttpResponseDto}.", httpResponseDto1);
                     return httpResponseDto1;
                 }
 
-                var validationResult = await _validator.ValidateAsync(readReviewsByVideoGameIdRequest.VideoGameId, cancellationToken);
+                var validationResult = await _validator.ValidateAsync(readReviewsByVideoGameIdRequest, cancellationToken);
 
-                if (!validationResult.IsValid)
+                if (validationResult.IsValid == false)
                 {
-                    var httpResponseDto1 = new HttpResponseDto<List<ReviewDto>>(new ArgumentNullException(nameof(readReviewsByVideoGameIdRequest.VideoGameId)).Message, StatusCodes.Status400BadRequest);
+                    var httpResponseDto1 = new HttpResponseDto<List<ReviewDto>>(new ValidationException(validationResult.Errors).Message, StatusCodes.Status400BadRequest);
                     _logger.LogError("Error ReadReviewsByVideoGameId {@HttpResponseDto}.", httpResponseDto1);
                     return httpResponseDto1;
                 }
 
-                var reviewDtos = await _unitOfWork.ReviewRepository.ReadByVideoGameIdAsync(readReviewsByVideoGameIdRequest.VideoGameId ?? 0, true);
+                var reviewDtos = await _unitOfWork.ReviewRepository.ReadByVideoGameIdAsync(readReviewsByVideoGameIdRequest.VideoGameId, cancellationToken);
 
                 var httpResponseDto = new HttpResponseDto<List<ReviewDto>>(reviewDtos.ToList(), StatusCodes.Status200OK);
                 _logger.LogInformation("Done ReadReviewsByVideoGameId {@HttpResponseDto}.", httpResponseDto);

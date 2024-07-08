@@ -13,11 +13,11 @@ namespace Application.Features.Reviews.RequestHandlers.Commands
     {
         private readonly IUnitOfWork _unitOfWork;
 
-        private readonly IValidator<ReviewDto> _validator;
+        private readonly IValidator<CreateReviewRequest> _validator;
 
         private readonly ILogger<CreateReviewRequestHandler> _logger;
 
-        public CreateReviewRequestHandler(IUnitOfWork unitOfWork, IValidator<ReviewDto> validator, ILogger<CreateReviewRequestHandler> logger)
+        public CreateReviewRequestHandler(IUnitOfWork unitOfWork, IValidator<CreateReviewRequest> validator, ILogger<CreateReviewRequestHandler> logger)
         {
             _unitOfWork = unitOfWork ?? throw new ArgumentNullException(nameof(unitOfWork));
             _validator = validator ?? throw new ArgumentNullException(nameof(validator));
@@ -32,23 +32,23 @@ namespace Application.Features.Reviews.RequestHandlers.Commands
 
                 cancellationToken.ThrowIfCancellationRequested();
 
-                if (createReviewRequest.ReviewDto == null)
+                if (createReviewRequest == null)
                 {
-                    var httpResponseDto1 = new HttpResponseDto<ReviewDto>(new ArgumentNullException(nameof(createReviewRequest.ReviewDto)).Message, StatusCodes.Status400BadRequest);
+                    var httpResponseDto1 = new HttpResponseDto<ReviewDto>(new ArgumentNullException(nameof(createReviewRequest)).Message, StatusCodes.Status400BadRequest);
                     _logger.LogError("Error CreateReview {@HttpResponseDto}.", httpResponseDto1);
                     return httpResponseDto1;
                 }
 
-                var validationResult = await _validator.ValidateAsync(createReviewRequest.ReviewDto, cancellationToken);
+                var validationResult = await _validator.ValidateAsync(createReviewRequest, cancellationToken);
 
-                if (!validationResult.IsValid)
+                if (validationResult.IsValid == false)
                 {
                     var httpResponseDto1 = new HttpResponseDto<ReviewDto>(new ValidationException(validationResult.Errors).Message, StatusCodes.Status400BadRequest);
                     _logger.LogError("Error CreateReview {@HttpResponseDto}.", httpResponseDto1);
                     return httpResponseDto1;
                 }
 
-                var createdReviewDto = await _unitOfWork.ReviewRepository.CreateAsync(createReviewRequest.ReviewDto);
+                var createdReviewDto = await _unitOfWork.ReviewRepository.CreateAsync(createReviewRequest.ReviewDto, cancellationToken);
                 await _unitOfWork.SaveAsync();
 
                 var httpResponseDto = new HttpResponseDto<ReviewDto>(createdReviewDto, StatusCodes.Status201Created);

@@ -6,6 +6,6 @@ namespace Application.Features.Consoles.Requests.Commands
 {
     public class DeleteConsoleRequest : IRequest<HttpResponseDto<ConsoleDto>>
     {
-        public int? Id { get; set; }
+        public int Id { get; set; }
     }
 }

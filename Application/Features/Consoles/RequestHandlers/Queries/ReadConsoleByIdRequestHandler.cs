@@ -13,11 +13,11 @@ namespace Application.Features.Consoles.RequestHandlers.Queries
     {
         private readonly IUnitOfWork _unitOfWork;
 
-        private readonly IValidator<ConsoleDto> _validator;
+        private readonly IValidator<ReadConsoleByIdRequest> _validator;
 
         private readonly ILogger<ReadConsoleByIdRequestHandler> _logger;
 
-        public ReadConsoleByIdRequestHandler(IUnitOfWork unitOfWork, IValidator<ConsoleDto> validator, ILogger<ReadConsoleByIdRequestHandler> logger)
+        public ReadConsoleByIdRequestHandler(IUnitOfWork unitOfWork, IValidator<ReadConsoleByIdRequest> validator, ILogger<ReadConsoleByIdRequestHandler> logger)
         {
             _unitOfWork = unitOfWork ?? throw new ArgumentNullException(nameof(unitOfWork));
             _validator = validator ?? throw new ArgumentNullException(nameof(validator));
@@ -32,23 +32,23 @@ namespace Application.Features.Consoles.RequestHandlers.Queries
 
                 cancellationToken.ThrowIfCancellationRequested();
 
-                if (readConsoleByIdRequest.Id == null)
+                if (readConsoleByIdRequest == null)
                 {
-                    var httpResponseDto1 = new HttpResponseDto<ConsoleDto>(new ArgumentNullException(nameof(readConsoleByIdRequest.ReadByIdRequestDto)).Message, StatusCodes.Status400BadRequest);
+                    var httpResponseDto1 = new HttpResponseDto<ConsoleDto>(new ArgumentNullException(nameof(readConsoleByIdRequest)).Message, StatusCodes.Status400BadRequest);
                     _logger.LogError("Error ReadConsoleById {@HttpResponseDto}.", httpResponseDto1);
                     return httpResponseDto1;
                 }
 
-                var validationResult = await _validator.ValidateAsync(readConsoleByIdRequest.Id, cancellationToken);
+                var validationResult = await _validator.ValidateAsync(readConsoleByIdRequest, cancellationToken);
 
-                if (!validationResult.IsValid)
+                if (validationResult.IsValid == false)
                 {
                     var httpResponseDto1 = new HttpResponseDto<ConsoleDto>(new ValidationException(validationResult.Errors).Message, StatusCodes.Status400BadRequest);
                     _logger.LogError("Error ReadConsoleById {@HttpResponseDto}.", httpResponseDto1);
                     return httpResponseDto1;
                 }
 
-                var consoleDto = await _unitOfWork.ConsoleRepository.ReadByIdAsync(readConsoleByIdRequest.Id ?? 0, true);
+                var consoleDto = await _unitOfWork.ConsoleRepository.ReadByIdAsync(readConsoleByIdRequest.Id, cancellationToken);
 
                 var httpResponseDto = new HttpResponseDto<ConsoleDto>(consoleDto, StatusCodes.Status200OK);
                 _logger.LogInformation("Done ReadConsoleById {@HttpResponseDto}.", httpResponseDto);
@@ -57,7 +57,7 @@ namespace Application.Features.Consoles.RequestHandlers.Queries
             catch (OperationCanceledException ex)
             {
                 var httpResponseDto1 = new HttpResponseDto<ConsoleDto>(ex.Message, StatusCodes.Status500InternalServerError);
-                _logger.LogError("Canceled ReadConsole {@HttpResponseDto}.", httpResponseDto1);
+                _logger.LogError("Canceled ReadConsoleById {@HttpResponseDto}.", httpResponseDto1);
                 return httpResponseDto1;
             }
             catch (Exception ex)

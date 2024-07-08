@@ -6,6 +6,6 @@ namespace Application.Features.ConsoleVideoGames.Requests.Queries
 {
     public class ReadConsoleVideoGameByIdRequest : IRequest<HttpResponseDto<ConsoleVideoGameDto>>
     {
-        public int? Id { get; set; }
+        public int Id { get; set; }
     }
 }

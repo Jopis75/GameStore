@@ -13,11 +13,11 @@ namespace Application.Features.Reviews.RequestHandlers.Queries
     {
         private readonly IUnitOfWork _unitOfWork;
 
-        private readonly IValidator<ReviewDto> _validator;
+        private readonly IValidator<ReadReviewByIdRequest> _validator;
 
         private readonly ILogger<ReadReviewByIdRequestHandler> _logger;
 
-        public ReadReviewByIdRequestHandler(IUnitOfWork unitOfWork, IValidator<ReviewDto> validator, ILogger<ReadReviewByIdRequestHandler> logger)
+        public ReadReviewByIdRequestHandler(IUnitOfWork unitOfWork, IValidator<ReadReviewByIdRequest> validator, ILogger<ReadReviewByIdRequestHandler> logger)
         {
             _unitOfWork = unitOfWork ?? throw new ArgumentNullException(nameof(unitOfWork));
             _validator = validator ?? throw new ArgumentNullException(nameof(validator));
@@ -32,23 +32,23 @@ namespace Application.Features.Reviews.RequestHandlers.Queries
 
                 cancellationToken.ThrowIfCancellationRequested();
 
-                if (readReviewByIdRequest.Id == null)
+                if (readReviewByIdRequest == null)
                 {
-                    var httpResponseDto1 = new HttpResponseDto<ReviewDto>(new ArgumentNullException(nameof(readReviewByIdRequest.Id)).Message, StatusCodes.Status400BadRequest);
+                    var httpResponseDto1 = new HttpResponseDto<ReviewDto>(new ArgumentNullException(nameof(readReviewByIdRequest)).Message, StatusCodes.Status400BadRequest);
                     _logger.LogError("Error ReadReviewById {@HttpResponseDto}.", httpResponseDto1);
                     return httpResponseDto1;
                 }
 
-                var validationResult = await _validator.ValidateAsync(readReviewByIdRequest.Id, cancellationToken);
+                var validationResult = await _validator.ValidateAsync(readReviewByIdRequest, cancellationToken);
 
-                if (!validationResult.IsValid)
+                if (validationResult.IsValid == false)
                 {
                     var httpResponseDto1 = new HttpResponseDto<ReviewDto>(new ValidationException(validationResult.Errors).Message, StatusCodes.Status400BadRequest);
                     _logger.LogError("Error ReadReviewById {@HttpResponseDto}.", httpResponseDto1);
                     return httpResponseDto1;
                 }
 
-                var reviewDto = await _unitOfWork.ReviewRepository.ReadByIdAsync(readReviewByIdRequest.Id ?? 0, true);
+                var reviewDto = await _unitOfWork.ReviewRepository.ReadByIdAsync(readReviewByIdRequest.Id, cancellationToken);
 
                 var httpResponseDto = new HttpResponseDto<ReviewDto>(reviewDto, StatusCodes.Status200OK);
                 _logger.LogInformation("Done ReadReviewById {@HttpResponseDto}.", httpResponseDto);

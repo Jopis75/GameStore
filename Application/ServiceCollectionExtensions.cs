@@ -3,12 +3,24 @@ using Application.Features.Addresses.Requests.Commands;
 using Application.Features.Addresses.Requests.Queries;
 using Application.Features.Companies.Requests.Commands;
 using Application.Features.Companies.Requests.Queries;
+using Application.Features.Consoles.Requests.Commands;
+using Application.Features.Consoles.Requests.Queries;
+using Application.Features.ConsoleVideoGames.Requests.Commands;
+using Application.Features.ConsoleVideoGames.Requests.Queries;
+using Application.Features.Reviews.Requests.Commands;
+using Application.Features.Reviews.Requests.Queries;
 using Application.Validators.Dtos;
 using Application.Validators.Identity;
 using Application.Validators.Requests.Addresses.Commands;
 using Application.Validators.Requests.Addresses.Queries;
 using Application.Validators.Requests.Companies.Commands;
 using Application.Validators.Requests.Companies.Queries;
+using Application.Validators.Requests.Consoles.Commands;
+using Application.Validators.Requests.Consoles.Queries;
+using Application.Validators.Requests.ConsoleVideoGame.Commands;
+using Application.Validators.Requests.ConsoleVideoGame.Queries;
+using Application.Validators.Requests.Reviews.Commands;
+using Application.Validators.Requests.Reviews.Queries;
 using Domain.Dtos;
 using FluentValidation;
 using MediatR;
@@ -49,7 +61,7 @@ namespace Application
             serviceCollection.AddScoped<IValidator<CompanyDto>, CompanyDtoValidator>();
             serviceCollection.AddScoped<IValidator<ConsoleDto>, ConsoleDtoValidator>();
             serviceCollection.AddScoped<IValidator<ConsoleVideoGameDto>, ConsoleVideoGameDtoValidator>();
-            serviceCollection.AddScoped<IValidator<ReviewDto>, CreateReviewRequestDtoValidator>();
+            serviceCollection.AddScoped<IValidator<ReviewDto>, ReviewDtoValidator>();
             serviceCollection.AddScoped<IValidator<VideoGameDto>, VideoGameDtoValidator>();
 
             // Application.Dtos.Identity.
@@ -68,6 +80,25 @@ namespace Application
             serviceCollection.AddScoped<IValidator<DeleteCompanyRequest>, DeleteCompanyRequestValidator>();
             serviceCollection.AddScoped<IValidator<UpdateCompanyRequest>, UpdateCompanyRequestValidator>();
             serviceCollection.AddScoped<IValidator<ReadCompanyByIdRequest>, ReadCompanyByIdRequestValidator>();
+
+            // Features.Consoles.Requests.
+            serviceCollection.AddScoped<IValidator<CreateConsoleRequest>, CreateConsoleRequestValidator>();
+            serviceCollection.AddScoped<IValidator<DeleteConsoleRequest>, DeleteConsoleRequestValidator>();
+            serviceCollection.AddScoped<IValidator<UpdateConsoleRequest>, UpdateConsoleRequestValidator>();
+            serviceCollection.AddScoped<IValidator<ReadConsoleByIdRequest>, ReadConsoleByIdRequestValidator>();
+
+            // Features.ConsoleVideoGames.Requests.
+            serviceCollection.AddScoped<IValidator<CreateConsoleVideoGameRequest>, CreateConsoleVideoGameRequestValidator>();
+            serviceCollection.AddScoped<IValidator<DeleteConsoleVideoGameRequest>, DeleteConsoleVideoGameRequestValidator>();
+            serviceCollection.AddScoped<IValidator<UpdateConsoleVideoGameRequest>, UpdateConsoleVideoGameRequestValidator>();
+            serviceCollection.AddScoped<IValidator<ReadConsoleVideoGameByIdRequest>, ReadConsoleVideoGameByIdRequestValidator>();
+
+            // Features.Reviews.Requests.
+            serviceCollection.AddScoped<IValidator<CreateReviewRequest>, CreateReviewRequestValidator>();
+            serviceCollection.AddScoped<IValidator<DeleteReviewRequest>, DeleteReviewRequestValidator>();
+            serviceCollection.AddScoped<IValidator<UpdateReviewRequest>, UpdateReviewRequestValidator>();
+            serviceCollection.AddScoped<IValidator<ReadReviewByIdRequest>, ReadReviewByIdRequestValidator>();
+            serviceCollection.AddScoped<IValidator<ReadReviewsByVideoGameIdRequest>, ReadReviewsByVideoGameIdRequestValidator>();
 
             return serviceCollection;
         }

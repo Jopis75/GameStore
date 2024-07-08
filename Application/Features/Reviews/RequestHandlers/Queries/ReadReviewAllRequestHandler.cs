@@ -28,7 +28,7 @@ namespace Application.Features.Reviews.RequestHandlers.Queries
 
                 cancellationToken.ThrowIfCancellationRequested();
 
-                var reviewDtos = await _unitOfWork.ReviewRepository.ReadAllAsync(true);
+                var reviewDtos = await _unitOfWork.ReviewRepository.ReadAllAsync(cancellationToken);
 
                 var httpResponseDto = new HttpResponseDto<List<ReviewDto>>(reviewDtos.ToList(), StatusCodes.Status200OK);
                 _logger.LogInformation("Done ReadReviewAll {@HttpResponseDto}.", httpResponseDto);

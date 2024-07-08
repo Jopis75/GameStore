@@ -13,11 +13,11 @@ namespace Application.Features.ConsoleVideoGames.RequestHandlers.Queries
     {
         private readonly IUnitOfWork _unitOfWork;
 
-        private readonly IValidator<ConsoleVideoGameDto> _validator;
+        private readonly IValidator<ReadConsoleVideoGameByIdRequest> _validator;
 
         private readonly ILogger<ReadConsoleVideoGameByIdRequestHandler> _logger;
 
-        public ReadConsoleVideoGameByIdRequestHandler(IUnitOfWork unitOfWork, IValidator<ConsoleVideoGameDto> validator, ILogger<ReadConsoleVideoGameByIdRequestHandler> logger)
+        public ReadConsoleVideoGameByIdRequestHandler(IUnitOfWork unitOfWork, IValidator<ReadConsoleVideoGameByIdRequest> validator, ILogger<ReadConsoleVideoGameByIdRequestHandler> logger)
         {
             _unitOfWork = unitOfWork ?? throw new ArgumentNullException(nameof(unitOfWork));
             _validator = validator ?? throw new ArgumentNullException(nameof(validator));
@@ -32,26 +32,26 @@ namespace Application.Features.ConsoleVideoGames.RequestHandlers.Queries
 
                 cancellationToken.ThrowIfCancellationRequested();
 
-                if (readConsoleVideoGameByIdRequest.Id == null)
+                if (readConsoleVideoGameByIdRequest == null)
                 {
-                    var httpResponseDto1 = new HttpResponseDto<ConsoleVideoGameDto>(new ArgumentNullException(nameof(readConsoleVideoGameByIdRequest.Id)).Message, StatusCodes.Status400BadRequest);
+                    var httpResponseDto1 = new HttpResponseDto<ConsoleVideoGameDto>(new ArgumentNullException(nameof(readConsoleVideoGameByIdRequest)).Message, StatusCodes.Status400BadRequest);
                     _logger.LogError("Error ReadConsoleVideoGameById {@HttpResponseDto}.", httpResponseDto1);
                     return httpResponseDto1;
                 }
 
-                var validationResult = await _validator.ValidateAsync(readConsoleVideoGameByIdRequest.Id, cancellationToken);
+                var validationResult = await _validator.ValidateAsync(readConsoleVideoGameByIdRequest, cancellationToken);
 
-                if (!validationResult.IsValid)
+                if (validationResult.IsValid == false)
                 {
                     var httpResponseDto1 = new HttpResponseDto<ConsoleVideoGameDto>(new ValidationException(validationResult.Errors).Message, StatusCodes.Status400BadRequest);
                     _logger.LogError("Error ReadConsoleVideoGameById {@HttpResponseDto}.", httpResponseDto1);
                     return httpResponseDto1;
                 }
 
-                var consoleVideoGameDto = await _unitOfWork.ConsoleVideoGameRepository.ReadByIdAsync(readConsoleVideoGameByIdRequest.Id ?? 0, true);
+                var consoleVideoGameDto = await _unitOfWork.ConsoleVideoGameRepository.ReadByIdAsync(readConsoleVideoGameByIdRequest.Id, cancellationToken);
 
                 var httpResponseDto = new HttpResponseDto<ConsoleVideoGameDto>(consoleVideoGameDto, StatusCodes.Status200OK);
-                _logger.LogInformation("Done ReadConsoleVideoGameId {@HttpResponseDto}.", httpResponseDto);
+                _logger.LogInformation("Done ReadConsoleVideoGameById {@HttpResponseDto}.", httpResponseDto);
                 return httpResponseDto;
             }
             catch (OperationCanceledException ex)

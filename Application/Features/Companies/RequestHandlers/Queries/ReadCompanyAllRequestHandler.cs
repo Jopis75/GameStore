@@ -28,7 +28,7 @@ namespace Application.Features.Companies.RequestHandlers.Queries
 
                 cancellationToken.ThrowIfCancellationRequested();
 
-                var companyDtos = await _unitOfWork.CompanyRepository.ReadAllAsync(true);
+                var companyDtos = await _unitOfWork.CompanyRepository.ReadAllAsync(cancellationToken);
 
                 var httpResponseDto = new HttpResponseDto<List<CompanyDto>>(companyDtos.ToList(), StatusCodes.Status200OK);
                 _logger.LogInformation("Done ReadCompanyAll {@HttpResponseDto}.", httpResponseDto);

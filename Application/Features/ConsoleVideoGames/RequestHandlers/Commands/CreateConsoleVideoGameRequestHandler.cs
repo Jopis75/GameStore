@@ -13,11 +13,11 @@ namespace Application.Features.ConsoleVideoGames.RequestHandlers.Commands
     {
         private readonly IUnitOfWork _unitOfWork;
 
-        private readonly IValidator<ConsoleVideoGameDto> _validator;
+        private readonly IValidator<CreateConsoleVideoGameRequest> _validator;
 
         private readonly ILogger<CreateConsoleVideoGameRequestHandler> _logger;
 
-        public CreateConsoleVideoGameRequestHandler(IUnitOfWork unitOfWork, IValidator<ConsoleVideoGameDto> validator, ILogger<CreateConsoleVideoGameRequestHandler> logger)
+        public CreateConsoleVideoGameRequestHandler(IUnitOfWork unitOfWork, IValidator<CreateConsoleVideoGameRequest> validator, ILogger<CreateConsoleVideoGameRequestHandler> logger)
         {
             _unitOfWork = unitOfWork ?? throw new ArgumentNullException(nameof(unitOfWork));
             _validator = validator ?? throw new ArgumentNullException(nameof(validator));
@@ -32,23 +32,23 @@ namespace Application.Features.ConsoleVideoGames.RequestHandlers.Commands
 
                 cancellationToken.ThrowIfCancellationRequested();
 
-                if (createConsoleVideoGameRequest.ConsoleVideoGameDto == null)
+                if (createConsoleVideoGameRequest == null)
                 {
-                    var httpResponseDto1 = new HttpResponseDto<ConsoleVideoGameDto>(new ArgumentNullException(nameof(createConsoleVideoGameRequest.ConsoleVideoGameDto)).Message, StatusCodes.Status400BadRequest);
+                    var httpResponseDto1 = new HttpResponseDto<ConsoleVideoGameDto>(new ArgumentNullException(nameof(createConsoleVideoGameRequest)).Message, StatusCodes.Status400BadRequest);
                     _logger.LogError("Error CreateConsoleVideoGame {@HttpResponseDto}.", httpResponseDto1);
                     return httpResponseDto1;
                 }
 
-                var validationResult = await _validator.ValidateAsync(createConsoleVideoGameRequest.ConsoleVideoGameDto, cancellationToken);
+                var validationResult = await _validator.ValidateAsync(createConsoleVideoGameRequest, cancellationToken);
 
-                if (!validationResult.IsValid)
+                if (validationResult.IsValid == false)
                 {
                     var httpResponseDto1 = new HttpResponseDto<ConsoleVideoGameDto>(new ValidationException(validationResult.Errors).Message, StatusCodes.Status400BadRequest);
                     _logger.LogError("Error CreateConsoleVideoGame {@HttpResponseDto}.", httpResponseDto1);
                     return httpResponseDto1;
                 }
 
-                var createdConsoleVideoGameDto = await _unitOfWork.ConsoleVideoGameRepository.CreateAsync(createConsoleVideoGameRequest.ConsoleVideoGameDto);
+                var createdConsoleVideoGameDto = await _unitOfWork.ConsoleVideoGameRepository.CreateAsync(createConsoleVideoGameRequest.ConsoleVideoGameDto, cancellationToken);
                 await _unitOfWork.SaveAsync();
 
                 var httpResponseDto = new HttpResponseDto<ConsoleVideoGameDto>(createdConsoleVideoGameDto, StatusCodes.Status201Created);

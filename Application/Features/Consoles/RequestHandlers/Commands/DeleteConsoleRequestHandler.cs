@@ -13,11 +13,11 @@ namespace Application.Features.Consoles.RequestHandlers.Commands
     {
         private readonly IUnitOfWork _unitOfWork;
 
-        private readonly IValidator<ConsoleDto> _validator;
+        private readonly IValidator<DeleteConsoleRequest> _validator;
 
         private readonly ILogger<DeleteConsoleRequestHandler> _logger;
 
-        public DeleteConsoleRequestHandler(IUnitOfWork unitOfWork, IValidator<ConsoleDto> validator, ILogger<DeleteConsoleRequestHandler> logger)
+        public DeleteConsoleRequestHandler(IUnitOfWork unitOfWork, IValidator<DeleteConsoleRequest> validator, ILogger<DeleteConsoleRequestHandler> logger)
         {
             _unitOfWork = unitOfWork ?? throw new ArgumentNullException(nameof(unitOfWork));
             _validator = validator ?? throw new ArgumentNullException(nameof(validator));
@@ -32,23 +32,23 @@ namespace Application.Features.Consoles.RequestHandlers.Commands
 
                 cancellationToken.ThrowIfCancellationRequested();
 
-                if (deleteConsoleRequest.Id == null)
+                if (deleteConsoleRequest == null)
                 {
-                    var httpResponseDto1 = new HttpResponseDto<ConsoleDto>(new ArgumentNullException(nameof(deleteConsoleRequest.DeleteConsoleRequestDto)).Message, StatusCodes.Status400BadRequest);
+                    var httpResponseDto1 = new HttpResponseDto<ConsoleDto>(new ArgumentNullException(nameof(deleteConsoleRequest)).Message, StatusCodes.Status400BadRequest);
                     _logger.LogError("Error DeleteConsole {@HttpResponseDto}.", httpResponseDto1);
                     return httpResponseDto1;
                 }
 
-                var validationResult = await _validator.ValidateAsync(deleteConsoleRequest.Id, cancellationToken);
+                var validationResult = await _validator.ValidateAsync(deleteConsoleRequest, cancellationToken);
 
-                if (!validationResult.IsValid)
+                if (validationResult.IsValid == false)
                 {
                     var httpResponseDto1 = new HttpResponseDto<ConsoleDto>(new ValidationException(validationResult.Errors).Message, StatusCodes.Status400BadRequest);
                     _logger.LogError("Error DeleteConsole {@HttpResponseDto}.", httpResponseDto1);
                     return httpResponseDto1;
                 }
 
-                var deletedConsoleDto = await _unitOfWork.ConsoleRepository.DeleteByIdAsync(deleteConsoleRequest.Id ?? 0);
+                var deletedConsoleDto = await _unitOfWork.ConsoleRepository.DeleteByIdAsync(deleteConsoleRequest.Id, cancellationToken);
                 await _unitOfWork.SaveAsync();
 
                 var httpResponseDto = new HttpResponseDto<ConsoleDto>(deletedConsoleDto, StatusCodes.Status200OK);

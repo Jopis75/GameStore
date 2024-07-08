@@ -13,11 +13,11 @@ namespace Application.Features.Consoles.RequestHandlers.Commands
     {
         private readonly IUnitOfWork _unitOfWork;
 
-        private readonly IValidator<ConsoleDto> _validator;
+        private readonly IValidator<CreateConsoleRequest> _validator;
 
         private readonly ILogger<CreateConsoleRequestHandler> _logger;
 
-        public CreateConsoleRequestHandler(IUnitOfWork unitOfWork, IValidator<ConsoleDto> validator, ILogger<CreateConsoleRequestHandler> logger)
+        public CreateConsoleRequestHandler(IUnitOfWork unitOfWork, IValidator<CreateConsoleRequest> validator, ILogger<CreateConsoleRequestHandler> logger)
         {
             _unitOfWork = unitOfWork ?? throw new ArgumentNullException(nameof(unitOfWork));
             _validator = validator ?? throw new ArgumentNullException(nameof(validator));
@@ -32,23 +32,23 @@ namespace Application.Features.Consoles.RequestHandlers.Commands
 
                 cancellationToken.ThrowIfCancellationRequested();
 
-                if (createConsoleRequest.ConsoleDto == null)
+                if (createConsoleRequest == null)
                 {
-                    var httpResponseDto1 = new HttpResponseDto<ConsoleDto>(new ArgumentNullException(nameof(createConsoleRequest.ConsoleDto)).Message, StatusCodes.Status400BadRequest);
+                    var httpResponseDto1 = new HttpResponseDto<ConsoleDto>(new ArgumentNullException(nameof(createConsoleRequest)).Message, StatusCodes.Status400BadRequest);
                     _logger.LogError("Error CreateConsole {@HttpResponseDto}.", httpResponseDto1);
                     return httpResponseDto1;
                 }
 
-                var validationResult = await _validator.ValidateAsync(createConsoleRequest.ConsoleDto, cancellationToken);
+                var validationResult = await _validator.ValidateAsync(createConsoleRequest, cancellationToken);
 
-                if (!validationResult.IsValid)
+                if (validationResult.IsValid == false)
                 {
                     var httpResponseDto1 = new HttpResponseDto<ConsoleDto>(new ValidationException(validationResult.Errors).Message, StatusCodes.Status400BadRequest);
                     _logger.LogError("Error CreateConsole {@HttpResponseDto}.", httpResponseDto1);
                     return httpResponseDto1;
                 }
 
-                var createdConsoleDto = await _unitOfWork.ConsoleRepository.CreateAsync(createConsoleRequest.ConsoleDto);
+                var createdConsoleDto = await _unitOfWork.ConsoleRepository.CreateAsync(createConsoleRequest.ConsoleDto, cancellationToken);
                 await _unitOfWork.SaveAsync();
 
                 var httpResponseDto = new HttpResponseDto<ConsoleDto>(createdConsoleDto, StatusCodes.Status201Created);

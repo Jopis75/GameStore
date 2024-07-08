@@ -13,11 +13,11 @@ namespace Application.Features.Reviews.RequestHandlers.Commands
     {
         private readonly IUnitOfWork _unitOfWork;
 
-        private readonly IValidator<ReviewDto> _validator;
+        private readonly IValidator<DeleteReviewRequest> _validator;
 
         private readonly ILogger<DeleteReviewRequestHandler> _logger;
 
-        public DeleteReviewRequestHandler(IUnitOfWork unitOfWork, IValidator<ReviewDto> validator, ILogger<DeleteReviewRequestHandler> logger)
+        public DeleteReviewRequestHandler(IUnitOfWork unitOfWork, IValidator<DeleteReviewRequest> validator, ILogger<DeleteReviewRequestHandler> logger)
         {
             _unitOfWork = unitOfWork ?? throw new ArgumentNullException(nameof(unitOfWork));
             _validator = validator ?? throw new ArgumentNullException(nameof(validator));
@@ -32,23 +32,23 @@ namespace Application.Features.Reviews.RequestHandlers.Commands
 
                 cancellationToken.ThrowIfCancellationRequested();
 
-                if (deleteReviewRequest.Id == null)
+                if (deleteReviewRequest == null)
                 {
-                    var httpResponseDto1 = new HttpResponseDto<ReviewDto>(new ArgumentNullException(nameof(deleteReviewRequest.DeleteReviewRequestDto)).Message, StatusCodes.Status400BadRequest);
+                    var httpResponseDto1 = new HttpResponseDto<ReviewDto>(new ArgumentNullException(nameof(deleteReviewRequest)).Message, StatusCodes.Status400BadRequest);
                     _logger.LogError("Error DeleteReview {@HttpResponseDto}.", httpResponseDto1);
                     return httpResponseDto1;
                 }
 
-                var validationResult = await _validator.ValidateAsync(deleteReviewRequest.Id, cancellationToken);
+                var validationResult = await _validator.ValidateAsync(deleteReviewRequest, cancellationToken);
 
-                if (!validationResult.IsValid)
+                if (validationResult.IsValid == false)
                 {
                     var httpResponseDto1 = new HttpResponseDto<ReviewDto>(new ValidationException(validationResult.Errors).Message, StatusCodes.Status400BadRequest);
                     _logger.LogError("Error DeleteReview {@HttpResponseDto}.", httpResponseDto1);
                     return httpResponseDto1;
                 }
 
-                var deletedReviewDto = await _unitOfWork.ReviewRepository.DeleteByIdAsync(deleteReviewRequest.Id ?? 0);
+                var deletedReviewDto = await _unitOfWork.ReviewRepository.DeleteByIdAsync(deleteReviewRequest.Id, cancellationToken);
                 await _unitOfWork.SaveAsync();
 
                 var httpResponseDto = new HttpResponseDto<ReviewDto>(deletedReviewDto, StatusCodes.Status200OK);

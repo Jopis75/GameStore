@@ -6,6 +6,7 @@
 - ASP.NET Core.
 - Web API Core.
 - Onion Architecture.
+- Thin Controllers.
 - Command Query Responsibility Segregation (CQRS) Pattern.
 - Mediator Pattern.
 - Service Layer Pattern.

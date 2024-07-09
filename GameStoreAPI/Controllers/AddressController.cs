@@ -1,7 +1,7 @@
-﻿using Application.Dtos.Addresses;
-using Application.Dtos.General;
+﻿using Application.Dtos.General;
 using Application.Features.Addresses.Requests.Commands;
 using Application.Features.Addresses.Requests.Queries;
+using Domain.Dtos;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
@@ -19,74 +19,56 @@ namespace GameStoreAPI.Controllers
         }
 
         [HttpPost]
-        [Route("Create")]
-        [ProducesResponseType(typeof(HttpResponseDto<CreateAddressResponseDto>), StatusCodes.Status201Created)]
+        [Route("CreateAsync")]
+        [ProducesResponseType(typeof(HttpResponseDto<AddressDto>), StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult<HttpResponseDto<CreateAddressResponseDto>>> CreateAsync([FromBody] CreateAddressRequestDto createAddressRequestDto)
+        public async Task<ActionResult<HttpResponseDto<AddressDto>>> CreateAsync([FromBody] AddressDto addressDto)
         {
-            var httpResponseDto = await _mediator.Send(new CreateAddressRequest
-            {
-                AddressDto = createAddressRequestDto
-            });
+            var httpResponseDto = await _mediator.Send(new CreateAddressRequest() { AddressDto = addressDto });
             return StatusCode(httpResponseDto.StatusCode, httpResponseDto);
         }
 
         [HttpDelete]
-        [Route("Delete/{id}")]
-        [ProducesResponseType(typeof(HttpResponseDto<DeleteAddressResponseDto>), StatusCodes.Status200OK)]
+        [Route("DeleteAsync/{id}")]
+        [ProducesResponseType(typeof(HttpResponseDto<AddressDto>), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult<HttpResponseDto<DeleteAddressResponseDto>>> DeleteAsync(int id)
+        public async Task<ActionResult<HttpResponseDto<AddressDto>>> DeleteAsync(int id)
         {
-            var httpResponseDto = await _mediator.Send(new DeleteAddressRequest
-            {
-                Id = new DeleteAddressRequestDto
-                {
-                    Id = id
-                }
-            });
+            var httpResponseDto = await _mediator.Send(new DeleteAddressRequest() { Id = id });
             return StatusCode(httpResponseDto.StatusCode, httpResponseDto);
         }
 
         [HttpGet]
-        [Route("ReadAll")]
-        [ProducesResponseType(typeof(HttpResponseDto<ReadAddressResponseDto>), StatusCodes.Status200OK)]
+        [Route("ReadAllAsync")]
+        [ProducesResponseType(typeof(HttpResponseDto<List<AddressDto>>), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult<HttpResponseDto<ReadAddressResponseDto>>> ReadAllAsync()
+        public async Task<ActionResult<HttpResponseDto<List<AddressDto>>>> ReadAllAsync()
         {
             var httpResponseDto = await _mediator.Send(new ReadAddressAllRequest());
             return StatusCode(httpResponseDto.StatusCode, httpResponseDto);
         }
 
         [HttpGet]
-        [Route("ReadById/{id}")]
-        [ProducesResponseType(typeof(HttpResponseDto<ReadAddressResponseDto>), StatusCodes.Status200OK)]
+        [Route("ReadByIdAsync/{id}")]
+        [ProducesResponseType(typeof(HttpResponseDto<AddressDto>), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult<HttpResponseDto<ReadAddressResponseDto>>> ReadByIdAsync(int id)
+        public async Task<ActionResult<HttpResponseDto<AddressDto>>> ReadByIdAsync(int id)
         {
-            var httpResponseDto = await _mediator.Send(new ReadAddressByIdRequest
-            {
-                Id = new ReadByIdRequestDto
-                {
-                    Id = id
-                }
-            });
+            var httpResponseDto = await _mediator.Send(new ReadAddressByIdRequest() { Id = id });
             return StatusCode(httpResponseDto.StatusCode, httpResponseDto);
         }
 
         [HttpPut]
-        [Route("Update")]
-        [ProducesResponseType(typeof(HttpResponseDto<UpdateAddressResponseDto>), StatusCodes.Status200OK)]
+        [Route("UpdateAsync")]
+        [ProducesResponseType(typeof(HttpResponseDto<AddressDto>), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult<HttpResponseDto<UpdateAddressResponseDto>>> UpdateAsync([FromBody] UpdateAddressRequestDto updateAddressRequestDto)
+        public async Task<ActionResult<HttpResponseDto<AddressDto>>> UpdateAsync([FromBody] AddressDto addressDto)
         {
-            var httpResponseDto = await _mediator.Send(new UpdateAddressRequest
-            {
-                AddressDto = updateAddressRequestDto
-            });
+            var httpResponseDto = await _mediator.Send(new UpdateAddressRequest() { AddressDto = addressDto });
             return StatusCode(httpResponseDto.StatusCode, httpResponseDto);
         }
     }

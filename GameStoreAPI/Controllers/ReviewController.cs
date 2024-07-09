@@ -1,7 +1,7 @@
 ﻿using Application.Dtos.General;
-using Application.Dtos.Reviews;
 using Application.Features.Reviews.Requests.Commands;
 using Application.Features.Reviews.Requests.Queries;
+using Domain.Dtos;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
@@ -19,91 +19,67 @@ namespace GameStoreAPI.Controllers
         }
 
         [HttpPost]
-        [Route("Create")]
-        [ProducesResponseType(typeof(HttpResponseDto<CreateReviewResponseDto>), StatusCodes.Status201Created)]
+        [Route("CreateAsync")]
+        [ProducesResponseType(typeof(HttpResponseDto<ReviewDto>), StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult<HttpResponseDto<CreateReviewResponseDto>>> CreateAsync([FromBody] CreateReviewRequestDto createReviewRequestDto)
+        public async Task<ActionResult<HttpResponseDto<ReviewDto>>> CreateAsync([FromBody] ReviewDto reviewDto)
         {
-            var httpResponseDto = await _mediator.Send(new CreateReviewRequest
-            {
-                ReviewDto = createReviewRequestDto
-            });
+            var httpResponseDto = await _mediator.Send(new CreateReviewRequest() { ReviewDto = reviewDto });
             return StatusCode(httpResponseDto.StatusCode, httpResponseDto);
         }
 
         [HttpDelete]
-        [Route("Delete/{id}")]
-        [ProducesResponseType(typeof(HttpResponseDto<DeleteReviewResponseDto>), StatusCodes.Status200OK)]
+        [Route("DeleteAsync/{id}")]
+        [ProducesResponseType(typeof(HttpResponseDto<ReviewDto>), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult<HttpResponseDto<DeleteReviewResponseDto>>> DeleteAsync(int id)
+        public async Task<ActionResult<HttpResponseDto<ReviewDto>>> DeleteAsync(int id)
         {
-            var httpResponseDto = await _mediator.Send(new DeleteReviewRequest
-            {
-                DeleteReviewRequestDto = new DeleteReviewRequestDto
-                {
-                    Id = id
-                }
-            });
+            var httpResponseDto = await _mediator.Send(new DeleteReviewRequest() { Id = id });
             return StatusCode(httpResponseDto.StatusCode, httpResponseDto);
         }
 
         [HttpGet]
-        [Route("ReadAll")]
-        [ProducesResponseType(typeof(HttpResponseDto<ReadReviewResponseDto>), StatusCodes.Status200OK)]
+        [Route("ReadAllAsync")]
+        [ProducesResponseType(typeof(HttpResponseDto<List<ReviewDto>>), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult<HttpResponseDto<ReadReviewResponseDto>>> ReadAllAsync()
+        public async Task<ActionResult<HttpResponseDto<List<ReviewDto>>>> ReadAllAsync()
         {
             var httpResponseDto = await _mediator.Send(new ReadReviewAllRequest());
             return StatusCode(httpResponseDto.StatusCode, httpResponseDto);
         }
 
         [HttpGet]
-        [Route("ReadById/{id}")]
-        [ProducesResponseType(typeof(HttpResponseDto<ReadReviewResponseDto>), StatusCodes.Status200OK)]
+        [Route("ReadByIdAsync/{id}")]
+        [ProducesResponseType(typeof(HttpResponseDto<ReviewDto>), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult<HttpResponseDto<ReadReviewResponseDto>>> ReadByIdAsync(int id)
+        public async Task<ActionResult<HttpResponseDto<ReviewDto>>> ReadByIdAsync(int id)
         {
-            var httpResponseDto = await _mediator.Send(new ReadReviewByIdRequest
-            {
-                Id = new ReadByIdRequestDto
-                {
-                    Id = id
-                }
-            });
+            var httpResponseDto = await _mediator.Send(new ReadReviewByIdRequest() { Id = id });
             return StatusCode(httpResponseDto.StatusCode, httpResponseDto);
         }
 
         [HttpGet]
-        [Route("ReadByVideoGameId/{videoGameId}")]
-        [ProducesResponseType(typeof(HttpResponseDto<ReadReviewResponseDto>), StatusCodes.Status200OK)]
+        [Route("ReadByVideoGameIdAsync/{videoGameId}")]
+        [ProducesResponseType(typeof(HttpResponseDto<List<ReviewDto>>), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult<HttpResponseDto<ReadReviewResponseDto>>> ReadByVideoGameIdAsync(int videoGameId)
+        public async Task<ActionResult<HttpResponseDto<List<ReviewDto>>>> ReadByVideoGameIdAsync(int videoGameId)
         {
-            var httpResponseDto = await _mediator.Send(new ReadReviewsByVideoGameIdRequest
-            {
-                VideoGameId = new ReadReviewsByVideoGameIdRequestDto
-                {
-                    VideoGameId = videoGameId
-                }
-            });
+            var httpResponseDto = await _mediator.Send(new ReadReviewsByVideoGameIdRequest() { VideoGameId = videoGameId });
             return StatusCode(httpResponseDto.StatusCode, httpResponseDto);
         }
 
         [HttpPut]
-        [Route("Update")]
-        [ProducesResponseType(typeof(HttpResponseDto<UpdateReviewResponseDto>), StatusCodes.Status200OK)]
+        [Route("UpdateAsync")]
+        [ProducesResponseType(typeof(HttpResponseDto<ReviewDto>), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult<HttpResponseDto<UpdateReviewResponseDto>>> UpdateAsync([FromBody] UpdateReviewRequestDto updateReviewRequestDto)
+        public async Task<ActionResult<HttpResponseDto<ReviewDto>>> UpdateAsync([FromBody] ReviewDto reviewDto)
         {
-            var httpResponseDto = await _mediator.Send(new UpdateReviewRequest
-            {
-                ReviewDto = updateReviewRequestDto
-            });
+            var httpResponseDto = await _mediator.Send(new UpdateReviewRequest() { ReviewDto = reviewDto });
             return StatusCode(httpResponseDto.StatusCode, httpResponseDto);
         }
     }

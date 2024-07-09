@@ -1,8 +1,7 @@
-﻿using Application.Dtos.Addresses;
-using Application.Dtos.Companies;
-using Application.Dtos.General;
+﻿using Application.Dtos.General;
 using Application.Features.Companies.Requests.Commands;
 using Application.Features.Companies.Requests.Queries;
+using Domain.Dtos;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
@@ -20,88 +19,67 @@ namespace GameStoreAPI.Controllers
         }
 
         [HttpPost]
-        [Route("Create")]
-        [ProducesResponseType(typeof(HttpResponseDto<CreateCompanyResponseDto>), StatusCodes.Status201Created)]
+        [Route("CreateAsync")]
+        [ProducesResponseType(typeof(HttpResponseDto<CompanyDto>), StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult<HttpResponseDto<CreateCompanyResponseDto>>> CreateAsync([FromBody] CreateCompanyRequestDto createCompanyRequestDto)
+        public async Task<ActionResult<HttpResponseDto<CompanyDto>>> CreateAsync([FromBody] CompanyDto companyDto)
         {
-            var httpResponseDto = await _mediator.Send(new CreateCompanyRequest
-            {
-                CompanyDto = createCompanyRequestDto
-            });
+            var httpResponseDto = await _mediator.Send(new CreateCompanyRequest() { CompanyDto = companyDto });
             return StatusCode(httpResponseDto.StatusCode, httpResponseDto);
         }
 
         [HttpPost]
-        [Route("CreateWithAddress")]
-        [ProducesResponseType(typeof(HttpResponseDto<CreateCompanyWithAddressResponseDto>), StatusCodes.Status201Created)]
+        [Route("CreateWithHeadquarterAsync")]
+        [ProducesResponseType(typeof(HttpResponseDto<CompanyDto>), StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult<HttpResponseDto<CreateCompanyResponseDto>>> CreateWithAddress([FromBody] CreateCompanyWithAddressRequestDto createCompanyWithAddressRequestDto)
+        public async Task<ActionResult<HttpResponseDto<CompanyDto>>> CreateWithHeadquarterAsync([FromBody] CompanyDto companyDto)
         {
-            var httpResponseDto = await _mediator.Send(new CreateCompanyWithHeadquarterRequest
-            {
-                CreateCompanyWithAddressRequestDto = createCompanyWithAddressRequestDto
-            });
+            var httpResponseDto = await _mediator.Send(new CreateCompanyWithHeadquarterRequest() { CompanyDto = companyDto });
             return StatusCode(httpResponseDto.StatusCode, httpResponseDto);
         }
 
         [HttpDelete]
-        [Route("Delete/{id}")]
-        [ProducesResponseType(typeof(HttpResponseDto<DeleteCompanyResponseDto>), StatusCodes.Status200OK)]
+        [Route("DeleteAsync/{id}")]
+        [ProducesResponseType(typeof(HttpResponseDto<CompanyDto>), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult<HttpResponseDto<DeleteCompanyResponseDto>>> DeleteAsync(int id)
+        public async Task<ActionResult<HttpResponseDto<CompanyDto>>> DeleteAsync(int id)
         {
-            var httpResponseDto = await _mediator.Send(new DeleteCompanyRequest
-            {
-                Id = new DeleteCompanyRequestDto
-                {
-                    Id = id
-                }
-            });
+            var httpResponseDto = await _mediator.Send(new DeleteCompanyRequest() { Id = id });
             return StatusCode(httpResponseDto.StatusCode, httpResponseDto);
         }
 
         [HttpGet]
-        [Route("ReadAll")]
-        [ProducesResponseType(typeof(HttpResponseDto<ReadCompanyResponseDto>), StatusCodes.Status200OK)]
+        [Route("ReadAllAsync")]
+        [ProducesResponseType(typeof(HttpResponseDto<List<CompanyDto>>), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult<HttpResponseDto<ReadCompanyResponseDto>>> ReadAllAsync()
+        public async Task<ActionResult<HttpResponseDto<List<CompanyDto>>>> ReadAllAsync()
         {
             var httpResponseDto = await _mediator.Send(new ReadCompanyAllRequest());
             return StatusCode(httpResponseDto.StatusCode, httpResponseDto);
         }
 
         [HttpGet]
-        [Route("ReadById/{id}")]
-        [ProducesResponseType(typeof(HttpResponseDto<ReadCompanyResponseDto>), StatusCodes.Status200OK)]
+        [Route("ReadByIdAsync/{id}")]
+        [ProducesResponseType(typeof(HttpResponseDto<CompanyDto>), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult<HttpResponseDto<ReadCompanyResponseDto>>> ReadByIdAsync(int id)
+        public async Task<ActionResult<HttpResponseDto<CompanyDto>>> ReadByIdAsync(int id)
         {
-            var httpResponseDto = await _mediator.Send(new ReadCompanyByIdRequest
-            {
-                Id = new ReadByIdRequestDto
-                {
-                    Id = id
-                }
-            });
+            var httpResponseDto = await _mediator.Send(new ReadCompanyByIdRequest() { Id = id });
             return StatusCode(httpResponseDto.StatusCode, httpResponseDto);
         }
 
         [HttpPut]
-        [Route("Update")]
-        [ProducesResponseType(typeof(HttpResponseDto<UpdateCompanyResponseDto>), StatusCodes.Status200OK)]
+        [Route("UpdateAsync")]
+        [ProducesResponseType(typeof(HttpResponseDto<CompanyDto>), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult<HttpResponseDto<UpdateCompanyResponseDto>>> UpdateAsync([FromBody] UpdateCompanyRequestDto updateCompanyRequestDto)
+        public async Task<ActionResult<HttpResponseDto<CompanyDto>>> UpdateAsync([FromBody] CompanyDto companyDto)
         {
-            var httpResponseDto = await _mediator.Send(new UpdateCompanyRequest
-            {
-                UpdateCompanyRequestDto = updateCompanyRequestDto
-            });
+            var httpResponseDto = await _mediator.Send(new UpdateCompanyRequest() { CompanyDto = companyDto });
             return StatusCode(httpResponseDto.StatusCode, httpResponseDto);
         }
     }

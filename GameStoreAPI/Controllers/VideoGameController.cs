@@ -2,6 +2,7 @@
 using Application.Dtos.VideoGames;
 using Application.Features.VideoGames.Requests.Commands;
 using Application.Features.VideoGames.Requests.Queries;
+using Domain.Dtos;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
@@ -19,74 +20,56 @@ namespace GameStoreAPI.Controllers
         }
 
         [HttpPost]
-        [Route("Create")]
-        [ProducesResponseType(typeof(HttpResponseDto<CreateVideoGameResponseDto>), StatusCodes.Status201Created)]
+        [Route("CreateAsync")]
+        [ProducesResponseType(typeof(HttpResponseDto<VideoGameDto>), StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult<HttpResponseDto<CreateVideoGameResponseDto>>> CreateAsync([FromBody] CreateVideoGameRequestDto createVideoGameRequestDto)
+        public async Task<ActionResult<HttpResponseDto<VideoGameDto>>> CreateAsync([FromBody] VideoGameDto videoGameDto)
         {
-            var httpResponseDto = await _mediator.Send(new CreateVideoGameRequest
-            {
-                VideoGameDto = createVideoGameRequestDto
-            });
+            var httpResponseDto = await _mediator.Send(new CreateVideoGameRequest() { VideoGameDto = videoGameDto });
             return StatusCode(httpResponseDto.StatusCode, httpResponseDto);
         }
 
         [HttpDelete]
-        [Route("Delete/{id}")]
-        [ProducesResponseType(typeof(HttpResponseDto<DeleteVideoGameResponseDto>), StatusCodes.Status200OK)]
+        [Route("DeleteAsync/{id}")]
+        [ProducesResponseType(typeof(HttpResponseDto<VideoGameDto>), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult<HttpResponseDto<DeleteVideoGameResponseDto>>> DeleteAsync(int id)
+        public async Task<ActionResult<HttpResponseDto<VideoGameDto>>> DeleteAsync(int id)
         {
-            var httpResponseDto = await _mediator.Send(new DeleteVideoGameRequest
-            {
-                Id = new DeleteVideoGameRequestDto
-                {
-                    Id = id
-                }
-            });
+            var httpResponseDto = await _mediator.Send(new DeleteVideoGameRequest() { Id = id });
             return StatusCode(httpResponseDto.StatusCode, httpResponseDto);
         }
 
         [HttpGet]
-        [Route("ReadAll")]
-        [ProducesResponseType(typeof(HttpResponseDto<ReadVideoGameResponseDto>), StatusCodes.Status200OK)]
+        [Route("ReadAllAsync")]
+        [ProducesResponseType(typeof(HttpResponseDto<List<VideoGameDto>>), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult<HttpResponseDto<ReadVideoGameResponseDto>>> ReadAllAsync()
+        public async Task<ActionResult<HttpResponseDto<List<VideoGameDto>>>> ReadAllAsync()
         {
             var httpResponseDto = await _mediator.Send(new ReadVideoGameAllRequest());
             return StatusCode(httpResponseDto.StatusCode, httpResponseDto);
         }
 
         [HttpGet]
-        [Route("ReadById/{id}")]
-        [ProducesResponseType(typeof(HttpResponseDto<ReadVideoGameResponseDto>), StatusCodes.Status200OK)]
+        [Route("ReadByIdAsync/{id}")]
+        [ProducesResponseType(typeof(HttpResponseDto<VideoGameDto>), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult<HttpResponseDto<ReadVideoGameResponseDto>>> ReadByIdAsync(int id)
+        public async Task<ActionResult<HttpResponseDto<VideoGameDto>>> ReadByIdAsync(int id)
         {
-            var httpResponseDto = await _mediator.Send(new ReadVideoGameByIdRequest
-            {
-                Id = new ReadByIdRequestDto
-                {
-                    Id = id
-                }
-            });
+            var httpResponseDto = await _mediator.Send(new ReadVideoGameByIdRequest() { Id = id });
             return StatusCode(httpResponseDto.StatusCode, httpResponseDto);
         }
 
         [HttpPut]
-        [Route("Update")]
-        [ProducesResponseType(typeof(HttpResponseDto<UpdateVideoGameResponseDto>), StatusCodes.Status200OK)]
+        [Route("UpdateAsync")]
+        [ProducesResponseType(typeof(HttpResponseDto<VideoGameDto>), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult<HttpResponseDto<UpdateVideoGameResponseDto>>> UpdateAsync([FromBody] UpdateVideoGameRequestDto updateVideoGameRequestDto)
+        public async Task<ActionResult<HttpResponseDto<VideoGameDto>>> UpdateAsync([FromBody] VideoGameDto videoGameDto)
         {
-            var httpResponseDto = await _mediator.Send(new UpdateVideoGameRequest
-            {
-                VideoGameDto = updateVideoGameRequestDto
-            });
+            var httpResponseDto = await _mediator.Send(new UpdateVideoGameRequest() { VideoGameDto = videoGameDto });
             return StatusCode(httpResponseDto.StatusCode, httpResponseDto);
         }
     }

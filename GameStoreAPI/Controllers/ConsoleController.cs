@@ -1,7 +1,7 @@
-﻿using Application.Dtos.Consoles;
-using Application.Dtos.General;
+﻿using Application.Dtos.General;
 using Application.Features.Consoles.Requests.Commands;
 using Application.Features.Consoles.Requests.Queries;
+using Domain.Dtos;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
@@ -19,74 +19,56 @@ namespace GameStoreAPI.Controllers
         }
 
         [HttpPost]
-        [Route("Create")]
-        [ProducesResponseType(typeof(HttpResponseDto<CreateConsoleResponseDto>), StatusCodes.Status201Created)]
+        [Route("CreateAsync")]
+        [ProducesResponseType(typeof(HttpResponseDto<ConsoleDto>), StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult<HttpResponseDto<CreateConsoleResponseDto>>> CreateAsync([FromBody] CreateConsoleRequestDto createConsoleRequestDto)
+        public async Task<ActionResult<HttpResponseDto<ConsoleDto>>> CreateAsync([FromBody] ConsoleDto consoleDto)
         {
-            var httpResponseDto = await _mediator.Send(new CreateConsoleRequest
-            {
-                ConsoleDto = createConsoleRequestDto
-            });
+            var httpResponseDto = await _mediator.Send(new CreateConsoleRequest() { ConsoleDto = consoleDto });
             return StatusCode(httpResponseDto.StatusCode, httpResponseDto);
         }
 
         [HttpDelete]
-        [Route("Delete/{id}")]
-        [ProducesResponseType(typeof(HttpResponseDto<DeleteConsoleResponseDto>), StatusCodes.Status200OK)]
+        [Route("DeleteAsync/{id}")]
+        [ProducesResponseType(typeof(HttpResponseDto<ConsoleDto>), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult<HttpResponseDto<DeleteConsoleResponseDto>>> DeleteAsync(int id)
+        public async Task<ActionResult<HttpResponseDto<ConsoleDto>>> DeleteAsync(int id)
         {
-            var httpResponseDto = await _mediator.Send(new DeleteConsoleRequest
-            {
-                DeleteConsoleRequestDto = new DeleteConsoleRequestDto
-                {
-                    Id = id
-                }
-            });
+            var httpResponseDto = await _mediator.Send(new DeleteConsoleRequest() { Id = id });
             return StatusCode(httpResponseDto.StatusCode, httpResponseDto);
         }
 
         [HttpGet]
-        [Route("ReadAll")]
-        [ProducesResponseType(typeof(HttpResponseDto<ReadConsoleResponseDto>), StatusCodes.Status200OK)]
+        [Route("ReadAllAsync")]
+        [ProducesResponseType(typeof(HttpResponseDto<List<ConsoleDto>>), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult<HttpResponseDto<ReadConsoleResponseDto>>> ReadAllAsync()
+        public async Task<ActionResult<HttpResponseDto<List<ConsoleDto>>>> ReadAllAsync()
         {
             var httpResponseDto = await _mediator.Send(new ReadConsoleAllRequest());
             return StatusCode(httpResponseDto.StatusCode, httpResponseDto);
         }
 
         [HttpGet]
-        [Route("ReadById/{id}")]
-        [ProducesResponseType(typeof(HttpResponseDto<ReadConsoleResponseDto>), StatusCodes.Status200OK)]
+        [Route("ReadByIdAsync/{id}")]
+        [ProducesResponseType(typeof(HttpResponseDto<ConsoleDto>), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult<HttpResponseDto<ReadConsoleResponseDto>>> ReadByIdAsync(int id)
+        public async Task<ActionResult<HttpResponseDto<ConsoleDto>>> ReadByIdAsync(int id)
         {
-            var httpResponseDto = await _mediator.Send(new ReadConsoleByIdRequest
-            {
-                ReadByIdRequestDto = new ReadByIdRequestDto
-                {
-                    Id = id
-                }
-            });
+            var httpResponseDto = await _mediator.Send(new ReadConsoleByIdRequest() { Id = id });
             return StatusCode(httpResponseDto.StatusCode, httpResponseDto);
         }
 
         [HttpPut]
-        [Route("Update")]
-        [ProducesResponseType(typeof(HttpResponseDto<UpdateConsoleResponseDto>), StatusCodes.Status200OK)]
+        [Route("UpdateAsync")]
+        [ProducesResponseType(typeof(HttpResponseDto<ConsoleDto>), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult<HttpResponseDto<UpdateConsoleResponseDto>>> UpdateAsync([FromBody] UpdateConsoleRequestDto updateConsoleRequestDto)
+        public async Task<ActionResult<HttpResponseDto<ConsoleDto>>> UpdateAsync([FromBody] ConsoleDto consoleDto)
         {
-            var httpResponseDto = await _mediator.Send(new UpdateConsoleRequest
-            {
-                UpdateConsoleRequestDto = updateConsoleRequestDto
-            });
+            var httpResponseDto = await _mediator.Send(new UpdateConsoleRequest() { ConsoleDto = consoleDto });
             return StatusCode(httpResponseDto.StatusCode, httpResponseDto);
         }
     }

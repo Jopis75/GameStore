@@ -8,7 +8,7 @@ using Microsoft.Extensions.Logging;
 
 namespace Application.Features.Reviews.RequestHandlers.Queries
 {
-    public class ReadReviewAllRequestHandler : IRequestHandler<ReadReviewAllRequest, HttpResponseDto<List<ReviewDto>>>
+    public class ReadReviewAllRequestHandler : IRequestHandler<ReadReviewAllRequest, HttpResponseDto<ReviewDto>>
     {
         private readonly IUnitOfWork _unitOfWork;
 
@@ -20,7 +20,7 @@ namespace Application.Features.Reviews.RequestHandlers.Queries
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
-        public async Task<HttpResponseDto<List<ReviewDto>>> Handle(ReadReviewAllRequest readReviewAllRequest, CancellationToken cancellationToken)
+        public async Task<HttpResponseDto<ReviewDto>> Handle(ReadReviewAllRequest readReviewAllRequest, CancellationToken cancellationToken)
         {
             try
             {
@@ -30,19 +30,19 @@ namespace Application.Features.Reviews.RequestHandlers.Queries
 
                 var reviewDtos = await _unitOfWork.ReviewRepository.ReadAllAsync(cancellationToken);
 
-                var httpResponseDto = new HttpResponseDto<List<ReviewDto>>(reviewDtos.ToList(), StatusCodes.Status200OK);
+                var httpResponseDto = new HttpResponseDto<ReviewDto>(reviewDtos.ToArray(), StatusCodes.Status200OK);
                 _logger.LogInformation("Done ReadReviewAll {@HttpResponseDto}.", httpResponseDto);
                 return httpResponseDto;
             }
             catch (OperationCanceledException ex)
             {
-                var httpResponseDto1 = new HttpResponseDto<List<ReviewDto>>(ex.Message, StatusCodes.Status500InternalServerError);
+                var httpResponseDto1 = new HttpResponseDto<ReviewDto>(ex.Message, StatusCodes.Status500InternalServerError);
                 _logger.LogError("Canceled ReadReviewAll {@HttpResponseDto}.", httpResponseDto1);
                 return httpResponseDto1;
             }
             catch (Exception ex)
             {
-                var httpResponseDto1 = new HttpResponseDto<List<ReviewDto>>(ex.Message, StatusCodes.Status500InternalServerError);
+                var httpResponseDto1 = new HttpResponseDto<ReviewDto>(ex.Message, StatusCodes.Status500InternalServerError);
                 _logger.LogError("Error ReadReviewAll {@HttpResponseDto}.", httpResponseDto1);
                 return httpResponseDto1;
             }

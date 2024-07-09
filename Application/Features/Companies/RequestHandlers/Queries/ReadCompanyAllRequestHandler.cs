@@ -8,7 +8,7 @@ using Microsoft.Extensions.Logging;
 
 namespace Application.Features.Companies.RequestHandlers.Queries
 {
-    public class ReadCompanyAllRequestHandler : IRequestHandler<ReadCompanyAllRequest, HttpResponseDto<List<CompanyDto>>>
+    public class ReadCompanyAllRequestHandler : IRequestHandler<ReadCompanyAllRequest, HttpResponseDto<CompanyDto>>
     {
         private readonly IUnitOfWork _unitOfWork;
 
@@ -20,7 +20,7 @@ namespace Application.Features.Companies.RequestHandlers.Queries
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
-        public async Task<HttpResponseDto<List<CompanyDto>>> Handle(ReadCompanyAllRequest readCompanyAllRequest, CancellationToken cancellationToken)
+        public async Task<HttpResponseDto<CompanyDto>> Handle(ReadCompanyAllRequest readCompanyAllRequest, CancellationToken cancellationToken)
         {
             try
             {
@@ -30,19 +30,19 @@ namespace Application.Features.Companies.RequestHandlers.Queries
 
                 var companyDtos = await _unitOfWork.CompanyRepository.ReadAllAsync(cancellationToken);
 
-                var httpResponseDto = new HttpResponseDto<List<CompanyDto>>(companyDtos.ToList(), StatusCodes.Status200OK);
+                var httpResponseDto = new HttpResponseDto<CompanyDto>(companyDtos.ToArray(), StatusCodes.Status200OK);
                 _logger.LogInformation("Done ReadCompanyAll {@HttpResponseDto}.", httpResponseDto);
                 return httpResponseDto;
             }
             catch (OperationCanceledException ex)
             {
-                var httpResponseDto1 = new HttpResponseDto<List<CompanyDto>>(ex.Message, StatusCodes.Status500InternalServerError);
+                var httpResponseDto1 = new HttpResponseDto<CompanyDto>(ex.Message, StatusCodes.Status500InternalServerError);
                 _logger.LogError("Canceled ReadCompanyAll {@HttpResponseDto}.", httpResponseDto1);
                 return httpResponseDto1;
             }
             catch (Exception ex)
             {
-                var httpResponseDto1 = new HttpResponseDto<List<CompanyDto>>(ex.Message, StatusCodes.Status500InternalServerError);
+                var httpResponseDto1 = new HttpResponseDto<CompanyDto>(ex.Message, StatusCodes.Status500InternalServerError);
                 _logger.LogError("Error ReadCompanyAll {@HttpResponseDto}.", httpResponseDto1);
                 return httpResponseDto1;
             }

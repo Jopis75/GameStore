@@ -8,7 +8,7 @@ using Microsoft.Extensions.Logging;
 
 namespace Application.Features.Consoles.RequestHandlers.Queries
 {
-    public class ReadConsoleAllRequestHandler : IRequestHandler<ReadConsoleAllRequest, HttpResponseDto<List<ConsoleDto>>>
+    public class ReadConsoleAllRequestHandler : IRequestHandler<ReadConsoleAllRequest, HttpResponseDto<ConsoleDto>>
     {
         private readonly IUnitOfWork _unitOfWork;
 
@@ -20,7 +20,7 @@ namespace Application.Features.Consoles.RequestHandlers.Queries
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
-        public async Task<HttpResponseDto<List<ConsoleDto>>> Handle(ReadConsoleAllRequest readConsoleAllRequest, CancellationToken cancellationToken)
+        public async Task<HttpResponseDto<ConsoleDto>> Handle(ReadConsoleAllRequest readConsoleAllRequest, CancellationToken cancellationToken)
         {
             try
             {
@@ -30,19 +30,19 @@ namespace Application.Features.Consoles.RequestHandlers.Queries
 
                 var consoleDtos = await _unitOfWork.ConsoleRepository.ReadAllAsync(cancellationToken);
 
-                var httpResponseDto = new HttpResponseDto<List<ConsoleDto>>(consoleDtos.ToList(), StatusCodes.Status200OK);
+                var httpResponseDto = new HttpResponseDto<ConsoleDto>(consoleDtos.ToArray(), StatusCodes.Status200OK);
                 _logger.LogInformation("Done ReadConsoleAll {@HttpResponseDto}.", httpResponseDto);
                 return httpResponseDto;
             }
             catch (OperationCanceledException ex)
             {
-                var httpResponseDto1 = new HttpResponseDto<List<ConsoleDto>>(ex.Message, StatusCodes.Status500InternalServerError);
+                var httpResponseDto1 = new HttpResponseDto<ConsoleDto>(ex.Message, StatusCodes.Status500InternalServerError);
                 _logger.LogError("Canceled ReadConsoleAll {@HttpResponseDto}.", httpResponseDto1);
                 return httpResponseDto1;
             }
             catch (Exception ex)
             {
-                var httpResponseDto1 = new HttpResponseDto<List<ConsoleDto>>(ex.Message, StatusCodes.Status500InternalServerError);
+                var httpResponseDto1 = new HttpResponseDto<ConsoleDto>(ex.Message, StatusCodes.Status500InternalServerError);
                 _logger.LogError("Error ReadConsoleAll {@HttpResponseDto}.", httpResponseDto1);
                 return httpResponseDto1;
             }

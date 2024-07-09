@@ -42,9 +42,9 @@ namespace GameStoreAPI.Controllers
 
         [HttpGet]
         [Route("ReadAllAsync")]
-        [ProducesResponseType(typeof(HttpResponseDto<List<ReviewDto>>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(HttpResponseDto<ReviewDto>), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult<HttpResponseDto<List<ReviewDto>>>> ReadAllAsync()
+        public async Task<ActionResult<HttpResponseDto<ReviewDto>>> ReadAllAsync()
         {
             var httpResponseDto = await _mediator.Send(new ReadReviewAllRequest());
             return StatusCode(httpResponseDto.StatusCode, httpResponseDto);
@@ -63,10 +63,10 @@ namespace GameStoreAPI.Controllers
 
         [HttpGet]
         [Route("ReadByVideoGameIdAsync/{videoGameId}")]
-        [ProducesResponseType(typeof(HttpResponseDto<List<ReviewDto>>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(HttpResponseDto<ReviewDto>), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult<HttpResponseDto<List<ReviewDto>>>> ReadByVideoGameIdAsync(int videoGameId)
+        public async Task<ActionResult<HttpResponseDto<ReviewDto>>> ReadByVideoGameIdAsync(int videoGameId)
         {
             var httpResponseDto = await _mediator.Send(new ReadReviewsByVideoGameIdRequest() { VideoGameId = videoGameId });
             return StatusCode(httpResponseDto.StatusCode, httpResponseDto);

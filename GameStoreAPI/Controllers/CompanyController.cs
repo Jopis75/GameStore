@@ -53,9 +53,9 @@ namespace GameStoreAPI.Controllers
 
         [HttpGet]
         [Route("ReadAllAsync")]
-        [ProducesResponseType(typeof(HttpResponseDto<List<CompanyDto>>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(HttpResponseDto<CompanyDto>), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult<HttpResponseDto<List<CompanyDto>>>> ReadAllAsync()
+        public async Task<ActionResult<HttpResponseDto<CompanyDto>>> ReadAllAsync()
         {
             var httpResponseDto = await _mediator.Send(new ReadCompanyAllRequest());
             return StatusCode(httpResponseDto.StatusCode, httpResponseDto);

@@ -24,5 +24,3 @@ Next up:
 - Convert the solution and all projects to .NET 8.
 - Add paging to repository queries.
 - Add Category entity that relates to VideoGame.
-
-**Note: the develop branch does not build at the moment.**

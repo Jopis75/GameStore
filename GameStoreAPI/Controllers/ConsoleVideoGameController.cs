@@ -1,5 +1,4 @@
-﻿using Application.Dtos.ConsoleVideoGames;
-using Application.Dtos.General;
+﻿using Application.Dtos.General;
 using Application.Features.ConsoleVideoGames.Requests.Commands;
 using Application.Features.ConsoleVideoGames.Requests.Queries;
 using Domain.Dtos;

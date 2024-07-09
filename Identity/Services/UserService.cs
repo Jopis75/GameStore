@@ -57,7 +57,7 @@ namespace Identity.Services
 
                 if (String.IsNullOrEmpty(id))
                 {
-                    var httpResponseDto1 = new HttpResponseDto<UserDto>(new ArgumentNullException(nameof(readUserByUserIdRequestDto)).Message, StatusCodes.Status400BadRequest);
+                    var httpResponseDto1 = new HttpResponseDto<UserDto>(new ArgumentNullException(nameof(id)).Message, StatusCodes.Status400BadRequest);
                     _logger.LogError("Error UserService.ReadByIdAsync {@HttpResponseDto}.", httpResponseDto1);
                     return httpResponseDto1;
                 }

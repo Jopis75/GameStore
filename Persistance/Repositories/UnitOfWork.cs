@@ -7,42 +7,50 @@ namespace Persistance.Repositories
     {
         private readonly GameStoreDbContext _gameStoreDbContext;
 
-        private IAddressRepository? _addressRepository;
-
-        private ICompanyRepository? _companyRepository;
-
-        private IConsoleRepository? _consoleRepository;
-
-        private IConsoleVideoGameRepository? _consoleVideoGameRepository;
-
         //private readonly IHttpContextAccessor _httpContextAccessor;
 
-        private IReviewRepository? _reviewRepository;
+        private readonly IAddressRepository _addressRepository;
 
-        private IVideoGameRepository? _videoGameRepository;
+        private readonly ICompanyRepository _companyRepository;
 
-        public IAddressRepository AddressRepository =>
-            _addressRepository ??= new AddressRepository(_gameStoreDbContext);
+        private readonly IConsoleRepository _consoleRepository;
 
-        public ICompanyRepository CompanyRepository =>
-            _companyRepository ??= new CompanyRepository(_gameStoreDbContext);
+        private readonly IConsoleVideoGameRepository _consoleVideoGameRepository;
 
-        public IConsoleRepository ConsoleRepository =>
-            _consoleRepository ??= new ConsoleRepository(_gameStoreDbContext);
+        private readonly IReviewRepository _reviewRepository;
 
-        public IConsoleVideoGameRepository ConsoleVideoGameRepository =>
-            _consoleVideoGameRepository ??= new ConsoleVideoGameRepository(_gameStoreDbContext);
+        private readonly IVideoGameRepository _videoGameRepository;
 
-        public IReviewRepository ReviewRepository =>
-            _reviewRepository ??= new ReviewRepository(_gameStoreDbContext);
+        public IAddressRepository AddressRepository => _addressRepository;
 
-        public IVideoGameRepository VideoGameRepository =>
-            _videoGameRepository ??= new VideoGameRepository(_gameStoreDbContext);
+        public ICompanyRepository CompanyRepository => _companyRepository;
 
-        public UnitOfWork(GameStoreDbContext gameStoreDbContext/*, IHttpContextAccessor httpContextAccessor*/)
+        public IConsoleRepository ConsoleRepository => _consoleRepository;
+
+        public IConsoleVideoGameRepository ConsoleVideoGameRepository => _consoleVideoGameRepository;
+
+        public IReviewRepository ReviewRepository => _reviewRepository;
+
+        public IVideoGameRepository VideoGameRepository => _videoGameRepository;
+
+        public UnitOfWork(
+            GameStoreDbContext gameStoreDbContext,
+            /*IHttpContextAccessor httpContextAccessor, */
+            IAddressRepository addressRepository,
+            ICompanyRepository companyRepository,
+            IConsoleRepository consoleRepository,
+            IConsoleVideoGameRepository consoleVideoGameRepository,
+            IReviewRepository reviewRepository,
+            IVideoGameRepository videoGameRepository)
         {
             _gameStoreDbContext = gameStoreDbContext ?? throw new ArgumentNullException(nameof(gameStoreDbContext));
             //_httpContextAccessor = httpContextAccessor ?? throw new ArgumentNullException(nameof(httpContextAccessor));
+            _addressRepository = addressRepository ?? throw new ArgumentNullException(nameof(addressRepository));
+            _companyRepository = companyRepository ?? throw new ArgumentNullException(nameof(companyRepository));
+            _consoleRepository = consoleRepository ?? throw new ArgumentNullException(nameof(consoleRepository));
+            _consoleVideoGameRepository = consoleVideoGameRepository ?? throw new ArgumentNullException(nameof(consoleVideoGameRepository));
+            _reviewRepository = reviewRepository ?? throw new ArgumentNullException(nameof(reviewRepository));
+            _videoGameRepository = videoGameRepository ?? throw new ArgumentNullException(nameof(videoGameRepository));
         }
 
         public void Dispose()

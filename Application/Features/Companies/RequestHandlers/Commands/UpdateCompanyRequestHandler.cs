@@ -48,7 +48,7 @@ namespace Application.Features.Companies.RequestHandlers.Commands
                     return httpResponseDto1;
                 }
 
-                var updatedCompanyDto = await _unitOfWork.CompanyRepository.UpdateAsync(updateCompanyRequest.CompanyDto);
+                var updatedCompanyDto = await _unitOfWork.CompanyRepository.UpdateAsync(updateCompanyRequest.CompanyDto, cancellationToken);
                 await _unitOfWork.SaveAsync();
 
                 var httpResponseDto = new HttpResponseDto<CompanyDto>(updatedCompanyDto, StatusCodes.Status200OK);

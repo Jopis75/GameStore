@@ -56,9 +56,7 @@ namespace Application.Validators.Dtos
                     var companyDtos = await unitOfWork.CompanyRepository.ReadByPhoneNumberAsync(phoneNumber, cancellationToken);
                     return companyDtos.Any() == false;
                 })
-                .WithMessage("{PropertyName} must be unique.")
-                .PhoneNumber()
-                .WithMessage("{PropertyName} is not valid.");
+                .WithMessage("{PropertyName} must be unique.");
 
             RuleFor(companyDto => companyDto.ParentCompanyId)
                 .GreaterThan(0)

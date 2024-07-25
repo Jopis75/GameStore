@@ -19,9 +19,9 @@ namespace Persistance.Configurations
                     Country = "USA",
                     CreatedBy = "System",
                     CreatedAt = DateTime.Now,
-                    UpdatedBy = String.Empty,
+                    UpdatedBy = null,
                     UpdatedAt = null,
-                    DeletedBy = String.Empty,
+                    DeletedBy = null,
                     DeletedAt = null
                 },
                 new Address
@@ -34,9 +34,9 @@ namespace Persistance.Configurations
                     Country = "United States",
                     CreatedBy = "System",
                     CreatedAt = DateTime.Now,
-                    UpdatedBy = String.Empty,
+                    UpdatedBy = null,
                     UpdatedAt = null,
-                    DeletedBy = String.Empty,
+                    DeletedBy = null,
                     DeletedAt = null
                 },
                 new Address
@@ -49,9 +49,9 @@ namespace Persistance.Configurations
                     Country = "The Netherlands",
                     CreatedBy = "System",
                     CreatedAt = DateTime.Now,
-                    UpdatedBy = String.Empty,
+                    UpdatedBy = null,
                     UpdatedAt = null,
-                    DeletedBy = String.Empty,
+                    DeletedBy = null,
                     DeletedAt = null
                 },
                 new Address
@@ -64,9 +64,9 @@ namespace Persistance.Configurations
                     Country = "United States",
                     CreatedBy = "System",
                     CreatedAt = DateTime.Now,
-                    UpdatedBy = String.Empty,
+                    UpdatedBy = null,
                     UpdatedAt = null,
-                    DeletedBy = String.Empty,
+                    DeletedBy = null,
                     DeletedAt = null
                 }
             );

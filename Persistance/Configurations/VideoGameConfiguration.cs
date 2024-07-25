@@ -2,12 +2,6 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-// 2022-05-03, 699
-// 2022-07-07, 995
-// 2022-07-18, 649
-// 2022-08-25, 549
-// 2022-12-30, 728
-
 namespace Persistance.Configurations
 {
     public class VideoGameConfiguration : IEntityTypeConfiguration<VideoGame>
@@ -18,58 +12,77 @@ namespace Persistance.Configurations
                 new VideoGame
                 {
                     Id = 1,
-                    Name = "Horizon Forbidden West",
-                    Title = "Horizon Forbidden West",
-                    ImageUri = String.Empty,
+                    Name = "Horizon Zero Dawn - Complete Edition",
+                    Title = "Horizon Zero Dawn - Complete Edition",
+                    ImageUri = null,
                     DeveloperId = 2,
-                    Price = 69.99M,
-                    ReleaseDate = DateTime.Parse("2022-02-18"),
-                    PurchaseDate = DateTime.Parse("2022-07-18"),
+                    Price = 229.0M,
+                    ReleaseDate = DateTime.Parse("2019-06-28"),
+                    PurchaseDate = DateTime.Parse("2023-04-07"),
                     TotalTimePlayed = TimeSpan.FromHours(0),
-                    Url = "https://www.playstation.com/sv-se/games/horizon-forbidden-west/",
+                    Url = "https://store.playstation.com/sv-se/product/EP9000-CUSA10211_00-HRZCE00000000000",
                     CreatedBy = "System",
                     CreatedAt = DateTime.Now,
-                    UpdatedBy = String.Empty,
+                    UpdatedBy = null,
                     UpdatedAt = null,
-                    DeletedBy = String.Empty,
+                    DeletedBy = null,
                     DeletedAt = null
                 },
                 new VideoGame
                 {
                     Id = 2,
-                    Name = "Horizon Call of the Mountain",
-                    Title = "Horizon Call of the Mountain",
-                    ImageUri = String.Empty,
+                    Name = "Horizon Forbidden West - Complete Edition",
+                    Title = "Horizon Forbidden West - Complete Edition",
+                    ImageUri = null,
                     DeveloperId = 2,
-                    Price = 59.99M,
-                    ReleaseDate = DateTime.Parse("2023-02-22"),
-                    PurchaseDate = DateTime.Parse("2023-02-24"),
+                    Price = 799.0M,
+                    ReleaseDate = DateTime.Parse("2023-10-06"),
+                    PurchaseDate = DateTime.Parse("2023-11-24"),
                     TotalTimePlayed = TimeSpan.FromHours(0),
-                    Url = "https://www.playstation.com/en-se/games/horizon-call-of-the-mountain/",
+                    Url = "https://www.playstation.com/sv-se/games/horizon-forbidden-west/",
                     CreatedBy = "System",
                     CreatedAt = DateTime.Now,
-                    UpdatedBy = String.Empty,
+                    UpdatedBy = null,
                     UpdatedAt = null,
-                    DeletedBy = String.Empty,
+                    DeletedBy = null,
                     DeletedAt = null
                 },
                 new VideoGame
                 {
                     Id = 3,
+                    Name = "Horizon Call of the Mountain",
+                    Title = "Horizon Call of the Mountain",
+                    ImageUri = null,
+                    DeveloperId = 2,
+                    Price = 739.0M,
+                    ReleaseDate = DateTime.Parse("2023-02-22"),
+                    PurchaseDate = DateTime.Parse("2023-02-25"),
+                    TotalTimePlayed = TimeSpan.FromHours(0),
+                    Url = "https://www.playstation.com/sv-se/games/horizon-call-of-the-mountain/",
+                    CreatedBy = "System",
+                    CreatedAt = DateTime.Now,
+                    UpdatedBy = null,
+                    UpdatedAt = null,
+                    DeletedBy = null,
+                    DeletedAt = null
+                },
+                new VideoGame
+                {
+                    Id = 4,
                     Name = "Ghost of Tsushima DIRECTOR’S CUT",
                     Title = "Ghost of Tsushima DIRECTOR’S CUT",
-                    ImageUri = String.Empty,
+                    ImageUri = null,
                     DeveloperId = 3,
-                    Price = 69.99M,
-                    ReleaseDate = DateTime.Parse("2020-07-17"),
+                    Price = 0.0M,
+                    ReleaseDate = DateTime.Parse("2021-08-20"),
                     PurchaseDate = DateTime.Parse("2022-05-03"),
                     TotalTimePlayed = TimeSpan.FromHours(0),
                     Url = "https://www.playstation.com/en-se/games/ghost-of-tsushima/",
                     CreatedBy = "System",
                     CreatedAt = DateTime.Now,
-                    UpdatedBy = String.Empty,
+                    UpdatedBy = null,
                     UpdatedAt = null,
-                    DeletedBy = String.Empty,
+                    DeletedBy = null,
                     DeletedAt = null
                 }
             );

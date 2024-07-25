@@ -65,7 +65,9 @@ namespace Application
             serviceCollection.AddScoped<IValidator<CompanyDto>, CompanyDtoValidator>();
             serviceCollection.AddScoped<IValidator<ConsoleDto>, ConsoleDtoValidator>();
             serviceCollection.AddScoped<IValidator<ConsoleVideoGameDto>, ConsoleVideoGameDtoValidator>();
+            serviceCollection.AddScoped<IValidator<GenreDto>, GenreDtoValidator>();
             serviceCollection.AddScoped<IValidator<ReviewDto>, ReviewDtoValidator>();
+            serviceCollection.AddScoped<IValidator<VideoGameGenreDto>, VideoGameGenreDtoValidator>();
             serviceCollection.AddScoped<IValidator<VideoGameDto>, VideoGameDtoValidator>();
 
             // Application.Dtos.Identity.

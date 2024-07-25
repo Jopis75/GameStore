@@ -10,9 +10,13 @@
 
         IConsoleVideoGameRepository ConsoleVideoGameRepository { get; }
 
+        IGenreRepository GenreRepository { get; }
+
         IReviewRepository ReviewRepository { get; }
 
         Task SaveAsync();
+
+        IVideoGameGenreRepository VideoGameGenreRepository { get; }
 
         IVideoGameRepository VideoGameRepository { get; }
     }

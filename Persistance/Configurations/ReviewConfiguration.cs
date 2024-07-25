@@ -18,9 +18,9 @@ namespace Persistance.Configurations
                     Grade = 100,
                     CreatedBy = "System",
                     CreatedAt = DateTime.Now,
-                    UpdatedBy = String.Empty,
+                    UpdatedBy = null,
                     UpdatedAt = null,
-                    DeletedBy = String.Empty,
+                    DeletedBy = null,
                     DeletedAt = null
                 },
                 new Review
@@ -32,9 +32,9 @@ namespace Persistance.Configurations
                     Grade = 100,
                     CreatedBy = "System",
                     CreatedAt = DateTime.Now,
-                    UpdatedBy = String.Empty,
+                    UpdatedBy = null,
                     UpdatedAt = null,
-                    DeletedBy = String.Empty,
+                    DeletedBy = null,
                     DeletedAt = null
                 },
                 new Review
@@ -46,9 +46,9 @@ namespace Persistance.Configurations
                     Grade = 100,
                     CreatedBy = "System",
                     CreatedAt = DateTime.Now,
-                    UpdatedBy = String.Empty,
+                    UpdatedBy = null,
                     UpdatedAt = null,
-                    DeletedBy = String.Empty,
+                    DeletedBy = null,
                     DeletedAt = null
                 },
                 new Review
@@ -60,9 +60,9 @@ namespace Persistance.Configurations
                     Grade = 100,
                     CreatedBy = "System",
                     CreatedAt = DateTime.Now,
-                    UpdatedBy = String.Empty,
+                    UpdatedBy = null,
                     UpdatedAt = null,
-                    DeletedBy = String.Empty,
+                    DeletedBy = null,
                     DeletedAt = null
                 },
                 new Review
@@ -74,9 +74,9 @@ namespace Persistance.Configurations
                     Grade = 100,
                     CreatedBy = "System",
                     CreatedAt = DateTime.Now,
-                    UpdatedBy = String.Empty,
+                    UpdatedBy = null,
                     UpdatedAt = null,
-                    DeletedBy = String.Empty,
+                    DeletedBy = null,
                     DeletedAt = null
                 }
             );

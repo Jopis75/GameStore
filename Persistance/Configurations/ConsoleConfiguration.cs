@@ -12,18 +12,35 @@ namespace Persistance.Configurations
                 new Console
                 {
                     Id = 1,
-                    Name = "PlayStation®5 Console",
+                    Name = "PlayStation 5",
                     DeveloperId = 1,
-                    Price = 9988.00M,
+                    Price = 9988.0M,
                     ReleaseDate = DateTime.Parse("2020-11-12"),
                     PurchaseDate = DateTime.Parse("2022-01-29"),
-                    Url = "https://direct.playstation.com/en-us/buy-consoles/playstation5-console/",
-                    ImageUri = String.Empty,
+                    Url = "https://www.playstation.com/sv-se/ps5/",
+                    ImageUri = null,
                     CreatedBy = "System",
                     CreatedAt = DateTime.Now,
-                    UpdatedBy = String.Empty,
+                    UpdatedBy = null,
                     UpdatedAt = null,
-                    DeletedBy = String.Empty,
+                    DeletedBy = null,
+                    DeletedAt = null
+                },
+                new Console
+                {
+                    Id = 2,
+                    Name = "PlayStation VR2",
+                    DeveloperId = 1,
+                    Price = 7869.0M,
+                    ReleaseDate = DateTime.Parse("2023-02-22"),
+                    PurchaseDate = DateTime.Parse("2023-02-22"),
+                    Url = "https://www.playstation.com/sv-se/ps-vr2/",
+                    ImageUri = null,
+                    CreatedBy = "System",
+                    CreatedAt = DateTime.Now,
+                    UpdatedBy = null,
+                    UpdatedAt = null,
+                    DeletedBy = null,
                     DeletedAt = null
                 }
             );

@@ -25,6 +25,12 @@ namespace Persistance.Configurations
                 {
                     Id = 3,
                     ConsoleId = 1,
+                    VideoGameId = 4
+                },
+                new ConsoleVideoGame
+                {
+                    Id = 4,
+                    ConsoleId = 2,
                     VideoGameId = 3
                 }
             );

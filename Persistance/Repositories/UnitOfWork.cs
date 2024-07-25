@@ -17,7 +17,11 @@ namespace Persistance.Repositories
 
         private readonly IConsoleVideoGameRepository _consoleVideoGameRepository;
 
+        private readonly IGenreRepository _genreRepository;
+
         private readonly IReviewRepository _reviewRepository;
+
+        private readonly IVideoGameGenreRepository _videoGameGenreRepository;
 
         private readonly IVideoGameRepository _videoGameRepository;
 
@@ -29,7 +33,11 @@ namespace Persistance.Repositories
 
         public IConsoleVideoGameRepository ConsoleVideoGameRepository => _consoleVideoGameRepository;
 
+        public IGenreRepository GenreRepository => _genreRepository;
+
         public IReviewRepository ReviewRepository => _reviewRepository;
+
+        public IVideoGameGenreRepository VideoGameGenreRepository => _videoGameGenreRepository;
 
         public IVideoGameRepository VideoGameRepository => _videoGameRepository;
 
@@ -40,7 +48,9 @@ namespace Persistance.Repositories
             ICompanyRepository companyRepository,
             IConsoleRepository consoleRepository,
             IConsoleVideoGameRepository consoleVideoGameRepository,
+            IGenreRepository genreRepository,
             IReviewRepository reviewRepository,
+            IVideoGameGenreRepository videoGameGenreRepository,
             IVideoGameRepository videoGameRepository)
         {
             _gameStoreDbContext = gameStoreDbContext ?? throw new ArgumentNullException(nameof(gameStoreDbContext));
@@ -49,7 +59,9 @@ namespace Persistance.Repositories
             _companyRepository = companyRepository ?? throw new ArgumentNullException(nameof(companyRepository));
             _consoleRepository = consoleRepository ?? throw new ArgumentNullException(nameof(consoleRepository));
             _consoleVideoGameRepository = consoleVideoGameRepository ?? throw new ArgumentNullException(nameof(consoleVideoGameRepository));
+            _genreRepository = genreRepository ?? throw new ArgumentNullException(nameof(genreRepository));
             _reviewRepository = reviewRepository ?? throw new ArgumentNullException(nameof(reviewRepository));
+            _videoGameGenreRepository = videoGameGenreRepository ?? throw new ArgumentNullException(nameof(videoGameGenreRepository));
             _videoGameRepository = videoGameRepository ?? throw new ArgumentNullException(nameof(videoGameRepository));
         }
 

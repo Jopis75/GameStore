@@ -15,14 +15,22 @@ namespace Persistance.DbContexts
 
         public DbSet<Console> Consoles { get; set; }
 
+        public DbSet<Genre> Genres { get; set; }
+
+        public DbSet<VideoGameGenre> VideoGameGenres { get; set; }
+
         public DbSet<VideoGame> VideoGames { get; set; }
 
         public DbSet<Review> Reviews { get; set; }
 
         public GameStoreDbContext(DbContextOptions<GameStoreDbContext> dbContextOptions) 
-            : base(dbContextOptions) { }
+            : base(dbContextOptions)
+        {
+        }
 
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) { }
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+        }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -74,6 +82,47 @@ namespace Persistance.DbContexts
                 .Property(console => console.Price)
                 .HasPrecision(18, 2);
 
+            // ConsoleVideoGame.
+            modelBuilder
+                .Entity<ConsoleVideoGame>()
+                .ToTable("ConsoleVideoGame");
+            modelBuilder
+                .Entity<ConsoleVideoGame>()
+                .HasKey(consoleVideoGame => consoleVideoGame.Id);
+            modelBuilder
+                .Entity<ConsoleVideoGame>()
+                .HasOne(consoleVideoGame => consoleVideoGame.Console)
+                .WithMany(console => console.ConsoleVideoGames)
+                .HasForeignKey(consoleVideoGame => consoleVideoGame.ConsoleId)
+                .OnDelete(DeleteBehavior.ClientSetNull);
+            modelBuilder
+                .Entity<ConsoleVideoGame>()
+                .HasOne(consoleVideoGame => consoleVideoGame.VideoGame)
+                .WithMany(videoGame => videoGame.ConsoleVideoGames)
+                .HasForeignKey(consoleVideoGame => consoleVideoGame.VideoGameId)
+                .OnDelete(DeleteBehavior.ClientSetNull);
+
+            // Genre.
+            modelBuilder
+                .Entity<Genre>()
+                .ToTable("Genre");
+            modelBuilder
+                .Entity<Genre>()
+                .HasKey(genre => genre.Id);
+
+            // Review.
+            modelBuilder
+                .Entity<Review>()
+                .ToTable("Review");
+            modelBuilder
+                .Entity<Review>()
+                .HasKey(review => review.Id);
+            modelBuilder
+                .Entity<Review>()
+                .HasOne(review => review.VideoGame)
+                .WithMany(videoGame => videoGame.Reviews)
+                .HasForeignKey(review => review.VideoGameId);
+
             // VideoGame.
             modelBuilder
                 .Entity<VideoGame>()
@@ -96,46 +145,35 @@ namespace Persistance.DbContexts
                 .Property(videoGame => videoGame.Price)
                 .HasPrecision(18, 2);
 
-            // ConsoleVideoGame.
+            // VideoGameGenre.
             modelBuilder
-                .Entity<ConsoleVideoGame>()
-                .ToTable("ConsoleVideoGame");
+                .Entity<VideoGameGenre>()
+                .ToTable("VideoGameGenre");
             modelBuilder
-                .Entity<ConsoleVideoGame>()
-                .HasKey(consoleVideoGame => consoleVideoGame.Id);
+                .Entity<VideoGameGenre>()
+                .HasKey(videoGameGenre => videoGameGenre.Id);
             modelBuilder
-                .Entity<ConsoleVideoGame>()
-                .HasOne(consoleVideoGame => consoleVideoGame.Console)
-                .WithMany(console => console.ConsoleVideoGames)
-                .HasForeignKey(consoleVideoGame => consoleVideoGame.ConsoleId)
+                .Entity<VideoGameGenre>()
+                .HasOne(videoGameGenre => videoGameGenre.VideoGame)
+                .WithMany(videoGame => videoGame.VideoGameGenres)
+                .HasForeignKey(videoGameGenre => videoGameGenre.VideoGameId)
                 .OnDelete(DeleteBehavior.ClientSetNull);
             modelBuilder
-                .Entity<ConsoleVideoGame>()
-                .HasOne(consoleVideoGame => consoleVideoGame.VideoGame)
-                .WithMany(videoGame => videoGame.ConsoleVideoGames)
-                .HasForeignKey(consoleVideoGame => consoleVideoGame.VideoGameId)
+                .Entity<VideoGameGenre>()
+                .HasOne(VideoGameGenre => VideoGameGenre.Genre)
+                .WithMany(genre => genre.VideoGameGenres)
+                .HasForeignKey(videoGameGenre => videoGameGenre.GenreId)
                 .OnDelete(DeleteBehavior.ClientSetNull);
-
-            // Review.
-            modelBuilder
-                .Entity<Review>()
-                .ToTable("Review");
-            modelBuilder
-                .Entity<Review>()
-                .HasKey(review => review.Id);
-            modelBuilder
-                .Entity<Review>()
-                .HasOne(review => review.VideoGame)
-                .WithMany(videoGame => videoGame.Reviews)
-                .HasForeignKey(review => review.VideoGameId);
 
             // Configurations.
             modelBuilder.ApplyConfiguration(new AddressConfiguration());
-            modelBuilder.ApplyConfiguration(new ConsoleConfiguration());
-            modelBuilder.ApplyConfiguration(new VideoGameConfiguration());
-            modelBuilder.ApplyConfiguration(new ConsoleVideoGameConfiguration());
             modelBuilder.ApplyConfiguration(new CompanyConfiguration());
+            modelBuilder.ApplyConfiguration(new ConsoleConfiguration());
+            modelBuilder.ApplyConfiguration(new ConsoleVideoGameConfiguration());
+            modelBuilder.ApplyConfiguration(new GenreConfiguration());
             modelBuilder.ApplyConfiguration(new ReviewConfiguration());
+            modelBuilder.ApplyConfiguration(new VideoGameConfiguration());
+            modelBuilder.ApplyConfiguration(new VideoGameGenreConfiguration());
         }
     }
 }

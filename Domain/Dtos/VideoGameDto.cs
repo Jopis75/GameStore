@@ -11,5 +11,7 @@ namespace Domain.Dtos
         public string Title { get; set; } = default!;
 
         public TimeSpan TotalTimePlayed { get; set; }
+
+        public List<TrophyDto> Trophies { get; set;} = new();
     }
 }

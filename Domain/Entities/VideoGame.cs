@@ -8,6 +8,8 @@
 
         public TimeSpan TotalTimePlayed { get; set; }
 
+        public virtual ICollection<Trophy> Trophies { get; set; } = new List<Trophy>();
+
         public virtual ICollection<VideoGameGenre> VideoGameGenres { get; set; } = new List<VideoGameGenre>();
     }
 }

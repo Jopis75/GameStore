@@ -11,17 +11,19 @@ namespace Persistance.DbContexts
 
         public DbSet<Company> Companies { get; set; }
 
-        public DbSet<ConsoleVideoGame> ConsoleVideoGames { get; set; }
-
         public DbSet<Console> Consoles { get; set; }
 
+        public DbSet<ConsoleVideoGame> ConsoleVideoGames { get; set; }
+
         public DbSet<Genre> Genres { get; set; }
+
+        public DbSet<Review> Reviews { get; set; }
+
+        public DbSet<Trophy> Trophies { get; set; }
 
         public DbSet<VideoGameGenre> VideoGameGenres { get; set; }
 
         public DbSet<VideoGame> VideoGames { get; set; }
-
-        public DbSet<Review> Reviews { get; set; }
 
         public GameStoreDbContext(DbContextOptions<GameStoreDbContext> dbContextOptions) 
             : base(dbContextOptions)
@@ -122,6 +124,19 @@ namespace Persistance.DbContexts
                 .HasOne(review => review.VideoGame)
                 .WithMany(videoGame => videoGame.Reviews)
                 .HasForeignKey(review => review.VideoGameId);
+
+            // Trophy.
+            modelBuilder
+                .Entity<Trophy>()
+                .ToTable("Trophy");
+            modelBuilder
+                .Entity<Trophy>()
+                .HasKey(trophy => trophy.Id);
+            modelBuilder
+                .Entity<Trophy>()
+                .HasOne(trophy => trophy.VideoGame)
+                .WithMany(videoGame => videoGame.Trophies)
+                .HasForeignKey(trophy => trophy.VideoGameId);
 
             // VideoGame.
             modelBuilder

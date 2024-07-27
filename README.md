@@ -23,4 +23,4 @@
 Next up:
 - Convert the solution and all projects to .NET 8.
 - Add paging to repository queries.
-- Add Category entity that relates to VideoGame.
+- Add Trophy entity that relates to VideoGame.

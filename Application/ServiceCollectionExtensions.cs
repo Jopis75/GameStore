@@ -7,6 +7,8 @@ using Application.Features.Consoles.Requests.Commands;
 using Application.Features.Consoles.Requests.Queries;
 using Application.Features.ConsoleVideoGames.Requests.Commands;
 using Application.Features.ConsoleVideoGames.Requests.Queries;
+using Application.Features.Genres.Requests.Commands;
+using Application.Features.Genres.Requests.Queries;
 using Application.Features.Reviews.Requests.Commands;
 using Application.Features.Reviews.Requests.Queries;
 using Application.Features.VideoGames.Requests.Commands;
@@ -21,6 +23,8 @@ using Application.Validators.Requests.Consoles.Commands;
 using Application.Validators.Requests.Consoles.Queries;
 using Application.Validators.Requests.ConsoleVideoGame.Commands;
 using Application.Validators.Requests.ConsoleVideoGame.Queries;
+using Application.Validators.Requests.Genres.Commands;
+using Application.Validators.Requests.Genres.Queries;
 using Application.Validators.Requests.Reviews.Commands;
 using Application.Validators.Requests.Reviews.Queries;
 using Application.Validators.Requests.VideoGames.Commands;
@@ -98,6 +102,12 @@ namespace Application
             serviceCollection.AddScoped<IValidator<DeleteConsoleVideoGameRequest>, DeleteConsoleVideoGameRequestValidator>();
             serviceCollection.AddScoped<IValidator<UpdateConsoleVideoGameRequest>, UpdateConsoleVideoGameRequestValidator>();
             serviceCollection.AddScoped<IValidator<ReadConsoleVideoGameByIdRequest>, ReadConsoleVideoGameByIdRequestValidator>();
+
+            // Features.Genres.Requests.
+            serviceCollection.AddScoped<IValidator<CreateGenreRequest>, CreateGenreRequestValidator>();
+            serviceCollection.AddScoped<IValidator<DeleteGenreRequest>, DeleteGenreRequestValidator>();
+            serviceCollection.AddScoped<IValidator<UpdateGenreRequest>, UpdateGenreRequestValidator>();
+            serviceCollection.AddScoped<IValidator<ReadGenreByIdRequest>, ReadGenreByIdRequestValidator>();
 
             // Features.Reviews.Requests.
             serviceCollection.AddScoped<IValidator<CreateReviewRequest>, CreateReviewRequestValidator>();

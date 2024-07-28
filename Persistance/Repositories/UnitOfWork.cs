@@ -21,6 +21,8 @@ namespace Persistance.Repositories
 
         private readonly IReviewRepository _reviewRepository;
 
+        private readonly ITrophyRepository _trophyRepository;
+
         private readonly IVideoGameGenreRepository _videoGameGenreRepository;
 
         private readonly IVideoGameRepository _videoGameRepository;
@@ -37,6 +39,8 @@ namespace Persistance.Repositories
 
         public IReviewRepository ReviewRepository => _reviewRepository;
 
+        public ITrophyRepository TrophyRepository => _trophyRepository;
+
         public IVideoGameGenreRepository VideoGameGenreRepository => _videoGameGenreRepository;
 
         public IVideoGameRepository VideoGameRepository => _videoGameRepository;
@@ -50,6 +54,7 @@ namespace Persistance.Repositories
             IConsoleVideoGameRepository consoleVideoGameRepository,
             IGenreRepository genreRepository,
             IReviewRepository reviewRepository,
+            ITrophyRepository trophyRepository,
             IVideoGameGenreRepository videoGameGenreRepository,
             IVideoGameRepository videoGameRepository)
         {
@@ -61,6 +66,7 @@ namespace Persistance.Repositories
             _consoleVideoGameRepository = consoleVideoGameRepository ?? throw new ArgumentNullException(nameof(consoleVideoGameRepository));
             _genreRepository = genreRepository ?? throw new ArgumentNullException(nameof(genreRepository));
             _reviewRepository = reviewRepository ?? throw new ArgumentNullException(nameof(reviewRepository));
+            _trophyRepository = trophyRepository ?? throw new ArgumentNullException(nameof(trophyRepository));
             _videoGameGenreRepository = videoGameGenreRepository ?? throw new ArgumentNullException(nameof(videoGameGenreRepository));
             _videoGameRepository = videoGameRepository ?? throw new ArgumentNullException(nameof(videoGameRepository));
         }

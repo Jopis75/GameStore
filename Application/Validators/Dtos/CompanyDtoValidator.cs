@@ -34,6 +34,14 @@ namespace Application.Validators.Dtos
                 .GreaterThan(0)
                 .WithMessage("{PropertyName} must be greater than 0.");
 
+            RuleFor(companyDto => companyDto.CompanyType)
+                .NotEmpty()
+                .WithMessage("{PropertyName} is required.");
+
+            RuleFor(companyDto => companyDto.Industry)
+                .NotEmpty()
+                .WithMessage("{PropertyName} is required.");
+
             RuleFor(companyDto => companyDto.EmailAddress)
                 .NotNull()
                 .NotEmpty()

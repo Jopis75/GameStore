@@ -16,6 +16,8 @@
 
         Task SaveAsync();
 
+        ITrophyRepository TrophyRepository { get; }
+
         IVideoGameGenreRepository VideoGameGenreRepository { get; }
 
         IVideoGameRepository VideoGameRepository { get; }

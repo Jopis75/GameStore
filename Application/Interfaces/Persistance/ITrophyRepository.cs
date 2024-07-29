@@ -1,5 +1,6 @@
 ﻿using Domain.Dtos;
 using Domain.Entities;
+using Domain.Enums;
 using Domain.Filters;
 
 namespace Application.Interfaces.Persistance

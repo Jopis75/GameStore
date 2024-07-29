@@ -1,6 +1,6 @@
-﻿namespace Domain.Dtos
+﻿namespace Domain.Enums
 {
-    public enum CompanyTypeEnum
+    public enum CompanyType
     {
         Subsidiary,
         Parent,

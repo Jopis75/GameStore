@@ -1,8 +1,10 @@
-﻿namespace Domain.Dtos
+﻿using Domain.Enums;
+
+namespace Domain.Dtos
 {
     public class CompanyDto : DtoBase
     {
-        public CompanyTypeEnum CompanyType { get; set; } = new();
+        public CompanyType CompanyType { get; set; }
 
         public List<ConsoleDto> Consoles { get; set; } = new();
 
@@ -12,7 +14,7 @@
 
         public int HeadquarterId { get; set; }
 
-        public IndustryEnum Industry { get; set; } = new();
+        public Industry Industry { get; set; }
 
         public string? LogoImageUri { get; set; }
 

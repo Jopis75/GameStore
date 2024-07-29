@@ -11,6 +11,8 @@ using Application.Features.Genres.Requests.Commands;
 using Application.Features.Genres.Requests.Queries;
 using Application.Features.Reviews.Requests.Commands;
 using Application.Features.Reviews.Requests.Queries;
+using Application.Features.Trophies.Requests.Commands;
+using Application.Features.Trophies.Requests.Queries;
 using Application.Features.VideoGames.Requests.Commands;
 using Application.Features.VideoGames.Requests.Queries;
 using Application.Validators.Dtos;
@@ -27,6 +29,8 @@ using Application.Validators.Requests.Genres.Commands;
 using Application.Validators.Requests.Genres.Queries;
 using Application.Validators.Requests.Reviews.Commands;
 using Application.Validators.Requests.Reviews.Queries;
+using Application.Validators.Requests.Trophies.Commands;
+using Application.Validators.Requests.Trophies.Queries;
 using Application.Validators.Requests.VideoGames.Commands;
 using Application.Validators.Requests.VideoGames.Queries;
 using Domain.Dtos;
@@ -115,6 +119,12 @@ namespace Application
             serviceCollection.AddScoped<IValidator<UpdateReviewRequest>, UpdateReviewRequestValidator>();
             serviceCollection.AddScoped<IValidator<ReadReviewByIdRequest>, ReadReviewByIdRequestValidator>();
             serviceCollection.AddScoped<IValidator<ReadReviewsByVideoGameIdRequest>, ReadReviewsByVideoGameIdRequestValidator>();
+
+            // Features.Trophies.Requests.
+            serviceCollection.AddScoped<IValidator<CreateTrophyRequest>, CreateTrophyRequestValidator>();
+            serviceCollection.AddScoped<IValidator<DeleteTrophyRequest>, DeleteTrophyRequestValidator>();
+            serviceCollection.AddScoped<IValidator<UpdateTrophyRequest>, UpdateTrophyRequestValidator>();
+            serviceCollection.AddScoped<IValidator<ReadTrophyByIdRequest>, ReadTrophyByIdRequestValidator>();
 
             // Features.VideoGames.Requests.
             serviceCollection.AddScoped<IValidator<CreateVideoGameRequest>, CreateVideoGameRequestValidator>();

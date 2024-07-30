@@ -23,5 +23,5 @@
 Next up:
 - Convert the solution and all projects to .NET 8.
 - Add paging to repository queries.
-- # Integration with PlayStation Trophy API.
-- # CI/CD using GitHub Actions.
+- Integration with PlayStation Trophy API.
+- CI/CD using GitHub Actions.

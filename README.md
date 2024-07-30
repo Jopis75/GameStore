@@ -23,4 +23,5 @@
 Next up:
 - Convert the solution and all projects to .NET 8.
 - Add paging to repository queries.
-- Add Trophy entity that relates to VideoGame.
+- # Integration with PlayStation Trophy API.
+- # CI/CD using GitHub Actions.

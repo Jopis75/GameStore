@@ -35,6 +35,7 @@ namespace Persistance
             serviceCollection.AddScoped<IGenreRepository, GenreRepository>();
             serviceCollection.AddScoped<IReviewRepository, ReviewRepository>();
             serviceCollection.AddScoped<ITrophyRepository, TrophyRepository>();
+            serviceCollection.AddScoped<IVideoGameGenreRepository, VideoGameGenreRepository>();
             serviceCollection.AddScoped<IVideoGameRepository, VideoGameRepository>();
 
             return serviceCollection;

@@ -13,14 +13,11 @@ namespace Application.Features.Genres.RequestHandlers.Queries
     {
         private readonly IUnitOfWork _unitOfWork;
 
-        private readonly IValidator<ReadGenreAllRequest> _validator;
-
         private readonly ILogger<ReadGenreAllRequestHandler> _logger;
 
-        public ReadGenreAllRequestHandler(IUnitOfWork unitOfWork, IValidator<ReadGenreAllRequest> validator, ILogger<ReadGenreAllRequestHandler> logger)
+        public ReadGenreAllRequestHandler(IUnitOfWork unitOfWork, ILogger<ReadGenreAllRequestHandler> logger)
         {
             _unitOfWork = unitOfWork ?? throw new ArgumentNullException(nameof(unitOfWork));
-            _validator = validator ?? throw new ArgumentNullException(nameof(validator));
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 

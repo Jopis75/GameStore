@@ -15,6 +15,7 @@ using Application.Features.Trophies.Requests.Commands;
 using Application.Features.Trophies.Requests.Queries;
 using Application.Features.VideoGames.Requests.Commands;
 using Application.Features.VideoGames.Requests.Queries;
+using Application.Profiles;
 using Application.Validators.Dtos;
 using Application.Validators.Identity;
 using Application.Validators.Requests.Addresses.Commands;
@@ -54,7 +55,7 @@ namespace Application
 
         private static IServiceCollection AddAutoMapper(this IServiceCollection serviceCollection)
         {
-            serviceCollection.AddAutoMapper(Assembly.GetExecutingAssembly());
+            serviceCollection.AddAutoMapper(typeof(GameStoreProfile));
 
             return serviceCollection;
         }

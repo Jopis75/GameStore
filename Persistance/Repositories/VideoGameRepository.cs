@@ -152,6 +152,16 @@ namespace Persistance.Repositories
 
             var videoGame = await Entities
                 .AsNoTracking()
+                .Include(videoGame => videoGame.Developer)
+                    .ThenInclude(company => company.Headquarter)
+                .Include(videoGame => videoGame.Reviews)
+                .Include(videoGame => videoGame.ConsoleVideoGames)
+                    .ThenInclude(consoleVidoeGame => consoleVidoeGame.Console)
+                //.Include(videoGame => videoGame.ConsoleVideoGames)
+                //    .ThenInclude(consoleVidoeGame => consoleVidoeGame.VideoGame)
+                .Include(videoGame => videoGame.VideoGameGenres)
+                    .ThenInclude(videoGameGenre => videoGameGenre.Genre)
+                .Include(videoGame => videoGame.Trophies)
                 .Where(videoGame => videoGame.ConsoleVideoGames.Any(consoleVideoGame => consoleVideoGame.ConsoleId == consoleId))
                 .OrderByDescending(videoGame => videoGame.TotalTimePlayed)
                 .FirstOrDefaultAsync();

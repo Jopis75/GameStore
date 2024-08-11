@@ -10,7 +10,7 @@ namespace Domain.Dtos
 
         public string EmailAddress { get; set; } = default!;
 
-        public AddressDto Headquarter { get; set; } = new();
+        public AddressDto Headquarter { get; set; } = default!;
 
         public int HeadquarterId { get; set; }
 
@@ -20,7 +20,7 @@ namespace Domain.Dtos
 
         public string Name { get; set; } = default!;
 
-        public CompanyDto? ParentCompany { get; set; } = new();
+        public CompanyDto? ParentCompany { get; set; }
 
         public int? ParentCompanyId { get; set; }
 

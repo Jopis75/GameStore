@@ -25,7 +25,7 @@ namespace GameStoreAPI.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<ActionResult<HttpResponseDto<AddressDto>>> CreateAsync([FromBody] AddressDto addressDto)
         {
-            var httpResponseDto = await _mediator.Send(new CreateAddressRequest() { AddressDto = addressDto });
+            var httpResponseDto = await _mediator.Send(new CreateAddressRequest { AddressDto = addressDto });
             return StatusCode(httpResponseDto.StatusCode, httpResponseDto);
         }
 
@@ -36,7 +36,7 @@ namespace GameStoreAPI.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<ActionResult<HttpResponseDto<AddressDto>>> DeleteAsync(int id)
         {
-            var httpResponseDto = await _mediator.Send(new DeleteAddressRequest() { Id = id });
+            var httpResponseDto = await _mediator.Send(new DeleteAddressRequest { Id = id });
             return StatusCode(httpResponseDto.StatusCode, httpResponseDto);
         }
 
@@ -57,7 +57,7 @@ namespace GameStoreAPI.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<ActionResult<HttpResponseDto<AddressDto>>> ReadByIdAsync(int id)
         {
-            var httpResponseDto = await _mediator.Send(new ReadAddressByIdRequest() { Id = id });
+            var httpResponseDto = await _mediator.Send(new ReadAddressByIdRequest { Id = id });
             return StatusCode(httpResponseDto.StatusCode, httpResponseDto);
         }
 
@@ -68,7 +68,7 @@ namespace GameStoreAPI.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<ActionResult<HttpResponseDto<AddressDto>>> UpdateAsync([FromBody] AddressDto addressDto)
         {
-            var httpResponseDto = await _mediator.Send(new UpdateAddressRequest() { AddressDto = addressDto });
+            var httpResponseDto = await _mediator.Send(new UpdateAddressRequest { AddressDto = addressDto });
             return StatusCode(httpResponseDto.StatusCode, httpResponseDto);
         }
     }

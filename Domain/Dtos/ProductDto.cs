@@ -2,7 +2,7 @@
 {
     public abstract class ProductDto : DtoBase
     {
-        public CompanyDto Developer { get; set; } = new();
+        public CompanyDto Developer { get; set; } = default!;
 
         public int DeveloperId { get; set; }
 

@@ -72,7 +72,7 @@ namespace Persistance.Repositories
 
             var addresses = await Entities
                 .AsNoTracking()
-                .Where(address => EF.Functions.Like(address.StreetAddress, $"{streetAddress}%"))
+                .Where(address => address.StreetAddress == streetAddress)
                 .ToArrayAsync();
 
             return addresses.Select(Mapper.Map<AddressDto>);

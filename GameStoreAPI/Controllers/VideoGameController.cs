@@ -61,6 +61,17 @@ namespace GameStoreAPI.Controllers
             return StatusCode(httpResponseDto.StatusCode, httpResponseDto);
         }
 
+        [HttpGet]
+        [Route("ReadMosrPlayedByConsoleIdAsync/{consoleId}")]
+        [ProducesResponseType(typeof(HttpResponseDto<VideoGameDto>), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<ActionResult<HttpResponseDto<VideoGameDto>>> ReadMosePlayedByConsoleIdAsync(int consoleId)
+        {
+            var httpResponseDto = await _mediator.Send(new ReadMostPlayedVideoGameByConsoleIdRequest() { ConsoleId = consoleId });
+            return StatusCode(httpResponseDto.StatusCode, httpResponseDto);
+        }
+
         [HttpPut]
         [Route("UpdateAsync")]
         [ProducesResponseType(typeof(HttpResponseDto<VideoGameDto>), StatusCodes.Status200OK)]

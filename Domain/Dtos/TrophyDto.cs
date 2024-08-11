@@ -12,7 +12,7 @@ namespace Domain.Dtos
 
         public TrophyValue TrophyValue { get; set; }
 
-        public VideoGameDto VideoGame { get; set; } = new();
+        public VideoGameDto VideoGame { get; set; } = default!;
 
         public int VideoGameId { get; set; }
     }

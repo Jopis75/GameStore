@@ -11,24 +11,12 @@ namespace Application.Validators.Dtos
             RuleFor(companyDto => companyDto.Name)
                 .NotNull()
                 .NotEmpty()
-                .WithMessage("{PropertyName} is required.")
-                .MustAsync(async (name, cancellationToken) =>
-                {
-                    var companyDto = await unitOfWork.CompanyRepository.ReadByNameAsync(name, cancellationToken);
-                    return companyDto.Id == 0;
-                })
-                .WithMessage("{PropertyName} must be unique.");
+                .WithMessage("{PropertyName} is required.");
 
             RuleFor(companyDto => companyDto.TradeName)
                 .NotNull()
                 .NotEmpty()
-                .WithMessage("{PropertyName} is required.")
-                .MustAsync(async (tradeName, cancellationToken) =>
-                {
-                    var companyDto = await unitOfWork.CompanyRepository.ReadByTradeNameAsync(tradeName, cancellationToken);
-                    return companyDto.Id == 0;
-                })
-                .WithMessage("{PropertyName} must be unique.");
+                .WithMessage("{PropertyName} is required.");
 
             RuleFor(companyDto => companyDto.HeadquarterId)
                 .GreaterThan(0)
@@ -46,25 +34,13 @@ namespace Application.Validators.Dtos
                 .NotNull()
                 .NotEmpty()
                 .WithMessage("{PropertyName} is required.")
-                .MustAsync(async (emailAddress, cancellationToken) =>
-                {
-                    var companyDto = await unitOfWork.CompanyRepository.ReadByEmailAddressAsync(emailAddress, cancellationToken);
-                    return companyDto.Id == 0;
-                })
-                .WithMessage("{PropertyName} must be unique.")
                 .EmailAddress()
                 .WithMessage("{PropertyName} is not valid.");
 
             RuleFor(companyDto => companyDto.PhoneNumber)
                 .NotNull()
                 .NotEmpty()
-                .WithMessage("{PropertyName} is required.")
-                .MustAsync(async (phoneNumber, cancellationToken) =>
-                {
-                    var companyDto = await unitOfWork.CompanyRepository.ReadByPhoneNumberAsync(phoneNumber, cancellationToken);
-                    return companyDto.Id == 0;
-                })
-                .WithMessage("{PropertyName} must be unique.");
+                .WithMessage("{PropertyName} is required.");
 
             RuleFor(companyDto => companyDto.ParentCompanyId)
                 .GreaterThan(0)

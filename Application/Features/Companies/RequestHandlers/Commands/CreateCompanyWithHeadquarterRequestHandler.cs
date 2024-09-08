@@ -30,8 +30,6 @@ namespace Application.Features.Companies.RequestHandlers.Commands
             {
                 _logger.LogInformation("Begin CreateCompanyWithHeadquarter {@CreateCompanyWithHeadquarterRequest}.", createCompanyWithHeadquarterRequest);
 
-                cancellationToken.ThrowIfCancellationRequested();
-
                 if (createCompanyWithHeadquarterRequest == null)
                 {
                     var httpResponseDto1 = new HttpResponseDto<CompanyDto>(new ArgumentNullException(nameof(createCompanyWithHeadquarterRequest)).Message, StatusCodes.Status400BadRequest);

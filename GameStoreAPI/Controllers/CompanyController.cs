@@ -25,7 +25,7 @@ namespace GameStoreAPI.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<ActionResult<HttpResponseDto<CompanyDto>>> CreateAsync([FromBody] CompanyDto companyDto)
         {
-            var httpResponseDto = await _mediator.Send(new CreateCompanyRequest() { CompanyDto = companyDto });
+            var httpResponseDto = await _mediator.Send(new CreateCompanyRequest { CompanyDto = companyDto });
             return StatusCode(httpResponseDto.StatusCode, httpResponseDto);
         }
 
@@ -36,7 +36,7 @@ namespace GameStoreAPI.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<ActionResult<HttpResponseDto<CompanyDto>>> CreateWithHeadquarterAsync([FromBody] CompanyDto companyDto)
         {
-            var httpResponseDto = await _mediator.Send(new CreateCompanyWithHeadquarterRequest() { CompanyDto = companyDto });
+            var httpResponseDto = await _mediator.Send(new CreateCompanyWithHeadquarterRequest { CompanyDto = companyDto });
             return StatusCode(httpResponseDto.StatusCode, httpResponseDto);
         }
 
@@ -47,7 +47,7 @@ namespace GameStoreAPI.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<ActionResult<HttpResponseDto<CompanyDto>>> DeleteAsync(int id)
         {
-            var httpResponseDto = await _mediator.Send(new DeleteCompanyRequest() { Id = id });
+            var httpResponseDto = await _mediator.Send(new DeleteCompanyRequest { Id = id });
             return StatusCode(httpResponseDto.StatusCode, httpResponseDto);
         }
 
@@ -68,7 +68,7 @@ namespace GameStoreAPI.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<ActionResult<HttpResponseDto<CompanyDto>>> ReadByIdAsync(int id)
         {
-            var httpResponseDto = await _mediator.Send(new ReadCompanyByIdRequest() { Id = id });
+            var httpResponseDto = await _mediator.Send(new ReadCompanyByIdRequest { Id = id });
             return StatusCode(httpResponseDto.StatusCode, httpResponseDto);
         }
 
@@ -79,7 +79,7 @@ namespace GameStoreAPI.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<ActionResult<HttpResponseDto<CompanyDto>>> UpdateAsync([FromBody] CompanyDto companyDto)
         {
-            var httpResponseDto = await _mediator.Send(new UpdateCompanyRequest() { CompanyDto = companyDto });
+            var httpResponseDto = await _mediator.Send(new UpdateCompanyRequest { CompanyDto = companyDto });
             return StatusCode(httpResponseDto.StatusCode, httpResponseDto);
         }
     }

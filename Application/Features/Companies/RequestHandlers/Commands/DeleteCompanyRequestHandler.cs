@@ -30,8 +30,6 @@ namespace Application.Features.Companies.RequestHandlers.Commands
             {
                 _logger.LogInformation("Begin DeleteCompany {@DeleteCompanyRequest}.", deleteCompanyRequest);
 
-                cancellationToken.ThrowIfCancellationRequested();
-
                 if (deleteCompanyRequest == null)
                 {
                     var httpResponseDto1 = new HttpResponseDto<CompanyDto>(new ArgumentNullException(nameof(deleteCompanyRequest)).Message, StatusCodes.Status400BadRequest);

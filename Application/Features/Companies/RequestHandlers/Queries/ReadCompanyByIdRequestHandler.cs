@@ -31,8 +31,6 @@ namespace Application.Features.Companies.RequestHandlers.Queries
             {
                 _logger.LogInformation("Begin ReadCompanyById {@ReadCompanyByIdRequest}.", readCompanyByIdRequest);
 
-                cancellationToken.ThrowIfCancellationRequested();
-
                 if (readCompanyByIdRequest == null)
                 {
                     var httpResponseDto1 = new HttpResponseDto<CompanyDto>(new ArgumentNullException(nameof(readCompanyByIdRequest)).Message, StatusCodes.Status400BadRequest);

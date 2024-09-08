@@ -30,8 +30,6 @@ namespace Application.Features.Addresses.RequestHandlers.Commands
             {
                 _logger.LogInformation("Begin UpdateAddress {@UpdateAddressRequest}.", updateAddressRequest);
 
-                cancellationToken.ThrowIfCancellationRequested();
-
                 if (updateAddressRequest == null)
                 {
                     var httpResponseDto1 = new HttpResponseDto<AddressDto>(new ArgumentNullException(nameof(updateAddressRequest)).Message, StatusCodes.Status400BadRequest);

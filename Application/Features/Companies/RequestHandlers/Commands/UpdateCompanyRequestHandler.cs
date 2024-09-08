@@ -30,8 +30,6 @@ namespace Application.Features.Companies.RequestHandlers.Commands
             {
                 _logger.LogInformation("Begin UpdateCompany {@UpdateCompanyRequest}.", updateCompanyRequest);
 
-                cancellationToken.ThrowIfCancellationRequested();
-
                 if (updateCompanyRequest == null)
                 {
                     var httpResponseDto1 = new HttpResponseDto<CompanyDto>(new ArgumentNullException(nameof(updateCompanyRequest)).Message, StatusCodes.Status400BadRequest);

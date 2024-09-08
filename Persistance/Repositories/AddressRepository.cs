@@ -17,6 +17,18 @@ namespace Persistance.Repositories
         {
         }
 
+        public async Task<bool> IsUniqueAsync(string streetAddress, string postalCode, string city, CancellationToken cancellationToken)
+        {
+            var isUnique = await Entities
+                .AsNoTracking()
+                .Where(address => address.StreetAddress == streetAddress
+                    && address.PostalCode == postalCode
+                    && address.City == city)
+                .AnyAsync(cancellationToken) == false;
+
+            return isUnique;
+        }
+
         public async Task<IEnumerable<AddressDto>> ReadByCityAsync(string city, CancellationToken cancellationToken)
         {
             var addresses = await Entities

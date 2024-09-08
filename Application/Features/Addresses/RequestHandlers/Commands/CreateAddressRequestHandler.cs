@@ -30,8 +30,6 @@ namespace Application.Features.Addresses.RequestHandlers.Commands
             {
                 _logger.LogInformation("Begin CreateAddress {@CreateAddressRequest}.", createAddressRequest);
 
-                cancellationToken.ThrowIfCancellationRequested();
-
                 if (createAddressRequest == null)
                 {
                     var httpResponseDto1 = new HttpResponseDto<AddressDto>(new ArgumentNullException(nameof(createAddressRequest)).Message, StatusCodes.Status400BadRequest);

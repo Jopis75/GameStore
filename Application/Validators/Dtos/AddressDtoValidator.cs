@@ -16,12 +16,6 @@ namespace Application.Validators.Dtos
                 .NotNull()
                 .NotEmpty()
                 .WithMessage("{PropertyName} is required.");
-                //.MustAsync(async (streetAddress, cancellationToken) =>
-                //{
-                //    var addressDtos = await unitOfWork.AddressRepository.ReadByStreetAddressAsync(streetAddress, cancellationToken);
-                //    return addressDtos.Any() == false;
-                //})
-                //.WithMessage("{PropertyName} must be unique.");
 
             RuleFor(addressDto => addressDto.City)
                 .NotNull()

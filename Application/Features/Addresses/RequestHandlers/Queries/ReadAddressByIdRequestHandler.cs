@@ -30,8 +30,6 @@ namespace Application.Features.Addresses.RequestHandlers.Queries
             {
                 _logger.LogInformation("Begin ReadAddressById {@ReadAddressByIdRequest}.", readAddressByIdRequest);
 
-                cancellationToken.ThrowIfCancellationRequested();
-
                 if (readAddressByIdRequest == null)
                 {
                     var httpResponseDto1 = new HttpResponseDto<AddressDto>(new ArgumentNullException(nameof(readAddressByIdRequest)).Message, StatusCodes.Status400BadRequest);

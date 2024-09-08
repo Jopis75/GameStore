@@ -30,8 +30,6 @@ namespace Application.Features.Addresses.RequestHandlers.Commands
             {
                 _logger.LogInformation("Begin DeleteAddress {@DeleteAddressRequest}.", deleteAddressRequest);
 
-                cancellationToken.ThrowIfCancellationRequested();
-
                 if (deleteAddressRequest == null)
                 {
                     var httpResponseDto1 = new HttpResponseDto<AddressDto>(new ArgumentNullException(nameof(deleteAddressRequest)).Message, StatusCodes.Status400BadRequest);

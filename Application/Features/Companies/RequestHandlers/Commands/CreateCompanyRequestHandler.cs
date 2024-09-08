@@ -30,8 +30,6 @@ namespace Application.Features.Companies.RequestHandlers.Commands
             {
                 _logger.LogInformation("Begin CreateCompany {@CreateCompanyRequest}.", createCompanyRequest);
 
-                cancellationToken.ThrowIfCancellationRequested();
-
                 if (createCompanyRequest == null)
                 {
                     var httpResponseDto1 = new HttpResponseDto<CompanyDto>(new ArgumentNullException(nameof(createCompanyRequest)).Message, StatusCodes.Status400BadRequest);

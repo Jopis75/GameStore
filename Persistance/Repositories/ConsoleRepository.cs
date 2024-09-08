@@ -19,8 +19,6 @@ namespace Persistance.Repositories
 
         protected override async Task<IEnumerable<ConsoleDto>> ReadByFilterAsync(ConsoleFilter filter, Expression<Func<Console, bool>> predicate, CancellationToken cancellationToken)
         {
-            cancellationToken.ThrowIfCancellationRequested();
-
             if (filter.DeveloperId != null)
             {
                 predicate = predicate.And(console => console.DeveloperId == filter.DeveloperId);
@@ -59,19 +57,17 @@ namespace Persistance.Repositories
             var consoles = await Entities
                 .AsNoTracking()
                 .Where(predicate)
-                .ToArrayAsync();
+                .ToArrayAsync(cancellationToken);
 
             return consoles.Select(Mapper.Map<ConsoleDto>);
         }
 
         public async Task<IEnumerable<ConsoleDto>> ReadByNameAsync(string name, CancellationToken cancellationToken)
         {
-            cancellationToken.ThrowIfCancellationRequested();
-
             var consoles = await Entities
                 .AsNoTracking()
                 .Where(console => EF.Functions.Like(console.Name, $"{name}%"))
-                .ToArrayAsync();
+                .ToArrayAsync(cancellationToken);
 
             return consoles.Select(Mapper.Map<ConsoleDto>);
         }

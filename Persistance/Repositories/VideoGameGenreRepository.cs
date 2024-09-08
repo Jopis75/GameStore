@@ -19,8 +19,6 @@ namespace Persistance.Repositories
 
         protected override async Task<IEnumerable<VideoGameGenreDto>> ReadByFilterAsync(VideoGameGenreFilter filter, Expression<Func<VideoGameGenre, bool>> predicate, CancellationToken cancellationToken)
         {
-            cancellationToken.ThrowIfCancellationRequested();
-
             if (filter.VideoGameId != null)
             {
                 predicate = predicate.And(videoGameGenre => videoGameGenre.VideoGameId == filter.VideoGameId);
@@ -34,7 +32,7 @@ namespace Persistance.Repositories
             var videoGameGenres = await Entities
                 .AsNoTracking()
                 .Where(predicate)
-                .ToArrayAsync();
+                .ToArrayAsync(cancellationToken);
 
             return videoGameGenres.Select(Mapper.Map<VideoGameGenreDto>);
         }

@@ -19,8 +19,6 @@ namespace Persistance.Repositories
 
         protected override async Task<IEnumerable<ConsoleVideoGameDto>> ReadByFilterAsync(ConsoleVideoGameFilter filter, Expression<Func<ConsoleVideoGame, bool>> predicate, CancellationToken cancellationToken)
         {
-            cancellationToken.ThrowIfCancellationRequested();
-
             if (filter.ConsoleId != null)
             {
                 predicate = predicate.And(consoleVideoGame => consoleVideoGame.ConsoleId == filter.ConsoleId);
@@ -34,31 +32,27 @@ namespace Persistance.Repositories
             var consoleVideoGames = await Entities
                 .AsNoTracking()
                 .Where(predicate)
-                .ToArrayAsync();
+                .ToArrayAsync(cancellationToken);
 
             return consoleVideoGames.Select(Mapper.Map<ConsoleVideoGameDto>);
         }
 
         public async Task<IEnumerable<ConsoleVideoGameDto>> ReadByConsoleIdAsync(int consoleId, CancellationToken cancellationToken)
         {
-            cancellationToken.ThrowIfCancellationRequested();
-
             var consoleVideoGames = await Entities
                 .AsNoTracking()
                 .Where(consoleVideoGame => consoleVideoGame.ConsoleId == consoleId)
-                .ToArrayAsync();
+                .ToArrayAsync(cancellationToken);
 
             return consoleVideoGames.Select(Mapper.Map<ConsoleVideoGameDto>);
         }
 
         public async Task<IEnumerable<ConsoleVideoGameDto>> ReadByVideoGameIdAsync(int videoGameId, CancellationToken cancellationToken)
         {
-            cancellationToken.ThrowIfCancellationRequested();
-
             var consoleVideoGames = await Entities
                 .AsNoTracking()
                 .Where(consoleVideoGame => consoleVideoGame.VideoGameId == videoGameId)
-                .ToArrayAsync();
+                .ToArrayAsync(cancellationToken);
 
             return consoleVideoGames.Select(Mapper.Map<ConsoleVideoGameDto>);
         }

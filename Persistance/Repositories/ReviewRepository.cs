@@ -19,8 +19,6 @@ namespace Persistance.Repositories
 
         protected override async Task<IEnumerable<ReviewDto>> ReadByFilterAsync(ReviewFilter filter, Expression<Func<Review, bool>> predicate, CancellationToken cancellationToken)
         {
-            cancellationToken.ThrowIfCancellationRequested();
-
             if (filter.Grade != null)
             {
                 predicate = predicate.And(review => review.Grade == filter.Grade);
@@ -34,55 +32,47 @@ namespace Persistance.Repositories
             var reviews = await Entities
                 .AsNoTracking()
                 .Where(predicate)
-                .ToArrayAsync();
+                .ToArrayAsync(cancellationToken);
 
             return reviews.Select(Mapper.Map<ReviewDto>);
         }
 
         public async Task<IEnumerable<ReviewDto>> ReadByGradeAsync(int grade, CancellationToken cancellationToken)
         {
-            cancellationToken.ThrowIfCancellationRequested();
-
             var reviews = await Entities
                 .AsNoTracking()
                 .Where(review => review.Grade == grade)
-                .ToArrayAsync();
+                .ToArrayAsync(cancellationToken);
 
             return reviews.Select(Mapper.Map<ReviewDto>);
         }
 
         public async Task<IEnumerable<ReviewDto>> ReadByGradeAsync(int fromGrade, int toGrade, CancellationToken cancellationToken)
         {
-            cancellationToken.ThrowIfCancellationRequested();
-
             var reviews = await Entities
                 .AsNoTracking()
                 .Where(review => review.Grade >= fromGrade && review.Grade <= toGrade)
-                .ToArrayAsync();
+                .ToArrayAsync(cancellationToken);
 
             return reviews.Select(Mapper.Map<ReviewDto>);
         }
 
         public async Task<IEnumerable<ReviewDto>> ReadByReviewDateAsync(DateTime fromReviewDate, DateTime toReviewDate, CancellationToken cancellationToken)
         {
-            cancellationToken.ThrowIfCancellationRequested();
-
             var reviews = await Entities
                 .AsNoTracking()
                 .Where(review => review.ReviewDate.Date >= fromReviewDate.Date && review.ReviewDate.Date <= toReviewDate.Date)
-                .ToArrayAsync();
+                .ToArrayAsync(cancellationToken);
 
             return reviews.Select(Mapper.Map<ReviewDto>);
         }
 
         public async Task<IEnumerable<ReviewDto>> ReadByVideoGameIdAsync(int videoGameId, CancellationToken cancellationToken)
         {
-            cancellationToken.ThrowIfCancellationRequested();
-
             var reviews = await Entities
                 .AsNoTracking()
                 .Where(review => review.VideoGameId == videoGameId)
-                .ToArrayAsync();
+                .ToArrayAsync(cancellationToken);
 
             return reviews.Select(Mapper.Map<ReviewDto>);
         }

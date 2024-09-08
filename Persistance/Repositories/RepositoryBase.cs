@@ -55,29 +55,28 @@ namespace Persistance.Repositories
 
         public async Task<TDto> CreateAsync(TDto dto, CancellationToken cancellationToken)
         {
-            cancellationToken.ThrowIfCancellationRequested();
-
             var entity = _mapper.Map<TEntity>(dto);
-            EntityEntry<TEntity> entityEntry = await _gameStoreDbContext.AddAsync<TEntity>(entity);
+            EntityEntry<TEntity> entityEntry = await _gameStoreDbContext.AddAsync<TEntity>(entity, cancellationToken);
             return _mapper.Map<TDto>(entityEntry.Entity);
         }
 
         public Task<TDto> DeleteAsync(TDto dto, CancellationToken cancellationToken)
         {
+            var entity = _mapper.Map<TEntity>(dto);
+            
             cancellationToken.ThrowIfCancellationRequested();
 
-            var entity = _mapper.Map<TEntity>(dto);
             EntityEntry<TEntity> entityEntry = _gameStoreDbContext.Remove<TEntity>(entity);
             return Task.FromResult<TDto>(_mapper.Map<TDto>(entityEntry.Entity));
         }
 
         public async Task<TDto> DeleteByIdAsync(int id, CancellationToken cancellationToken)
         {
-            cancellationToken.ThrowIfCancellationRequested();
-
             var entity = await Entities
                 .Where(entity => entity.Id == id)
-                .SingleAsync();
+                .SingleAsync(cancellationToken);
+
+            cancellationToken.ThrowIfCancellationRequested();
 
             var entityEntry = _gameStoreDbContext.Remove<TEntity>(entity);
             return _mapper.Map<TDto>(entityEntry.Entity);
@@ -90,19 +89,15 @@ namespace Persistance.Repositories
 
         public async Task<IEnumerable<TDto>> ReadAllAsync(CancellationToken cancellationToken)
         {
-            cancellationToken.ThrowIfCancellationRequested();
-
             var entities = await Entities
                 .AsNoTracking()
-                .ToArrayAsync();
+                .ToArrayAsync(cancellationToken);
 
             return entities.Select(_mapper.Map<TDto>);
         }
 
         public async Task<IEnumerable<TDto>> ReadByFilterAsync(TFilter filter, CancellationToken cancellationToken)
         {
-            cancellationToken.ThrowIfCancellationRequested();
-
             var predicate = PredicateBuilder.New<TEntity>();
 
             if (filter.Id != null)
@@ -147,11 +142,9 @@ namespace Persistance.Repositories
 
         public async Task<TDto> ReadByIdAsync(int id, CancellationToken cancellationToken)
         {
-            cancellationToken.ThrowIfCancellationRequested();
-
             var entity = await Entities
                 .Where(entity => entity.Id == id)
-                .SingleOrDefaultAsync();
+                .SingleOrDefaultAsync(cancellationToken);
 
             if (entity == null)
             {
@@ -163,9 +156,10 @@ namespace Persistance.Repositories
 
         public Task<TDto> UpdateAsync(TDto dto, CancellationToken cancellationToken)
         {
-            cancellationToken.ThrowIfCancellationRequested();
-
             var entity = _mapper.Map<TEntity>(dto);
+
+            cancellationToken.ThrowIfCancellationRequested();
+            
             EntityEntry<TEntity> entityEntry = _gameStoreDbContext.Update<TEntity>(entity);
             return Task.FromResult(_mapper.Map<TDto>(entityEntry.Entity));
         }

@@ -19,73 +19,65 @@ namespace Persistance.Repositories
 
         public async Task<IEnumerable<AddressDto>> ReadByCityAsync(string city, CancellationToken cancellationToken)
         {
-            cancellationToken.ThrowIfCancellationRequested();
-
             var addresses = await Entities
                 .AsNoTracking()
-                .Where(address => EF.Functions.Like(address.City, $"{city}%"))
-                .ToArrayAsync();
+                .Where(address => address.City == city)
+                .ToArrayAsync(cancellationToken);
 
             return addresses.Select(Mapper.Map<AddressDto>);
         }
 
         protected override async Task<IEnumerable<AddressDto>> ReadByFilterAsync(AddressFilter filter, Expression<Func<Address, bool>> predicate, CancellationToken cancellationToken)
         {
-            cancellationToken.ThrowIfCancellationRequested();
-
             if (filter.City != null)
             {
-                predicate = predicate.And(address => EF.Functions.Like(address.City, $"{filter.City}%"));
+                predicate = predicate.And(address => address.City == filter.City);
             }
 
             if (filter.Country != null)
             {
-                predicate = predicate.And(address => EF.Functions.Like(address.Country, $"{filter.Country}%"));
+                predicate = predicate.And(address => address.Country == filter.Country);
             }
 
             if (filter.PostalCode != null)
             {
-                predicate = predicate.And(address => EF.Functions.Like(address.PostalCode, $"{filter.PostalCode}%"));
+                predicate = predicate.And(address => address.PostalCode == filter.PostalCode);
             }
 
             if (filter.State != null)
             {
-                predicate = predicate.And(address => EF.Functions.Like(address.State, $"{filter.State}%"));
+                predicate = predicate.And(address => address.State == filter.State);
             }
 
             if (filter.StreetAddress != null)
             {
-                predicate = predicate.And(address => EF.Functions.Like(address.StreetAddress, $"{filter.StreetAddress}%"));
+                predicate = predicate.And(address => address.StreetAddress == filter.StreetAddress);
             }
 
             var addresses = await Entities
                 .AsNoTracking()
                 .Where(predicate)
-                .ToArrayAsync();
+                .ToArrayAsync(cancellationToken);
 
             return addresses.Select(Mapper.Map<AddressDto>);
         }
 
         public async Task<IEnumerable<AddressDto>> ReadByStreetAddressAsync(string streetAddress, CancellationToken cancellationToken)
         {
-            cancellationToken.ThrowIfCancellationRequested();
-
             var addresses = await Entities
                 .AsNoTracking()
                 .Where(address => address.StreetAddress == streetAddress)
-                .ToArrayAsync();
+                .ToArrayAsync(cancellationToken);
 
             return addresses.Select(Mapper.Map<AddressDto>);
         }
 
         public async Task<IEnumerable<AddressDto>> ReadByPostalCodeAsync(string postalCode, CancellationToken cancellationToken)
         {
-           cancellationToken.ThrowIfCancellationRequested();
-
-            var addresses = await Entities
+           var addresses = await Entities
                 .AsNoTracking()
-                .Where(address => EF.Functions.Like(address.PostalCode, $"{postalCode}%"))
-                .ToArrayAsync();
+                .Where(address => address.PostalCode == postalCode)
+                .ToArrayAsync(cancellationToken);
 
             return addresses.Select(Mapper.Map<AddressDto>);
         }

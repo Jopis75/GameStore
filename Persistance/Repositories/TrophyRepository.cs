@@ -20,8 +20,6 @@ namespace Persistance.Repositories
 
         protected override async Task<IEnumerable<TrophyDto>> ReadByFilterAsync(TrophyFilter filter, Expression<Func<Trophy, bool>> predicate, CancellationToken cancellationToken)
         {
-            cancellationToken.ThrowIfCancellationRequested();
-
             if (filter.Name != null)
             {
                 predicate = predicate.And(trophy => EF.Functions.Like(trophy.Name, $"{filter.Name}%"));
@@ -45,31 +43,27 @@ namespace Persistance.Repositories
             var trophies = await Entities
                 .AsNoTracking()
                 .Where(predicate)
-                .ToArrayAsync();
+                .ToArrayAsync(cancellationToken);
 
             return trophies.Select(Mapper.Map<TrophyDto>);
         }
 
         public async Task<IEnumerable<TrophyDto>> ReadByNameAsync(string name, CancellationToken cancellationToken)
         {
-            cancellationToken.ThrowIfCancellationRequested();
-
             var trophies = await Entities
                 .AsNoTracking()
                 .Where(trophy => EF.Functions.Like(trophy.Name, $"{name}%"))
-                .ToArrayAsync();
+                .ToArrayAsync(cancellationToken);
 
             return trophies.Select(Mapper.Map<TrophyDto>);
         }
 
         public async Task<IEnumerable<TrophyDto>> ReadByTrophyValueAsync(TrophyValue trophyValue, CancellationToken cancellationToken)
         {
-            cancellationToken.ThrowIfCancellationRequested();
-
             var trophies = await Entities
                 .AsNoTracking()
                 .Where(trophy => trophy.TrophyValue == trophyValue)
-                .ToArrayAsync();
+                .ToArrayAsync(cancellationToken);
 
             return trophies.Select(Mapper.Map<TrophyDto>);
         }

@@ -14,8 +14,8 @@ namespace Application.Validators.Dtos
                 .WithMessage("{PropertyName} is required.")
                 .MustAsync(async (name, cancellationToken) =>
                 {
-                    var companyDtos = await unitOfWork.CompanyRepository.ReadByNameAsync(name, cancellationToken);
-                    return companyDtos.Any() == false;
+                    var companyDto = await unitOfWork.CompanyRepository.ReadByNameAsync(name, cancellationToken);
+                    return companyDto.Id == 0;
                 })
                 .WithMessage("{PropertyName} must be unique.");
 
@@ -25,8 +25,8 @@ namespace Application.Validators.Dtos
                 .WithMessage("{PropertyName} is required.")
                 .MustAsync(async (tradeName, cancellationToken) =>
                 {
-                    var companyDtos = await unitOfWork.CompanyRepository.ReadByTradeNameAsync(tradeName, cancellationToken);
-                    return companyDtos.Any() == false;
+                    var companyDto = await unitOfWork.CompanyRepository.ReadByTradeNameAsync(tradeName, cancellationToken);
+                    return companyDto.Id == 0;
                 })
                 .WithMessage("{PropertyName} must be unique.");
 
@@ -48,8 +48,8 @@ namespace Application.Validators.Dtos
                 .WithMessage("{PropertyName} is required.")
                 .MustAsync(async (emailAddress, cancellationToken) =>
                 {
-                    var companyDtos = await unitOfWork.CompanyRepository.ReadByEmailAddressAsync(emailAddress, cancellationToken);
-                    return companyDtos.Any() == false;
+                    var companyDto = await unitOfWork.CompanyRepository.ReadByEmailAddressAsync(emailAddress, cancellationToken);
+                    return companyDto.Id == 0;
                 })
                 .WithMessage("{PropertyName} must be unique.")
                 .EmailAddress()
@@ -61,8 +61,8 @@ namespace Application.Validators.Dtos
                 .WithMessage("{PropertyName} is required.")
                 .MustAsync(async (phoneNumber, cancellationToken) =>
                 {
-                    var companyDtos = await unitOfWork.CompanyRepository.ReadByPhoneNumberAsync(phoneNumber, cancellationToken);
-                    return companyDtos.Any() == false;
+                    var companyDto = await unitOfWork.CompanyRepository.ReadByPhoneNumberAsync(phoneNumber, cancellationToken);
+                    return companyDto.Id == 0;
                 })
                 .WithMessage("{PropertyName} must be unique.");
 

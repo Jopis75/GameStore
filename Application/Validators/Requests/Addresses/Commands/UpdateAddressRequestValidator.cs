@@ -1,6 +1,5 @@
 ﻿using Application.Features.Addresses.Requests.Commands;
 using Application.Interfaces.Persistance;
-using Application.Validators.Dtos;
 using FluentValidation;
 
 namespace Application.Validators.Requests.Addresses.Commands
@@ -9,9 +8,25 @@ namespace Application.Validators.Requests.Addresses.Commands
     {
         public UpdateAddressRequestValidator(IUnitOfWork unitOfWork)
         {
-            RuleFor(updateAddressRequest => updateAddressRequest.AddressDto)
+            RuleFor(updateAddressRequest => updateAddressRequest.StreetAddress)
                 .NotNull()
-                .SetValidator(updateAddressRequest => new AddressDtoValidator(unitOfWork));
+                .NotEmpty()
+                .WithMessage("{PropertyName} is required.");
+
+            RuleFor(updateAddressRequest => updateAddressRequest.City)
+                .NotNull()
+                .NotEmpty()
+                .WithMessage("{PropertyName} is required.");
+
+            RuleFor(updateAddressRequest => updateAddressRequest.PostalCode)
+                .NotNull()
+                .NotEmpty()
+                .WithMessage("{PropertyName} is required.");
+
+            RuleFor(updateAddressRequest => updateAddressRequest.Country)
+                .NotNull()
+                .NotEmpty()
+                .WithMessage("{PropertyName} is required.");
         }
     }
 }

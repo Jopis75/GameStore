@@ -1,6 +1,7 @@
 ﻿using Application.Dtos.General;
 using Application.Features.Companies.Requests.Commands;
 using Application.Interfaces.Persistance;
+using AutoMapper;
 using Domain.Dtos;
 using FluentValidation;
 using MediatR;
@@ -13,13 +14,16 @@ namespace Application.Features.Companies.RequestHandlers.Commands
     {
         private readonly IUnitOfWork _unitOfWork;
 
+        private readonly IMapper _mapper;
+
         private readonly IValidator<CreateCompanyWithHeadquarterRequest> _validator;
 
         private readonly ILogger<CreateCompanyWithHeadquarterRequestHandler> _logger;
 
-        public CreateCompanyWithHeadquarterRequestHandler(IUnitOfWork unitOfWork, IValidator<CreateCompanyWithHeadquarterRequest> validator, ILogger<CreateCompanyWithHeadquarterRequestHandler> logger)
+        public CreateCompanyWithHeadquarterRequestHandler(IUnitOfWork unitOfWork, IMapper mapper, IValidator<CreateCompanyWithHeadquarterRequest> validator, ILogger<CreateCompanyWithHeadquarterRequestHandler> logger)
         {
             _unitOfWork = unitOfWork ?? throw new ArgumentNullException(nameof(unitOfWork));
+            _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
             _validator = validator ?? throw new ArgumentNullException(nameof(validator));
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
@@ -46,9 +50,14 @@ namespace Application.Features.Companies.RequestHandlers.Commands
                     return httpResponseDto1;
                 }
 
-                var createdAddressDto = await _unitOfWork.AddressRepository.CreateAsync(createCompanyWithHeadquarterRequest.CompanyDto.Headquarter, cancellationToken);
-                createCompanyWithHeadquarterRequest.CompanyDto.HeadquarterId = createdAddressDto.Id;
-                var createdCompanyDto = await _unitOfWork.CompanyRepository.CreateAsync(createCompanyWithHeadquarterRequest.CompanyDto, cancellationToken);
+                var addressDto = _mapper.Map<AddressDto>(createCompanyWithHeadquarterRequest);
+                var createdAddressDto = await _unitOfWork.AddressRepository.CreateAsync(addressDto, cancellationToken);
+
+                createCompanyWithHeadquarterRequest.HeadquarterId = createdAddressDto.Id;
+
+                var companyDto = _mapper.Map<CompanyDto>(createCompanyWithHeadquarterRequest);
+                var createdCompanyDto = await _unitOfWork.CompanyRepository.CreateAsync(companyDto, cancellationToken);
+
                 await _unitOfWork.SaveAsync();
 
                 var httpResponseDto = new HttpResponseDto<CompanyDto>(createdCompanyDto, StatusCodes.Status201Created);

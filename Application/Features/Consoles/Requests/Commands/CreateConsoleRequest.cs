@@ -6,6 +6,18 @@ namespace Application.Features.Consoles.Requests.Commands
 {
     public class CreateConsoleRequest : IRequest<HttpResponseDto<ConsoleDto>>
     {
-        public ConsoleDto ConsoleDto { get; set; } = new();
+        public int DeveloperId { get; set; }
+
+        public string? ImageUri { get; set; }
+
+        public string Name { get; set; } = String.Empty;
+
+        public decimal Price { get; set; }
+
+        public DateTime PurchaseDate { get; set; }
+
+        public DateTime ReleaseDate { get; set; }
+
+        public string? Url { get; set; }
     }
 }

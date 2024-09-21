@@ -9,9 +9,10 @@ namespace Application.Validators.Requests.Genres.Commands
     {
         public UpdateGenreRequestValidator(IUnitOfWork unitOfWork)
         {
-            RuleFor(updateGenreRequest => updateGenreRequest.GenreDto)
+            RuleFor(updateGenreRequest => updateGenreRequest.Name)
                 .NotNull()
-                .SetValidator(updateGenreRequest => new GenreDtoValidator(unitOfWork));
+                .NotEmpty()
+                .WithMessage("{PropertyName} is required.");
         }
     }
 }

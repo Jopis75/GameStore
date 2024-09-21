@@ -23,9 +23,9 @@ namespace GameStoreAPI.Controllers
         [ProducesResponseType(typeof(HttpResponseDto<ConsoleVideoGameDto>), StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult<HttpResponseDto<ConsoleVideoGameDto>>> CreateAsync([FromBody] ConsoleVideoGameDto consoleVideoGameDto)
+        public async Task<ActionResult<HttpResponseDto<ConsoleVideoGameDto>>> CreateAsync([FromBody] CreateGenreRequest createConsoleVideoGameRequest)
         {
-            var httpResponseDto = await _mediator.Send(new CreateConsoleVideoGameRequest() { ConsoleVideoGameDto = consoleVideoGameDto });
+            var httpResponseDto = await _mediator.Send(createConsoleVideoGameRequest);
             return StatusCode(httpResponseDto.StatusCode, httpResponseDto);
         }
 
@@ -36,7 +36,7 @@ namespace GameStoreAPI.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<ActionResult<HttpResponseDto<ConsoleVideoGameDto>>> DeleteAsync(int id)
         {
-            var httpResponseDto = await _mediator.Send(new DeleteConsoleVideoGameRequest() { Id = id });
+            var httpResponseDto = await _mediator.Send(new DeleteConsoleVideoGameRequest { Id = id });
             return StatusCode(httpResponseDto.StatusCode, httpResponseDto);
         }
 
@@ -57,7 +57,7 @@ namespace GameStoreAPI.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<ActionResult<HttpResponseDto<ConsoleVideoGameDto>>> ReadByIdAsync(int id)
         {
-            var httpResponseDto = await _mediator.Send(new ReadConsoleVideoGameByIdRequest() { Id = id });
+            var httpResponseDto = await _mediator.Send(new ReadConsoleVideoGameByIdRequest { Id = id });
             return StatusCode(httpResponseDto.StatusCode, httpResponseDto);
         }
 
@@ -66,9 +66,9 @@ namespace GameStoreAPI.Controllers
         [ProducesResponseType(typeof(HttpResponseDto<ConsoleVideoGameDto>), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult<HttpResponseDto<ConsoleVideoGameDto>>> UpdateAsync([FromBody] ConsoleVideoGameDto consoleVideoGameDto)
+        public async Task<ActionResult<HttpResponseDto<ConsoleVideoGameDto>>> UpdateAsync([FromBody] UpdateGenresRequest updateConsoleVideoGameRequest)
         {
-            var httpResponseDto = await _mediator.Send(new UpdateConsoleVideoGameRequest() { ConsoleVideoGameDto = consoleVideoGameDto });
+            var httpResponseDto = await _mediator.Send(updateConsoleVideoGameRequest);
             return StatusCode(httpResponseDto.StatusCode, httpResponseDto);
         }
     }

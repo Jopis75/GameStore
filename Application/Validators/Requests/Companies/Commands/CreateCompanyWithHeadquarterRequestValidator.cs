@@ -9,13 +9,43 @@ namespace Application.Validators.Requests.Companies.Commands
     {
         public CreateCompanyWithHeadquarterRequestValidator(IUnitOfWork unitOfWork)
         {
-            RuleFor(createCompanyWithHeadquarterRequest => createCompanyWithHeadquarterRequest.CompanyDto)
+            RuleFor(createCompanyWithHeadquarterRequest => createCompanyWithHeadquarterRequest.Name)
                 .NotNull()
-                .SetValidator(createCompanyWithAddressRequest => new CompanyDtoValidator(unitOfWork));
+                .NotEmpty()
+                .WithMessage("{PropertyName} is required.");
 
-            RuleFor(createCompanyWithHeadquarterRequest => createCompanyWithHeadquarterRequest.CompanyDto.Headquarter)
+            RuleFor(createCompanyWithHeadquarterRequest => createCompanyWithHeadquarterRequest.TradeName)
+                .NotNull()
+                .NotEmpty()
+                .WithMessage("{PropertyName} is required.");
+
+            RuleFor(createCompanyWithHeadquarterRequest => createCompanyWithHeadquarterRequest.Headquarter)
                 .NotNull()
                 .SetValidator(createCompanyWithHeadquarterRequest => new AddressDtoValidator(unitOfWork));
+
+            RuleFor(createCompanyWithHeadquarterRequest => createCompanyWithHeadquarterRequest.CompanyType)
+                .NotEmpty()
+                .WithMessage("{PropertyName} is required.");
+
+            RuleFor(createCompanyWithHeadquarterRequest => createCompanyWithHeadquarterRequest.Industry)
+                .NotEmpty()
+                .WithMessage("{PropertyName} is required.");
+
+            RuleFor(createCompanyWithHeadquarterRequest => createCompanyWithHeadquarterRequest.EmailAddress)
+                .NotNull()
+                .NotEmpty()
+                .WithMessage("{PropertyName} is required.")
+                .EmailAddress()
+                .WithMessage("{PropertyName} is not valid.");
+
+            RuleFor(createCompanyWithHeadquarterRequest => createCompanyWithHeadquarterRequest.PhoneNumber)
+                .NotNull()
+                .NotEmpty()
+                .WithMessage("{PropertyName} is required.");
+
+            RuleFor(createCompanyWithHeadquarterRequest => createCompanyWithHeadquarterRequest.ParentCompanyId)
+                .GreaterThan(0)
+                .WithMessage("{PropertyName} must be greater than 0.");
         }
     }
 }

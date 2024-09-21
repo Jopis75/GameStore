@@ -1,6 +1,7 @@
 ﻿using Application.Dtos.General;
 using Application.Features.Consoles.Requests.Commands;
 using Application.Interfaces.Persistance;
+using AutoMapper;
 using Domain.Dtos;
 using FluentValidation;
 using MediatR;
@@ -13,13 +14,16 @@ namespace Application.Features.Consoles.RequestHandlers.Commands
     {
         private readonly IUnitOfWork _unitOfWork;
 
+        private readonly IMapper _mapper;
+
         private readonly IValidator<UpdateConsoleRequest> _validator;
 
         private readonly ILogger<UpdateConsoleRequestHandler> _logger;
 
-        public UpdateConsoleRequestHandler(IUnitOfWork unitOfWork, IValidator<UpdateConsoleRequest> validator, ILogger<UpdateConsoleRequestHandler> logger)
+        public UpdateConsoleRequestHandler(IUnitOfWork unitOfWork, IMapper mapper, IValidator<UpdateConsoleRequest> validator, ILogger<UpdateConsoleRequestHandler> logger)
         {
             _unitOfWork = unitOfWork ?? throw new ArgumentNullException(nameof(unitOfWork));
+            _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
             _validator = validator ?? throw new ArgumentNullException(nameof(validator));
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
@@ -29,8 +33,6 @@ namespace Application.Features.Consoles.RequestHandlers.Commands
             try
             {
                 _logger.LogInformation("Begin UpdateConsole {@UpdateConsoleRequest}.", updateConsoleRequest);
-
-                cancellationToken.ThrowIfCancellationRequested();
 
                 if (updateConsoleRequest == null)
                 {
@@ -48,7 +50,9 @@ namespace Application.Features.Consoles.RequestHandlers.Commands
                     return httpResponseDto1;
                 }
 
-                var updatedConsoleDto = await _unitOfWork.ConsoleRepository.UpdateAsync(updateConsoleRequest.ConsoleDto, cancellationToken);
+                var consoleDto = _mapper.Map<ConsoleDto>(updateConsoleRequest);
+                var updatedConsoleDto = await _unitOfWork.ConsoleRepository.UpdateAsync(consoleDto, cancellationToken);
+                
                 await _unitOfWork.SaveAsync();
 
                 var httpResponseDto = new HttpResponseDto<ConsoleDto>(updatedConsoleDto, StatusCodes.Status200OK);

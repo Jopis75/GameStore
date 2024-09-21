@@ -103,13 +103,13 @@ namespace Application
             serviceCollection.AddScoped<IValidator<ReadConsoleByIdRequest>, ReadConsoleByIdRequestValidator>();
 
             // Features.ConsoleVideoGames.Requests.
-            serviceCollection.AddScoped<IValidator<CreateConsoleVideoGameRequest>, CreateConsoleVideoGameRequestValidator>();
+            serviceCollection.AddScoped<IValidator<Features.ConsoleVideoGames.Requests.Commands.CreateGenreRequest>, CreateConsoleVideoGameRequestValidator>();
             serviceCollection.AddScoped<IValidator<DeleteConsoleVideoGameRequest>, DeleteConsoleVideoGameRequestValidator>();
-            serviceCollection.AddScoped<IValidator<UpdateConsoleVideoGameRequest>, UpdateConsoleVideoGameRequestValidator>();
+            serviceCollection.AddScoped<IValidator<UpdateGenresRequest>, UpdateConsoleVideoGameRequestValidator>();
             serviceCollection.AddScoped<IValidator<ReadConsoleVideoGameByIdRequest>, ReadConsoleVideoGameByIdRequestValidator>();
 
             // Features.Genres.Requests.
-            serviceCollection.AddScoped<IValidator<CreateGenreRequest>, CreateGenreRequestValidator>();
+            serviceCollection.AddScoped<IValidator<Features.Genres.Requests.Commands.CreateGenreRequest>, CreateGenreRequestValidator>();
             serviceCollection.AddScoped<IValidator<DeleteGenreRequest>, DeleteGenreRequestValidator>();
             serviceCollection.AddScoped<IValidator<UpdateGenreRequest>, UpdateGenreRequestValidator>();
             serviceCollection.AddScoped<IValidator<ReadGenreByIdRequest>, ReadGenreByIdRequestValidator>();

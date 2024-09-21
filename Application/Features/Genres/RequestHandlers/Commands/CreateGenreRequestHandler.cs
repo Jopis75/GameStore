@@ -2,6 +2,7 @@
 using Application.Features.Genres.Requests.Commands;
 using Application.Interfaces.Persistance;
 using Application.Validators.Requests.Genres.Commands;
+using AutoMapper;
 using Domain.Dtos;
 using FluentValidation;
 using MediatR;
@@ -14,13 +15,16 @@ namespace Application.Features.Genres.RequestHandlers.Commands
     {
         private readonly IUnitOfWork _unitOfWork;
 
+        private readonly IMapper _mapper;
+
         private readonly IValidator<CreateGenreRequest> _validator;
 
         private readonly ILogger<CreateGenreRequestHandler> _logger;
 
-        public CreateGenreRequestHandler(IUnitOfWork unitOfWork, IValidator<CreateGenreRequest> validator, ILogger<CreateGenreRequestHandler> logger)
+        public CreateGenreRequestHandler(IUnitOfWork unitOfWork, IMapper mapper, IValidator<CreateGenreRequest> validator, ILogger<CreateGenreRequestHandler> logger)
         {
             _unitOfWork = unitOfWork ?? throw new ArgumentNullException(nameof(unitOfWork));
+            _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
             _validator = validator ?? throw new ArgumentNullException(nameof(validator));
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
@@ -30,8 +34,6 @@ namespace Application.Features.Genres.RequestHandlers.Commands
             try
             {
                 _logger.LogInformation("Begin CreateGenre {@CreateGenreRequest}.", createGenreRequest);
-
-                cancellationToken.ThrowIfCancellationRequested();
 
                 if (createGenreRequest == null)
                 {
@@ -49,7 +51,9 @@ namespace Application.Features.Genres.RequestHandlers.Commands
                     return httpResponseDto1;
                 }
 
-                var createdGenreDto = await _unitOfWork.GenreRepository.CreateAsync(createGenreRequest.GenreDto, cancellationToken);
+                var genreDto = _mapper.Map<GenreDto>(createGenreRequest);
+                var createdGenreDto = await _unitOfWork.GenreRepository.CreateAsync(genreDto, cancellationToken);
+                
                 await _unitOfWork.SaveAsync();
 
                 var httpResponseDto = new HttpResponseDto<GenreDto>(createdGenreDto, StatusCodes.Status201Created);

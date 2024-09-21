@@ -1,6 +1,7 @@
 ﻿using Application.Dtos.General;
 using Application.Features.Companies.Requests.Commands;
 using Application.Interfaces.Persistance;
+using AutoMapper;
 using Domain.Dtos;
 using FluentValidation;
 using MediatR;
@@ -13,13 +14,16 @@ namespace Application.Features.Companies.RequestHandlers.Commands
     {
         private readonly IUnitOfWork _unitOfWork;
 
+        private readonly IMapper _mapper;
+
         private readonly IValidator<UpdateCompanyRequest> _validator;
 
         private readonly ILogger<UpdateCompanyRequestHandler> _logger;
 
-        public UpdateCompanyRequestHandler(IUnitOfWork unitOfWork, IValidator<UpdateCompanyRequest> validator, ILogger<UpdateCompanyRequestHandler> logger)
+        public UpdateCompanyRequestHandler(IUnitOfWork unitOfWork, IMapper mapper, IValidator<UpdateCompanyRequest> validator, ILogger<UpdateCompanyRequestHandler> logger)
         {
             _unitOfWork = unitOfWork ?? throw new ArgumentNullException(nameof(unitOfWork));
+            _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
             _validator = validator ?? throw new ArgumentNullException(nameof(validator));
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
@@ -46,7 +50,9 @@ namespace Application.Features.Companies.RequestHandlers.Commands
                     return httpResponseDto1;
                 }
 
-                var updatedCompanyDto = await _unitOfWork.CompanyRepository.UpdateAsync(updateCompanyRequest.CompanyDto, cancellationToken);
+                var companyDto = _mapper.Map<CompanyDto>(updateCompanyRequest);
+                var updatedCompanyDto = await _unitOfWork.CompanyRepository.UpdateAsync(companyDto, cancellationToken);
+                
                 await _unitOfWork.SaveAsync();
 
                 var httpResponseDto = new HttpResponseDto<CompanyDto>(updatedCompanyDto, StatusCodes.Status200OK);

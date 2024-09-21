@@ -1,6 +1,7 @@
 ﻿using Application.Dtos.General;
 using Application.Features.ConsoleVideoGames.Requests.Commands;
 using Application.Interfaces.Persistance;
+using AutoMapper;
 using Domain.Dtos;
 using FluentValidation;
 using MediatR;
@@ -9,28 +10,29 @@ using Microsoft.Extensions.Logging;
 
 namespace Application.Features.ConsoleVideoGames.RequestHandlers.Commands
 {
-    public class CreateConsoleVideoGameRequestHandler : IRequestHandler<CreateConsoleVideoGameRequest, HttpResponseDto<ConsoleVideoGameDto>>
+    public class CreateConsoleVideoGameRequestHandler : IRequestHandler<CreateGenreRequest, HttpResponseDto<ConsoleVideoGameDto>>
     {
         private readonly IUnitOfWork _unitOfWork;
 
-        private readonly IValidator<CreateConsoleVideoGameRequest> _validator;
+        private readonly IMapper _mapper;
+
+        private readonly IValidator<CreateGenreRequest> _validator;
 
         private readonly ILogger<CreateConsoleVideoGameRequestHandler> _logger;
 
-        public CreateConsoleVideoGameRequestHandler(IUnitOfWork unitOfWork, IValidator<CreateConsoleVideoGameRequest> validator, ILogger<CreateConsoleVideoGameRequestHandler> logger)
+        public CreateConsoleVideoGameRequestHandler(IUnitOfWork unitOfWork, IMapper mapper, IValidator<CreateGenreRequest> validator, ILogger<CreateConsoleVideoGameRequestHandler> logger)
         {
             _unitOfWork = unitOfWork ?? throw new ArgumentNullException(nameof(unitOfWork));
+            _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
             _validator = validator ?? throw new ArgumentNullException(nameof(validator));
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
-        public async Task<HttpResponseDto<ConsoleVideoGameDto>> Handle(CreateConsoleVideoGameRequest createConsoleVideoGameRequest, CancellationToken cancellationToken)
+        public async Task<HttpResponseDto<ConsoleVideoGameDto>> Handle(CreateGenreRequest createConsoleVideoGameRequest, CancellationToken cancellationToken)
         {
             try
             {
                 _logger.LogInformation("Begin CreateConsoleVideoGame {@CreateConsoleVideoGameRequest}.", createConsoleVideoGameRequest);
-
-                cancellationToken.ThrowIfCancellationRequested();
 
                 if (createConsoleVideoGameRequest == null)
                 {
@@ -48,7 +50,9 @@ namespace Application.Features.ConsoleVideoGames.RequestHandlers.Commands
                     return httpResponseDto1;
                 }
 
-                var createdConsoleVideoGameDto = await _unitOfWork.ConsoleVideoGameRepository.CreateAsync(createConsoleVideoGameRequest.ConsoleVideoGameDto, cancellationToken);
+                var consoleVideoGameDto = _mapper.Map<ConsoleVideoGameDto>(createConsoleVideoGameRequest);
+                var createdConsoleVideoGameDto = await _unitOfWork.ConsoleVideoGameRepository.CreateAsync(consoleVideoGameDto, cancellationToken);
+
                 await _unitOfWork.SaveAsync();
 
                 var httpResponseDto = new HttpResponseDto<ConsoleVideoGameDto>(createdConsoleVideoGameDto, StatusCodes.Status201Created);

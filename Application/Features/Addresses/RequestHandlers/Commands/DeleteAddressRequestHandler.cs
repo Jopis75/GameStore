@@ -47,6 +47,7 @@ namespace Application.Features.Addresses.RequestHandlers.Commands
                 }
 
                 var deletedAddressDto = await _unitOfWork.AddressRepository.DeleteByIdAsync(deleteAddressRequest.Id, cancellationToken);
+                
                 await _unitOfWork.SaveAsync();
 
                 var httpResponseDto = new HttpResponseDto<AddressDto>(deletedAddressDto, StatusCodes.Status200OK);

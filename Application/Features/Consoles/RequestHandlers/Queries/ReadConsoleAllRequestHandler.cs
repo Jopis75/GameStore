@@ -26,8 +26,6 @@ namespace Application.Features.Consoles.RequestHandlers.Queries
             {
                 _logger.LogInformation("Begin ReadConsoleAll {@ReadConsoleAllRequest}.", readConsoleAllRequest);
 
-                cancellationToken.ThrowIfCancellationRequested();
-
                 var consoleDtos = await _unitOfWork.ConsoleRepository.ReadAllAsync(cancellationToken);
 
                 var httpResponseDto = new HttpResponseDto<ConsoleDto>(consoleDtos.ToArray(), StatusCodes.Status200OK);

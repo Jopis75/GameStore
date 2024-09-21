@@ -30,8 +30,6 @@ namespace Application.Features.ConsoleVideoGames.RequestHandlers.Commands
             {
                 _logger.LogInformation("Begin DeleteConsoleVideoGame {@DeleteConsoleVideoGameRequest}.", deleteConsoleVideoGameRequest);
 
-                cancellationToken.ThrowIfCancellationRequested();
-
                 if (deleteConsoleVideoGameRequest == null)
                 {
                     var httpResponseDto1 = new HttpResponseDto<ConsoleVideoGameDto>(new ArgumentNullException(nameof(deleteConsoleVideoGameRequest)).Message, StatusCodes.Status400BadRequest);
@@ -49,6 +47,7 @@ namespace Application.Features.ConsoleVideoGames.RequestHandlers.Commands
                 }
 
                 var deletedConsoleVideoGameDto = await _unitOfWork.ConsoleVideoGameRepository.DeleteByIdAsync(deleteConsoleVideoGameRequest.Id, cancellationToken);
+
                 await _unitOfWork.SaveAsync();
 
                 var httpResponseDto = new HttpResponseDto<ConsoleVideoGameDto>(deletedConsoleVideoGameDto, StatusCodes.Status200OK);

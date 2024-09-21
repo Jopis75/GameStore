@@ -6,6 +6,8 @@ namespace Application.Features.Genres.Requests.Commands
 {
     public class CreateGenreRequest : IRequest<HttpResponseDto<GenreDto>>
     {
-        public GenreDto GenreDto { get; set; } = new();
+        public string Name { get; set; } = String.Empty;
+
+        public string? Description { get; set; }
     }
 }

@@ -1,16 +1,19 @@
 ﻿using Application.Features.ConsoleVideoGames.Requests.Commands;
-using Application.Validators.Dtos;
 using FluentValidation;
 
 namespace Application.Validators.Requests.ConsoleVideoGame.Commands
 {
-    public class CreateConsoleVideoGameRequestValidator : AbstractValidator<CreateConsoleVideoGameRequest>
+    public class CreateConsoleVideoGameRequestValidator : AbstractValidator<CreateGenreRequest>
     {
         public CreateConsoleVideoGameRequestValidator()
         {
-            RuleFor(createConsoleVideoGameRequest => createConsoleVideoGameRequest.ConsoleVideoGameDto)
-                .NotNull()
-                .SetValidator(createConsoleVideoGameRequest => new ConsoleVideoGameDtoValidator());
+            RuleFor(createConsoleVideoGameRequest => createConsoleVideoGameRequest.ConsoleId)
+                .GreaterThan(0)
+                .WithMessage("{PropertyName} must be greater than 0.");
+
+            RuleFor(createConsoleVideoGameRequest => createConsoleVideoGameRequest.VideoGameId)
+                .GreaterThan(0)
+                .WithMessage("{PropertyName} must be greater than 0.");
         }
     }
 }

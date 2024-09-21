@@ -1,4 +1,8 @@
 ﻿using Application.Dtos.Identity;
+using Application.Features.Addresses.Requests.Commands;
+using Application.Features.Companies.Requests.Commands;
+using Application.Features.Consoles.Requests.Commands;
+using Application.Features.ConsoleVideoGames.Requests.Commands;
 using Application.Models.Identity;
 using AutoMapper;
 using Domain.Dtos;
@@ -50,6 +54,38 @@ namespace Application.Profiles
 
             // Application.Dtos.Identity.
             CreateMap<ApplicationUser, UserDto>()
+                .ReverseMap();
+
+            // Application.Features.Addresses.Requests.
+            CreateMap<CreateAddressRequest, AddressDto>()
+                .ReverseMap();
+            CreateMap<UpdateAddressRequest, AddressDto>()
+                .ReverseMap();
+
+            // Application.Features.Companies.Requests.
+            CreateMap<CreateCompanyRequest, CompanyDto>()
+                .ReverseMap();
+            CreateMap<CreateCompanyWithHeadquarterRequest, CompanyDto>()
+                .ReverseMap();
+            CreateMap<UpdateCompanyRequest, CompanyDto>()
+                .ReverseMap();
+
+            // Application.Features.Consoles.Requests.
+            CreateMap<CreateConsoleRequest, ConsoleDto>()
+                .ReverseMap();
+            CreateMap<UpdateConsoleRequest, ConsoleDto>()
+                .ReverseMap();
+
+            // Application.Features.ConsoleVideoGames.Requests.
+            CreateMap<CreateGenreRequest, ConsoleVideoGameDto>()
+                .ReverseMap();
+            CreateMap<UpdateGenresRequest, ConsoleVideoGameDto>()
+                .ReverseMap();
+
+            // Application.Features.Genres.Requests.
+            CreateMap<CreateGenreRequest, GenreDto>()
+                .ReverseMap();
+            CreateMap<UpdateGenresRequest, GenreDto>()
                 .ReverseMap();
         }
     }

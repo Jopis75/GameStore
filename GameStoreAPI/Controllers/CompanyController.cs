@@ -23,9 +23,9 @@ namespace GameStoreAPI.Controllers
         [ProducesResponseType(typeof(HttpResponseDto<CompanyDto>), StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult<HttpResponseDto<CompanyDto>>> CreateAsync([FromBody] CompanyDto companyDto)
+        public async Task<ActionResult<HttpResponseDto<CompanyDto>>> CreateAsync([FromBody] CreateCompanyRequest createCompanyRequest)
         {
-            var httpResponseDto = await _mediator.Send(new CreateCompanyRequest { CompanyDto = companyDto });
+            var httpResponseDto = await _mediator.Send(createCompanyRequest);
             return StatusCode(httpResponseDto.StatusCode, httpResponseDto);
         }
 
@@ -34,9 +34,9 @@ namespace GameStoreAPI.Controllers
         [ProducesResponseType(typeof(HttpResponseDto<CompanyDto>), StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult<HttpResponseDto<CompanyDto>>> CreateWithHeadquarterAsync([FromBody] CompanyDto companyDto)
+        public async Task<ActionResult<HttpResponseDto<CompanyDto>>> CreateWithHeadquarterAsync([FromBody] CreateCompanyWithHeadquarterRequest createCompanyWithHeadquarterRequest)
         {
-            var httpResponseDto = await _mediator.Send(new CreateCompanyWithHeadquarterRequest { CompanyDto = companyDto });
+            var httpResponseDto = await _mediator.Send(createCompanyWithHeadquarterRequest);
             return StatusCode(httpResponseDto.StatusCode, httpResponseDto);
         }
 
@@ -77,9 +77,9 @@ namespace GameStoreAPI.Controllers
         [ProducesResponseType(typeof(HttpResponseDto<CompanyDto>), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult<HttpResponseDto<CompanyDto>>> UpdateAsync([FromBody] CompanyDto companyDto)
+        public async Task<ActionResult<HttpResponseDto<CompanyDto>>> UpdateAsync([FromBody] UpdateCompanyRequest updateCompanyRequest)
         {
-            var httpResponseDto = await _mediator.Send(new UpdateCompanyRequest { CompanyDto = companyDto });
+            var httpResponseDto = await _mediator.Send(updateCompanyRequest);
             return StatusCode(httpResponseDto.StatusCode, httpResponseDto);
         }
     }

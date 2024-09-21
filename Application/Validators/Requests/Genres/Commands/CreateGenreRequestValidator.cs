@@ -1,6 +1,5 @@
 ﻿using Application.Features.Genres.Requests.Commands;
 using Application.Interfaces.Persistance;
-using Application.Validators.Dtos;
 using FluentValidation;
 
 namespace Application.Validators.Requests.Genres.Commands
@@ -9,9 +8,10 @@ namespace Application.Validators.Requests.Genres.Commands
     {
         public CreateGenreRequestValidator(IUnitOfWork unitOfWork)
         {
-            RuleFor(createGenreRequest => createGenreRequest.GenreDto)
+            RuleFor(createGenreRequest => createGenreRequest.Name)
                 .NotNull()
-                .SetValidator(createGenreRequest => new GenreDtoValidator(unitOfWork));
+                .NotEmpty()
+                .WithMessage("{PropertyName} is required.");
         }
     }
 }

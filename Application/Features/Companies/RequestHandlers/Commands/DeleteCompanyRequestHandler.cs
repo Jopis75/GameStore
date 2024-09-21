@@ -47,6 +47,7 @@ namespace Application.Features.Companies.RequestHandlers.Commands
                 }
 
                 var deletedCompanyDto = await _unitOfWork.CompanyRepository.DeleteByIdAsync(deleteCompanyRequest.Id, cancellationToken);
+                
                 await _unitOfWork.SaveAsync();
 
                 var httpResponseDto = new HttpResponseDto<CompanyDto>(deletedCompanyDto, StatusCodes.Status200OK);

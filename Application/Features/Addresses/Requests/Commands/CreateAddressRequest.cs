@@ -6,6 +6,14 @@ namespace Application.Features.Addresses.Requests.Commands
 {
     public class CreateAddressRequest : IRequest<HttpResponseDto<AddressDto>>
     {
-        public AddressDto AddressDto { get; set; } = new();
+        public string City { get; set; } = String.Empty;
+
+        public string Country { get; set; } = String.Empty;
+
+        public string PostalCode { get; set; } = String.Empty;
+
+        public string State { get; set; } = String.Empty;
+
+        public string StreetAddress { get; set; } = String.Empty;
     }
 }

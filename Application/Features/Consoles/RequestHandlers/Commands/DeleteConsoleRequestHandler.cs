@@ -49,6 +49,7 @@ namespace Application.Features.Consoles.RequestHandlers.Commands
                 }
 
                 var deletedConsoleDto = await _unitOfWork.ConsoleRepository.DeleteByIdAsync(deleteConsoleRequest.Id, cancellationToken);
+                
                 await _unitOfWork.SaveAsync();
 
                 var httpResponseDto = new HttpResponseDto<ConsoleDto>(deletedConsoleDto, StatusCodes.Status200OK);

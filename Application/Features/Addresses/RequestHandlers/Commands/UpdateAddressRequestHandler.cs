@@ -1,6 +1,7 @@
 ﻿using Application.Dtos.General;
 using Application.Features.Addresses.Requests.Commands;
 using Application.Interfaces.Persistance;
+using AutoMapper;
 using Domain.Dtos;
 using FluentValidation;
 using MediatR;
@@ -13,13 +14,16 @@ namespace Application.Features.Addresses.RequestHandlers.Commands
     {
         private readonly IUnitOfWork _unitOfWork;
 
+        private readonly IMapper _mapper;
+
         private readonly IValidator<UpdateAddressRequest> _validator;
 
         private readonly ILogger<UpdateAddressRequestHandler> _logger;
 
-        public UpdateAddressRequestHandler(IUnitOfWork unitOfWork, IValidator<UpdateAddressRequest> validator, ILogger<UpdateAddressRequestHandler> logger)
+        public UpdateAddressRequestHandler(IUnitOfWork unitOfWork, IMapper mapper, IValidator<UpdateAddressRequest> validator, ILogger<UpdateAddressRequestHandler> logger)
         {
             _unitOfWork = unitOfWork ?? throw new ArgumentNullException(nameof(unitOfWork));
+            _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
             _validator = validator ?? throw new ArgumentNullException(nameof(validator));
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
@@ -46,7 +50,9 @@ namespace Application.Features.Addresses.RequestHandlers.Commands
                     return httpResponseDto1;
                 }
 
-                var updatedAddressDto = await _unitOfWork.AddressRepository.UpdateAsync(updateAddressRequest.AddressDto, cancellationToken);
+                var addressDto = _mapper.Map<AddressDto>(updateAddressRequest);
+                var updatedAddressDto = await _unitOfWork.AddressRepository.UpdateAsync(addressDto, cancellationToken);
+                
                 await _unitOfWork.SaveAsync();
 
                 var httpResponseDto = new HttpResponseDto<AddressDto>(updatedAddressDto, StatusCodes.Status200OK);

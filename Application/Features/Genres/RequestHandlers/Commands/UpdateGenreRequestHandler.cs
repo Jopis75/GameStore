@@ -1,6 +1,7 @@
 ﻿using Application.Dtos.General;
 using Application.Features.Genres.Requests.Commands;
 using Application.Interfaces.Persistance;
+using AutoMapper;
 using Domain.Dtos;
 using FluentValidation;
 using MediatR;
@@ -13,13 +14,16 @@ namespace Application.Features.Genres.RequestHandlers.Commands
     {
         private readonly IUnitOfWork _unitOfWork;
 
+        private readonly IMapper _mapper;
+
         private readonly IValidator<UpdateGenreRequest> _validator;
 
         private readonly ILogger<UpdateGenreRequestHandler> _logger;
 
-        public UpdateGenreRequestHandler(IUnitOfWork unitOfWork, IValidator<UpdateGenreRequest> validator, ILogger<UpdateGenreRequestHandler> logger)
+        public UpdateGenreRequestHandler(IUnitOfWork unitOfWork, IMapper mapper, IValidator<UpdateGenreRequest> validator, ILogger<UpdateGenreRequestHandler> logger)
         {
             _unitOfWork = unitOfWork ?? throw new ArgumentNullException(nameof(unitOfWork));
+            _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
             _validator = validator ?? throw new ArgumentNullException(nameof(validator));
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
@@ -29,8 +33,6 @@ namespace Application.Features.Genres.RequestHandlers.Commands
             try
             {
                 _logger.LogInformation("Begin UpdateGenre {@UpdateGenreRequest}.", updateGenreRequest);
-
-                cancellationToken.ThrowIfCancellationRequested();
 
                 if (updateGenreRequest == null)
                 {
@@ -48,7 +50,9 @@ namespace Application.Features.Genres.RequestHandlers.Commands
                     return httpResponseDto1;
                 }
 
-                var updatedGenreDto = await _unitOfWork.GenreRepository.UpdateAsync(updateGenreRequest.GenreDto, cancellationToken);
+                var genreDto = _mapper.Map<GenreDto>(updateGenreRequest);
+                var updatedGenreDto = await _unitOfWork.GenreRepository.UpdateAsync(genreDto, cancellationToken);
+                
                 await _unitOfWork.SaveAsync();
 
                 var httpResponseDto = new HttpResponseDto<GenreDto>(updatedGenreDto, StatusCodes.Status200OK);

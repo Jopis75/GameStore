@@ -27,8 +27,6 @@ namespace Application.Features.Genres.RequestHandlers.Queries
             {
                 _logger.LogInformation("Begin ReadGenreAll {@ReadGenreAllRequest}.", readGenreAllRequest);
 
-                cancellationToken.ThrowIfCancellationRequested();
-
                 var genreDtos = await _unitOfWork.GenreRepository.ReadAllAsync(cancellationToken);
 
                 var httpResponseDto = new HttpResponseDto<GenreDto>(genreDtos.ToArray(), StatusCodes.Status200OK);

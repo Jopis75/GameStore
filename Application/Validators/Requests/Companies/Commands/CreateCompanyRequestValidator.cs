@@ -1,6 +1,5 @@
 ﻿using Application.Features.Companies.Requests.Commands;
 using Application.Interfaces.Persistance;
-using Application.Validators.Dtos;
 using FluentValidation;
 
 namespace Application.Validators.Requests.Companies.Commands
@@ -9,9 +8,43 @@ namespace Application.Validators.Requests.Companies.Commands
     {
         public CreateCompanyRequestValidator(IUnitOfWork unitOfWork)
         {
-            RuleFor(createCompanyRequest => createCompanyRequest.CompanyDto)
+            RuleFor(createCompanyRequest => createCompanyRequest.Name)
                 .NotNull()
-                .SetValidator(createCompanyRequest => new CompanyDtoValidator(unitOfWork));
+                .NotEmpty()
+                .WithMessage("{PropertyName} is required.");
+
+            RuleFor(createCompanyRequest => createCompanyRequest.TradeName)
+                .NotNull()
+                .NotEmpty()
+                .WithMessage("{PropertyName} is required.");
+
+            RuleFor(createCompanyRequest => createCompanyRequest.HeadquarterId)
+                .GreaterThan(0)
+                .WithMessage("{PropertyName} must be greater than 0.");
+
+            RuleFor(createCompanyRequest => createCompanyRequest.CompanyType)
+                .NotEmpty()
+                .WithMessage("{PropertyName} is required.");
+
+            RuleFor(createCompanyRequest => createCompanyRequest.Industry)
+                .NotEmpty()
+                .WithMessage("{PropertyName} is required.");
+
+            RuleFor(createCompanyRequest => createCompanyRequest.EmailAddress)
+                .NotNull()
+                .NotEmpty()
+                .WithMessage("{PropertyName} is required.")
+                .EmailAddress()
+                .WithMessage("{PropertyName} is not valid.");
+
+            RuleFor(createCompanyRequest => createCompanyRequest.PhoneNumber)
+                .NotNull()
+                .NotEmpty()
+                .WithMessage("{PropertyName} is required.");
+
+            RuleFor(createCompanyRequest => createCompanyRequest.ParentCompanyId)
+                .GreaterThan(0)
+                .WithMessage("{PropertyName} must be greater than 0.");
         }
     }
 }

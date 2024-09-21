@@ -1,6 +1,7 @@
 ﻿using Application.Dtos.General;
 using Application.Features.Consoles.Requests.Commands;
 using Application.Interfaces.Persistance;
+using AutoMapper;
 using Domain.Dtos;
 using FluentValidation;
 using MediatR;
@@ -13,13 +14,16 @@ namespace Application.Features.Consoles.RequestHandlers.Commands
     {
         private readonly IUnitOfWork _unitOfWork;
 
+        private readonly IMapper _mapper;
+
         private readonly IValidator<CreateConsoleRequest> _validator;
 
         private readonly ILogger<CreateConsoleRequestHandler> _logger;
 
-        public CreateConsoleRequestHandler(IUnitOfWork unitOfWork, IValidator<CreateConsoleRequest> validator, ILogger<CreateConsoleRequestHandler> logger)
+        public CreateConsoleRequestHandler(IUnitOfWork unitOfWork, IMapper mapper, IValidator<CreateConsoleRequest> validator, ILogger<CreateConsoleRequestHandler> logger)
         {
             _unitOfWork = unitOfWork ?? throw new ArgumentNullException(nameof(unitOfWork));
+            _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
             _validator = validator ?? throw new ArgumentNullException(nameof(validator));
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
@@ -29,8 +33,6 @@ namespace Application.Features.Consoles.RequestHandlers.Commands
             try
             {
                 _logger.LogInformation("Begin CreateConsole {@CreateConsoleRequest}.", createConsoleRequest);
-
-                cancellationToken.ThrowIfCancellationRequested();
 
                 if (createConsoleRequest == null)
                 {
@@ -48,7 +50,9 @@ namespace Application.Features.Consoles.RequestHandlers.Commands
                     return httpResponseDto1;
                 }
 
-                var createdConsoleDto = await _unitOfWork.ConsoleRepository.CreateAsync(createConsoleRequest.ConsoleDto, cancellationToken);
+                var consoleDto = _mapper.Map<ConsoleDto>(createConsoleRequest);
+                var createdConsoleDto = await _unitOfWork.ConsoleRepository.CreateAsync(consoleDto, cancellationToken);
+                
                 await _unitOfWork.SaveAsync();
 
                 var httpResponseDto = new HttpResponseDto<ConsoleDto>(createdConsoleDto, StatusCodes.Status201Created);

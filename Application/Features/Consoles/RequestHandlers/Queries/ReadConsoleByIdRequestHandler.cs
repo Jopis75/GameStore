@@ -30,8 +30,6 @@ namespace Application.Features.Consoles.RequestHandlers.Queries
             {
                 _logger.LogInformation("Begin ReadConsoleById {@ReadConsoleByIdRequest}.", readConsoleByIdRequest);
 
-                cancellationToken.ThrowIfCancellationRequested();
-
                 if (readConsoleByIdRequest == null)
                 {
                     var httpResponseDto1 = new HttpResponseDto<ConsoleDto>(new ArgumentNullException(nameof(readConsoleByIdRequest)).Message, StatusCodes.Status400BadRequest);

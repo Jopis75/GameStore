@@ -30,8 +30,6 @@ namespace Application.Features.Genres.RequestHandlers.Queries
             {
                 _logger.LogInformation("Begin ReadGenreById {@ReadGenreByIdRequest}.", readGenreByIdRequest);
 
-                cancellationToken.ThrowIfCancellationRequested();
-
                 if (readGenreByIdRequest == null)
                 {
                     var httpResponseDto1 = new HttpResponseDto<GenreDto>(new ArgumentNullException(nameof(readGenreByIdRequest)).Message, StatusCodes.Status400BadRequest);

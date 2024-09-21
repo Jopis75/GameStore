@@ -26,8 +26,6 @@ namespace Application.Features.ConsoleVideoGames.RequestHandlers.Queries
             {
                 _logger.LogInformation("Begin ReadConsoleVideoGameAll {@ReadConsoleVideoGameAllRequest}.", readConsoleVideoGameAllRequest);
 
-                cancellationToken.ThrowIfCancellationRequested();
-
                 var consoleVideoGameDtos = await _unitOfWork.ConsoleVideoGameRepository.ReadAllAsync(cancellationToken);
 
                 var httpResponseDto = new HttpResponseDto<ConsoleVideoGameDto>(consoleVideoGameDtos.ToArray(), StatusCodes.Status200OK);

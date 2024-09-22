@@ -30,8 +30,6 @@ namespace Application.Features.VideoGames.RequestHandlers.Queries
             {
                 _logger.LogInformation("Begin ReadVideoGamesByConsoleId {@ReadVideoGamesByConsoleIdRequest}.", readVideoGamesByConsoleIdRequest);
 
-                cancellationToken.ThrowIfCancellationRequested();
-
                 if (readVideoGamesByConsoleIdRequest == null)
                 {
                     var httpResponseDto1 = new HttpResponseDto<VideoGameDto>(new ArgumentNullException(nameof(readVideoGamesByConsoleIdRequest)).Message, StatusCodes.Status400BadRequest);

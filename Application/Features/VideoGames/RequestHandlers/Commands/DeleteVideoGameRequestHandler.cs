@@ -1,6 +1,7 @@
 ﻿using Application.Dtos.General;
 using Application.Features.VideoGames.Requests.Commands;
 using Application.Interfaces.Persistance;
+using AutoMapper;
 using Domain.Dtos;
 using FluentValidation;
 using MediatR;
@@ -30,8 +31,6 @@ namespace Application.Features.VideoGames.RequestHandlers.Commands
             {
                 _logger.LogInformation("Begin DeleteVideoGame {@DeleteVideoGameRequest}.", deleteVideoGameRequest);
 
-                cancellationToken.ThrowIfCancellationRequested();
-
                 if (deleteVideoGameRequest == null)
                 {
                     var httpResponseDto1 = new HttpResponseDto<VideoGameDto>(new ArgumentNullException(nameof(deleteVideoGameRequest)).Message, StatusCodes.Status400BadRequest);
@@ -48,10 +47,11 @@ namespace Application.Features.VideoGames.RequestHandlers.Commands
                     return httpResponseDto1;
                 }
 
-                var deleteVideoGameDto = await _unitOfWork.VideoGameRepository.DeleteByIdAsync(deleteVideoGameRequest.Id, cancellationToken);
+                var deletedVideoGameDto = await _unitOfWork.VideoGameRepository.DeleteByIdAsync(deleteVideoGameRequest.Id, cancellationToken);
+                
                 await _unitOfWork.SaveAsync();
 
-                var httpResponseDto = new HttpResponseDto<VideoGameDto>(deleteVideoGameDto, StatusCodes.Status200OK);
+                var httpResponseDto = new HttpResponseDto<VideoGameDto>(deletedVideoGameDto, StatusCodes.Status200OK);
                 _logger.LogInformation("Done DeleteVideoGame {@HttpResponseDto}.", httpResponseDto);
                 return httpResponseDto;
             }

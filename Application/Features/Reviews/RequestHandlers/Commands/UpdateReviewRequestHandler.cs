@@ -1,6 +1,7 @@
 ﻿using Application.Dtos.General;
 using Application.Features.Reviews.Requests.Commands;
 using Application.Interfaces.Persistance;
+using AutoMapper;
 using Domain.Dtos;
 using FluentValidation;
 using MediatR;
@@ -13,13 +14,16 @@ namespace Application.Features.Reviews.RequestHandlers.Commands
     {
         private readonly IUnitOfWork _unitOfWork;
 
+        private readonly IMapper _mapper;
+
         private readonly IValidator<UpdateReviewRequest> _validator;
 
         private readonly ILogger<UpdateReviewRequestHandler> _logger;
 
-        public UpdateReviewRequestHandler(IUnitOfWork unitOfWork, IValidator<UpdateReviewRequest> validator, ILogger<UpdateReviewRequestHandler> logger)
+        public UpdateReviewRequestHandler(IUnitOfWork unitOfWork, IMapper mapper, IValidator<UpdateReviewRequest> validator, ILogger<UpdateReviewRequestHandler> logger)
         {
             _unitOfWork = unitOfWork ?? throw new ArgumentNullException(nameof(unitOfWork));
+            _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
             _validator = validator ?? throw new ArgumentNullException(nameof(validator));
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
@@ -29,8 +33,6 @@ namespace Application.Features.Reviews.RequestHandlers.Commands
             try
             {
                 _logger.LogInformation("Begin UpdateReview {@UpdateReviewRequest}.", updateReviewRequest);
-
-                cancellationToken.ThrowIfCancellationRequested();
 
                 if (updateReviewRequest == null)
                 {
@@ -48,7 +50,9 @@ namespace Application.Features.Reviews.RequestHandlers.Commands
                     return httpResponseDto1;
                 }
 
-                var updatedReviewDto = await _unitOfWork.ReviewRepository.UpdateAsync(updateReviewRequest.ReviewDto, cancellationToken);
+                var reviewDto = _mapper.Map<ReviewDto>(updateReviewRequest);
+                var updatedReviewDto = await _unitOfWork.ReviewRepository.UpdateAsync(reviewDto, cancellationToken);
+                
                 await _unitOfWork.SaveAsync();
 
                 var httpResponseDto = new HttpResponseDto<ReviewDto>(updatedReviewDto, StatusCodes.Status200OK);

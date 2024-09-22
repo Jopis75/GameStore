@@ -4,7 +4,7 @@ using MediatR;
 
 namespace Application.Features.ConsoleVideoGames.Requests.Commands
 {
-    public class CreateGenreRequest : IRequest<HttpResponseDto<ConsoleVideoGameDto>>
+    public class CreateConsoleVideoGameRequest : IRequest<HttpResponseDto<ConsoleVideoGameDto>>
     {
         public int ConsoleId { get; set; }
 

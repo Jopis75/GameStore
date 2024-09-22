@@ -23,9 +23,9 @@ namespace GameStoreAPI.Controllers
         [ProducesResponseType(typeof(HttpResponseDto<VideoGameDto>), StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult<HttpResponseDto<VideoGameDto>>> CreateAsync([FromBody] VideoGameDto videoGameDto)
+        public async Task<ActionResult<HttpResponseDto<VideoGameDto>>> CreateAsync([FromBody] CreateVideoGameRequest createVideoGameRequest)
         {
-            var httpResponseDto = await _mediator.Send(new CreateVideoGameRequest() { VideoGameDto = videoGameDto });
+            var httpResponseDto = await _mediator.Send(createVideoGameRequest);
             return StatusCode(httpResponseDto.StatusCode, httpResponseDto);
         }
 
@@ -36,7 +36,7 @@ namespace GameStoreAPI.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<ActionResult<HttpResponseDto<VideoGameDto>>> DeleteAsync(int id)
         {
-            var httpResponseDto = await _mediator.Send(new DeleteVideoGameRequest() { Id = id });
+            var httpResponseDto = await _mediator.Send(new DeleteVideoGameRequest { Id = id });
             return StatusCode(httpResponseDto.StatusCode, httpResponseDto);
         }
 
@@ -57,7 +57,7 @@ namespace GameStoreAPI.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<ActionResult<HttpResponseDto<VideoGameDto>>> ReadByIdAsync(int id)
         {
-            var httpResponseDto = await _mediator.Send(new ReadVideoGameByIdRequest() { Id = id });
+            var httpResponseDto = await _mediator.Send(new ReadVideoGameByIdRequest { Id = id });
             return StatusCode(httpResponseDto.StatusCode, httpResponseDto);
         }
 
@@ -68,7 +68,7 @@ namespace GameStoreAPI.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<ActionResult<HttpResponseDto<VideoGameDto>>> ReadMosePlayedByConsoleIdAsync(int consoleId)
         {
-            var httpResponseDto = await _mediator.Send(new ReadMostPlayedVideoGameByConsoleIdRequest() { ConsoleId = consoleId });
+            var httpResponseDto = await _mediator.Send(new ReadMostPlayedVideoGameByConsoleIdRequest { ConsoleId = consoleId });
             return StatusCode(httpResponseDto.StatusCode, httpResponseDto);
         }
 
@@ -77,9 +77,9 @@ namespace GameStoreAPI.Controllers
         [ProducesResponseType(typeof(HttpResponseDto<VideoGameDto>), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult<HttpResponseDto<VideoGameDto>>> UpdateAsync([FromBody] VideoGameDto videoGameDto)
+        public async Task<ActionResult<HttpResponseDto<VideoGameDto>>> UpdateAsync([FromBody] UpdateVideoGameRequest updateVideoGameRequest)
         {
-            var httpResponseDto = await _mediator.Send(new UpdateVideoGameRequest() { VideoGameDto = videoGameDto });
+            var httpResponseDto = await _mediator.Send(updateVideoGameRequest);
             return StatusCode(httpResponseDto.StatusCode, httpResponseDto);
         }
     }

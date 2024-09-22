@@ -30,8 +30,6 @@ namespace Application.Features.Reviews.RequestHandlers.Queries
             {
                 _logger.LogInformation("Begin ReadReviewById {@ReadReviewByIdRequest}.", readReviewByIdRequest);
 
-                cancellationToken.ThrowIfCancellationRequested();
-
                 if (readReviewByIdRequest == null)
                 {
                     var httpResponseDto1 = new HttpResponseDto<ReviewDto>(new ArgumentNullException(nameof(readReviewByIdRequest)).Message, StatusCodes.Status400BadRequest);

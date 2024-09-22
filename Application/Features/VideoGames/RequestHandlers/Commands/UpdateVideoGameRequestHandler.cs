@@ -1,6 +1,7 @@
 ﻿using Application.Dtos.General;
 using Application.Features.VideoGames.Requests.Commands;
 using Application.Interfaces.Persistance;
+using AutoMapper;
 using Domain.Dtos;
 using FluentValidation;
 using MediatR;
@@ -13,13 +14,16 @@ namespace Application.Features.VideoGames.RequestHandlers.Commands
     {
         private readonly IUnitOfWork _unitOfWork;
 
+        private readonly IMapper _mapper;
+
         private readonly IValidator<UpdateVideoGameRequest> _validator;
 
         private readonly ILogger<UpdateVideoGameRequestHandler> _logger;
 
-        public UpdateVideoGameRequestHandler(IUnitOfWork unitOfWork, IValidator<UpdateVideoGameRequest> validator, ILogger<UpdateVideoGameRequestHandler> logger)
+        public UpdateVideoGameRequestHandler(IUnitOfWork unitOfWork, IMapper mapper, IValidator<UpdateVideoGameRequest> validator, ILogger<UpdateVideoGameRequestHandler> logger)
         {
             _unitOfWork = unitOfWork ?? throw new ArgumentNullException(nameof(unitOfWork));
+            _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
             _validator = validator ?? throw new ArgumentNullException(nameof(validator));
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
@@ -29,8 +33,6 @@ namespace Application.Features.VideoGames.RequestHandlers.Commands
             try
             {
                 _logger.LogInformation("Begin UpdateVideoGame {@UpdateVideoGameRequest}.", updateVideoGameRequest);
-
-                cancellationToken.ThrowIfCancellationRequested();
 
                 if (updateVideoGameRequest == null)
                 {
@@ -48,7 +50,9 @@ namespace Application.Features.VideoGames.RequestHandlers.Commands
                     return httpResponseDto1;
                 }
 
-                var updatedVideoGameDto = await _unitOfWork.VideoGameRepository.UpdateAsync(updateVideoGameRequest.VideoGameDto, cancellationToken);
+                var videoGameDto = _mapper.Map<VideoGameDto>(updateVideoGameRequest);
+                var updatedVideoGameDto = await _unitOfWork.VideoGameRepository.UpdateAsync(videoGameDto, cancellationToken);
+                
                 await _unitOfWork.SaveAsync();
 
                 var httpResponseDto = new HttpResponseDto<VideoGameDto>(updatedVideoGameDto, StatusCodes.Status200OK);

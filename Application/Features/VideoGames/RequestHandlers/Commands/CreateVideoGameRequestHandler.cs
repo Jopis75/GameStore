@@ -1,6 +1,7 @@
 ﻿using Application.Dtos.General;
 using Application.Features.VideoGames.Requests.Commands;
 using Application.Interfaces.Persistance;
+using AutoMapper;
 using Domain.Dtos;
 using FluentValidation;
 using MediatR;
@@ -13,13 +14,16 @@ namespace Application.Features.VideoGames.RequestHandlers.Commands
     {
         private readonly IUnitOfWork _unitOfWork;
 
+        private readonly IMapper _mapper;
+
         private readonly IValidator<CreateVideoGameRequest> _validator;
 
         private readonly ILogger<CreateVideoGameRequestHandler> _logger;
 
-        public CreateVideoGameRequestHandler(IUnitOfWork unitOfWork, IValidator<CreateVideoGameRequest> validator, ILogger<CreateVideoGameRequestHandler> logger)
+        public CreateVideoGameRequestHandler(IUnitOfWork unitOfWork, IMapper mapper, IValidator<CreateVideoGameRequest> validator, ILogger<CreateVideoGameRequestHandler> logger)
         {
             _unitOfWork = unitOfWork ?? throw new ArgumentNullException(nameof(unitOfWork));
+            _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
             _validator = validator ?? throw new ArgumentNullException(nameof(validator));
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
@@ -29,8 +33,6 @@ namespace Application.Features.VideoGames.RequestHandlers.Commands
             try
             {
                 _logger.LogInformation("Begin CreateVideoGame {@CreateVideoGameRequest}.", createVideoGameRequest);
-
-                cancellationToken.ThrowIfCancellationRequested();
 
                 if (createVideoGameRequest == null)
                 {
@@ -48,7 +50,9 @@ namespace Application.Features.VideoGames.RequestHandlers.Commands
                     return httpResponseDto1;
                 }
 
-                var createdVideoGameDto = await _unitOfWork.VideoGameRepository.CreateAsync(createVideoGameRequest.VideoGameDto, cancellationToken);
+                var videoGameDto = _mapper.Map<VideoGameDto>(createVideoGameRequest);
+                var createdVideoGameDto = await _unitOfWork.VideoGameRepository.CreateAsync(videoGameDto, cancellationToken);
+                
                 await _unitOfWork.SaveAsync();
 
                 var httpResponseDto = new HttpResponseDto<VideoGameDto>(createdVideoGameDto, StatusCodes.Status201Created);

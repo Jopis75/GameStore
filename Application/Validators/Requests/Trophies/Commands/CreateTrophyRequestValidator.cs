@@ -1,6 +1,5 @@
 ﻿using Application.Features.Trophies.Requests.Commands;
 using Application.Interfaces.Persistance;
-using Application.Validators.Dtos;
 using FluentValidation;
 
 namespace Application.Validators.Requests.Trophies.Commands
@@ -9,9 +8,23 @@ namespace Application.Validators.Requests.Trophies.Commands
     {
         public CreateTrophyRequestValidator(IUnitOfWork unitOfWork)
         {
-            RuleFor(createTrophyRequest => createTrophyRequest.TrophyDto)
+            RuleFor(createTrophyRequest => createTrophyRequest.Name)
                 .NotNull()
-                .SetValidator(createTrophyRequest => new TrophyDtoValidator(unitOfWork));
+                .NotEmpty()
+                .WithMessage("{PropertyName} is required.");
+
+            RuleFor(createTrophyRequest => createTrophyRequest.Description)
+                .NotNull()
+                .NotEmpty()
+                .WithMessage("{PropertyName} is required.");
+
+            RuleFor(createTrophyRequest => createTrophyRequest.TrophyValue)
+                .NotEmpty()
+                .WithMessage("{PropertyName} is required.");
+
+            RuleFor(createTrophyRequest => createTrophyRequest.VideoGameId)
+                .GreaterThan(0)
+                .WithMessage("{PropertyName} must be greater than 0.");
         }
     }
 }

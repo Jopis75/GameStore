@@ -23,7 +23,7 @@ namespace GameStoreAPI.Controllers
         [ProducesResponseType(typeof(HttpResponseDto<ConsoleVideoGameDto>), StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult<HttpResponseDto<ConsoleVideoGameDto>>> CreateAsync([FromBody] CreateGenreRequest createConsoleVideoGameRequest)
+        public async Task<ActionResult<HttpResponseDto<ConsoleVideoGameDto>>> CreateAsync([FromBody] CreateConsoleVideoGameRequest createConsoleVideoGameRequest)
         {
             var httpResponseDto = await _mediator.Send(createConsoleVideoGameRequest);
             return StatusCode(httpResponseDto.StatusCode, httpResponseDto);
@@ -66,7 +66,7 @@ namespace GameStoreAPI.Controllers
         [ProducesResponseType(typeof(HttpResponseDto<ConsoleVideoGameDto>), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult<HttpResponseDto<ConsoleVideoGameDto>>> UpdateAsync([FromBody] UpdateGenresRequest updateConsoleVideoGameRequest)
+        public async Task<ActionResult<HttpResponseDto<ConsoleVideoGameDto>>> UpdateAsync([FromBody] UpdateConsoleVideoGameRequest updateConsoleVideoGameRequest)
         {
             var httpResponseDto = await _mediator.Send(updateConsoleVideoGameRequest);
             return StatusCode(httpResponseDto.StatusCode, httpResponseDto);

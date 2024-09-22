@@ -3,7 +3,7 @@ using FluentValidation;
 
 namespace Application.Validators.Requests.ConsoleVideoGame.Commands
 {
-    public class CreateConsoleVideoGameRequestValidator : AbstractValidator<CreateGenreRequest>
+    public class CreateConsoleVideoGameRequestValidator : AbstractValidator<CreateConsoleVideoGameRequest>
     {
         public CreateConsoleVideoGameRequestValidator()
         {

@@ -10,17 +10,17 @@ using Microsoft.Extensions.Logging;
 
 namespace Application.Features.ConsoleVideoGames.RequestHandlers.Commands
 {
-    public class UpdateConsoleVideoGameRequestHandler : IRequestHandler<UpdateGenresRequest, HttpResponseDto<ConsoleVideoGameDto>>
+    public class UpdateConsoleVideoGameRequestHandler : IRequestHandler<UpdateConsoleVideoGameRequest, HttpResponseDto<ConsoleVideoGameDto>>
     {
         private readonly IUnitOfWork _unitOfWork;
 
         private readonly IMapper _mapper;
 
-        private readonly IValidator<UpdateGenresRequest> _validator;
+        private readonly IValidator<UpdateConsoleVideoGameRequest> _validator;
 
         private readonly ILogger<UpdateConsoleVideoGameRequestHandler> _logger;
 
-        public UpdateConsoleVideoGameRequestHandler(IUnitOfWork unitOfWork, IMapper mapper, IValidator<UpdateGenresRequest> validator, ILogger<UpdateConsoleVideoGameRequestHandler> logger)
+        public UpdateConsoleVideoGameRequestHandler(IUnitOfWork unitOfWork, IMapper mapper, IValidator<UpdateConsoleVideoGameRequest> validator, ILogger<UpdateConsoleVideoGameRequestHandler> logger)
         {
             _unitOfWork = unitOfWork ?? throw new ArgumentNullException(nameof(unitOfWork));
             _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
@@ -28,7 +28,7 @@ namespace Application.Features.ConsoleVideoGames.RequestHandlers.Commands
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
-        public async Task<HttpResponseDto<ConsoleVideoGameDto>> Handle(UpdateGenresRequest updateConsoleVideoGameRequest, CancellationToken cancellationToken)
+        public async Task<HttpResponseDto<ConsoleVideoGameDto>> Handle(UpdateConsoleVideoGameRequest updateConsoleVideoGameRequest, CancellationToken cancellationToken)
         {
             try
             {

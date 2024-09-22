@@ -30,8 +30,6 @@ namespace Application.Features.VideoGames.RequestHandlers.Queries
             {
                 _logger.LogInformation("Begin ReadMostPlayedVideoGameByConsoleId {@ReadMostPlayedVideoGameByConsoleIdRequest}.", readMostPlayedVideoGameByConsoleIdRequest);
 
-                cancellationToken.ThrowIfCancellationRequested();
-
                 if (readMostPlayedVideoGameByConsoleIdRequest == null)
                 {
                     var httpResponseDto1 = new HttpResponseDto<VideoGameDto>(new ArgumentNullException(nameof(readMostPlayedVideoGameByConsoleIdRequest)).Message, StatusCodes.Status400BadRequest);

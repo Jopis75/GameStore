@@ -1,6 +1,7 @@
 ﻿using Application.Dtos.General;
 using Application.Features.Trophies.Requests.Commands;
 using Application.Interfaces.Persistance;
+using AutoMapper;
 using Domain.Dtos;
 using FluentValidation;
 using MediatR;
@@ -13,13 +14,16 @@ namespace Application.Features.Trophies.RequestHandlers.Commands
     {
         private readonly IUnitOfWork _unitOfWork;
 
+        private readonly IMapper _mapper;
+
         private readonly IValidator<CreateTrophyRequest> _validator;
 
         private readonly ILogger<CreateTrophyRequestHandler> _logger;
 
-        public CreateTrophyRequestHandler(IUnitOfWork unitOfWork, IValidator<CreateTrophyRequest> validator, ILogger<CreateTrophyRequestHandler> logger)
+        public CreateTrophyRequestHandler(IUnitOfWork unitOfWork, IMapper mapper, IValidator<CreateTrophyRequest> validator, ILogger<CreateTrophyRequestHandler> logger)
         {
             _unitOfWork = unitOfWork ?? throw new ArgumentNullException(nameof(unitOfWork));
+            _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
             _validator = validator ?? throw new ArgumentNullException(nameof(validator));
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
@@ -29,8 +33,6 @@ namespace Application.Features.Trophies.RequestHandlers.Commands
             try
             {
                 _logger.LogInformation("Begin CreateTrophy {@CreateTrophyRequest}.", createTrophyRequest);
-
-                cancellationToken.ThrowIfCancellationRequested();
 
                 if (createTrophyRequest == null)
                 {
@@ -48,7 +50,9 @@ namespace Application.Features.Trophies.RequestHandlers.Commands
                     return httpResponseDto1;
                 }
 
-                var createdTrophyDto = await _unitOfWork.TrophyRepository.CreateAsync(createTrophyRequest.TrophyDto, cancellationToken);
+                var trophyDto = _mapper.Map<TrophyDto>(createTrophyRequest);
+                var createdTrophyDto = await _unitOfWork.TrophyRepository.CreateAsync(trophyDto, cancellationToken);
+
                 await _unitOfWork.SaveAsync();
 
                 var httpResponseDto = new HttpResponseDto<TrophyDto>(createdTrophyDto, StatusCodes.Status201Created);

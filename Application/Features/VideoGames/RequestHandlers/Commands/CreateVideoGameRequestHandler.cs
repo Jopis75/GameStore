@@ -12,7 +12,7 @@ namespace Application.Features.VideoGames.RequestHandlers.Commands
 {
     public class CreateVideoGameRequestHandler : IRequestHandler<CreateVideoGameRequest, HttpResponseDto<VideoGameDto>>
     {
-        private readonly IUnitOfWork _unitOfWork;
+        private readonly IVideoGameRepository _videoGameRepository;
 
         private readonly IMapper _mapper;
 
@@ -20,9 +20,9 @@ namespace Application.Features.VideoGames.RequestHandlers.Commands
 
         private readonly ILogger<CreateVideoGameRequestHandler> _logger;
 
-        public CreateVideoGameRequestHandler(IUnitOfWork unitOfWork, IMapper mapper, IValidator<CreateVideoGameRequest> validator, ILogger<CreateVideoGameRequestHandler> logger)
+        public CreateVideoGameRequestHandler(IVideoGameRepository videoGameRepository, IMapper mapper, IValidator<CreateVideoGameRequest> validator, ILogger<CreateVideoGameRequestHandler> logger)
         {
-            _unitOfWork = unitOfWork ?? throw new ArgumentNullException(nameof(unitOfWork));
+            _videoGameRepository = videoGameRepository ?? throw new ArgumentNullException(nameof(videoGameRepository));
             _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
             _validator = validator ?? throw new ArgumentNullException(nameof(validator));
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
@@ -51,9 +51,7 @@ namespace Application.Features.VideoGames.RequestHandlers.Commands
                 }
 
                 var videoGameDto = _mapper.Map<VideoGameDto>(createVideoGameRequest);
-                var createdVideoGameDto = await _unitOfWork.VideoGameRepository.CreateAsync(videoGameDto, cancellationToken);
-                
-                await _unitOfWork.SaveAsync();
+                var createdVideoGameDto = await _videoGameRepository.CreateAsync(videoGameDto, cancellationToken);
 
                 var httpResponseDto = new HttpResponseDto<VideoGameDto>(createdVideoGameDto, StatusCodes.Status201Created);
                 _logger.LogInformation("Done CreateVideoGame {@HttpResponseDto}.", httpResponseDto);

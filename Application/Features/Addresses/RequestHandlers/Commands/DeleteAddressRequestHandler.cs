@@ -11,15 +11,15 @@ namespace Application.Features.Addresses.RequestHandlers.Commands
 {
     public class DeleteAddressRequestHandler : IRequestHandler<DeleteAddressRequest, HttpResponseDto<AddressDto>>
     {
-        private readonly IUnitOfWork _unitOfWork;
+        private readonly IAddressRepository _addressRepository;
 
         private readonly IValidator<DeleteAddressRequest> _validator;
 
         private readonly ILogger<DeleteAddressRequestHandler> _logger;
 
-        public DeleteAddressRequestHandler(IUnitOfWork unitOfWork, IValidator<DeleteAddressRequest> validator, ILogger<DeleteAddressRequestHandler> logger)
+        public DeleteAddressRequestHandler(IAddressRepository addressRepository, IValidator<DeleteAddressRequest> validator, ILogger<DeleteAddressRequestHandler> logger)
         {
-            _unitOfWork = unitOfWork ?? throw new ArgumentNullException(nameof(unitOfWork));
+            _addressRepository = addressRepository ?? throw new ArgumentNullException(nameof(addressRepository));
             _validator = validator ?? throw new ArgumentNullException(nameof(validator));
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
@@ -46,9 +46,7 @@ namespace Application.Features.Addresses.RequestHandlers.Commands
                     return httpResponseDto1;
                 }
 
-                var deletedAddressDto = await _unitOfWork.AddressRepository.DeleteByIdAsync(deleteAddressRequest.Id, cancellationToken);
-                
-                await _unitOfWork.SaveAsync();
+                var deletedAddressDto = await _addressRepository.DeleteByIdAsync(deleteAddressRequest.Id, cancellationToken);
 
                 var httpResponseDto = new HttpResponseDto<AddressDto>(deletedAddressDto, StatusCodes.Status200OK);
                 _logger.LogInformation("Done DeleteAddress {@HttpResponseDto}.", httpResponseDto);

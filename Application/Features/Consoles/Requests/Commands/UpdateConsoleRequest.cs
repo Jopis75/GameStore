@@ -8,6 +8,8 @@ namespace Application.Features.Consoles.Requests.Commands
     {
         public int DeveloperId { get; set; }
 
+        public int Id { get; set; }
+
         public string? ImageUri { get; set; }
 
         public string Name { get; set; } = String.Empty;

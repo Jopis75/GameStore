@@ -11,15 +11,15 @@ namespace Application.Features.Companies.RequestHandlers.Commands
 {
     public class DeleteCompanyRequestHandler : IRequestHandler<DeleteCompanyRequest, HttpResponseDto<CompanyDto>>
     {
-        private readonly IUnitOfWork _unitOfWork;
+        private readonly ICompanyRepository _companyRepository;
 
         private readonly IValidator<DeleteCompanyRequest> _validator;
 
         private readonly ILogger<DeleteCompanyRequestHandler> _logger;
 
-        public DeleteCompanyRequestHandler(IUnitOfWork unitOfWork, IValidator<DeleteCompanyRequest> validator, ILogger<DeleteCompanyRequestHandler> logger)
+        public DeleteCompanyRequestHandler(ICompanyRepository companyRepository, IValidator<DeleteCompanyRequest> validator, ILogger<DeleteCompanyRequestHandler> logger)
         {
-            _unitOfWork = unitOfWork ?? throw new ArgumentNullException(nameof(unitOfWork));
+            _companyRepository = companyRepository ?? throw new ArgumentNullException(nameof(companyRepository));
             _validator = validator ?? throw new ArgumentNullException(nameof(validator));
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
@@ -46,9 +46,7 @@ namespace Application.Features.Companies.RequestHandlers.Commands
                     return httpResponseDto1;
                 }
 
-                var deletedCompanyDto = await _unitOfWork.CompanyRepository.DeleteByIdAsync(deleteCompanyRequest.Id, cancellationToken);
-                
-                await _unitOfWork.SaveAsync();
+                var deletedCompanyDto = await _companyRepository.DeleteByIdAsync(deleteCompanyRequest.Id, cancellationToken);
 
                 var httpResponseDto = new HttpResponseDto<CompanyDto>(deletedCompanyDto, StatusCodes.Status200OK);
                 _logger.LogInformation("Done DeleteCompany {@HttpResponseDto}.", httpResponseDto);

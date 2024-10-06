@@ -12,7 +12,7 @@ namespace Application.Features.Trophies.RequestHandlers.Commands
 {
     public class UpdateTrophyRequestHandler : IRequestHandler<UpdateTrophyRequest, HttpResponseDto<TrophyDto>>
     {
-        private readonly IUnitOfWork _unitOfWork;
+        private readonly ITrophyRepository _trophyRepository;
 
         private readonly IMapper _mapper;
 
@@ -20,9 +20,9 @@ namespace Application.Features.Trophies.RequestHandlers.Commands
 
         private readonly ILogger<UpdateTrophyRequestHandler> _logger;
 
-        public UpdateTrophyRequestHandler(IUnitOfWork unitOfWork, IMapper mapper, IValidator<UpdateTrophyRequest> validator, ILogger<UpdateTrophyRequestHandler> logger)
+        public UpdateTrophyRequestHandler(ITrophyRepository trophyRepository, IMapper mapper, IValidator<UpdateTrophyRequest> validator, ILogger<UpdateTrophyRequestHandler> logger)
         {
-            _unitOfWork = unitOfWork ?? throw new ArgumentNullException(nameof(unitOfWork));
+            _trophyRepository = trophyRepository ?? throw new ArgumentNullException(nameof(trophyRepository));
             _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
             _validator = validator ?? throw new ArgumentNullException(nameof(validator));
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
@@ -51,9 +51,7 @@ namespace Application.Features.Trophies.RequestHandlers.Commands
                 }
 
                 var trophyDto = _mapper.Map<TrophyDto>(updateTrophyRequest);
-                var updatedTrophyDto = await _unitOfWork.TrophyRepository.UpdateAsync(trophyDto, cancellationToken);
-                
-                await _unitOfWork.SaveAsync();
+                var updatedTrophyDto = await _trophyRepository.UpdateAsync(trophyDto, cancellationToken);
 
                 var httpResponseDto = new HttpResponseDto<TrophyDto>(updatedTrophyDto, StatusCodes.Status200OK);
                 _logger.LogInformation("Done UpdateTrophy {@HttpResponseDto}.", httpResponseDto);

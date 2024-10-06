@@ -1,12 +1,11 @@
 ﻿using Application.Features.Trophies.Requests.Commands;
-using Application.Interfaces.Persistance;
 using FluentValidation;
 
 namespace Application.Validators.Requests.Trophies.Commands
 {
     public class CreateTrophyRequestValidator : AbstractValidator<CreateTrophyRequest>
     {
-        public CreateTrophyRequestValidator(IUnitOfWork unitOfWork)
+        public CreateTrophyRequestValidator()
         {
             RuleFor(createTrophyRequest => createTrophyRequest.Name)
                 .NotNull()

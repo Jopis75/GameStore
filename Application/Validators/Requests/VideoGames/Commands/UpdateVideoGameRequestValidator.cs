@@ -1,13 +1,16 @@
 ﻿using Application.Features.VideoGames.Requests.Commands;
-using Application.Interfaces.Persistance;
 using FluentValidation;
 
 namespace Application.Validators.Requests.VideoGames.Commands
 {
     public class UpdateVideoGameRequestValidator : AbstractValidator<UpdateVideoGameRequest>
     {
-        public UpdateVideoGameRequestValidator(IUnitOfWork unitOfWork)
+        public UpdateVideoGameRequestValidator()
         {
+            RuleFor(updateVideoGameRequest => updateVideoGameRequest.Id)
+                .GreaterThan(0)
+                .WithMessage("{PropertyName} must be greater than 0.");
+
             RuleFor(updateVideoGameRequest => updateVideoGameRequest.Title)
                 .NotNull()
                 .NotEmpty()

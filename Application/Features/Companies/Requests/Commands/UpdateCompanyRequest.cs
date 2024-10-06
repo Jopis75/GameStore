@@ -13,6 +13,8 @@ namespace Application.Features.Companies.Requests.Commands
 
         public int HeadquarterId { get; set; }
 
+        public int Id { get; set; }
+
         public Industry Industry { get; set; }
 
         public string? LogoImageUri { get; set; }

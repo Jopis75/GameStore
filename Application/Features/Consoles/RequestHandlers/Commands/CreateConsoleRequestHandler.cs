@@ -12,7 +12,7 @@ namespace Application.Features.Consoles.RequestHandlers.Commands
 {
     public class CreateConsoleRequestHandler : IRequestHandler<CreateConsoleRequest, HttpResponseDto<ConsoleDto>>
     {
-        private readonly IUnitOfWork _unitOfWork;
+        private readonly IConsoleRepository _consoleRepository;
 
         private readonly IMapper _mapper;
 
@@ -20,9 +20,9 @@ namespace Application.Features.Consoles.RequestHandlers.Commands
 
         private readonly ILogger<CreateConsoleRequestHandler> _logger;
 
-        public CreateConsoleRequestHandler(IUnitOfWork unitOfWork, IMapper mapper, IValidator<CreateConsoleRequest> validator, ILogger<CreateConsoleRequestHandler> logger)
+        public CreateConsoleRequestHandler(IConsoleRepository consoleRepository, IMapper mapper, IValidator<CreateConsoleRequest> validator, ILogger<CreateConsoleRequestHandler> logger)
         {
-            _unitOfWork = unitOfWork ?? throw new ArgumentNullException(nameof(unitOfWork));
+            _consoleRepository = consoleRepository ?? throw new ArgumentNullException(nameof(consoleRepository));
             _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
             _validator = validator ?? throw new ArgumentNullException(nameof(validator));
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
@@ -51,9 +51,7 @@ namespace Application.Features.Consoles.RequestHandlers.Commands
                 }
 
                 var consoleDto = _mapper.Map<ConsoleDto>(createConsoleRequest);
-                var createdConsoleDto = await _unitOfWork.ConsoleRepository.CreateAsync(consoleDto, cancellationToken);
-                
-                await _unitOfWork.SaveAsync();
+                var createdConsoleDto = await _consoleRepository.CreateAsync(consoleDto, cancellationToken);
 
                 var httpResponseDto = new HttpResponseDto<ConsoleDto>(createdConsoleDto, StatusCodes.Status201Created);
                 _logger.LogInformation("Done CreateConsole {@HttpResponseDto}.", httpResponseDto);

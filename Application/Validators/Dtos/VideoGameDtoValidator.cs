@@ -1,23 +1,16 @@
-﻿using Application.Interfaces.Persistance;
-using Domain.Dtos;
+﻿using Domain.Dtos;
 using FluentValidation;
 
 namespace Application.Validators.Dtos
 {
     public class VideoGameDtoValidator : AbstractValidator<VideoGameDto>
     {
-        public VideoGameDtoValidator(IUnitOfWork unitOfWork)
+        public VideoGameDtoValidator()
         {
             RuleFor(videoGameDto => videoGameDto.Title)
                 .NotNull()
                 .NotEmpty()
-                .WithMessage("{PropertyName} is required.")
-                .MustAsync(async (title, cancellationToken) =>
-                {
-                    var videoGameDtos = await unitOfWork.VideoGameRepository.ReadByTitleAsync(title, cancellationToken);
-                    return videoGameDtos.Any() == false;
-                })
-                .WithMessage("{PropertyName} must be unique.");
+                .WithMessage("{PropertyName} is required.");
 
             RuleFor(videoGameDto => videoGameDto.DeveloperId)
                 .GreaterThan(0)

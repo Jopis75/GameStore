@@ -7,6 +7,10 @@ namespace Application.Validators.Requests.ConsoleVideoGame.Commands
     {
         public UpdateConsoleVideoGameRequestValidator()
         {
+            RuleFor(updateConsoleVideoGameRequest => updateConsoleVideoGameRequest.Id)
+                .GreaterThan(0)
+                .WithMessage("{PropertyName} must be greater than 0.");
+
             RuleFor(updateConsoleVideoGameRequest => updateConsoleVideoGameRequest.ConsoleId)
                 .GreaterThan(0)
                 .WithMessage("{PropertyName} must be greater than 0.");

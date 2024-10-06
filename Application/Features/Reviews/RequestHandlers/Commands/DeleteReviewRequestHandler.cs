@@ -11,15 +11,15 @@ namespace Application.Features.Reviews.RequestHandlers.Commands
 {
     public class DeleteReviewRequestHandler : IRequestHandler<DeleteReviewRequest, HttpResponseDto<ReviewDto>>
     {
-        private readonly IUnitOfWork _unitOfWork;
+        private readonly IReviewRepository _reviewRepository;
 
         private readonly IValidator<DeleteReviewRequest> _validator;
 
         private readonly ILogger<DeleteReviewRequestHandler> _logger;
 
-        public DeleteReviewRequestHandler(IUnitOfWork unitOfWork, IValidator<DeleteReviewRequest> validator, ILogger<DeleteReviewRequestHandler> logger)
+        public DeleteReviewRequestHandler(IReviewRepository reviewRepository, IValidator<DeleteReviewRequest> validator, ILogger<DeleteReviewRequestHandler> logger)
         {
-            _unitOfWork = unitOfWork ?? throw new ArgumentNullException(nameof(unitOfWork));
+            _reviewRepository = reviewRepository ?? throw new ArgumentNullException(nameof(reviewRepository));
             _validator = validator ?? throw new ArgumentNullException(nameof(validator));
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
@@ -29,8 +29,6 @@ namespace Application.Features.Reviews.RequestHandlers.Commands
             try
             {
                 _logger.LogInformation("Begin DeleteReview {@DeleteReviewRequest}.", deleteReviewRequest);
-
-                cancellationToken.ThrowIfCancellationRequested();
 
                 if (deleteReviewRequest == null)
                 {
@@ -48,8 +46,7 @@ namespace Application.Features.Reviews.RequestHandlers.Commands
                     return httpResponseDto1;
                 }
 
-                var deletedReviewDto = await _unitOfWork.ReviewRepository.DeleteByIdAsync(deleteReviewRequest.Id, cancellationToken);
-                await _unitOfWork.SaveAsync();
+                var deletedReviewDto = await _reviewRepository.DeleteByIdAsync(deleteReviewRequest.Id, cancellationToken);
 
                 var httpResponseDto = new HttpResponseDto<ReviewDto>(deletedReviewDto, StatusCodes.Status200OK);
                 _logger.LogInformation("Done DeleteReview {@HttpResponseDto}.", httpResponseDto);

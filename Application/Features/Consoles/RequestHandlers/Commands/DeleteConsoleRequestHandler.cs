@@ -11,15 +11,15 @@ namespace Application.Features.Consoles.RequestHandlers.Commands
 {
     public class DeleteConsoleRequestHandler : IRequestHandler<DeleteConsoleRequest, HttpResponseDto<ConsoleDto>>
     {
-        private readonly IUnitOfWork _unitOfWork;
+        private readonly IConsoleRepository _consoleRepository;
 
         private readonly IValidator<DeleteConsoleRequest> _validator;
 
         private readonly ILogger<DeleteConsoleRequestHandler> _logger;
 
-        public DeleteConsoleRequestHandler(IUnitOfWork unitOfWork, IValidator<DeleteConsoleRequest> validator, ILogger<DeleteConsoleRequestHandler> logger)
+        public DeleteConsoleRequestHandler(IConsoleRepository consoleRepository, IValidator<DeleteConsoleRequest> validator, ILogger<DeleteConsoleRequestHandler> logger)
         {
-            _unitOfWork = unitOfWork ?? throw new ArgumentNullException(nameof(unitOfWork));
+            _consoleRepository = consoleRepository ?? throw new ArgumentNullException(nameof(consoleRepository));
             _validator = validator ?? throw new ArgumentNullException(nameof(validator));
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
@@ -48,9 +48,7 @@ namespace Application.Features.Consoles.RequestHandlers.Commands
                     return httpResponseDto1;
                 }
 
-                var deletedConsoleDto = await _unitOfWork.ConsoleRepository.DeleteByIdAsync(deleteConsoleRequest.Id, cancellationToken);
-                
-                await _unitOfWork.SaveAsync();
+                var deletedConsoleDto = await _consoleRepository.DeleteByIdAsync(deleteConsoleRequest.Id, cancellationToken);
 
                 var httpResponseDto = new HttpResponseDto<ConsoleDto>(deletedConsoleDto, StatusCodes.Status200OK);
                 _logger.LogInformation("Done DeleteConsole {@HttpResponseDto}.", httpResponseDto);

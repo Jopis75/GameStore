@@ -12,15 +12,15 @@ namespace Application.Features.VideoGames.RequestHandlers.Commands
 {
     public class DeleteVideoGameRequestHandler : IRequestHandler<DeleteVideoGameRequest, HttpResponseDto<VideoGameDto>>
     {
-        private readonly IUnitOfWork _unitOfWork;
+        private readonly IVideoGameRepository _videoGameRepository;
 
         private readonly IValidator<DeleteVideoGameRequest> _validator;
 
         private readonly ILogger<DeleteVideoGameRequestHandler> _logger;
 
-        public DeleteVideoGameRequestHandler(IUnitOfWork unitOfWork, IValidator<DeleteVideoGameRequest> validator, ILogger<DeleteVideoGameRequestHandler> logger)
+        public DeleteVideoGameRequestHandler(IVideoGameRepository videoGameRepository, IValidator<DeleteVideoGameRequest> validator, ILogger<DeleteVideoGameRequestHandler> logger)
         {
-            _unitOfWork = unitOfWork ?? throw new ArgumentNullException(nameof(unitOfWork));
+            _videoGameRepository = videoGameRepository ?? throw new ArgumentNullException(nameof(videoGameRepository));
             _validator = validator ?? throw new ArgumentNullException(nameof(validator));
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
@@ -47,9 +47,7 @@ namespace Application.Features.VideoGames.RequestHandlers.Commands
                     return httpResponseDto1;
                 }
 
-                var deletedVideoGameDto = await _unitOfWork.VideoGameRepository.DeleteByIdAsync(deleteVideoGameRequest.Id, cancellationToken);
-                
-                await _unitOfWork.SaveAsync();
+                var deletedVideoGameDto = await _videoGameRepository.DeleteByIdAsync(deleteVideoGameRequest.Id, cancellationToken);
 
                 var httpResponseDto = new HttpResponseDto<VideoGameDto>(deletedVideoGameDto, StatusCodes.Status200OK);
                 _logger.LogInformation("Done DeleteVideoGame {@HttpResponseDto}.", httpResponseDto);

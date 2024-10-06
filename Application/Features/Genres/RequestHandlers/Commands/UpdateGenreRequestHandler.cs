@@ -12,7 +12,7 @@ namespace Application.Features.Genres.RequestHandlers.Commands
 {
     public class UpdateGenreRequestHandler : IRequestHandler<UpdateGenreRequest, HttpResponseDto<GenreDto>>
     {
-        private readonly IUnitOfWork _unitOfWork;
+        private readonly IGenreRepository _genreRepository;
 
         private readonly IMapper _mapper;
 
@@ -20,9 +20,9 @@ namespace Application.Features.Genres.RequestHandlers.Commands
 
         private readonly ILogger<UpdateGenreRequestHandler> _logger;
 
-        public UpdateGenreRequestHandler(IUnitOfWork unitOfWork, IMapper mapper, IValidator<UpdateGenreRequest> validator, ILogger<UpdateGenreRequestHandler> logger)
+        public UpdateGenreRequestHandler(IGenreRepository genreRepository, IMapper mapper, IValidator<UpdateGenreRequest> validator, ILogger<UpdateGenreRequestHandler> logger)
         {
-            _unitOfWork = unitOfWork ?? throw new ArgumentNullException(nameof(unitOfWork));
+            _genreRepository = genreRepository ?? throw new ArgumentNullException(nameof(genreRepository));
             _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
             _validator = validator ?? throw new ArgumentNullException(nameof(validator));
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
@@ -51,9 +51,7 @@ namespace Application.Features.Genres.RequestHandlers.Commands
                 }
 
                 var genreDto = _mapper.Map<GenreDto>(updateGenreRequest);
-                var updatedGenreDto = await _unitOfWork.GenreRepository.UpdateAsync(genreDto, cancellationToken);
-                
-                await _unitOfWork.SaveAsync();
+                var updatedGenreDto = await _genreRepository.UpdateAsync(genreDto, cancellationToken);
 
                 var httpResponseDto = new HttpResponseDto<GenreDto>(updatedGenreDto, StatusCodes.Status200OK);
                 _logger.LogInformation("Done UpdateGenre {@HttpResponseDto}.", httpResponseDto);

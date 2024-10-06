@@ -12,7 +12,7 @@ namespace Application.Features.Consoles.RequestHandlers.Commands
 {
     public class UpdateConsoleRequestHandler : IRequestHandler<UpdateConsoleRequest, HttpResponseDto<ConsoleDto>>
     {
-        private readonly IUnitOfWork _unitOfWork;
+        private readonly IConsoleRepository _consoleRepository;
 
         private readonly IMapper _mapper;
 
@@ -20,9 +20,9 @@ namespace Application.Features.Consoles.RequestHandlers.Commands
 
         private readonly ILogger<UpdateConsoleRequestHandler> _logger;
 
-        public UpdateConsoleRequestHandler(IUnitOfWork unitOfWork, IMapper mapper, IValidator<UpdateConsoleRequest> validator, ILogger<UpdateConsoleRequestHandler> logger)
+        public UpdateConsoleRequestHandler(IConsoleRepository consoleRepository, IMapper mapper, IValidator<UpdateConsoleRequest> validator, ILogger<UpdateConsoleRequestHandler> logger)
         {
-            _unitOfWork = unitOfWork ?? throw new ArgumentNullException(nameof(unitOfWork));
+            _consoleRepository = consoleRepository ?? throw new ArgumentNullException(nameof(consoleRepository));
             _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
             _validator = validator ?? throw new ArgumentNullException(nameof(validator));
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
@@ -51,9 +51,7 @@ namespace Application.Features.Consoles.RequestHandlers.Commands
                 }
 
                 var consoleDto = _mapper.Map<ConsoleDto>(updateConsoleRequest);
-                var updatedConsoleDto = await _unitOfWork.ConsoleRepository.UpdateAsync(consoleDto, cancellationToken);
-                
-                await _unitOfWork.SaveAsync();
+                var updatedConsoleDto = await _consoleRepository.UpdateAsync(consoleDto, cancellationToken);
 
                 var httpResponseDto = new HttpResponseDto<ConsoleDto>(updatedConsoleDto, StatusCodes.Status200OK);
                 _logger.LogInformation("Done UpdateConsole {@HttpResponseDto}.", httpResponseDto);

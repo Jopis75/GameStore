@@ -11,15 +11,15 @@ namespace Application.Features.ConsoleVideoGames.RequestHandlers.Commands
 {
     public class DeleteConsoleVideoGameRequestHandler : IRequestHandler<DeleteConsoleVideoGameRequest, HttpResponseDto<ConsoleVideoGameDto>>
     {
-        private readonly IUnitOfWork _unitOfWork;
+        private readonly IConsoleVideoGameRepository _consoleVideoGameRepository;
 
         private readonly IValidator<DeleteConsoleVideoGameRequest> _validator;
 
         private readonly ILogger<DeleteConsoleVideoGameRequestHandler> _logger;
 
-        public DeleteConsoleVideoGameRequestHandler(IUnitOfWork unitOfWork, IValidator<DeleteConsoleVideoGameRequest> validator, ILogger<DeleteConsoleVideoGameRequestHandler> logger)
+        public DeleteConsoleVideoGameRequestHandler(IConsoleVideoGameRepository consoleVideoGameRepository, IValidator<DeleteConsoleVideoGameRequest> validator, ILogger<DeleteConsoleVideoGameRequestHandler> logger)
         {
-            _unitOfWork = unitOfWork ?? throw new ArgumentNullException(nameof(unitOfWork));
+            _consoleVideoGameRepository = consoleVideoGameRepository ?? throw new ArgumentNullException(nameof(consoleVideoGameRepository));
             _validator = validator ?? throw new ArgumentNullException(nameof(validator));
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
@@ -46,9 +46,7 @@ namespace Application.Features.ConsoleVideoGames.RequestHandlers.Commands
                     return httpResponseDto1;
                 }
 
-                var deletedConsoleVideoGameDto = await _unitOfWork.ConsoleVideoGameRepository.DeleteByIdAsync(deleteConsoleVideoGameRequest.Id, cancellationToken);
-
-                await _unitOfWork.SaveAsync();
+                var deletedConsoleVideoGameDto = await _consoleVideoGameRepository.DeleteByIdAsync(deleteConsoleVideoGameRequest.Id, cancellationToken);
 
                 var httpResponseDto = new HttpResponseDto<ConsoleVideoGameDto>(deletedConsoleVideoGameDto, StatusCodes.Status200OK);
                 _logger.LogInformation("Done DeleteConsoleVideoGame {@HttpResponseDto}.", httpResponseDto);

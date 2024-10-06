@@ -1,7 +1,6 @@
 ﻿using Application.Dtos.General;
 using Application.Features.Genres.Requests.Commands;
 using Application.Interfaces.Persistance;
-using Application.Validators.Requests.Genres.Commands;
 using AutoMapper;
 using Domain.Dtos;
 using FluentValidation;
@@ -13,7 +12,7 @@ namespace Application.Features.Genres.RequestHandlers.Commands
 {
     public class CreateGenreRequestHandler : IRequestHandler<CreateGenreRequest, HttpResponseDto<GenreDto>>
     {
-        private readonly IUnitOfWork _unitOfWork;
+        private readonly IGenreRepository _genreRepository;
 
         private readonly IMapper _mapper;
 
@@ -21,9 +20,9 @@ namespace Application.Features.Genres.RequestHandlers.Commands
 
         private readonly ILogger<CreateGenreRequestHandler> _logger;
 
-        public CreateGenreRequestHandler(IUnitOfWork unitOfWork, IMapper mapper, IValidator<CreateGenreRequest> validator, ILogger<CreateGenreRequestHandler> logger)
+        public CreateGenreRequestHandler(IGenreRepository genreRepository, IMapper mapper, IValidator<CreateGenreRequest> validator, ILogger<CreateGenreRequestHandler> logger)
         {
-            _unitOfWork = unitOfWork ?? throw new ArgumentNullException(nameof(unitOfWork));
+            _genreRepository = genreRepository ?? throw new ArgumentNullException(nameof(genreRepository));
             _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
             _validator = validator ?? throw new ArgumentNullException(nameof(validator));
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
@@ -52,9 +51,7 @@ namespace Application.Features.Genres.RequestHandlers.Commands
                 }
 
                 var genreDto = _mapper.Map<GenreDto>(createGenreRequest);
-                var createdGenreDto = await _unitOfWork.GenreRepository.CreateAsync(genreDto, cancellationToken);
-                
-                await _unitOfWork.SaveAsync();
+                var createdGenreDto = await _genreRepository.CreateAsync(genreDto, cancellationToken);
 
                 var httpResponseDto = new HttpResponseDto<GenreDto>(createdGenreDto, StatusCodes.Status201Created);
                 _logger.LogInformation("Done CreateGenre {@HttpResponseDto}.", httpResponseDto);

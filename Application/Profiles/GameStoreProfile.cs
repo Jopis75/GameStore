@@ -23,38 +23,19 @@ namespace Application.Profiles
             CreateMap<Address, AddressDto>()
                 .ReverseMap();
             CreateMap<Company, CompanyDto>()
-                .MaxDepth(1)
-                .ReverseMap()
-                .MaxDepth(1);
+                .ReverseMap();
             CreateMap<Product, ProductDto>()
-                .ForMember(dest => dest.Reviews, act => act.MapFrom(src => src.Reviews))
-                .Include<Console, ConsoleDto>()
-                .MaxDepth(3)
-                .ReverseMap()
-                .MaxDepth(3);
+                .ReverseMap();
             CreateMap<Console, ConsoleDto>()
-                .MaxDepth(1)
-                .ReverseMap()
-                .MaxDepth(1);
+                .ReverseMap();
             CreateMap<ConsoleVideoGame, ConsoleVideoGameDto>()
-                .MaxDepth(1)
-                .ReverseMap()
-                .MaxDepth(1);
+                .ReverseMap();
             CreateMap<Review, ReviewDto>()
-                .MaxDepth(5)
-                .ReverseMap()
-                .MaxDepth(5);
+                .ReverseMap();
             CreateMap<Product, ProductDto>()
-                .ForMember(dest => dest.Reviews, act => act.MapFrom(src => src.Reviews))
-                .Include<VideoGame, VideoGameDto>()
-                .ForMember(dest => dest.Reviews, act => act.MapFrom(src => src.Reviews))
-                .MaxDepth(5)
-                .ReverseMap()
-                .MaxDepth(5);
+                .ReverseMap();
             CreateMap<VideoGame, VideoGameDto>()
-                .MaxDepth(2)
-                .ReverseMap()
-                .MaxDepth(2);
+                .ReverseMap();
 
             // Application.Dtos.Identity.
             CreateMap<ApplicationUser, UserDto>()

@@ -11,15 +11,15 @@ namespace Application.Features.VideoGames.RequestHandlers.Queries
 {
     public class ReadMostPlayedVideoGameByConsoleIdRequestHandler : IRequestHandler<ReadMostPlayedVideoGameByConsoleIdRequest, HttpResponseDto<VideoGameDto>>
     {
-        private readonly IUnitOfWork _unitOfWork;
+        private readonly IVideoGameRepository _videoGameRepository;
 
         private readonly IValidator<ReadMostPlayedVideoGameByConsoleIdRequest> _validator;
 
         private readonly ILogger<ReadMostPlayedVideoGameByConsoleIdRequestHandler> _logger;
 
-        public ReadMostPlayedVideoGameByConsoleIdRequestHandler(IUnitOfWork unitOfWork, IValidator<ReadMostPlayedVideoGameByConsoleIdRequest> validator, ILogger<ReadMostPlayedVideoGameByConsoleIdRequestHandler> logger)
+        public ReadMostPlayedVideoGameByConsoleIdRequestHandler(IVideoGameRepository videoGameRepository, IValidator<ReadMostPlayedVideoGameByConsoleIdRequest> validator, ILogger<ReadMostPlayedVideoGameByConsoleIdRequestHandler> logger)
         {
-            _unitOfWork = unitOfWork ?? throw new ArgumentNullException(nameof(unitOfWork));
+            _videoGameRepository = videoGameRepository ?? throw new ArgumentNullException(nameof(videoGameRepository));
             _validator = validator ?? throw new ArgumentNullException(nameof(validator));
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
@@ -46,7 +46,7 @@ namespace Application.Features.VideoGames.RequestHandlers.Queries
                     return httpResponseDto1;
                 }
 
-                var videoGameDto = await _unitOfWork.VideoGameRepository.ReadMostPlayedByConsoleIdAsync(readMostPlayedVideoGameByConsoleIdRequest.ConsoleId, cancellationToken);
+                var videoGameDto = await _videoGameRepository.ReadMostPlayedByConsoleIdAsync(readMostPlayedVideoGameByConsoleIdRequest.ConsoleId, cancellationToken);
 
                 var httpResponseDto = new HttpResponseDto<VideoGameDto>(videoGameDto, StatusCodes.Status200OK);
                 _logger.LogInformation("Done ReadMostPlayedVideoGameByConsoleId {@HttpResponseDto}.", httpResponseDto);

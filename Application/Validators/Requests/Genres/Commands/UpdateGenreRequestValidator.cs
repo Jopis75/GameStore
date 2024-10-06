@@ -1,14 +1,16 @@
 ﻿using Application.Features.Genres.Requests.Commands;
-using Application.Interfaces.Persistance;
-using Application.Validators.Dtos;
 using FluentValidation;
 
 namespace Application.Validators.Requests.Genres.Commands
 {
     public class UpdateGenreRequestValidator : AbstractValidator<UpdateGenreRequest>
     {
-        public UpdateGenreRequestValidator(IUnitOfWork unitOfWork)
+        public UpdateGenreRequestValidator()
         {
+            RuleFor(updateGenreRequest => updateGenreRequest.Id)
+                .GreaterThan(0)
+                .WithMessage("{PropertyName} must be greater than 0.");
+
             RuleFor(updateGenreRequest => updateGenreRequest.Name)
                 .NotNull()
                 .NotEmpty()

@@ -10,13 +10,13 @@ namespace Application.Features.Addresses.RequestHandlers.Queries
 {
     public class ReadAddressAllRequestHandler : IRequestHandler<ReadAddressAllRequest, HttpResponseDto<AddressDto>>
     {
-        private readonly IUnitOfWork _unitOfWork;
+        private readonly IAddressRepository _addressRepository;
 
         private readonly ILogger<ReadAddressAllRequestHandler> _logger;
 
-        public ReadAddressAllRequestHandler(IUnitOfWork unitOfWork, ILogger<ReadAddressAllRequestHandler> logger)
+        public ReadAddressAllRequestHandler(IAddressRepository addressRepository, ILogger<ReadAddressAllRequestHandler> logger)
         {
-            _unitOfWork = unitOfWork ?? throw new ArgumentNullException(nameof(unitOfWork));
+            _addressRepository = addressRepository ?? throw new ArgumentNullException(nameof(addressRepository));
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
@@ -26,7 +26,7 @@ namespace Application.Features.Addresses.RequestHandlers.Queries
             {
                 _logger.LogInformation("Begin ReadAddressAll {@ReadAddressAllRequest}.", readAddressAllRequest);
 
-                var addressDtos = await _unitOfWork.AddressRepository.ReadAllAsync(cancellationToken);
+                var addressDtos = await _addressRepository.ReadAllAsync(cancellationToken);
 
                 var httpResponseDto = new HttpResponseDto<AddressDto>(addressDtos.ToArray(), StatusCodes.Status200OK);
                 _logger.LogInformation("Done ReadAddressAll {@HttpResponseDto}.", httpResponseDto);

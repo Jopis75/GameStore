@@ -1,23 +1,16 @@
-﻿using Application.Interfaces.Persistance;
-using Domain.Dtos;
+﻿using Domain.Dtos;
 using FluentValidation;
 
 namespace Application.Validators.Dtos
 {
     public class TrophyDtoValidator : AbstractValidator<TrophyDto>
     {
-        public TrophyDtoValidator(IUnitOfWork unitOfWork)
+        public TrophyDtoValidator()
         {
             RuleFor(trophyDto => trophyDto.Name)
                 .NotNull()
                 .NotEmpty()
-                .WithMessage("{PropertyName} is required.")
-                .MustAsync(async (name, cancellationToken) =>
-                {
-                    var trophyDtos = await unitOfWork.TrophyRepository.ReadByNameAsync(name, cancellationToken);
-                    return trophyDtos.Any() == false;
-                })
-                .WithMessage("{PropertyName} must be unique.");
+                .WithMessage("{PropertyName} is required.");
 
             RuleFor(trophyDto => trophyDto.Description)
                 .NotNull()

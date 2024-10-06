@@ -11,6 +11,8 @@ namespace Application.Features.Reviews.Requests.Commands
         // Grade between 0 and 100.
         public int Grade { get; set; }
 
+        public int Id { get; set; }
+
         public DateTime ReviewDate { get; set; }
 
         public string ReviewText { get; set; } = String.Empty;

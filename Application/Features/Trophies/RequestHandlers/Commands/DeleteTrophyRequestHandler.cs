@@ -11,15 +11,15 @@ namespace Application.Features.Trophies.RequestHandlers.Commands
 {
     public class DeleteTrophyRequestHandler : IRequestHandler<DeleteTrophyRequest, HttpResponseDto<TrophyDto>>
     {
-        private readonly IUnitOfWork _unitOfWork;
+        private readonly ITrophyRepository _trophyRepository;
 
         private readonly IValidator<DeleteTrophyRequest> _validator;
 
         private readonly ILogger<DeleteTrophyRequestHandler> _logger;
 
-        public DeleteTrophyRequestHandler(IUnitOfWork unitOfWork, IValidator<DeleteTrophyRequest> validator, ILogger<DeleteTrophyRequestHandler> logger)
+        public DeleteTrophyRequestHandler(ITrophyRepository trophyRepository, IValidator<DeleteTrophyRequest> validator, ILogger<DeleteTrophyRequestHandler> logger)
         {
-            _unitOfWork = unitOfWork ?? throw new ArgumentNullException(nameof(unitOfWork));
+            _trophyRepository = trophyRepository ?? throw new ArgumentNullException(nameof(trophyRepository));
             _validator = validator ?? throw new ArgumentNullException(nameof(validator));
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
@@ -29,8 +29,6 @@ namespace Application.Features.Trophies.RequestHandlers.Commands
             try
             {
                 _logger.LogInformation("Begin DeleteTrophy {@DeleteTrophyRequest}.", deleteTrophyRequest);
-
-                cancellationToken.ThrowIfCancellationRequested();
 
                 if (deleteTrophyRequest == null)
                 {
@@ -48,10 +46,9 @@ namespace Application.Features.Trophies.RequestHandlers.Commands
                     return httpResponseDto1;
                 }
 
-                var deleteTrophyDto = await _unitOfWork.TrophyRepository.DeleteByIdAsync(deleteTrophyRequest.Id, cancellationToken);
-                await _unitOfWork.SaveAsync();
+                var deletedTrophyDto = await _trophyRepository.DeleteByIdAsync(deleteTrophyRequest.Id, cancellationToken);
 
-                var httpResponseDto = new HttpResponseDto<TrophyDto>(deleteTrophyDto, StatusCodes.Status200OK);
+                var httpResponseDto = new HttpResponseDto<TrophyDto>(deletedTrophyDto, StatusCodes.Status200OK);
                 _logger.LogInformation("Done DeleteTrophy {@HttpResponseDto}.", httpResponseDto);
                 return httpResponseDto;
             }

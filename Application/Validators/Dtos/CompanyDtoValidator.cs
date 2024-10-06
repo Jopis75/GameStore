@@ -6,7 +6,7 @@ namespace Application.Validators.Dtos
 {
     public class CompanyDtoValidator : AbstractValidator<CompanyDto>
     {
-        public CompanyDtoValidator(IUnitOfWork unitOfWork)
+        public CompanyDtoValidator()
         {
             RuleFor(companyDto => companyDto.Name)
                 .NotNull()

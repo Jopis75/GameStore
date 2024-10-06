@@ -1,13 +1,16 @@
 ﻿using Application.Features.Trophies.Requests.Commands;
-using Application.Interfaces.Persistance;
 using FluentValidation;
 
 namespace Application.Validators.Requests.Trophies.Commands
 {
     public class UpdateTrophyRequestValidator : AbstractValidator<UpdateTrophyRequest>
     {
-        public UpdateTrophyRequestValidator(IUnitOfWork unitOfWork)
+        public UpdateTrophyRequestValidator()
         {
+            RuleFor(updateTrophyRequest => updateTrophyRequest.Id)
+                .GreaterThan(0)
+                .WithMessage("{PropertyName} must be greater than 0.");
+
             RuleFor(updateTrophyRequest => updateTrophyRequest.Name)
                 .NotNull()
                 .NotEmpty()

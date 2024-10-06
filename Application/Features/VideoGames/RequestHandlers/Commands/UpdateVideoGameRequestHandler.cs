@@ -12,7 +12,7 @@ namespace Application.Features.VideoGames.RequestHandlers.Commands
 {
     public class UpdateVideoGameRequestHandler : IRequestHandler<UpdateVideoGameRequest, HttpResponseDto<VideoGameDto>>
     {
-        private readonly IUnitOfWork _unitOfWork;
+        private readonly IVideoGameRepository _videoGameRepository;
 
         private readonly IMapper _mapper;
 
@@ -20,9 +20,9 @@ namespace Application.Features.VideoGames.RequestHandlers.Commands
 
         private readonly ILogger<UpdateVideoGameRequestHandler> _logger;
 
-        public UpdateVideoGameRequestHandler(IUnitOfWork unitOfWork, IMapper mapper, IValidator<UpdateVideoGameRequest> validator, ILogger<UpdateVideoGameRequestHandler> logger)
+        public UpdateVideoGameRequestHandler(IVideoGameRepository videoGameRepository, IMapper mapper, IValidator<UpdateVideoGameRequest> validator, ILogger<UpdateVideoGameRequestHandler> logger)
         {
-            _unitOfWork = unitOfWork ?? throw new ArgumentNullException(nameof(unitOfWork));
+            _videoGameRepository = videoGameRepository ?? throw new ArgumentNullException(nameof(videoGameRepository));
             _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
             _validator = validator ?? throw new ArgumentNullException(nameof(validator));
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
@@ -51,9 +51,7 @@ namespace Application.Features.VideoGames.RequestHandlers.Commands
                 }
 
                 var videoGameDto = _mapper.Map<VideoGameDto>(updateVideoGameRequest);
-                var updatedVideoGameDto = await _unitOfWork.VideoGameRepository.UpdateAsync(videoGameDto, cancellationToken);
-                
-                await _unitOfWork.SaveAsync();
+                var updatedVideoGameDto = await _videoGameRepository.UpdateAsync(videoGameDto, cancellationToken);
 
                 var httpResponseDto = new HttpResponseDto<VideoGameDto>(updatedVideoGameDto, StatusCodes.Status200OK);
                 _logger.LogInformation("Done UpdateVideoGame {@HttpResponseDto}.", httpResponseDto);

@@ -1,12 +1,11 @@
 ﻿using Application.Features.Consoles.Requests.Commands;
-using Application.Interfaces.Persistance;
 using FluentValidation;
 
 namespace Application.Validators.Requests.Consoles.Commands
 {
     public class CreateConsoleRequestValidator : AbstractValidator<CreateConsoleRequest>
     {
-        public CreateConsoleRequestValidator(IUnitOfWork unitOfWork)
+        public CreateConsoleRequestValidator()
         {
             RuleFor(createConsoleRequest => createConsoleRequest.Name)
                 .NotNull()
@@ -18,11 +17,11 @@ namespace Application.Validators.Requests.Consoles.Commands
                 .WithMessage("{PropertyName} must be greater than 0.");
 
             RuleFor(createConsoleRequest => createConsoleRequest.ReleaseDate)
-                .LessThanOrEqualTo(consoleDto => consoleDto.PurchaseDate)
+                .LessThanOrEqualTo(createConsoleRequest => createConsoleRequest.PurchaseDate)
                 .WithMessage("{PropertyName} must be less than or equal to {ComparisonProperty}.");
 
             RuleFor(createConsoleRequest => createConsoleRequest.PurchaseDate)
-                .GreaterThanOrEqualTo(consoleDto => consoleDto.ReleaseDate)
+                .GreaterThanOrEqualTo(createConsoleRequest => createConsoleRequest.ReleaseDate)
                 .WithMessage("{PropertyName} must be greater than or equal to {ComparisonProperty}.");
 
             RuleFor(createConsoleRequest => createConsoleRequest.Price)

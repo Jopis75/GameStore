@@ -13,6 +13,8 @@ namespace Application.Features.Trophies.Requests.Commands
 
         public string IconUrl { get; set; } = String.Empty;
 
+        public int Id { get; set; }
+
         public TrophyValue TrophyValue { get; set; }
 
         public int VideoGameId { get; set; }

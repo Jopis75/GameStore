@@ -1,13 +1,16 @@
 ﻿using Application.Features.Companies.Requests.Commands;
-using Application.Interfaces.Persistance;
 using FluentValidation;
 
 namespace Application.Validators.Requests.Companies.Commands
 {
     public class UpdateCompanyRequestValidator : AbstractValidator<UpdateCompanyRequest>
     {
-        public UpdateCompanyRequestValidator(IUnitOfWork unitOfWork)
+        public UpdateCompanyRequestValidator()
         {
+            RuleFor(updateCompanyRequest => updateCompanyRequest.Id)
+                .GreaterThan(0)
+                .WithMessage("{PropertyName} must be greater than 0.");
+
             RuleFor(updateCompanyRequest => updateCompanyRequest.Name)
                 .NotNull()
                 .NotEmpty()

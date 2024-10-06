@@ -10,6 +10,8 @@ namespace Application.Features.Addresses.Requests.Commands
 
         public string Country { get; set; } = String.Empty;
 
+        public int Id { get; set; }
+
         public string PostalCode { get; set; } = String.Empty;
 
         public string State { get; set; } = String.Empty;

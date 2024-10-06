@@ -1,12 +1,11 @@
 ﻿using Application.Features.Genres.Requests.Commands;
-using Application.Interfaces.Persistance;
 using FluentValidation;
 
 namespace Application.Validators.Requests.Genres.Commands
 {
     public class CreateGenreRequestValidator : AbstractValidator<CreateGenreRequest>
     {
-        public CreateGenreRequestValidator(IUnitOfWork unitOfWork)
+        public CreateGenreRequestValidator()
         {
             RuleFor(createGenreRequest => createGenreRequest.Name)
                 .NotNull()

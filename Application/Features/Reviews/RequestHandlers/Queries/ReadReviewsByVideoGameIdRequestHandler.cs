@@ -11,15 +11,15 @@ namespace Application.Features.Reviews.RequestHandlers.Queries
 {
     public class ReadReviewsByVideoGameIdRequestHandler : IRequestHandler<ReadReviewsByVideoGameIdRequest, HttpResponseDto<ReviewDto>>
     {
-        private readonly IUnitOfWork _unitOfWork;
+        private readonly IReviewRepository _reviewRepository;
 
         private readonly IValidator<ReadReviewsByVideoGameIdRequest> _validator;
 
         private readonly ILogger<ReadReviewsByVideoGameIdRequestHandler> _logger;
 
-        public ReadReviewsByVideoGameIdRequestHandler(IUnitOfWork unitOfWork, IValidator<ReadReviewsByVideoGameIdRequest> validator, ILogger<ReadReviewsByVideoGameIdRequestHandler> logger)
+        public ReadReviewsByVideoGameIdRequestHandler(IReviewRepository reviewRepository, IValidator<ReadReviewsByVideoGameIdRequest> validator, ILogger<ReadReviewsByVideoGameIdRequestHandler> logger)
         {
-            _unitOfWork = unitOfWork ?? throw new ArgumentNullException(nameof(unitOfWork));
+            _reviewRepository = reviewRepository ?? throw new ArgumentNullException(nameof(reviewRepository));
             _validator = validator ?? throw new ArgumentNullException(nameof(validator));
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
@@ -46,7 +46,7 @@ namespace Application.Features.Reviews.RequestHandlers.Queries
                     return httpResponseDto1;
                 }
 
-                var reviewDtos = await _unitOfWork.ReviewRepository.ReadByVideoGameIdAsync(readReviewsByVideoGameIdRequest.VideoGameId, cancellationToken);
+                var reviewDtos = await _reviewRepository.ReadByVideoGameIdAsync(readReviewsByVideoGameIdRequest.VideoGameId, cancellationToken);
 
                 var httpResponseDto = new HttpResponseDto<ReviewDto>(reviewDtos.ToArray(), StatusCodes.Status200OK);
                 _logger.LogInformation("Done ReadReviewsByVideoGameId {@HttpResponseDto}.", httpResponseDto);

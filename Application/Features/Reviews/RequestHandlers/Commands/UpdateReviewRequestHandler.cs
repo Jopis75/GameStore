@@ -12,7 +12,7 @@ namespace Application.Features.Reviews.RequestHandlers.Commands
 {
     public class UpdateReviewRequestHandler : IRequestHandler<UpdateReviewRequest, HttpResponseDto<ReviewDto>>
     {
-        private readonly IUnitOfWork _unitOfWork;
+        private readonly IReviewRepository _reviewRepository;
 
         private readonly IMapper _mapper;
 
@@ -20,9 +20,9 @@ namespace Application.Features.Reviews.RequestHandlers.Commands
 
         private readonly ILogger<UpdateReviewRequestHandler> _logger;
 
-        public UpdateReviewRequestHandler(IUnitOfWork unitOfWork, IMapper mapper, IValidator<UpdateReviewRequest> validator, ILogger<UpdateReviewRequestHandler> logger)
+        public UpdateReviewRequestHandler(IReviewRepository reviewRepository, IMapper mapper, IValidator<UpdateReviewRequest> validator, ILogger<UpdateReviewRequestHandler> logger)
         {
-            _unitOfWork = unitOfWork ?? throw new ArgumentNullException(nameof(unitOfWork));
+            _reviewRepository = reviewRepository ?? throw new ArgumentNullException(nameof(reviewRepository));
             _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
             _validator = validator ?? throw new ArgumentNullException(nameof(validator));
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
@@ -51,9 +51,7 @@ namespace Application.Features.Reviews.RequestHandlers.Commands
                 }
 
                 var reviewDto = _mapper.Map<ReviewDto>(updateReviewRequest);
-                var updatedReviewDto = await _unitOfWork.ReviewRepository.UpdateAsync(reviewDto, cancellationToken);
-                
-                await _unitOfWork.SaveAsync();
+                var updatedReviewDto = await _reviewRepository.UpdateAsync(reviewDto, cancellationToken);
 
                 var httpResponseDto = new HttpResponseDto<ReviewDto>(updatedReviewDto, StatusCodes.Status200OK);
                 _logger.LogInformation("Done UpdateReview {@HttpResponseDto}.", httpResponseDto);

@@ -10,13 +10,13 @@ namespace Application.Features.VideoGames.RequestHandlers.Queries
 {
     public class ReadVideoGameAllRequestHandler : IRequestHandler<ReadVideoGameAllRequest, HttpResponseDto<VideoGameDto>>
     {
-        private readonly IUnitOfWork _unitOfWork;
+        private readonly IVideoGameRepository _videoGameRepository;
 
         private readonly ILogger<ReadVideoGameAllRequestHandler> _logger;
 
-        public ReadVideoGameAllRequestHandler(IUnitOfWork unitOfWork, ILogger<ReadVideoGameAllRequestHandler> logger)
+        public ReadVideoGameAllRequestHandler(IVideoGameRepository videoGameRepository, ILogger<ReadVideoGameAllRequestHandler> logger)
         {
-            _unitOfWork = unitOfWork ?? throw new ArgumentNullException(nameof(unitOfWork));
+            _videoGameRepository = videoGameRepository ?? throw new ArgumentNullException(nameof(videoGameRepository));
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
@@ -26,7 +26,7 @@ namespace Application.Features.VideoGames.RequestHandlers.Queries
             {
                 _logger.LogInformation("Begin ReadVideoGameAll {@ReadVideoGameAllRequest}.", readVideoGameAllRequest);
 
-                var videoGameDtos = await _unitOfWork.VideoGameRepository.ReadAllAsync(cancellationToken);
+                var videoGameDtos = await _videoGameRepository.ReadAllAsync(cancellationToken);
 
                 var httpResponseDto = new HttpResponseDto<VideoGameDto>(videoGameDtos.ToArray(), StatusCodes.Status200OK);
                 _logger.LogInformation("Done ReadVideoGameAll {@HttpResponseDto}.", httpResponseDto);

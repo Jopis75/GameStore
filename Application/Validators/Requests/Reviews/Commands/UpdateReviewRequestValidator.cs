@@ -7,6 +7,10 @@ namespace Application.Validators.Requests.Reviews.Commands
     {
         public UpdateReviewRequestValidator()
         {
+            RuleFor(updateReviewRequest => updateReviewRequest.Id)
+                .GreaterThan(0)
+                .WithMessage("{PropertyName} must be greater than 0.");
+
             RuleFor(updateReviewRequest => updateReviewRequest.Grade)
                 .GreaterThanOrEqualTo(0)
                 .WithMessage("{PropertyName} must be greater than or equal to 0.")

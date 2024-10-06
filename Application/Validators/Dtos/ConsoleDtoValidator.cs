@@ -1,23 +1,16 @@
-﻿using Application.Interfaces.Persistance;
-using Domain.Dtos;
+﻿using Domain.Dtos;
 using FluentValidation;
 
 namespace Application.Validators.Dtos
 {
     public class ConsoleDtoValidator : AbstractValidator<ConsoleDto>
     {
-        public ConsoleDtoValidator(IUnitOfWork unitOfWork)
+        public ConsoleDtoValidator()
         {
             RuleFor(consoleDto => consoleDto.Name)
                 .NotNull()
                 .NotEmpty()
-                .WithMessage("{PropertyName} is required.")
-                .MustAsync(async (name, cancellationToken) =>
-                {
-                    var consoleDtos = await unitOfWork.ConsoleRepository.ReadByNameAsync(name, cancellationToken);
-                    return consoleDtos.Any() == false;
-                })
-                .WithMessage("{PropertyName} must be unique.");
+                .WithMessage("{PropertyName} is required.");
 
             RuleFor(consoleDto => consoleDto.DeveloperId)
                 .GreaterThan(0)

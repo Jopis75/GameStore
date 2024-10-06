@@ -11,15 +11,15 @@ namespace Application.Features.Genres.RequestHandlers.Commands
 {
     public class DeleteGenreRequestHandler : IRequestHandler<DeleteGenreRequest, HttpResponseDto<GenreDto>>
     {
-        private readonly IUnitOfWork _unitOfWork;
+        private readonly IGenreRepository _genreRepository;
 
         private readonly IValidator<DeleteGenreRequest> _validator;
 
         private readonly ILogger<DeleteGenreRequestHandler> _logger;
 
-        public DeleteGenreRequestHandler(IUnitOfWork unitOfWork, IValidator<DeleteGenreRequest> validator, ILogger<DeleteGenreRequestHandler> logger)
+        public DeleteGenreRequestHandler(IGenreRepository genreRepository, IValidator<DeleteGenreRequest> validator, ILogger<DeleteGenreRequestHandler> logger)
         {
-            _unitOfWork = unitOfWork ?? throw new ArgumentNullException(nameof(unitOfWork));
+            _genreRepository = genreRepository ?? throw new ArgumentNullException(nameof(genreRepository));
             _validator = validator ?? throw new ArgumentNullException(nameof(validator));
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
@@ -29,8 +29,6 @@ namespace Application.Features.Genres.RequestHandlers.Commands
             try
             {
                 _logger.LogInformation("Begin DeleteGenre {@DeleteGenreRequest}.", deleteGenreRequest);
-
-                cancellationToken.ThrowIfCancellationRequested();
 
                 if (deleteGenreRequest == null)
                 {
@@ -48,8 +46,7 @@ namespace Application.Features.Genres.RequestHandlers.Commands
                     return httpResponseDto1;
                 }
 
-                var deletedGenreDto = await _unitOfWork.GenreRepository.DeleteByIdAsync(deleteGenreRequest.Id, cancellationToken);
-                await _unitOfWork.SaveAsync();
+                var deletedGenreDto = await _genreRepository.DeleteByIdAsync(deleteGenreRequest.Id, cancellationToken);
 
                 var httpResponseDto = new HttpResponseDto<GenreDto>(deletedGenreDto, StatusCodes.Status200OK);
                 _logger.LogInformation("Done DeleteGenre {@HttpResponseDto}.", httpResponseDto);

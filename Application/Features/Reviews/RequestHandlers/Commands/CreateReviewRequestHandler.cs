@@ -12,7 +12,7 @@ namespace Application.Features.Reviews.RequestHandlers.Commands
 {
     public class CreateReviewRequestHandler : IRequestHandler<CreateReviewRequest, HttpResponseDto<ReviewDto>>
     {
-        private readonly IUnitOfWork _unitOfWork;
+        private readonly IReviewRepository _reviewRepository;
 
         private readonly IMapper _mapper;
 
@@ -20,9 +20,9 @@ namespace Application.Features.Reviews.RequestHandlers.Commands
 
         private readonly ILogger<CreateReviewRequestHandler> _logger;
 
-        public CreateReviewRequestHandler(IUnitOfWork unitOfWork, IMapper mapper, IValidator<CreateReviewRequest> validator, ILogger<CreateReviewRequestHandler> logger)
+        public CreateReviewRequestHandler(IReviewRepository reviewRepository, IMapper mapper, IValidator<CreateReviewRequest> validator, ILogger<CreateReviewRequestHandler> logger)
         {
-            _unitOfWork = unitOfWork ?? throw new ArgumentNullException(nameof(unitOfWork));
+            _reviewRepository = reviewRepository ?? throw new ArgumentNullException(nameof(reviewRepository));
             _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
             _validator = validator ?? throw new ArgumentNullException(nameof(validator));
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
@@ -51,9 +51,7 @@ namespace Application.Features.Reviews.RequestHandlers.Commands
                 }
 
                 var reviewDto = _mapper.Map<ReviewDto>(createReviewRequest);
-                var createdReviewDto = await _unitOfWork.ReviewRepository.CreateAsync(reviewDto, cancellationToken);
-                
-                await _unitOfWork.SaveAsync();
+                var createdReviewDto = await _reviewRepository.CreateAsync(reviewDto, cancellationToken);
 
                 var httpResponseDto = new HttpResponseDto<ReviewDto>(createdReviewDto, StatusCodes.Status201Created);
                 _logger.LogInformation("Done CreateReview {@HttpResponseDto}.", httpResponseDto);

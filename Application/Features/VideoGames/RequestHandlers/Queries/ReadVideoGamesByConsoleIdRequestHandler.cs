@@ -11,15 +11,15 @@ namespace Application.Features.VideoGames.RequestHandlers.Queries
 {
     public class ReadVideoGamesByConsoleIdRequestHandler : IRequestHandler<ReadVideoGamesByConsoleIdRequest, HttpResponseDto<VideoGameDto>>
     {
-        private readonly IUnitOfWork _unitOfWork;
+        private readonly IVideoGameRepository _videoGameRepository;
 
         private readonly IValidator<ReadVideoGamesByConsoleIdRequest> _validator;
 
         private readonly ILogger<ReadVideoGamesByConsoleIdRequestHandler> _logger;
 
-        public ReadVideoGamesByConsoleIdRequestHandler(IUnitOfWork unitOfWork, IValidator<ReadVideoGamesByConsoleIdRequest> validator, ILogger<ReadVideoGamesByConsoleIdRequestHandler> logger)
+        public ReadVideoGamesByConsoleIdRequestHandler(IVideoGameRepository videoGameRepository, IValidator<ReadVideoGamesByConsoleIdRequest> validator, ILogger<ReadVideoGamesByConsoleIdRequestHandler> logger)
         {
-            _unitOfWork = unitOfWork ?? throw new ArgumentNullException(nameof(unitOfWork));
+            _videoGameRepository = videoGameRepository ?? throw new ArgumentNullException(nameof(videoGameRepository));
             _validator = validator ?? throw new ArgumentNullException(nameof(validator));
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
@@ -46,7 +46,7 @@ namespace Application.Features.VideoGames.RequestHandlers.Queries
                     return httpResponseDto1;
                 }
 
-                var videoGameDtos = await _unitOfWork.VideoGameRepository.ReadByConsoleIdAsync(readVideoGamesByConsoleIdRequest.ConsoleId, cancellationToken);
+                var videoGameDtos = await _videoGameRepository.ReadByConsoleIdAsync(readVideoGamesByConsoleIdRequest.ConsoleId, cancellationToken);
 
                 var httpResponseDto = new HttpResponseDto<VideoGameDto>(videoGameDtos.ToArray(), StatusCodes.Status200OK);
                 _logger.LogInformation("Done ReadVideoGamesByConsoleId {@HttpResponseDto}.", httpResponseDto);

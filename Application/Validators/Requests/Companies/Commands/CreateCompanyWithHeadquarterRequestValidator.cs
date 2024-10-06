@@ -1,13 +1,12 @@
 ﻿using Application.Features.Companies.Requests.Commands;
-using Application.Interfaces.Persistance;
-using Application.Validators.Dtos;
+using Application.Validators.Requests.Addresses.Commands;
 using FluentValidation;
 
 namespace Application.Validators.Requests.Companies.Commands
 {
     public class CreateCompanyWithHeadquarterRequestValidator : AbstractValidator<CreateCompanyWithHeadquarterRequest>
     {
-        public CreateCompanyWithHeadquarterRequestValidator(IUnitOfWork unitOfWork)
+        public CreateCompanyWithHeadquarterRequestValidator()
         {
             RuleFor(createCompanyWithHeadquarterRequest => createCompanyWithHeadquarterRequest.Name)
                 .NotNull()
@@ -21,7 +20,7 @@ namespace Application.Validators.Requests.Companies.Commands
 
             RuleFor(createCompanyWithHeadquarterRequest => createCompanyWithHeadquarterRequest.Headquarter)
                 .NotNull()
-                .SetValidator(createCompanyWithHeadquarterRequest => new AddressDtoValidator(unitOfWork));
+                .SetValidator(createCompanyWithHeadquarterRequest => new CreateAddressRequestValidator());
 
             RuleFor(createCompanyWithHeadquarterRequest => createCompanyWithHeadquarterRequest.CompanyType)
                 .NotEmpty()

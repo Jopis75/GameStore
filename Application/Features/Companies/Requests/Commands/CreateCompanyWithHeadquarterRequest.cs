@@ -1,4 +1,5 @@
 ﻿using Application.Dtos.General;
+using Application.Features.Addresses.Requests.Commands;
 using Domain.Dtos;
 using Domain.Enums;
 using MediatR;
@@ -11,7 +12,7 @@ namespace Application.Features.Companies.Requests.Commands
 
         public string EmailAddress { get; set; } = String.Empty;
 
-        public AddressDto Headquarter { get; set; } = new();
+        public CreateAddressRequest Headquarter { get; set; } = new();
 
         public int HeadquarterId { get; set; }
 

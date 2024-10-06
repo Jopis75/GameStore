@@ -10,13 +10,13 @@ namespace Application.Features.Consoles.RequestHandlers.Queries
 {
     public class ReadConsoleAllRequestHandler : IRequestHandler<ReadConsoleAllRequest, HttpResponseDto<ConsoleDto>>
     {
-        private readonly IUnitOfWork _unitOfWork;
+        private readonly IConsoleRepository _consoleRepository;
 
         private readonly ILogger<ReadConsoleAllRequestHandler> _logger;
 
-        public ReadConsoleAllRequestHandler(IUnitOfWork unitOfWork, ILogger<ReadConsoleAllRequestHandler> logger)
+        public ReadConsoleAllRequestHandler(IConsoleRepository consoleRepository, ILogger<ReadConsoleAllRequestHandler> logger)
         {
-            _unitOfWork = unitOfWork ?? throw new ArgumentNullException(nameof(unitOfWork));
+            _consoleRepository = consoleRepository ?? throw new ArgumentNullException(nameof(consoleRepository));
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
@@ -26,7 +26,7 @@ namespace Application.Features.Consoles.RequestHandlers.Queries
             {
                 _logger.LogInformation("Begin ReadConsoleAll {@ReadConsoleAllRequest}.", readConsoleAllRequest);
 
-                var consoleDtos = await _unitOfWork.ConsoleRepository.ReadAllAsync(cancellationToken);
+                var consoleDtos = await _consoleRepository.ReadAllAsync(cancellationToken);
 
                 var httpResponseDto = new HttpResponseDto<ConsoleDto>(consoleDtos.ToArray(), StatusCodes.Status200OK);
                 _logger.LogInformation("Done ReadConsoleAll {@HttpResponseDto}.", httpResponseDto);

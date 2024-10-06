@@ -1,12 +1,11 @@
 ﻿using Application.Features.VideoGames.Requests.Commands;
-using Application.Interfaces.Persistance;
 using FluentValidation;
 
 namespace Application.Validators.Requests.VideoGames.Commands
 {
     public class CreateVideoGameRequestValidator : AbstractValidator<CreateVideoGameRequest>
     {
-        public CreateVideoGameRequestValidator(IUnitOfWork unitOfWork)
+        public CreateVideoGameRequestValidator()
         {
             RuleFor(createVideoGameRequest => createVideoGameRequest.Title)
                 .NotNull()

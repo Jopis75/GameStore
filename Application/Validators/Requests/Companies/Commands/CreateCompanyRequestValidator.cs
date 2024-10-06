@@ -1,12 +1,11 @@
 ﻿using Application.Features.Companies.Requests.Commands;
-using Application.Interfaces.Persistance;
 using FluentValidation;
 
 namespace Application.Validators.Requests.Companies.Commands
 {
     public class CreateCompanyRequestValidator : AbstractValidator<CreateCompanyRequest>
     {
-        public CreateCompanyRequestValidator(IUnitOfWork unitOfWork)
+        public CreateCompanyRequestValidator()
         {
             RuleFor(createCompanyRequest => createCompanyRequest.Name)
                 .NotNull()

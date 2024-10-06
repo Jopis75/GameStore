@@ -1,12 +1,11 @@
 ﻿using Application.Features.Addresses.Requests.Commands;
-using Application.Interfaces.Persistance;
 using FluentValidation;
 
 namespace Application.Validators.Requests.Addresses.Commands
 {
     public class CreateAddressRequestValidator : AbstractValidator<CreateAddressRequest>
     {
-        public CreateAddressRequestValidator(IUnitOfWork unitOfWork)
+        public CreateAddressRequestValidator()
         {
             RuleFor(createAddressRequest => createAddressRequest.StreetAddress)
                 .NotNull()
@@ -19,11 +18,6 @@ namespace Application.Validators.Requests.Addresses.Commands
                 .WithMessage("{PropertyName} is required.");
 
             RuleFor(createAddressRequest => createAddressRequest.PostalCode)
-                .NotNull()
-                .NotEmpty()
-                .WithMessage("{PropertyName} is required.");
-
-            RuleFor(createAddressRequest => createAddressRequest.Country)
                 .NotNull()
                 .NotEmpty()
                 .WithMessage("{PropertyName} is required.");

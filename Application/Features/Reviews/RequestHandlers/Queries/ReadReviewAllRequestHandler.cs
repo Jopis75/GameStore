@@ -10,13 +10,13 @@ namespace Application.Features.Reviews.RequestHandlers.Queries
 {
     public class ReadReviewAllRequestHandler : IRequestHandler<ReadReviewAllRequest, HttpResponseDto<ReviewDto>>
     {
-        private readonly IUnitOfWork _unitOfWork;
+        private readonly IReviewRepository _reviewRepository;
 
         private readonly ILogger<ReadReviewAllRequestHandler> _logger;
 
-        public ReadReviewAllRequestHandler(IUnitOfWork unitOfWork, ILogger<ReadReviewAllRequestHandler> logger)
+        public ReadReviewAllRequestHandler(IReviewRepository reviewRepository, ILogger<ReadReviewAllRequestHandler> logger)
         {
-            _unitOfWork = unitOfWork ?? throw new ArgumentNullException(nameof(unitOfWork));
+            _reviewRepository = reviewRepository ?? throw new ArgumentNullException(nameof(reviewRepository));
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
@@ -26,7 +26,7 @@ namespace Application.Features.Reviews.RequestHandlers.Queries
             {
                 _logger.LogInformation("Begin ReadReviewAll {@ReadReviewAllRequest}.", readReviewAllRequest);
 
-                var reviewDtos = await _unitOfWork.ReviewRepository.ReadAllAsync(cancellationToken);
+                var reviewDtos = await _reviewRepository.ReadAllAsync(cancellationToken);
 
                 var httpResponseDto = new HttpResponseDto<ReviewDto>(reviewDtos.ToArray(), StatusCodes.Status200OK);
                 _logger.LogInformation("Done ReadReviewAll {@HttpResponseDto}.", httpResponseDto);

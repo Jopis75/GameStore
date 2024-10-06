@@ -10,7 +10,7 @@ namespace Application.Validators.Dtos
     //LINE 4: COUNTRY NAME(UPPERCASE LETTERS IN ENGLISH)
     public class AddressDtoValidator : AbstractValidator<AddressDto>
     {
-        public AddressDtoValidator(IUnitOfWork unitOfWork)
+        public AddressDtoValidator()
         {
             RuleFor(addressDto => addressDto.StreetAddress)
                 .NotNull()
@@ -22,17 +22,7 @@ namespace Application.Validators.Dtos
                 .NotEmpty()
                 .WithMessage("{PropertyName} is required.");
 
-            RuleFor(addressDto => addressDto.State)
-                .NotNull()
-                .NotEmpty()
-                .WithMessage("{PropertyName} is required.");
-
             RuleFor(addressDto => addressDto.PostalCode)
-                .NotNull()
-                .NotEmpty()
-                .WithMessage("{PropertyName} is required.");
-
-            RuleFor(addressDto => addressDto.Country)
                 .NotNull()
                 .NotEmpty()
                 .WithMessage("{PropertyName} is required.");

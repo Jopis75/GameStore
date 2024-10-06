@@ -8,6 +8,8 @@ namespace Application.Features.ConsoleVideoGames.Requests.Commands
     {
         public int ConsoleId { get; set; }
 
+        public int Id { get; set; }
+
         public int VideoGameId { get; set; }
     }
 }

@@ -11,13 +11,13 @@ namespace Application.Features.Genres.RequestHandlers.Queries
 {
     public class ReadGenreAllRequestHandler : IRequestHandler<ReadGenreAllRequest, HttpResponseDto<GenreDto>>
     {
-        private readonly IUnitOfWork _unitOfWork;
+        private readonly IGenreRepository _genreRepository;
 
         private readonly ILogger<ReadGenreAllRequestHandler> _logger;
 
-        public ReadGenreAllRequestHandler(IUnitOfWork unitOfWork, ILogger<ReadGenreAllRequestHandler> logger)
+        public ReadGenreAllRequestHandler(IGenreRepository genreRepository, ILogger<ReadGenreAllRequestHandler> logger)
         {
-            _unitOfWork = unitOfWork ?? throw new ArgumentNullException(nameof(unitOfWork));
+            _genreRepository = genreRepository ?? throw new ArgumentNullException(nameof(genreRepository));
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
@@ -27,7 +27,7 @@ namespace Application.Features.Genres.RequestHandlers.Queries
             {
                 _logger.LogInformation("Begin ReadGenreAll {@ReadGenreAllRequest}.", readGenreAllRequest);
 
-                var genreDtos = await _unitOfWork.GenreRepository.ReadAllAsync(cancellationToken);
+                var genreDtos = await _genreRepository.ReadAllAsync(cancellationToken);
 
                 var httpResponseDto = new HttpResponseDto<GenreDto>(genreDtos.ToArray(), StatusCodes.Status200OK);
                 _logger.LogInformation("Done ReadGenreAll {@HttpResponseDto}.", httpResponseDto);

@@ -20,7 +20,6 @@
 
 
 Next up:
-- Modify MediatoR Requests; Remove Dto and replace with props.
 - Convert the solution and all projects to .NET 8.
 - Add paging to repository queries.
 - Integration with PlayStation Trophy API.

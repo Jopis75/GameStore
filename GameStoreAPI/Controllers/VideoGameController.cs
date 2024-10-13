@@ -1,9 +1,11 @@
 ﻿using Application.Dtos.General;
+using Application.Dtos.General.Interfaces;
 using Application.Features.VideoGames.Requests.Commands;
 using Application.Features.VideoGames.Requests.Queries;
 using Domain.Dtos;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using System.Text;
 
 namespace GameStoreAPI.Controllers
 {
@@ -38,6 +40,20 @@ namespace GameStoreAPI.Controllers
         {
             var httpResponseDto = await _mediator.Send(new DeleteVideoGameRequest { Id = id });
             return StatusCode(httpResponseDto.StatusCode, httpResponseDto);
+        }
+
+        [HttpGet]
+        [Route("DownloadExcel/{consoleId]")]
+        [ProducesResponseType(typeof(HttpResponseDto<DownloadExcelDto>), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<ActionResult<HttpResponseDto<DownloadExcelDto>>> DownloadExcelAsync(int consoleId)
+        {
+            var httpResponseDto = await _mediator.Send(new DownloadExcelRequest { ConsoleId = consoleId });
+            return File(
+                httpResponseDto.Data[0].FileContents,
+                httpResponseDto.Data[0].ContentType,
+                httpResponseDto.Data[0].FileDownloadName);
         }
 
         [HttpGet]

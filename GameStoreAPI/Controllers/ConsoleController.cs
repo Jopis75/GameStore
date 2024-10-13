@@ -1,9 +1,11 @@
 ﻿using Application.Dtos.General;
+using Application.Dtos.General.Interfaces;
 using Application.Features.Consoles.Requests.Commands;
 using Application.Features.Consoles.Requests.Queries;
 using Domain.Dtos;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using System.Text;
 
 namespace GameStoreAPI.Controllers
 {

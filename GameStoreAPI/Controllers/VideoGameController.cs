@@ -42,18 +42,17 @@ namespace GameStoreAPI.Controllers
             return StatusCode(httpResponseDto.StatusCode, httpResponseDto);
         }
 
-        [HttpGet]
-        [Route("DownloadExcel/{consoleId]")]
+        [HttpPost]
+        [Route("DownloadExcel")]
         [ProducesResponseType(typeof(HttpResponseDto<DownloadExcelDto>), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult<HttpResponseDto<DownloadExcelDto>>> DownloadExcelAsync(int consoleId)
+        public async Task<ActionResult<HttpResponseDto<DownloadExcelDto>>> DownloadExcelAsync([FromBody] DownloadExcelRequest downloadExcelRequest)
         {
-            var httpResponseDto = await _mediator.Send(new DownloadExcelRequest { ConsoleId = consoleId });
-            return File(
-                httpResponseDto.Data[0].FileContents,
-                httpResponseDto.Data[0].ContentType,
-                httpResponseDto.Data[0].FileDownloadName);
+            var httpResponseDto = await _mediator.Send(downloadExcelRequest);
+            return httpResponseDto.Successful
+                ? File(httpResponseDto.Data[0].FileContents, httpResponseDto.Data[0].ContentType, httpResponseDto.Data[0].FileDownloadName)
+                : StatusCode(httpResponseDto.StatusCode, httpResponseDto);
         }
 
         [HttpGet]

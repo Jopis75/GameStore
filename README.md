@@ -16,6 +16,7 @@
 - AutoMapper.
 - FluentValidation.
 - Serilog.
+- ClosedXML.
 - JWT authentication.
 
 

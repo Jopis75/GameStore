@@ -21,11 +21,14 @@ namespace Persistance.Repositories
         {
             var videoGames = await Entities
                 .AsNoTracking()
-                .Include(videoGame => videoGame.ConsoleVideoGames)
-                    .ThenInclude(consoleVideoGame => consoleVideoGame.Console)
-                .Include(videoGame => videoGame.Reviews)
                 .Include(videoGame => videoGame.Developer)
                     .ThenInclude(developer => developer.Headquarter)
+                .Include(videoGame => videoGame.ConsoleVideoGames)
+                    .ThenInclude(consoleVideoGame => consoleVideoGame.Console)
+                .Include(videoGame => videoGame.VideoGameGenres)
+                    .ThenInclude(videoGameGenre => videoGameGenre.Genre)
+                .Include(videoGame => videoGame.Trophies)
+                .Include(videoGame => videoGame.Reviews)
                 .Where(videoGame => videoGame.ConsoleVideoGames.Any(consoleVideoGame => consoleVideoGame.ConsoleId == consoleId))
                 .ToArrayAsync(cancellationToken);
 

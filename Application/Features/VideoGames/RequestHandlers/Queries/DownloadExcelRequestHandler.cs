@@ -3,6 +3,7 @@ using Application.Dtos.General.Interfaces;
 using Application.Features.VideoGames.Requests.Queries;
 using Application.Interfaces.Persistance;
 using ClosedXML.Excel;
+using Domain.Dtos;
 using FluentValidation;
 using MediatR;
 using Microsoft.AspNetCore.Http;
@@ -50,14 +51,15 @@ namespace Application.Features.VideoGames.RequestHandlers.Queries
 
                 var videoGameDtos = await _videoGameRepository.ReadByConsoleIdAsync(downloadExcelRequest.ConsoleId, cancellationToken);
 
-                // Use ClosedXML package here.
-                // https://learn.microsoft.com/en-us/answers/questions/835030/how-to-download-as-excel-file-from-selected-rows-i
+                var fileContents = GetFileContents(videoGameDtos);
 
                 var downloadExcelDto = new DownloadExcelDto
                 {
                     ContentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-                    FileContents = CreateFileContents(),
-                    FileDownloadName = downloadExcelRequest.FileDownloadName
+                    FileContents = fileContents,
+                    FileDownloadName = downloadExcelRequest.FileDownloadName,
+                    CreatedAt = DateTime.Now,
+                    CreatedBy = String.Empty
                 };
 
                 var httpResponseDto = new HttpResponseDto<DownloadExcelDto>(downloadExcelDto, StatusCodes.Status200OK);
@@ -78,42 +80,56 @@ namespace Application.Features.VideoGames.RequestHandlers.Queries
             }
         }
 
-        class Employee
+        private byte[] GetFileContents(IEnumerable<VideoGameDto> videoGameDtos)
         {
-            public int EmpID { get; set; }
+            var worksheetName = GetWorksheetName(videoGameDtos);
 
-            public string EmpName { get; set; }
-        }
+            var dataTable = new DataTable(worksheetName);
+            dataTable.Columns.Add("Title", typeof(string));
+            dataTable.Columns.Add("Developer", typeof(string));
+            dataTable.Columns.Add("Platform", typeof(string));
+            dataTable.Columns.Add("Genre", typeof(string));
+            dataTable.Columns.Add("Release date", typeof(DateTime));
+            dataTable.Columns.Add("Purchase date", typeof(DateTime));
+            dataTable.Columns.Add("Price (SEK)", typeof(decimal));
+            dataTable.Columns.Add("Total time played", typeof(TimeSpan));
 
-        private byte[] CreateFileContents()
-        {
-            var testdata = new List<Employee>()
+            foreach (var videoGameDto in videoGameDtos)
             {
-                new Employee(){ EmpID=101, EmpName="Johnny"},
-                new Employee(){ EmpID=102, EmpName="Tom"},
-                new Employee(){ EmpID=103, EmpName="Jack"},
-                new Employee(){ EmpID=104, EmpName="Vivian"},
-                new Employee(){ EmpID=105, EmpName="Edward"},
-            };
-            //using System.Data;  
-            DataTable dt = new DataTable("Grid");
-            dt.Columns.AddRange(new DataColumn[2] { new DataColumn("EmpID"),
-                                    new DataColumn("EmpName") });
-
-            foreach (var emp in testdata)
-            {
-                dt.Rows.Add(emp.EmpID, emp.EmpName);
+                dataTable.Rows.Add(
+                    videoGameDto.Title,
+                    $"{videoGameDto.Developer.Name} {(videoGameDto.Developer.TradeName)}",
+                    videoGameDto.ConsoleVideoGames.First().Console.Name,
+                    String.Join(", ", videoGameDto.VideoGameGenres.Select(genre => genre.Genre.Name)),
+                    videoGameDto.ReleaseDate.Date,
+                    videoGameDto.PurchaseDate.Date,
+                    videoGameDto.Price,
+                    videoGameDto.TotalTimePlayed
+                );
             }
-            //using ClosedXML.Excel;  
-            using (XLWorkbook wb = new XLWorkbook())
+
+            using (var xmlWorkbook = new XLWorkbook())
             {
-                wb.Worksheets.Add(dt);
-                using (MemoryStream stream = new MemoryStream())
+                xmlWorkbook.Worksheets.Add(dataTable);
+
+                using (var memoryStream = new MemoryStream())
                 {
-                    wb.SaveAs(stream);
-                    return stream.ToArray();
+                    xmlWorkbook.SaveAs(memoryStream);
+                    return memoryStream.ToArray();
                 }
             }
+        }
+
+        private string GetWorksheetName(IEnumerable<VideoGameDto> videoGameDtos)
+        {
+            var consoleName = videoGameDtos
+                .First()
+                .ConsoleVideoGames
+                .First()
+                .Console
+                .Name;
+
+            return $"{consoleName} games";
         }
     }
 }

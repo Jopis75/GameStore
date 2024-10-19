@@ -20,76 +20,52 @@ namespace Application.Profiles
         public GameStoreProfile()
         {
             // Domain.Dtos.
-            CreateMap<Address, AddressDto>()
-                .ReverseMap();
-            CreateMap<Company, CompanyDto>()
-                .ReverseMap();
-            CreateMap<Product, ProductDto>()
-                .ReverseMap();
-            CreateMap<Console, ConsoleDto>()
-                .ReverseMap();
-            CreateMap<ConsoleVideoGame, ConsoleVideoGameDto>()
-                .ReverseMap();
-            CreateMap<Review, ReviewDto>()
-                .ReverseMap();
-            CreateMap<Product, ProductDto>()
-                .ReverseMap();
-            CreateMap<VideoGame, VideoGameDto>()
-                .ReverseMap();
+            CreateMap<Address, AddressDto>().ReverseMap();
+            CreateMap<Company, CompanyDto>().ReverseMap();
+            CreateMap<Genre, GenreDto>().ReverseMap();
+            CreateMap<Console, ConsoleDto>().ReverseMap();
+            CreateMap<ConsoleVideoGame, ConsoleVideoGameDto>().ReverseMap();
+            CreateMap<Product, ProductDto>().ReverseMap();
+            CreateMap<Review, ReviewDto>().ReverseMap();
+            CreateMap<Trophy, TrophyDto>().ReverseMap();
+            CreateMap<VideoGame, VideoGameDto>().ReverseMap();
+            CreateMap<VideoGameGenre, VideoGameGenreDto>().ReverseMap();
 
             // Application.Dtos.Identity.
-            CreateMap<ApplicationUser, UserDto>()
-                .ReverseMap();
+            CreateMap<ApplicationUser, UserDto>().ReverseMap();
 
             // Application.Features.Addresses.Requests.
-            CreateMap<CreateAddressRequest, AddressDto>()
-                .ReverseMap();
-            CreateMap<UpdateAddressRequest, AddressDto>()
-                .ReverseMap();
+            CreateMap<CreateAddressRequest, AddressDto>().ReverseMap();
+            CreateMap<UpdateAddressRequest, AddressDto>().ReverseMap();
 
             // Application.Features.Companies.Requests.
-            CreateMap<CreateCompanyRequest, CompanyDto>()
-                .ReverseMap();
-            CreateMap<CreateCompanyWithHeadquarterRequest, CompanyDto>()
-                .ReverseMap();
-            CreateMap<UpdateCompanyRequest, CompanyDto>()
-                .ReverseMap();
+            CreateMap<CreateCompanyRequest, CompanyDto>().ReverseMap();
+            CreateMap<CreateCompanyWithHeadquarterRequest, CompanyDto>().ReverseMap();
+            CreateMap<UpdateCompanyRequest, CompanyDto>().ReverseMap();
 
             // Application.Features.Consoles.Requests.
-            CreateMap<CreateConsoleRequest, ConsoleDto>()
-                .ReverseMap();
-            CreateMap<UpdateConsoleRequest, ConsoleDto>()
-                .ReverseMap();
+            CreateMap<CreateConsoleRequest, ConsoleDto>().ReverseMap();
+            CreateMap<UpdateConsoleRequest, ConsoleDto>().ReverseMap();
 
             // Application.Features.ConsoleVideoGames.Requests.
-            CreateMap<CreateConsoleVideoGameRequest, ConsoleVideoGameDto>()
-                .ReverseMap();
-            CreateMap<UpdateConsoleVideoGameRequest, ConsoleVideoGameDto>()
-                .ReverseMap();
+            CreateMap<CreateConsoleVideoGameRequest, ConsoleVideoGameDto>().ReverseMap();
+            CreateMap<UpdateConsoleVideoGameRequest, ConsoleVideoGameDto>().ReverseMap();
 
             // Application.Features.Genres.Requests.
-            CreateMap<CreateGenreRequest, GenreDto>()
-                .ReverseMap();
-            CreateMap<UpdateGenreRequest, GenreDto>()
-                .ReverseMap();
+            CreateMap<CreateGenreRequest, GenreDto>().ReverseMap();
+            CreateMap<UpdateGenreRequest, GenreDto>().ReverseMap();
 
             // Application.Features.Reviews.Requests.
-            CreateMap<CreateReviewRequest, ReviewDto>()
-                .ReverseMap();
-            CreateMap<UpdateReviewRequest, ReviewDto>()
-                .ReverseMap();
+            CreateMap<CreateReviewRequest, ReviewDto>().ReverseMap();
+            CreateMap<UpdateReviewRequest, ReviewDto>().ReverseMap();
 
             // Application.Features.Trophies.Requests.
-            CreateMap<CreateTrophyRequest, TrophyDto>()
-                .ReverseMap();
-            CreateMap<UpdateTrophyRequest, TrophyDto>()
-                .ReverseMap();
+            CreateMap<CreateTrophyRequest, TrophyDto>().ReverseMap();
+            CreateMap<UpdateTrophyRequest, TrophyDto>().ReverseMap();
 
             // Application.Features.VideoGames.Requests.
-            CreateMap<CreateVideoGameRequest, VideoGameDto>()
-                .ReverseMap();
-            CreateMap<UpdateVideoGameRequest, VideoGameDto>()
-                .ReverseMap();
+            CreateMap<CreateVideoGameRequest, VideoGameDto>().ReverseMap();
+            CreateMap<UpdateVideoGameRequest, VideoGameDto>().ReverseMap();
         }
     }
 }

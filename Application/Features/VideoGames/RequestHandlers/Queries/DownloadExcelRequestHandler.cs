@@ -16,13 +16,16 @@ namespace Application.Features.VideoGames.RequestHandlers.Queries
     {
         private readonly IVideoGameRepository _videoGameRepository;
 
+        private readonly IConsoleRepository _consoleRepository;
+
         private readonly IValidator<DownloadExcelRequest> _validator;
 
         private readonly ILogger<DownloadExcelRequestHandler> _logger;
 
-        public DownloadExcelRequestHandler(IVideoGameRepository videoGameRepository, IValidator<DownloadExcelRequest> validator, ILogger<DownloadExcelRequestHandler> logger)
+        public DownloadExcelRequestHandler(IVideoGameRepository videoGameRepository, IConsoleRepository consoleRepository, IValidator<DownloadExcelRequest> validator, ILogger<DownloadExcelRequestHandler> logger)
         {
             _videoGameRepository = videoGameRepository ?? throw new ArgumentNullException(nameof(videoGameRepository));
+            _consoleRepository = consoleRepository ?? throw new ArgumentNullException(nameof(consoleRepository));
             _validator = validator ?? throw new ArgumentNullException(nameof(validator));
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
@@ -50,8 +53,9 @@ namespace Application.Features.VideoGames.RequestHandlers.Queries
                 }
 
                 var videoGameDtos = await _videoGameRepository.ReadByConsoleIdAsync(downloadExcelRequest.ConsoleId, cancellationToken);
+                var console = await _consoleRepository.ReadByIdAsync(downloadExcelRequest.ConsoleId, cancellationToken);
 
-                var fileContents = GetFileContents(videoGameDtos);
+                var fileContents = GetFileContents(videoGameDtos, console.Name);
 
                 var downloadExcelDto = new DownloadExcelDto
                 {
@@ -80,11 +84,9 @@ namespace Application.Features.VideoGames.RequestHandlers.Queries
             }
         }
 
-        private byte[] GetFileContents(IEnumerable<VideoGameDto> videoGameDtos)
+        private byte[] GetFileContents(IEnumerable<VideoGameDto> videoGameDtos, string consoleName)
         {
-            var worksheetName = GetWorksheetName(videoGameDtos);
-
-            var dataTable = new DataTable(worksheetName);
+            var dataTable = new DataTable($"{consoleName} Games");
             dataTable.Columns.Add("Title", typeof(string));
             dataTable.Columns.Add("Developer", typeof(string));
             dataTable.Columns.Add("Platform", typeof(string));
@@ -98,7 +100,7 @@ namespace Application.Features.VideoGames.RequestHandlers.Queries
             {
                 dataTable.Rows.Add(
                     videoGameDto.Title,
-                    $"{videoGameDto.Developer.Name} {(videoGameDto.Developer.TradeName)}",
+                    $"{videoGameDto.Developer.Name} ({videoGameDto.Developer.TradeName})",
                     videoGameDto.ConsoleVideoGames.First().Console.Name,
                     String.Join(", ", videoGameDto.VideoGameGenres.Select(genre => genre.Genre.Name)),
                     videoGameDto.ReleaseDate.Date,
@@ -108,28 +110,16 @@ namespace Application.Features.VideoGames.RequestHandlers.Queries
                 );
             }
 
-            using (var xmlWorkbook = new XLWorkbook())
+            using (var workbook = new XLWorkbook())
             {
-                xmlWorkbook.Worksheets.Add(dataTable);
+                workbook.Worksheets.Add(dataTable);
 
                 using (var memoryStream = new MemoryStream())
                 {
-                    xmlWorkbook.SaveAs(memoryStream);
+                    workbook.SaveAs(memoryStream);
                     return memoryStream.ToArray();
                 }
             }
-        }
-
-        private string GetWorksheetName(IEnumerable<VideoGameDto> videoGameDtos)
-        {
-            var consoleName = videoGameDtos
-                .First()
-                .ConsoleVideoGames
-                .First()
-                .Console
-                .Name;
-
-            return $"{consoleName} games";
         }
     }
 }

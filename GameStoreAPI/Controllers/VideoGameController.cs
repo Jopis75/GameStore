@@ -1,5 +1,4 @@
 ﻿using Application.Dtos.General;
-using Application.Dtos.General.Interfaces;
 using Application.Features.VideoGames.Requests.Commands;
 using Application.Features.VideoGames.Requests.Queries;
 using Domain.Dtos;
@@ -43,7 +42,7 @@ namespace GameStoreAPI.Controllers
         }
 
         [HttpPost]
-        [Route("DownloadExcel")]
+        [Route("DownloadExcelAsync")]
         [ProducesResponseType(typeof(HttpResponseDto<DownloadExcelDto>), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
@@ -95,6 +94,17 @@ namespace GameStoreAPI.Controllers
         public async Task<ActionResult<HttpResponseDto<VideoGameDto>>> UpdateAsync([FromBody] UpdateVideoGameRequest updateVideoGameRequest)
         {
             var httpResponseDto = await _mediator.Send(updateVideoGameRequest);
+            return StatusCode(httpResponseDto.StatusCode, httpResponseDto);
+        }
+
+        [HttpPost]
+        [Route("UploadGameStoreAsync")]
+        [ProducesResponseType(typeof(HttpResponseDto<UploadGameStoreDto>), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<ActionResult<HttpResponseDto<UploadGameStoreDto>>> UploadGameStoreAsync([FromBody] UploadGameStoreRequest uploadGameStoreRequest)
+        {
+            var httpResponseDto = await _mediator.Send(uploadGameStoreRequest);
             return StatusCode(httpResponseDto.StatusCode, httpResponseDto);
         }
     }

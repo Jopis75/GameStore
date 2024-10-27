@@ -1,5 +1,4 @@
 ﻿using Application.Dtos.General;
-using Application.Dtos.General.Interfaces;
 using MediatR;
 
 namespace Application.Features.VideoGames.Requests.Queries

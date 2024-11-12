@@ -21,7 +21,9 @@
 
 
 Next up:
-- Convert the solution and all projects to .NET 8.
+- Convert the solution and all projects to .NET 9.
 - Add paging to repository queries.
 - Integration with PlayStation Trophy API.
 - CI/CD using GitHub Actions.
+- Using ADO.NET to read data.
+- Use EF Core Transaction.

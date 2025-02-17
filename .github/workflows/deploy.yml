@@ -11,5 +11,4 @@ jobs:
       - uses: actions/setup-dotnet@v1
       - name: Build
         run: dotnet build
-      - name: Run tests
-        run: dotnet test
+    

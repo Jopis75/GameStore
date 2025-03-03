@@ -4,7 +4,6 @@ using Application.Features.VideoGames.Requests.Queries;
 using Domain.Dtos;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using System.Text;
 
 namespace GameStoreAPI.Controllers
 {
@@ -99,12 +98,12 @@ namespace GameStoreAPI.Controllers
 
         [HttpPost]
         [Route("UploadGameStoreAsync")]
-        [ProducesResponseType(typeof(HttpResponseDto<UploadGameStoreDto>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(HttpResponseDto<UploadGameStoreFileDto>), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult<HttpResponseDto<UploadGameStoreDto>>> UploadGameStoreAsync(IFormFile formFile)
+        public async Task<ActionResult<HttpResponseDto<UploadGameStoreFileDto>>> UploadGameStoreAsync(IFormFile formFile)
         {
-            var httpResponseDto = await _mediator.Send(new UploadGameStoreRequest { FormFile = formFile });
+            var httpResponseDto = await _mediator.Send(new UploadGameStoreFileRequest { FormFile = formFile });
             return StatusCode(httpResponseDto.StatusCode, httpResponseDto);
         }
     }

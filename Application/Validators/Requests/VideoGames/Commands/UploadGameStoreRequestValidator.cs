@@ -4,7 +4,7 @@ using FluentValidation;
 
 namespace Application.Validators.Requests.VideoGames.Commands
 {
-    public class UploadGameStoreRequestValidator : AbstractValidator<UploadGameStoreRequest>
+    public class UploadGameStoreRequestValidator : AbstractValidator<UploadGameStoreFileRequest>
     {
         public UploadGameStoreRequestValidator()
         {

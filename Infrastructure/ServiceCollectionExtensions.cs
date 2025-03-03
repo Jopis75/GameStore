@@ -44,6 +44,7 @@ namespace Infrastructure
         private static IServiceCollection AddServices(this IServiceCollection serviceCollection)
         {
             serviceCollection.AddScoped<IAzureBlobStorageService, AzureBlobStorageService>();
+            serviceCollection.AddScoped<IGameStoreFileService, GameStoreFileService>();
 
             return serviceCollection;
         }

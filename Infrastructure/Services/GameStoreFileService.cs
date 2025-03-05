@@ -1,4 +1,5 @@
-﻿using Application.Exceptions;
+﻿using Application.Dtos.General;
+using Application.Exceptions;
 using Application.Interfaces.Infrastructure;
 using Application.Interfaces.Persistance;
 using Domain.Dtos;
@@ -28,8 +29,10 @@ namespace Infrastructure.Services
             _logger = logger;
         }
 
-        public async Task UpsertAsync(IFormFile formFile, CancellationToken cancellationToken)
+        public async Task<UploadGameStoreFileDto<VideoGameDto>> UpsertAsync(IFormFile formFile, CancellationToken cancellationToken)
         {
+            var videoGameDtos = new List<VideoGameDto>();
+
             var memoryStream = new MemoryStream();
             await formFile.CopyToAsync(memoryStream, cancellationToken);
             memoryStream.Position = 0;
@@ -54,8 +57,10 @@ namespace Infrastructure.Services
 
                     var videoGameDto = await UpsertVideoGameAsync(videoGameTitle, videoGameReleaseDate, videoGamePurchaseDate, videoGamePrice, cancellationToken);
 
+                    videoGameDtos.Add(videoGameDto);
+
                     // Log success.
-                    _logger.LogInformation("Upsert {@VideoGameDto}.", videoGameDto);
+                    _logger.LogInformation("Success Upsert {@VideoGameDto}.", videoGameDto);
                 }
                 catch (OperationCanceledException)
                 {
@@ -64,14 +69,18 @@ namespace Infrastructure.Services
                 catch (Exception ex)
                 {
                     // Log error.
-                    _logger.LogError(ex, "Error Upsert {@Row}.", row);
+                    _logger.LogError(ex, $"Error Upsert {row}.");
                 }
             }
+
+            var uploadGameStoreFileDto = new UploadGameStoreFileDto<VideoGameDto>(videoGameDtos.ToArray(), DateTime.Now, "System");
+
+            return uploadGameStoreFileDto;
         }
 
-        public Task UpsertAsync(Stream stream)
+        public Task<UploadGameStoreFileDto<VideoGameDto>> UpsertAsync(Stream stream, CancellationToken cancellationToken)
         {
-            return Task.FromResult(0);
+            throw new NotImplementedException();
         }
 
         private async Task<CompanyDto> GetCompanyDtoAsync(string name, CancellationToken cancellationToken)
@@ -166,16 +175,13 @@ namespace Infrastructure.Services
             }
             else // Update if exist.
             {
-                var videoGameDto = new VideoGameDto
-                {
-                    Id = videoGameDtos.First().Id,
-                    Title = title,
-                    ReleaseDate = releaseDate,
-                    PurchaseDate = purchaseDate,
-                    Price = price,
-                    UpdatedAt = DateTime.Now,
-                    UpdatedBy = "System"
-                };
+                var videoGameDto = videoGameDtos.First();
+                videoGameDto.Title = title;
+                videoGameDto.ReleaseDate = releaseDate;
+                videoGameDto.PurchaseDate = purchaseDate;
+                videoGameDto.Price = price;
+                videoGameDto.UpdatedAt = DateTime.Now;
+                videoGameDto.UpdatedBy = "System";
 
                 return await _videoGameRepository.UpdateAsync(videoGameDto, cancellationToken);
             }

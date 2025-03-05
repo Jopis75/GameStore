@@ -1,11 +1,13 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Application.Dtos.General;
+using Domain.Dtos;
+using Microsoft.AspNetCore.Http;
 
 namespace Application.Interfaces.Infrastructure
 {
     public interface IGameStoreFileService
     {
-        Task UpsertAsync(IFormFile formFile, CancellationToken cancellationToken);
+        Task<UploadGameStoreFileDto<VideoGameDto>> UpsertAsync(IFormFile formFile, CancellationToken cancellationToken);
 
-        Task UpsertAsync(Stream stream);
+        Task<UploadGameStoreFileDto<VideoGameDto>> UpsertAsync(Stream stream, CancellationToken cancellationToken);
     }
 }

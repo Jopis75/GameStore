@@ -1,6 +1,7 @@
 ﻿using Abp.Linq.Expressions;
 using Application.Interfaces.Persistance;
 using AutoMapper;
+using DocumentFormat.OpenXml.Wordprocessing;
 using Domain.Dtos;
 using Domain.Entities;
 using Domain.Filters;
@@ -92,19 +93,14 @@ namespace Persistance.Repositories
             return companies.Select(Mapper.Map<CompanyDto>);
         }
 
-        public async Task<CompanyDto> ReadByNameAsync(string name, CancellationToken cancellationToken)
+        public async Task<IEnumerable<CompanyDto>> ReadByNameAsync(string name, CancellationToken cancellationToken)
         {
-            var company = await Entities
+            var companies = await Entities
                 .AsNoTracking()
-                .Where(company => company.Name == name)
-                .SingleOrDefaultAsync(cancellationToken);
+                .Where(company => EF.Functions.Like(company.Name, $"{name}%"))
+                .ToArrayAsync(cancellationToken);
 
-            if (company== null)
-            {
-                return new CompanyDto();
-            }
-
-            return Mapper.Map<CompanyDto>(company);
+            return companies.Select(Mapper.Map<CompanyDto>);
         }
 
         public async Task<CompanyDto> ReadByPhoneNumberAsync(string phoneNumber, CancellationToken cancellationToken)
@@ -122,19 +118,14 @@ namespace Persistance.Repositories
             return Mapper.Map<CompanyDto>(company);
         }
 
-        public async Task<CompanyDto> ReadByTradeNameAsync(string tradeName, CancellationToken cancellationToken)
+        public async Task<IEnumerable<CompanyDto>> ReadByTradeNameAsync(string tradeName, CancellationToken cancellationToken)
         {
-            var company = await Entities
+            var companies = await Entities
                 .AsNoTracking()
-                .Where(company => company.TradeName == tradeName)
-                .SingleOrDefaultAsync(cancellationToken);
+                .Where(company => EF.Functions.Like(company.TradeName, $"{tradeName}%"))
+                .ToArrayAsync(cancellationToken);
 
-            if (company == null)
-            {
-                return new CompanyDto();
-            }
-
-            return Mapper.Map<CompanyDto>(company);
+            return companies.Select(Mapper.Map<CompanyDto>);
         }
     }
 }

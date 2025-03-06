@@ -14,18 +14,24 @@ namespace Infrastructure.Services
 
         private readonly IConsoleRepository _consoleRepository;
 
+        private readonly IConsoleVideoGameRepository _consoleVideoGameRepository;
+
         private readonly IGenreRepository _genreRepository;
 
         private readonly IVideoGameRepository _videoGameRepository;
 
+        private readonly IVideoGameGenreRepository _videoGameGenreRepository;
+
         private readonly ILogger<GameStoreFileService> _logger;
 
-        public GameStoreFileService(ICompanyRepository companyRepository, IConsoleRepository consoleRepository, IGenreRepository genreRepository, IVideoGameRepository videoGameRepository, ILogger<GameStoreFileService> logger)
+        public GameStoreFileService(ICompanyRepository companyRepository, IConsoleRepository consoleRepository, IConsoleVideoGameRepository consoleVideoGameRepository, IGenreRepository genreRepository, IVideoGameRepository videoGameRepository, IVideoGameGenreRepository videoGameGenreRepository, ILogger<GameStoreFileService> logger)
         {
             _companyRepository = companyRepository;
             _consoleRepository = consoleRepository;
+            _consoleVideoGameRepository = consoleVideoGameRepository;
             _genreRepository = genreRepository;
             _videoGameRepository = videoGameRepository;
+            _videoGameGenreRepository = videoGameGenreRepository;
             _logger = logger;
         }
 
@@ -55,7 +61,14 @@ namespace Infrastructure.Services
                     var videoGamePurchaseDate = DateTime.Parse(columns[5].Trim());
                     var videoGamePrice = Decimal.Parse(columns[6].Trim());
 
-                    var videoGameDto = await UpsertVideoGameAsync(videoGameTitle, videoGameReleaseDate, videoGamePurchaseDate, videoGamePrice, cancellationToken);
+                    // Update or insert VideoGame.
+                    var videoGameDto = await UpsertVideoGameAsync(videoGameTitle, videoGameReleaseDate, videoGamePurchaseDate, videoGamePrice, developerName, cancellationToken);
+
+                    // Update or insert ConsoleVideoGame.
+                    var consoleVideoGameDtos = await UpsertConsoleVideoGamesAsync(consoleName, videoGameDto.Id, cancellationToken);
+
+                    // Update or insert VideoGameGenre.
+                    var videoGameGenreDtos = await UpsertVideoGameGenresAsync(videoGameDto.Id, genreNames, cancellationToken);
 
                     videoGameDtos.Add(videoGameDto);
 
@@ -83,86 +96,26 @@ namespace Infrastructure.Services
             throw new NotImplementedException();
         }
 
-        private async Task<CompanyDto> GetCompanyDtoAsync(string name, CancellationToken cancellationToken)
+        private async Task<ConsoleVideoGameDto> UpsertConsoleVideoGamesAsync(string consoleName, int videoGameId, CancellationToken cancellationToken)
         {
-            var companyDtos = await _companyRepository.ReadByNameAsync(name, cancellationToken);
+            var consoleVideoGameDtos = await _consoleVideoGameRepository.ReadByVideoGameIdAsync(videoGameId, cancellationToken);
 
-            if (companyDtos.Count() != 1)
-            {
-                throw new NotFoundException(name, name);
-            }
-
-            return companyDtos.First();
-        }
-
-        private async Task<ConsoleVideoGameDto> GetConsoleVideoGameDtoAsync(string consoleName, int videoGameId, CancellationToken cancellationToken)
-        {
             var consoleDtos = await _consoleRepository.ReadByNameAsync(consoleName, cancellationToken);
 
+            // Did not found an exact match.
             if (consoleDtos.Count() != 1)
             {
                 throw new NotFoundException(consoleName, consoleName);
             }
 
-            var consoleVideoGameDto = new ConsoleVideoGameDto
+            var consoleDto = consoleDtos.First();
+
+            if (consoleVideoGameDtos.Any(cvgd => cvgd.ConsoleId == consoleDto.Id) == false)
             {
-                ConsoleId = consoleDtos.First().Id,
-                VideoGameId = videoGameId,
-                CreatedAt = DateTime.Now,
-                CreatedBy = "System",
-                DeletedAt = null,
-                DeletedBy = String.Empty,
-                UpdatedAt = null,
-                UpdatedBy = String.Empty
-            };
-
-            return consoleVideoGameDto;
-        }
-
-        private async Task<List<VideoGameGenreDto>> GetVideoGameGenreDtosAsync(int videoGameId, string[] genreNames, CancellationToken cancellationToken)
-        {
-            var videoGameGenreDtos = new List<VideoGameGenreDto>();
-
-            foreach (var genreName in genreNames)
-            {
-                var genreDtos = await _genreRepository.ReadByNameAsync(genreName, cancellationToken);
-
-                if (genreDtos.Count() != 1)
+                var consoleVideoGameDto = new ConsoleVideoGameDto
                 {
-                    throw new NotFoundException(genreName, genreName);
-                }
-
-                videoGameGenreDtos.Add(new VideoGameGenreDto
-                {
+                    ConsoleId = consoleDto.Id,
                     VideoGameId = videoGameId,
-                    GenreId = genreDtos.First().Id,
-                    CreatedAt = DateTime.Now,
-                    CreatedBy = "System",
-                    DeletedAt = null,
-                    DeletedBy = String.Empty,
-                    UpdatedAt = null,
-                    UpdatedBy = String.Empty
-                });
-            }
-
-            return videoGameGenreDtos;
-        }
-
-        private async Task<VideoGameDto> UpsertVideoGameAsync(string title, DateTime releaseDate, DateTime purchaseDate, decimal price, CancellationToken cancellationToken)
-        {
-            var videoGameDtos = await _videoGameRepository.ReadByTitleAsync(title, cancellationToken);
-
-            var videoGameDtoCount = videoGameDtos.Count();
-
-            // Create if not exist.
-            if (videoGameDtoCount == 0)
-            {
-                var videoGameDto = new VideoGameDto
-                {
-                    Title = title,
-                    ReleaseDate = releaseDate,
-                    PurchaseDate = purchaseDate,
-                    Price = price,
                     CreatedAt = DateTime.Now,
                     CreatedBy = "System",
                     DeletedAt = null,
@@ -171,7 +124,92 @@ namespace Infrastructure.Services
                     UpdatedBy = String.Empty
                 };
 
-                return await _videoGameRepository.CreateAsync(videoGameDto, cancellationToken);
+                var createdConsoleVideoGameDto = await _consoleVideoGameRepository.CreateAsync(consoleVideoGameDto, cancellationToken);
+
+                return createdConsoleVideoGameDto;
+            }
+
+            return new ConsoleVideoGameDto();
+        }
+
+        private async Task<IEnumerable<VideoGameGenreDto>> UpsertVideoGameGenresAsync(int videoGameId, string[] genreNames, CancellationToken cancellationToken)
+        {
+            var videoGameGenreDtos = await _videoGameGenreRepository.ReadByVideoGameIdAsync(videoGameId, cancellationToken);
+
+            foreach (var videoGameGenreDto in videoGameGenreDtos)
+            {
+                await _videoGameGenreRepository.DeleteAsync(videoGameGenreDto, cancellationToken);
+            }
+
+            var createdVideoGameGenreDtos = new List<VideoGameGenreDto>();
+
+            foreach (var genreName in genreNames)
+            {
+                var genreDtos = await _genreRepository.ReadByNameAsync(genreName, cancellationToken);
+
+                // Did not found exact match.
+                if (genreDtos.Count() != 1)
+                {
+                    throw new NotFoundException(genreName, genreName);
+                }
+
+                var genreDto = genreDtos.First();
+
+                var videoGameGenreDto = new VideoGameGenreDto
+                {
+                    VideoGameId = videoGameId,
+                    GenreId = genreDto.Id,
+                    CreatedAt = DateTime.Now,
+                    CreatedBy = "System",
+                    DeletedAt = null,
+                    DeletedBy = String.Empty,
+                    UpdatedAt = null,
+                    UpdatedBy = String.Empty
+                };
+
+                var createdVideoGameGenreDto = await _videoGameGenreRepository.CreateAsync(videoGameGenreDto, cancellationToken);
+
+                createdVideoGameGenreDtos.Add(createdVideoGameGenreDto);
+            }
+
+            return createdVideoGameGenreDtos;
+        }
+
+        private async Task<VideoGameDto> UpsertVideoGameAsync(string title, DateTime releaseDate, DateTime purchaseDate, decimal price, string developerName, CancellationToken cancellationToken)
+        {
+            var videoGameDtos = await _videoGameRepository.ReadByTitleAsync(title, cancellationToken);
+
+            var companyDtos = await _companyRepository.ReadByNameAsync(developerName, cancellationToken);
+
+            // Did not found an exact match.
+            if (companyDtos.Count() != 1)
+            {
+                throw new NotFoundException(developerName, developerName);
+            }
+
+            var companyDto = companyDtos.First();
+
+            // Create if not exist.
+            if (videoGameDtos.Count() == 0)
+            {
+                var videoGameDto = new VideoGameDto
+                {
+                    Title = title,
+                    ReleaseDate = releaseDate,
+                    PurchaseDate = purchaseDate,
+                    Price = price,
+                    DeveloperId = companyDto.Id,
+                    CreatedAt = DateTime.Now,
+                    CreatedBy = "System",
+                    DeletedAt = null,
+                    DeletedBy = String.Empty,
+                    UpdatedAt = null,
+                    UpdatedBy = String.Empty
+                };
+
+                var createdVideoGameDto = await _videoGameRepository.CreateAsync(videoGameDto, cancellationToken);
+
+                return createdVideoGameDto;
             }
             else // Update if exist.
             {
@@ -180,10 +218,13 @@ namespace Infrastructure.Services
                 videoGameDto.ReleaseDate = releaseDate;
                 videoGameDto.PurchaseDate = purchaseDate;
                 videoGameDto.Price = price;
+                videoGameDto.DeveloperId = companyDto.Id;
                 videoGameDto.UpdatedAt = DateTime.Now;
                 videoGameDto.UpdatedBy = "System";
 
-                return await _videoGameRepository.UpdateAsync(videoGameDto, cancellationToken);
+                var updatedVideoGameDto = await _videoGameRepository.UpdateAsync(videoGameDto, cancellationToken);
+
+                return updatedVideoGameDto;
             }
         }
     }

@@ -36,5 +36,15 @@ namespace Persistance.Repositories
 
             return videoGameGenres.Select(Mapper.Map<VideoGameGenreDto>);
         }
+
+        public async Task<IEnumerable<VideoGameGenreDto>> ReadByVideoGameIdAsync(int videoGameId, CancellationToken cancellationToken)
+        {
+            var videoGameGenres = await Entities
+                .AsNoTracking()
+                .Where(videoGameGenre => videoGameGenre.VideoGameId == videoGameId)
+                .ToArrayAsync(cancellationToken);
+
+            return videoGameGenres.Select(Mapper.Map<VideoGameGenreDto>);
+        }
     }
 }

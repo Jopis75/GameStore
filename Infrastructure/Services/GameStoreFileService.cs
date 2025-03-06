@@ -5,6 +5,7 @@ using Application.Interfaces.Persistance;
 using Domain.Dtos;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
+using System.IO;
 
 namespace Infrastructure.Services
 {
@@ -37,13 +38,20 @@ namespace Infrastructure.Services
 
         public async Task<UploadGameStoreFileDto<VideoGameDto>> UpsertAsync(IFormFile formFile, CancellationToken cancellationToken)
         {
-            var videoGameDtos = new List<VideoGameDto>();
-
             var memoryStream = new MemoryStream();
             await formFile.CopyToAsync(memoryStream, cancellationToken);
             memoryStream.Position = 0;
 
-            TextReader textReader = new StreamReader(memoryStream);
+            var uploadGameStoreFileDto = await UpsertAsync(memoryStream, cancellationToken);
+
+            return uploadGameStoreFileDto;
+        }
+
+        public async Task<UploadGameStoreFileDto<VideoGameDto>> UpsertAsync(Stream stream, CancellationToken cancellationToken)
+        {
+            var videoGameDtos = new List<VideoGameDto>();
+
+            TextReader textReader = new StreamReader(stream);
             var rows = (await textReader.ReadToEndAsync()).Split("\r\n");
 
             foreach (var row in rows)
@@ -89,11 +97,6 @@ namespace Infrastructure.Services
             var uploadGameStoreFileDto = new UploadGameStoreFileDto<VideoGameDto>(videoGameDtos.ToArray(), DateTime.Now, "System");
 
             return uploadGameStoreFileDto;
-        }
-
-        public Task<UploadGameStoreFileDto<VideoGameDto>> UpsertAsync(Stream stream, CancellationToken cancellationToken)
-        {
-            throw new NotImplementedException();
         }
 
         private async Task<ConsoleVideoGameDto> UpsertConsoleVideoGamesAsync(string consoleName, int videoGameId, CancellationToken cancellationToken)

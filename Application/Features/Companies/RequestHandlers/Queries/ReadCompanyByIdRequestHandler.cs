@@ -32,8 +32,9 @@ namespace Application.Features.Companies.RequestHandlers.Queries
 
                 if (readCompanyByIdRequest == null)
                 {
-                    var httpResponseDto1 = new HttpResponseDto<CompanyDto>(new ArgumentNullException(nameof(readCompanyByIdRequest)).Message, StatusCodes.Status400BadRequest);
-                    _logger.LogError("Error ReadCompanyById {@HttpResponseDto}.", httpResponseDto1);
+                    var ex = new ArgumentNullException(nameof(readCompanyByIdRequest));
+                    var httpResponseDto1 = new HttpResponseDto<CompanyDto>(ex.Message, StatusCodes.Status400BadRequest);
+                    _logger.LogError(ex, "Error ReadCompanyById {@HttpResponseDto}.", httpResponseDto1);
                     return httpResponseDto1;
                 }
 
@@ -41,8 +42,9 @@ namespace Application.Features.Companies.RequestHandlers.Queries
 
                 if (validationResult.IsValid == false)
                 {
-                    var httpResponseDto1 = new HttpResponseDto<CompanyDto>(new ValidationException(validationResult.Errors).Message, StatusCodes.Status400BadRequest);
-                    _logger.LogError("Error ReadCompanyById {@HttpResponseDto}.", httpResponseDto1);
+                    var ex = new ValidationException(validationResult.Errors);
+                    var httpResponseDto1 = new HttpResponseDto<CompanyDto>(ex.Message, StatusCodes.Status400BadRequest);
+                    _logger.LogError(ex, "Error ReadCompanyById {@HttpResponseDto}.", httpResponseDto1);
                     return httpResponseDto1;
                 }
 
@@ -55,13 +57,13 @@ namespace Application.Features.Companies.RequestHandlers.Queries
             catch (OperationCanceledException ex)
             {
                 var httpResponseDto1 = new HttpResponseDto<CompanyDto>(ex.Message, StatusCodes.Status500InternalServerError);
-                _logger.LogError("Canceled ReadCompanyById {@HttpResponseDto}.", httpResponseDto1);
+                _logger.LogError(ex, "Canceled ReadCompanyById {@HttpResponseDto}.", httpResponseDto1);
                 return httpResponseDto1;
             }
             catch (Exception ex)
             {
                 var httpResponseDto1 = new HttpResponseDto<CompanyDto>(ex.Message, StatusCodes.Status500InternalServerError);
-                _logger.LogError("Error ReadCompanyById {@HttpResponseDto}.", httpResponseDto1);
+                _logger.LogError(ex, "Error ReadCompanyById {@HttpResponseDto}.", httpResponseDto1);
                 return httpResponseDto1;
             }
         }

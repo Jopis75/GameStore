@@ -35,13 +35,13 @@ namespace Application.Features.Trophies.RequestHandlers.Queries
             catch (OperationCanceledException ex)
             {
                 var httpResponseDto1 = new HttpResponseDto<TrophyDto>(ex.Message, StatusCodes.Status500InternalServerError);
-                _logger.LogError("Canceled ReadTrophyAll {@HttpResponseDto}.", httpResponseDto1);
+                _logger.LogError(ex, "Canceled ReadTrophyAll {@HttpResponseDto}.", httpResponseDto1);
                 return httpResponseDto1;
             }
             catch (Exception ex)
             {
                 var httpResponseDto1 = new HttpResponseDto<TrophyDto>(ex.Message, StatusCodes.Status500InternalServerError);
-                _logger.LogError("Error ReadTrophyAll {@HttpResponseDto}.", httpResponseDto1);
+                _logger.LogError(ex, "Error ReadTrophyAll {@HttpResponseDto}.", httpResponseDto1);
                 return httpResponseDto1;
             }
         }

@@ -32,8 +32,9 @@ namespace Application.Features.Consoles.RequestHandlers.Queries
 
                 if (readConsoleByIdRequest == null)
                 {
-                    var httpResponseDto1 = new HttpResponseDto<ConsoleDto>(new ArgumentNullException(nameof(readConsoleByIdRequest)).Message, StatusCodes.Status400BadRequest);
-                    _logger.LogError("Error ReadConsoleById {@HttpResponseDto}.", httpResponseDto1);
+                    var ex = new ArgumentNullException(nameof(readConsoleByIdRequest));
+                    var httpResponseDto1 = new HttpResponseDto<ConsoleDto>(ex.Message, StatusCodes.Status400BadRequest);
+                    _logger.LogError(ex, "Error ReadConsoleById {@HttpResponseDto}.", httpResponseDto1);
                     return httpResponseDto1;
                 }
 
@@ -41,8 +42,9 @@ namespace Application.Features.Consoles.RequestHandlers.Queries
 
                 if (validationResult.IsValid == false)
                 {
-                    var httpResponseDto1 = new HttpResponseDto<ConsoleDto>(new ValidationException(validationResult.Errors).Message, StatusCodes.Status400BadRequest);
-                    _logger.LogError("Error ReadConsoleById {@HttpResponseDto}.", httpResponseDto1);
+                    var ex = new ValidationException(validationResult.Errors);
+                    var httpResponseDto1 = new HttpResponseDto<ConsoleDto>(ex.Message, StatusCodes.Status400BadRequest);
+                    _logger.LogError(ex, "Error ReadConsoleById {@HttpResponseDto}.", httpResponseDto1);
                     return httpResponseDto1;
                 }
 
@@ -55,13 +57,13 @@ namespace Application.Features.Consoles.RequestHandlers.Queries
             catch (OperationCanceledException ex)
             {
                 var httpResponseDto1 = new HttpResponseDto<ConsoleDto>(ex.Message, StatusCodes.Status500InternalServerError);
-                _logger.LogError("Canceled ReadConsoleById {@HttpResponseDto}.", httpResponseDto1);
+                _logger.LogError(ex, "Canceled ReadConsoleById {@HttpResponseDto}.", httpResponseDto1);
                 return httpResponseDto1;
             }
             catch (Exception ex)
             {
                 var httpResponseDto1 = new HttpResponseDto<ConsoleDto>(ex.Message, StatusCodes.Status500InternalServerError);
-                _logger.LogError("Error ReadConsoleById {@HttpResponseDto}.", httpResponseDto1);
+                _logger.LogError(ex, "Error ReadConsoleById {@HttpResponseDto}.", httpResponseDto1);
                 return httpResponseDto1;
             }
         }

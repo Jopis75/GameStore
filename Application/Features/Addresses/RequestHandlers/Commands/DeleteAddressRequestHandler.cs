@@ -32,8 +32,9 @@ namespace Application.Features.Addresses.RequestHandlers.Commands
 
                 if (deleteAddressRequest == null)
                 {
-                    var httpResponseDto1 = new HttpResponseDto<AddressDto>(new ArgumentNullException(nameof(deleteAddressRequest)).Message, StatusCodes.Status400BadRequest);
-                    _logger.LogError("Error DeleteAddress {@HttpResponseDto}.", httpResponseDto1);
+                    var ex = new ArgumentNullException(nameof(deleteAddressRequest));
+                    var httpResponseDto1 = new HttpResponseDto<AddressDto>(ex.Message, StatusCodes.Status400BadRequest);
+                    _logger.LogError(ex, "Error DeleteAddress {@HttpResponseDto}.", httpResponseDto1);
                     return httpResponseDto1;
                 }
 
@@ -41,8 +42,9 @@ namespace Application.Features.Addresses.RequestHandlers.Commands
 
                 if (validationResult.IsValid == false)
                 {
-                    var httpResponseDto1 = new HttpResponseDto<AddressDto>(new ValidationException(validationResult.Errors).Message, StatusCodes.Status400BadRequest);
-                    _logger.LogError("Error DeleteAddress {@HttpResponseDto}.", httpResponseDto1);
+                    var ex = new ValidationException(validationResult.Errors);
+                    var httpResponseDto1 = new HttpResponseDto<AddressDto>(ex.Message, StatusCodes.Status400BadRequest);
+                    _logger.LogError(ex, "Error DeleteAddress {@HttpResponseDto}.", httpResponseDto1);
                     return httpResponseDto1;
                 }
 
@@ -55,13 +57,13 @@ namespace Application.Features.Addresses.RequestHandlers.Commands
             catch (OperationCanceledException ex)
             {
                 var httpResponseDto1 = new HttpResponseDto<AddressDto>(ex.Message, StatusCodes.Status500InternalServerError);
-                _logger.LogError("Canceled DeleteAddress {@HttpResponseDto}.", httpResponseDto1);
+                _logger.LogError(ex, "Canceled DeleteAddress {@HttpResponseDto}.", httpResponseDto1);
                 return httpResponseDto1;
             }
             catch (Exception ex)
             {
                 var httpResponseDto1 = new HttpResponseDto<AddressDto>(ex.Message, StatusCodes.Status500InternalServerError);
-                _logger.LogError("Error DeleteAddress {@HttpResponseDto}.", httpResponseDto1);
+                _logger.LogError(ex, "Error DeleteAddress {@HttpResponseDto}.", httpResponseDto1);
                 return httpResponseDto1;
             }
         }

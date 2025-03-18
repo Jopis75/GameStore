@@ -32,8 +32,9 @@ namespace Application.Features.Companies.RequestHandlers.Commands
 
                 if (deleteCompanyRequest == null)
                 {
-                    var httpResponseDto1 = new HttpResponseDto<CompanyDto>(new ArgumentNullException(nameof(deleteCompanyRequest)).Message, StatusCodes.Status400BadRequest);
-                    _logger.LogError("Error DeleteCompany {@HttpResponseDto}.", httpResponseDto1);
+                    var ex = new ArgumentNullException(nameof(deleteCompanyRequest));
+                    var httpResponseDto1 = new HttpResponseDto<CompanyDto>(ex.Message, StatusCodes.Status400BadRequest);
+                    _logger.LogError(ex, "Error DeleteCompany {@HttpResponseDto}.", httpResponseDto1);
                     return httpResponseDto1;
                 }
 
@@ -41,8 +42,9 @@ namespace Application.Features.Companies.RequestHandlers.Commands
 
                 if (validationResult.IsValid == false)
                 {
-                    var httpResponseDto1 = new HttpResponseDto<CompanyDto>(new ValidationException(validationResult.Errors).Message, StatusCodes.Status400BadRequest);
-                    _logger.LogError("Error DeleteCompany {@HttpResponseDto}.", httpResponseDto1);
+                    var ex = new ValidationException(validationResult.Errors);
+                    var httpResponseDto1 = new HttpResponseDto<CompanyDto>(ex.Message, StatusCodes.Status400BadRequest);
+                    _logger.LogError(ex, "Error DeleteCompany {@HttpResponseDto}.", httpResponseDto1);
                     return httpResponseDto1;
                 }
 
@@ -55,13 +57,13 @@ namespace Application.Features.Companies.RequestHandlers.Commands
             catch (OperationCanceledException ex)
             {
                 var httpResponseDto1 = new HttpResponseDto<CompanyDto>(ex.Message, StatusCodes.Status500InternalServerError);
-                _logger.LogError("Canceled DeleteCompany {@HttpResponseDto}.", httpResponseDto1);
+                _logger.LogError(ex, "Canceled DeleteCompany {@HttpResponseDto}.", httpResponseDto1);
                 return httpResponseDto1;
             }
             catch (Exception ex)
             {
                 var httpResponseDto1 = new HttpResponseDto<CompanyDto>(ex.Message, StatusCodes.Status500InternalServerError);
-                _logger.LogError("Error DeleteCompany {@HttpResponseDto}.", httpResponseDto1);
+                _logger.LogError(ex, "Error DeleteCompany {@HttpResponseDto}.", httpResponseDto1);
                 return httpResponseDto1;
             }
         }

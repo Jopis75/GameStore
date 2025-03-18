@@ -32,8 +32,9 @@ namespace Application.Features.Genres.RequestHandlers.Queries
 
                 if (readGenreByIdRequest == null)
                 {
-                    var httpResponseDto1 = new HttpResponseDto<GenreDto>(new ArgumentNullException(nameof(readGenreByIdRequest)).Message, StatusCodes.Status400BadRequest);
-                    _logger.LogError("Error ReadGenreById {@HttpResponseDto}.", httpResponseDto1);
+                    var ex = new ArgumentNullException(nameof(readGenreByIdRequest));
+                    var httpResponseDto1 = new HttpResponseDto<GenreDto>(ex.Message, StatusCodes.Status400BadRequest);
+                    _logger.LogError(ex, "Error ReadGenreById {@HttpResponseDto}.", httpResponseDto1);
                     return httpResponseDto1;
                 }
 
@@ -41,8 +42,9 @@ namespace Application.Features.Genres.RequestHandlers.Queries
 
                 if (validationResult.IsValid == false)
                 {
-                    var httpResponseDto1 = new HttpResponseDto<GenreDto>(new ValidationException(validationResult.Errors).Message, StatusCodes.Status400BadRequest);
-                    _logger.LogError("Error ReadGenreById {@HttpResponseDto}.", httpResponseDto1);
+                    var ex = new ValidationException(validationResult.Errors);
+                    var httpResponseDto1 = new HttpResponseDto<GenreDto>(ex.Message, StatusCodes.Status400BadRequest);
+                    _logger.LogError(ex, "Error ReadGenreById {@HttpResponseDto}.", httpResponseDto1);
                     return httpResponseDto1;
                 }
 
@@ -55,13 +57,13 @@ namespace Application.Features.Genres.RequestHandlers.Queries
             catch (OperationCanceledException ex)
             {
                 var httpResponseDto1 = new HttpResponseDto<GenreDto>(ex.Message, StatusCodes.Status500InternalServerError);
-                _logger.LogError("Canceled ReadGenreById {@HttpResponseDto}.", httpResponseDto1);
+                _logger.LogError(ex, "Canceled ReadGenreById {@HttpResponseDto}.", httpResponseDto1);
                 return httpResponseDto1;
             }
             catch (Exception ex)
             {
                 var httpResponseDto1 = new HttpResponseDto<GenreDto>(ex.Message, StatusCodes.Status500InternalServerError);
-                _logger.LogError("Error ReadGenreById {@HttpResponseDto}.", httpResponseDto1);
+                _logger.LogError(ex, "Error ReadGenreById {@HttpResponseDto}.", httpResponseDto1);
                 return httpResponseDto1;
             }
         }

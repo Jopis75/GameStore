@@ -36,8 +36,9 @@ namespace Application.Features.Companies.RequestHandlers.Commands
 
                 if (createCompanyRequest == null)
                 {
-                    var httpResponseDto1 = new HttpResponseDto<CompanyDto>(new ArgumentNullException(nameof(createCompanyRequest)).Message, StatusCodes.Status400BadRequest);
-                    _logger.LogError("Error CreateCompany {@HttpResponseDto}.", httpResponseDto1);
+                    var ex = new ArgumentNullException(nameof(createCompanyRequest));
+                    var httpResponseDto1 = new HttpResponseDto<CompanyDto>(ex.Message, StatusCodes.Status400BadRequest);
+                    _logger.LogError(ex, "Error CreateCompany {@HttpResponseDto}.", httpResponseDto1);
                     return httpResponseDto1;
                 }
 
@@ -45,8 +46,9 @@ namespace Application.Features.Companies.RequestHandlers.Commands
 
                 if (validationResult.IsValid == false)
                 {
-                    var httpResponseDto1 = new HttpResponseDto<CompanyDto>(new ValidationException(validationResult.Errors).Message, StatusCodes.Status400BadRequest);
-                    _logger.LogError("Error CreateCompany {@HttpResponseDto}.", httpResponseDto1);
+                    var ex = new ValidationException(validationResult.Errors);
+                    var httpResponseDto1 = new HttpResponseDto<CompanyDto>(ex.Message, StatusCodes.Status400BadRequest);
+                    _logger.LogError(ex, "Error CreateCompany {@HttpResponseDto}.", httpResponseDto1);
                     return httpResponseDto1;
                 }
 
@@ -60,13 +62,13 @@ namespace Application.Features.Companies.RequestHandlers.Commands
             catch (OperationCanceledException ex)
             {
                 var httpResponseDto1 = new HttpResponseDto<CompanyDto>(ex.Message, StatusCodes.Status500InternalServerError);
-                _logger.LogError("Canceled CreateCompany {@HttpResponseDto}.", httpResponseDto1);
+                _logger.LogError(ex, "Canceled CreateCompany {@HttpResponseDto}.", httpResponseDto1);
                 return httpResponseDto1;
             }
             catch (Exception ex)
             {
                 var httpResponseDto1 = new HttpResponseDto<CompanyDto>(ex.Message, StatusCodes.Status500InternalServerError);
-                _logger.LogError("Error CreateCompany {@HttpResponseDto}.", httpResponseDto1);
+                _logger.LogError(ex, "Error CreateCompany {@HttpResponseDto}.", httpResponseDto1);
                 return httpResponseDto1;
             }
         }

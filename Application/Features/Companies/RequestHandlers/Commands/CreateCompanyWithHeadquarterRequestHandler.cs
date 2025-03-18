@@ -39,8 +39,9 @@ namespace Application.Features.Companies.RequestHandlers.Commands
 
                 if (createCompanyWithHeadquarterRequest == null)
                 {
-                    var httpResponseDto1 = new HttpResponseDto<CompanyDto>(new ArgumentNullException(nameof(createCompanyWithHeadquarterRequest)).Message, StatusCodes.Status400BadRequest);
-                    _logger.LogError("Error CreateCompanyWithHeadquarter {@HttpResponseDto}.", httpResponseDto1);
+                    var ex = new ArgumentNullException(nameof(createCompanyWithHeadquarterRequest));
+                    var httpResponseDto1 = new HttpResponseDto<CompanyDto>(ex.Message, StatusCodes.Status400BadRequest);
+                    _logger.LogError(ex, "Error CreateCompanyWithHeadquarter {@HttpResponseDto}.", httpResponseDto1);
                     return httpResponseDto1;
                 }
 
@@ -48,8 +49,9 @@ namespace Application.Features.Companies.RequestHandlers.Commands
 
                 if (validationResult.IsValid == false)
                 {
-                    var httpResponseDto1 = new HttpResponseDto<CompanyDto>(new ValidationException(validationResult.Errors).Message, StatusCodes.Status400BadRequest);
-                    _logger.LogError("Error CreateCompanyWithHeadquarter {@HttpResponseDto}.", httpResponseDto1);
+                    var ex = new ValidationException(validationResult.Errors);
+                    var httpResponseDto1 = new HttpResponseDto<CompanyDto>(ex.Message, StatusCodes.Status400BadRequest);
+                    _logger.LogError(ex, "Error CreateCompanyWithHeadquarter {@HttpResponseDto}.", httpResponseDto1);
                     return httpResponseDto1;
                 }
 
@@ -66,13 +68,13 @@ namespace Application.Features.Companies.RequestHandlers.Commands
             catch (OperationCanceledException ex)
             {
                 var httpResponseDto1 = new HttpResponseDto<CompanyDto>(ex.Message, StatusCodes.Status500InternalServerError);
-                _logger.LogError("Canceled CreateCompanyWithHeadquarter {@HttpResponseDto}.", httpResponseDto1);
+                _logger.LogError(ex, "Canceled CreateCompanyWithHeadquarter {@HttpResponseDto}.", httpResponseDto1);
                 return httpResponseDto1;
             }
             catch (Exception ex)
             {
                 var httpResponseDto1 = new HttpResponseDto<CompanyDto>(ex.Message, StatusCodes.Status500InternalServerError);
-                _logger.LogError("Error CreateCompanyWithHeadquarter {@HttpResponseDto}.", httpResponseDto1);
+                _logger.LogError(ex, "Error CreateCompanyWithHeadquarter {@HttpResponseDto}.", httpResponseDto1);
                 return httpResponseDto1;
             }
         }

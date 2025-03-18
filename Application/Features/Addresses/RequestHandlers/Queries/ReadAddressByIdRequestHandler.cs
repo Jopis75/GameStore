@@ -32,8 +32,9 @@ namespace Application.Features.Addresses.RequestHandlers.Queries
 
                 if (readAddressByIdRequest == null)
                 {
-                    var httpResponseDto1 = new HttpResponseDto<AddressDto>(new ArgumentNullException(nameof(readAddressByIdRequest)).Message, StatusCodes.Status400BadRequest);
-                    _logger.LogError("Error ReadAddressById {@HttpResponseDto}.", httpResponseDto1);
+                    var ex = new ArgumentNullException(nameof(readAddressByIdRequest));
+                    var httpResponseDto1 = new HttpResponseDto<AddressDto>(ex.Message, StatusCodes.Status400BadRequest);
+                    _logger.LogError(ex, "Error ReadAddressById {@HttpResponseDto}.", httpResponseDto1);
                     return httpResponseDto1;
                 }
 
@@ -41,8 +42,9 @@ namespace Application.Features.Addresses.RequestHandlers.Queries
 
                 if (validationResult.IsValid == false)
                 {
-                    var httpResponseDto1 = new HttpResponseDto<AddressDto>(new ValidationException(validationResult.Errors).Message, StatusCodes.Status400BadRequest);
-                    _logger.LogError("Error ReadAddressById {@HttpResponseDto}.", httpResponseDto1);
+                    var ex = new ValidationException(validationResult.Errors);
+                    var httpResponseDto1 = new HttpResponseDto<AddressDto>(ex.Message, StatusCodes.Status400BadRequest);
+                    _logger.LogError(ex, "Error ReadAddressById {@HttpResponseDto}.", httpResponseDto1);
                     return httpResponseDto1;
                 }
 
@@ -55,13 +57,13 @@ namespace Application.Features.Addresses.RequestHandlers.Queries
             catch (OperationCanceledException ex)
             {
                 var httpResponseDto1 = new HttpResponseDto<AddressDto>(ex.Message, StatusCodes.Status500InternalServerError);
-                _logger.LogError("Canceled ReadAddressById {@HttpResponseDto}.", httpResponseDto1);
+                _logger.LogError(ex, "Canceled ReadAddressById {@HttpResponseDto}.", httpResponseDto1);
                 return httpResponseDto1;
             }
             catch (Exception ex)
             {
                 var httpResponseDto1 = new HttpResponseDto<AddressDto>(ex.Message, StatusCodes.Status500InternalServerError);
-                _logger.LogError("Error ReadAddressById {@HttpResponseDto}.", httpResponseDto1);
+                _logger.LogError(ex, "Error ReadAddressById {@HttpResponseDto}.", httpResponseDto1);
                 return httpResponseDto1;
             }
         }

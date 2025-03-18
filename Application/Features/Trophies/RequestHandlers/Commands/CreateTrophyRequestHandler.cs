@@ -36,8 +36,9 @@ namespace Application.Features.Trophies.RequestHandlers.Commands
 
                 if (createTrophyRequest == null)
                 {
-                    var httpResponseDto1 = new HttpResponseDto<TrophyDto>(new ArgumentNullException(nameof(createTrophyRequest)).Message, StatusCodes.Status400BadRequest);
-                    _logger.LogError("Error CreateTrophy {@HttpResponseDto}.", httpResponseDto1);
+                    var ex = new ArgumentNullException(nameof(createTrophyRequest));
+                    var httpResponseDto1 = new HttpResponseDto<TrophyDto>(ex.Message, StatusCodes.Status400BadRequest);
+                    _logger.LogError(ex, "Error CreateTrophy {@HttpResponseDto}.", httpResponseDto1);
                     return httpResponseDto1;
                 }
 
@@ -45,8 +46,9 @@ namespace Application.Features.Trophies.RequestHandlers.Commands
 
                 if (validationResult.IsValid == false)
                 {
-                    var httpResponseDto1 = new HttpResponseDto<TrophyDto>(new ValidationException(validationResult.Errors).Message, StatusCodes.Status400BadRequest);
-                    _logger.LogError("Error CreateTrophy {@HttpResponseDto}.", httpResponseDto1);
+                    var ex = new ValidationException(validationResult.Errors);
+                    var httpResponseDto1 = new HttpResponseDto<TrophyDto>(ex.Message, StatusCodes.Status400BadRequest);
+                    _logger.LogError(ex, "Error CreateTrophy {@HttpResponseDto}.", httpResponseDto1);
                     return httpResponseDto1;
                 }
 
@@ -60,13 +62,13 @@ namespace Application.Features.Trophies.RequestHandlers.Commands
             catch (OperationCanceledException ex)
             {
                 var httpResponseDto1 = new HttpResponseDto<TrophyDto>(ex.Message, StatusCodes.Status500InternalServerError);
-                _logger.LogError("Canceled CreateTrophy {@HttpResponseDto}.", httpResponseDto1);
+                _logger.LogError(ex, "Canceled CreateTrophy {@HttpResponseDto}.", httpResponseDto1);
                 return httpResponseDto1;
             }
             catch (Exception ex)
             {
                 var httpResponseDto1 = new HttpResponseDto<TrophyDto>(ex.Message, StatusCodes.Status500InternalServerError);
-                _logger.LogError("Error CreateTrophy {@HttpResponseDto}.", httpResponseDto1);
+                _logger.LogError(ex, "Error CreateTrophy {@HttpResponseDto}.", httpResponseDto1);
                 return httpResponseDto1;
             }
         }

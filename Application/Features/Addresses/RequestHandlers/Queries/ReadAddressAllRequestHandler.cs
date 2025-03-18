@@ -35,13 +35,13 @@ namespace Application.Features.Addresses.RequestHandlers.Queries
             catch (OperationCanceledException ex)
             {
                 var httpResponseDto1 = new HttpResponseDto<AddressDto>(ex.Message, StatusCodes.Status500InternalServerError);
-                _logger.LogError("Canceled ReadAddressAll {@HttpResponseDto}.", httpResponseDto1);
+                _logger.LogError(ex, "Canceled ReadAddressAll {@HttpResponseDto}.", httpResponseDto1);
                 return httpResponseDto1;
             }
             catch (Exception ex)
             {
                 var httpResponseDto1 = new HttpResponseDto<AddressDto>(ex.Message, StatusCodes.Status500InternalServerError);
-                _logger.LogError("Error ReadAddressAll {@HttpResponseDto}.", httpResponseDto1);
+                _logger.LogError(ex, "Error ReadAddressAll {@HttpResponseDto}.", httpResponseDto1);
                 return httpResponseDto1;
             }
         }

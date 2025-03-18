@@ -32,8 +32,9 @@ namespace Application.Features.ConsoleVideoGames.RequestHandlers.Queries
 
                 if (readConsoleVideoGameByIdRequest == null)
                 {
-                    var httpResponseDto1 = new HttpResponseDto<ConsoleVideoGameDto>(new ArgumentNullException(nameof(readConsoleVideoGameByIdRequest)).Message, StatusCodes.Status400BadRequest);
-                    _logger.LogError("Error ReadConsoleVideoGameById {@HttpResponseDto}.", httpResponseDto1);
+                    var ex = new ArgumentNullException(nameof(readConsoleVideoGameByIdRequest));
+                    var httpResponseDto1 = new HttpResponseDto<ConsoleVideoGameDto>(ex.Message, StatusCodes.Status400BadRequest);
+                    _logger.LogError(ex, "Error ReadConsoleVideoGameById {@HttpResponseDto}.", httpResponseDto1);
                     return httpResponseDto1;
                 }
 
@@ -41,8 +42,9 @@ namespace Application.Features.ConsoleVideoGames.RequestHandlers.Queries
 
                 if (validationResult.IsValid == false)
                 {
-                    var httpResponseDto1 = new HttpResponseDto<ConsoleVideoGameDto>(new ValidationException(validationResult.Errors).Message, StatusCodes.Status400BadRequest);
-                    _logger.LogError("Error ReadConsoleVideoGameById {@HttpResponseDto}.", httpResponseDto1);
+                    var ex = new ValidationException(validationResult.Errors);
+                    var httpResponseDto1 = new HttpResponseDto<ConsoleVideoGameDto>(ex.Message, StatusCodes.Status400BadRequest);
+                    _logger.LogError(ex, "Error ReadConsoleVideoGameById {@HttpResponseDto}.", httpResponseDto1);
                     return httpResponseDto1;
                 }
 
@@ -55,13 +57,13 @@ namespace Application.Features.ConsoleVideoGames.RequestHandlers.Queries
             catch (OperationCanceledException ex)
             {
                 var httpResponseDto1 = new HttpResponseDto<ConsoleVideoGameDto>(ex.Message, StatusCodes.Status500InternalServerError);
-                _logger.LogError("Canceled ReadConsoleVideoGameById {@HttpResponseDto}.", httpResponseDto1);
+                _logger.LogError(ex, "Canceled ReadConsoleVideoGameById {@HttpResponseDto}.", httpResponseDto1);
                 return httpResponseDto1;
             }
             catch (Exception ex)
             {
                 var httpResponseDto1 = new HttpResponseDto<ConsoleVideoGameDto>(ex.Message, StatusCodes.Status500InternalServerError);
-                _logger.LogError("Error ReadConsoleVideoGameById {@HttpResponseDto}.", httpResponseDto1);
+                _logger.LogError(ex, "Error ReadConsoleVideoGameById {@HttpResponseDto}.", httpResponseDto1);
                 return httpResponseDto1;
             }
         }

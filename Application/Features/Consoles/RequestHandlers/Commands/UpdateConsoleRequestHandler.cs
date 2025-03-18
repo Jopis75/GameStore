@@ -36,8 +36,9 @@ namespace Application.Features.Consoles.RequestHandlers.Commands
 
                 if (updateConsoleRequest == null)
                 {
-                    var httpResponseDto1 = new HttpResponseDto<ConsoleDto>(new ArgumentNullException(nameof(updateConsoleRequest)).Message, StatusCodes.Status400BadRequest);
-                    _logger.LogError("Error UpdateConsole {@HttpResponseDto}.", httpResponseDto1);
+                    var ex = new ArgumentNullException(nameof(updateConsoleRequest));
+                    var httpResponseDto1 = new HttpResponseDto<ConsoleDto>(ex.Message, StatusCodes.Status400BadRequest);
+                    _logger.LogError(ex, "Error UpdateConsole {@HttpResponseDto}.", httpResponseDto1);
                     return httpResponseDto1;
                 }
 
@@ -45,8 +46,9 @@ namespace Application.Features.Consoles.RequestHandlers.Commands
 
                 if (validationResult.IsValid == false)
                 {
-                    var httpResponseDto1 = new HttpResponseDto<ConsoleDto>(new ValidationException(validationResult.Errors).Message, StatusCodes.Status400BadRequest);
-                    _logger.LogError("Error UpdateConsole {@HttpResponseDto}.", httpResponseDto1);
+                    var ex = new ValidationException(validationResult.Errors);
+                    var httpResponseDto1 = new HttpResponseDto<ConsoleDto>(ex.Message, StatusCodes.Status400BadRequest);
+                    _logger.LogError(ex, "Error UpdateConsole {@HttpResponseDto}.", httpResponseDto1);
                     return httpResponseDto1;
                 }
 
@@ -60,13 +62,13 @@ namespace Application.Features.Consoles.RequestHandlers.Commands
             catch (OperationCanceledException ex)
             {
                 var httpResponseDto1 = new HttpResponseDto<ConsoleDto>(ex.Message, StatusCodes.Status500InternalServerError);
-                _logger.LogError("Canceled UpdateConsole {@HttpResponseDto}.", httpResponseDto1);
+                _logger.LogError(ex, "Canceled UpdateConsole {@HttpResponseDto}.", httpResponseDto1);
                 return httpResponseDto1;
             }
             catch (Exception ex)
             {
                 var httpResponseDto1 = new HttpResponseDto<ConsoleDto>(ex.Message, StatusCodes.Status500InternalServerError);
-                _logger.LogError("Error UpdateConsole {@HttpResponseDto}.", httpResponseDto1);
+                _logger.LogError(ex, "Error UpdateConsole {@HttpResponseDto}.", httpResponseDto1);
                 return httpResponseDto1;
             }
         }

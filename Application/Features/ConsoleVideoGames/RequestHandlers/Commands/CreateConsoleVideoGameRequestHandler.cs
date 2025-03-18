@@ -36,8 +36,9 @@ namespace Application.Features.ConsoleVideoGames.RequestHandlers.Commands
 
                 if (createConsoleVideoGameRequest == null)
                 {
-                    var httpResponseDto1 = new HttpResponseDto<ConsoleVideoGameDto>(new ArgumentNullException(nameof(createConsoleVideoGameRequest)).Message, StatusCodes.Status400BadRequest);
-                    _logger.LogError("Error CreateConsoleVideoGame {@HttpResponseDto}.", httpResponseDto1);
+                    var ex = new ArgumentNullException(nameof(createConsoleVideoGameRequest));
+                    var httpResponseDto1 = new HttpResponseDto<ConsoleVideoGameDto>(ex.Message, StatusCodes.Status400BadRequest);
+                    _logger.LogError(ex, "Error CreateConsoleVideoGame {@HttpResponseDto}.", httpResponseDto1);
                     return httpResponseDto1;
                 }
 
@@ -45,8 +46,9 @@ namespace Application.Features.ConsoleVideoGames.RequestHandlers.Commands
 
                 if (validationResult.IsValid == false)
                 {
-                    var httpResponseDto1 = new HttpResponseDto<ConsoleVideoGameDto>(new ValidationException(validationResult.Errors).Message, StatusCodes.Status400BadRequest);
-                    _logger.LogError("Error CreateConsoleVideoGame {@HttpResponseDto}.", httpResponseDto1);
+                    var ex = new ValidationException(validationResult.Errors);
+                    var httpResponseDto1 = new HttpResponseDto<ConsoleVideoGameDto>(ex.Message, StatusCodes.Status400BadRequest);
+                    _logger.LogError(ex, "Error CreateConsoleVideoGame {@HttpResponseDto}.", httpResponseDto1);
                     return httpResponseDto1;
                 }
 
@@ -60,13 +62,13 @@ namespace Application.Features.ConsoleVideoGames.RequestHandlers.Commands
             catch (OperationCanceledException ex)
             {
                 var httpResponseDto1 = new HttpResponseDto<ConsoleVideoGameDto>(ex.Message, StatusCodes.Status500InternalServerError);
-                _logger.LogError("Canceled CreateConsoleVideoGame {@HttpResponseDto}.", httpResponseDto1);
+                _logger.LogError(ex, "Canceled CreateConsoleVideoGame {@HttpResponseDto}.", httpResponseDto1);
                 return httpResponseDto1;
             }
             catch (Exception ex)
             {
                 var httpResponseDto1 = new HttpResponseDto<ConsoleVideoGameDto>(ex.Message, StatusCodes.Status500InternalServerError);
-                _logger.LogError("Error CreateConsoleVideoGame {@HttpResponseDto}.", httpResponseDto1);
+                _logger.LogError(ex, "Error CreateConsoleVideoGame {@HttpResponseDto}.", httpResponseDto1);
                 return httpResponseDto1;
             }
         }

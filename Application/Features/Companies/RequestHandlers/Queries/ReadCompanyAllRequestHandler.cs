@@ -35,13 +35,13 @@ namespace Application.Features.Companies.RequestHandlers.Queries
             catch (OperationCanceledException ex)
             {
                 var httpResponseDto1 = new HttpResponseDto<CompanyDto>(ex.Message, StatusCodes.Status500InternalServerError);
-                _logger.LogError("Canceled ReadCompanyAll {@HttpResponseDto}.", httpResponseDto1);
+                _logger.LogError(ex, "Canceled ReadCompanyAll {@HttpResponseDto}.", httpResponseDto1);
                 return httpResponseDto1;
             }
             catch (Exception ex)
             {
                 var httpResponseDto1 = new HttpResponseDto<CompanyDto>(ex.Message, StatusCodes.Status500InternalServerError);
-                _logger.LogError("Error ReadCompanyAll {@HttpResponseDto}.", httpResponseDto1);
+                _logger.LogError(ex, "Error ReadCompanyAll {@HttpResponseDto}.", httpResponseDto1);
                 return httpResponseDto1;
             }
         }

@@ -35,13 +35,13 @@ namespace Application.Features.ConsoleVideoGames.RequestHandlers.Queries
             catch (OperationCanceledException ex)
             {
                 var httpResponseDto1 = new HttpResponseDto<ConsoleVideoGameDto>(ex.Message, StatusCodes.Status500InternalServerError);
-                _logger.LogError("Canceled ReadConsoleVideoGameAll {@HttpResponseDto}.", httpResponseDto1);
+                _logger.LogError(ex, "Canceled ReadConsoleVideoGameAll {@HttpResponseDto}.", httpResponseDto1);
                 return httpResponseDto1;
             }
             catch (Exception ex)
             {
                 var httpResponseDto1 = new HttpResponseDto<ConsoleVideoGameDto>(ex.Message, StatusCodes.Status500InternalServerError);
-                _logger.LogError("Error ReadConsoleVideoGameAll {@HttpResponseDto}.", httpResponseDto1);
+                _logger.LogError(ex, "Error ReadConsoleVideoGameAll {@HttpResponseDto}.", httpResponseDto1);
                 return httpResponseDto1;
             }
         }

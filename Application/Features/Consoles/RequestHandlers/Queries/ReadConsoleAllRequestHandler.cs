@@ -35,13 +35,13 @@ namespace Application.Features.Consoles.RequestHandlers.Queries
             catch (OperationCanceledException ex)
             {
                 var httpResponseDto1 = new HttpResponseDto<ConsoleDto>(ex.Message, StatusCodes.Status500InternalServerError);
-                _logger.LogError("Canceled ReadConsoleAll {@HttpResponseDto}.", httpResponseDto1);
+                _logger.LogError(ex, "Canceled ReadConsoleAll {@HttpResponseDto}.", httpResponseDto1);
                 return httpResponseDto1;
             }
             catch (Exception ex)
             {
                 var httpResponseDto1 = new HttpResponseDto<ConsoleDto>(ex.Message, StatusCodes.Status500InternalServerError);
-                _logger.LogError("Error ReadConsoleAll {@HttpResponseDto}.", httpResponseDto1);
+                _logger.LogError(ex, "Error ReadConsoleAll {@HttpResponseDto}.", httpResponseDto1);
                 return httpResponseDto1;
             }
         }

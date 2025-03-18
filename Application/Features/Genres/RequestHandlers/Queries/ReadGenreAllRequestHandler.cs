@@ -36,13 +36,13 @@ namespace Application.Features.Genres.RequestHandlers.Queries
             catch (OperationCanceledException ex)
             {
                 var httpResponseDto1 = new HttpResponseDto<GenreDto>(ex.Message, StatusCodes.Status500InternalServerError);
-                _logger.LogError("Canceled ReadGenreAll {@HttpResponseDto}.", httpResponseDto1);
+                _logger.LogError(ex, "Canceled ReadGenreAll {@HttpResponseDto}.", httpResponseDto1);
                 return httpResponseDto1;
             }
             catch (Exception ex)
             {
                 var httpResponseDto1 = new HttpResponseDto<GenreDto>(ex.Message, StatusCodes.Status500InternalServerError);
-                _logger.LogError("Error ReadGenreAll {@HttpResponseDto}.", httpResponseDto1);
+                _logger.LogError(ex, "Error ReadGenreAll {@HttpResponseDto}.", httpResponseDto1);
                 return httpResponseDto1;
             }
         }

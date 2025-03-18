@@ -36,8 +36,9 @@ namespace Application.Features.Genres.RequestHandlers.Commands
 
                 if (updateGenreRequest == null)
                 {
-                    var httpResponseDto1 = new HttpResponseDto<GenreDto>(new ArgumentNullException(nameof(updateGenreRequest)).Message, StatusCodes.Status400BadRequest);
-                    _logger.LogError("Error UpdateGenre {@HttpResponseDto}.", httpResponseDto1);
+                    var ex = new ArgumentNullException(nameof(updateGenreRequest));
+                    var httpResponseDto1 = new HttpResponseDto<GenreDto>(ex.Message, StatusCodes.Status400BadRequest);
+                    _logger.LogError(ex, "Error UpdateGenre {@HttpResponseDto}.", httpResponseDto1);
                     return httpResponseDto1;
                 }
 
@@ -45,8 +46,9 @@ namespace Application.Features.Genres.RequestHandlers.Commands
 
                 if (validationResult.IsValid == false)
                 {
-                    var httpResponseDto1 = new HttpResponseDto<GenreDto>(new ValidationException(validationResult.Errors).Message, StatusCodes.Status400BadRequest);
-                    _logger.LogError("Error UpdateGenre {@HttpResponseDto}.", httpResponseDto1);
+                    var ex = new ValidationException(validationResult.Errors);
+                    var httpResponseDto1 = new HttpResponseDto<GenreDto>(ex.Message, StatusCodes.Status400BadRequest);
+                    _logger.LogError(ex, "Error UpdateGenre {@HttpResponseDto}.", httpResponseDto1);
                     return httpResponseDto1;
                 }
 
@@ -60,13 +62,13 @@ namespace Application.Features.Genres.RequestHandlers.Commands
             catch (OperationCanceledException ex)
             {
                 var httpResponseDto1 = new HttpResponseDto<GenreDto>(ex.Message, StatusCodes.Status500InternalServerError);
-                _logger.LogError("Canceled UpdateGenre {@HttpResponseDto}.", httpResponseDto1);
+                _logger.LogError(ex, "Canceled UpdateGenre {@HttpResponseDto}.", httpResponseDto1);
                 return httpResponseDto1;
             }
             catch (Exception ex)
             {
                 var httpResponseDto1 = new HttpResponseDto<GenreDto>(ex.Message, StatusCodes.Status500InternalServerError);
-                _logger.LogError("Error UpdateGenre {@HttpResponseDto}.", httpResponseDto1);
+                _logger.LogError(ex, "Error UpdateGenre {@HttpResponseDto}.", httpResponseDto1);
                 return httpResponseDto1;
             }
         }

@@ -37,8 +37,9 @@ namespace Application.Features.VideoGames.RequestHandlers.Queries
 
                 if (downloadExcelRequest == null)
                 {
-                    var httpResponseDto1 = new HttpResponseDto<DownloadExcelDto>(new ArgumentNullException(nameof(downloadExcelRequest)).Message, StatusCodes.Status400BadRequest);
-                    _logger.LogError("Error DownloadExcel {@HttpResponseDto}.", httpResponseDto1);
+                    var ex = new ArgumentNullException(nameof(downloadExcelRequest));
+                    var httpResponseDto1 = new HttpResponseDto<DownloadExcelDto>(ex.Message, StatusCodes.Status400BadRequest);
+                    _logger.LogError(ex, "Error DownloadExcel {@HttpResponseDto}.", httpResponseDto1);
                     return httpResponseDto1;
                 }
 
@@ -46,8 +47,9 @@ namespace Application.Features.VideoGames.RequestHandlers.Queries
 
                 if (validationResult.IsValid == false)
                 {
-                    var httpResponseDto1 = new HttpResponseDto<DownloadExcelDto>(new ValidationException(validationResult.Errors).Message, StatusCodes.Status400BadRequest);
-                    _logger.LogError("Error DownloadExcel {@HttpResponseDto}.", httpResponseDto1);
+                    var ex = new ValidationException(validationResult.Errors);
+                    var httpResponseDto1 = new HttpResponseDto<DownloadExcelDto>(ex.Message, StatusCodes.Status400BadRequest);
+                    _logger.LogError(ex, "Error DownloadExcel {@HttpResponseDto}.", httpResponseDto1);
                     return httpResponseDto1;
                 }
 
@@ -72,13 +74,13 @@ namespace Application.Features.VideoGames.RequestHandlers.Queries
             catch (OperationCanceledException ex)
             {
                 var httpResponseDto1 = new HttpResponseDto<DownloadExcelDto>(ex.Message, StatusCodes.Status500InternalServerError);
-                _logger.LogError("Canceled DownloadExcel {@HttpResponseDto}.", httpResponseDto1);
+                _logger.LogError(ex, "Canceled DownloadExcel {@HttpResponseDto}.", httpResponseDto1);
                 return httpResponseDto1;
             }
             catch (Exception ex)
             {
                 var httpResponseDto1 = new HttpResponseDto<DownloadExcelDto>(ex.Message, StatusCodes.Status500InternalServerError);
-                _logger.LogError("Error DownloadExcel {@HttpResponseDto}.", httpResponseDto1);
+                _logger.LogError(ex, "Error DownloadExcel {@HttpResponseDto}.", httpResponseDto1);
                 return httpResponseDto1;
             }
         }

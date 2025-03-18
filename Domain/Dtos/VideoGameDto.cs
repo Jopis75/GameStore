@@ -4,6 +4,10 @@
     {
         public List<ConsoleVideoGameDto> ConsoleVideoGames { get; set; } = new();
 
+        public CompanyDto Publisher { get; set; } = default!;
+
+        public int PublisherId { get; set; }
+
         public string Title { get; set; } = default!;
 
         public TimeSpan TotalTimePlayed { get; set; }

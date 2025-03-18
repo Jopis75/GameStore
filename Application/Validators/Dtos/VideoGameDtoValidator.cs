@@ -16,6 +16,10 @@ namespace Application.Validators.Dtos
                 .GreaterThan(0)
                 .WithMessage("{PropertyName} must be greater than 0.");
 
+            RuleFor(videoGameDto => videoGameDto.PublisherId)
+                .GreaterThan(0)
+                .WithMessage("{PropertyName} must be greater than 0.");
+
             RuleFor(videoGameDto => videoGameDto.ReleaseDate)
                 .LessThanOrEqualTo(videoGameDto => videoGameDto.PurchaseDate)
                 .WithMessage("{PropertyName} must be less than or equal to {ComparisonProperty}.");

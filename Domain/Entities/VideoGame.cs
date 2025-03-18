@@ -4,6 +4,10 @@
     {
         public virtual ICollection<ConsoleVideoGame> ConsoleVideoGames { get; set; } = new List<ConsoleVideoGame>();
 
+        public virtual Company Publisher { get; set; } = default!;
+
+        public int PublisherId { get; set; }
+
         public string Title { get; set; } = default!;
 
         public TimeSpan TotalTimePlayed { get; set; }

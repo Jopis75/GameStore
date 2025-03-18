@@ -12,6 +12,8 @@ namespace Application.Interfaces.Persistance
 
         Task<IEnumerable<VideoGameDto>> ReadByPriceAsync(decimal fromPrice, decimal toPrice, CancellationToken cancellationToken);
 
+        Task<IEnumerable<VideoGameDto>> ReadByPublisherIdAsync(int publisherId, CancellationToken cancellationToken);
+
         Task<IEnumerable<VideoGameDto>> ReadByPurchaseDateAsync(DateTime fromPurchaseDate, DateTime toPurchaseDate, CancellationToken cancellationToken);
 
         Task<IEnumerable<VideoGameDto>> ReadByReleaseDateAsync(DateTime fromReleaseDate, DateTime toReleaseDate, CancellationToken cancellationToken);

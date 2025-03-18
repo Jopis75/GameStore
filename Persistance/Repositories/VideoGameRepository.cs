@@ -95,6 +95,16 @@ namespace Persistance.Repositories
             return videoGames.Select(Mapper.Map<VideoGameDto>);
         }
 
+        public async Task<IEnumerable<VideoGameDto>> ReadByPublisherIdAsync(int publisherId, CancellationToken cancellationToken)
+        {
+            var videoGames = await Entities
+                .AsNoTracking()
+                .Where(videoGame => videoGame.PublisherId == publisherId)
+                .ToArrayAsync(cancellationToken);
+
+            return videoGames.Select(Mapper.Map<VideoGameDto>);
+        }
+
         public async Task<IEnumerable<VideoGameDto>> ReadByPriceAsync(decimal fromPrice, decimal toPrice, CancellationToken cancellationToken)
         {
             var videoGames = await Entities

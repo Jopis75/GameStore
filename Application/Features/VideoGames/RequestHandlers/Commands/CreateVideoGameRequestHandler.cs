@@ -22,10 +22,10 @@ namespace Application.Features.VideoGames.RequestHandlers.Commands
 
         public CreateVideoGameRequestHandler(IVideoGameRepository videoGameRepository, IMapper mapper, IValidator<CreateVideoGameRequest> validator, ILogger<CreateVideoGameRequestHandler> logger)
         {
-            _videoGameRepository = videoGameRepository ?? throw new ArgumentNullException(nameof(videoGameRepository));
-            _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
-            _validator = validator ?? throw new ArgumentNullException(nameof(validator));
-            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+            _videoGameRepository = videoGameRepository;
+            _mapper = mapper;
+            _validator = validator;
+            _logger = logger;
         }
 
         public async Task<HttpResponseDto<VideoGameDto>> Handle(CreateVideoGameRequest createVideoGameRequest, CancellationToken cancellationToken)

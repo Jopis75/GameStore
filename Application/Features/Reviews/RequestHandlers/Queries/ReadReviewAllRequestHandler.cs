@@ -16,8 +16,8 @@ namespace Application.Features.Reviews.RequestHandlers.Queries
 
         public ReadReviewAllRequestHandler(IReviewRepository reviewRepository, ILogger<ReadReviewAllRequestHandler> logger)
         {
-            _reviewRepository = reviewRepository ?? throw new ArgumentNullException(nameof(reviewRepository));
-            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+            _reviewRepository = reviewRepository;
+            _logger = logger;
         }
 
         public async Task<HttpResponseDto<ReviewDto>> Handle(ReadReviewAllRequest readReviewAllRequest, CancellationToken cancellationToken)

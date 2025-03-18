@@ -17,8 +17,8 @@ namespace Application.Features.Genres.RequestHandlers.Queries
 
         public ReadGenreAllRequestHandler(IGenreRepository genreRepository, ILogger<ReadGenreAllRequestHandler> logger)
         {
-            _genreRepository = genreRepository ?? throw new ArgumentNullException(nameof(genreRepository));
-            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+            _genreRepository = genreRepository;
+            _logger = logger;
         }
 
         public async Task<HttpResponseDto<GenreDto>> Handle(ReadGenreAllRequest readGenreAllRequest, CancellationToken cancellationToken)

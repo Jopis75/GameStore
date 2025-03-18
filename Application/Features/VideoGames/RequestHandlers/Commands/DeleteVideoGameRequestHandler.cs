@@ -20,9 +20,9 @@ namespace Application.Features.VideoGames.RequestHandlers.Commands
 
         public DeleteVideoGameRequestHandler(IVideoGameRepository videoGameRepository, IValidator<DeleteVideoGameRequest> validator, ILogger<DeleteVideoGameRequestHandler> logger)
         {
-            _videoGameRepository = videoGameRepository ?? throw new ArgumentNullException(nameof(videoGameRepository));
-            _validator = validator ?? throw new ArgumentNullException(nameof(validator));
-            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+            _videoGameRepository = videoGameRepository;
+            _validator = validator;
+            _logger = logger;
         }
 
         public async Task<HttpResponseDto<VideoGameDto>> Handle(DeleteVideoGameRequest deleteVideoGameRequest, CancellationToken cancellationToken)

@@ -22,10 +22,10 @@ namespace Application.Features.Companies.RequestHandlers.Commands
 
         public UpdateCompanyRequestHandler(ICompanyRepository companyRepository, IMapper mapper, IValidator<UpdateCompanyRequest> validator, ILogger<UpdateCompanyRequestHandler> logger)
         {
-            _companyRepository = companyRepository ?? throw new ArgumentNullException(nameof(companyRepository));
-            _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
-            _validator = validator ?? throw new ArgumentNullException(nameof(validator));
-            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+            _companyRepository = companyRepository;
+            _mapper = mapper;
+            _validator = validator;
+            _logger = logger;
         }
 
         public async Task<HttpResponseDto<CompanyDto>> Handle(UpdateCompanyRequest updateCompanyRequest, CancellationToken cancellationToken)

@@ -16,8 +16,8 @@ namespace Application.Features.Consoles.RequestHandlers.Queries
 
         public ReadConsoleAllRequestHandler(IConsoleRepository consoleRepository, ILogger<ReadConsoleAllRequestHandler> logger)
         {
-            _consoleRepository = consoleRepository ?? throw new ArgumentNullException(nameof(consoleRepository));
-            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+            _consoleRepository = consoleRepository;
+            _logger = logger;
         }
 
         public async Task<HttpResponseDto<ConsoleDto>> Handle(ReadConsoleAllRequest readConsoleAllRequest, CancellationToken cancellationToken)

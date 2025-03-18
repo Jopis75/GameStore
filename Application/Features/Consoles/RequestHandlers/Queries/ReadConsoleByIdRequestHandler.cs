@@ -19,9 +19,9 @@ namespace Application.Features.Consoles.RequestHandlers.Queries
 
         public ReadConsoleByIdRequestHandler(IConsoleRepository consoleRepository, IValidator<ReadConsoleByIdRequest> validator, ILogger<ReadConsoleByIdRequestHandler> logger)
         {
-            _consoleRepository = consoleRepository ?? throw new ArgumentNullException(nameof(consoleRepository));
-            _validator = validator ?? throw new ArgumentNullException(nameof(validator));
-            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+            _consoleRepository = consoleRepository;
+            _validator = validator;
+            _logger = logger;
         }
 
         public async Task<HttpResponseDto<ConsoleDto>> Handle(ReadConsoleByIdRequest readConsoleByIdRequest, CancellationToken cancellationToken)

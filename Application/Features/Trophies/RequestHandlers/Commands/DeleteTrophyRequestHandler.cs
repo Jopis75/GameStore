@@ -19,9 +19,9 @@ namespace Application.Features.Trophies.RequestHandlers.Commands
 
         public DeleteTrophyRequestHandler(ITrophyRepository trophyRepository, IValidator<DeleteTrophyRequest> validator, ILogger<DeleteTrophyRequestHandler> logger)
         {
-            _trophyRepository = trophyRepository ?? throw new ArgumentNullException(nameof(trophyRepository));
-            _validator = validator ?? throw new ArgumentNullException(nameof(validator));
-            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+            _trophyRepository = trophyRepository;
+            _validator = validator;
+            _logger = logger;
         }
 
         public async Task<HttpResponseDto<TrophyDto>> Handle(DeleteTrophyRequest deleteTrophyRequest, CancellationToken cancellationToken)

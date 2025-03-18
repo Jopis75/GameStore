@@ -19,9 +19,9 @@ namespace Application.Features.Trophies.RequestHandlers.Queries
 
         public ReadTrophyByIdRequestHandler(ITrophyRepository trophyRepository, IValidator<ReadTrophyByIdRequest> validator, ILogger<ReadTrophyByIdRequestHandler> logger)
         {
-            _trophyRepository = trophyRepository ?? throw new ArgumentNullException(nameof(trophyRepository));
-            _validator = validator ?? throw new ArgumentNullException(nameof(validator));
-            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+            _trophyRepository = trophyRepository;
+            _validator = validator;
+            _logger = logger;
         }
 
         public async Task<HttpResponseDto<TrophyDto>> Handle(ReadTrophyByIdRequest readTrophyByIdRequest, CancellationToken cancellationToken)

@@ -31,12 +31,12 @@ namespace Identity.Services
 
         public AuthenticationService(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, IValidator<LoginRequestDto> loginRequestDtoValidator, IValidator<RegistrationRequestDto> registrationRequestDtoValidator, ILogger<AuthenticationService> logger, IOptions<JwtSettings> options)
         {
-            _userManager = userManager ?? throw new ArgumentNullException(nameof(userManager));
-            _signInManager = signInManager ?? throw new ArgumentNullException(nameof(signInManager));
-            _loginRequestDtoValidator = loginRequestDtoValidator ?? throw new ArgumentNullException(nameof(loginRequestDtoValidator));
-            _registrationRequestDtoValidator = registrationRequestDtoValidator ?? throw new ArgumentNullException(nameof(registrationRequestDtoValidator));
-            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
-            _options = options ?? throw new ArgumentNullException(nameof(options));
+            _userManager = userManager;
+            _signInManager = signInManager;
+            _loginRequestDtoValidator = loginRequestDtoValidator;
+            _registrationRequestDtoValidator = registrationRequestDtoValidator;
+            _logger = logger;
+            _options = options;
         }
 
         public async Task<HttpResponseDto<LoginResponseDto>> LoginAsync(LoginRequestDto loginRequestDto)

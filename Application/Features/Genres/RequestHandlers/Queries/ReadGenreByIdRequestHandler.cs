@@ -19,9 +19,9 @@ namespace Application.Features.Genres.RequestHandlers.Queries
 
         public ReadGenreByIdRequestHandler(IGenreRepository genreRepository, IValidator<ReadGenreByIdRequest> validator, ILogger<ReadGenreByIdRequestHandler> logger)
         {
-            _genreRepository = genreRepository ?? throw new ArgumentNullException(nameof(genreRepository));
-            _validator = validator ?? throw new ArgumentNullException(nameof(validator));
-            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+            _genreRepository = genreRepository;
+            _validator = validator;
+            _logger = logger;
         }
 
         public async Task<HttpResponseDto<GenreDto>> Handle(ReadGenreByIdRequest readGenreByIdRequest, CancellationToken cancellationToken)

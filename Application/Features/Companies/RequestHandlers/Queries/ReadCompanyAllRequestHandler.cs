@@ -16,8 +16,8 @@ namespace Application.Features.Companies.RequestHandlers.Queries
 
         public ReadCompanyAllRequestHandler(ICompanyRepository companyRepository, ILogger<ReadCompanyAllRequestHandler> logger)
         {
-            _companyRepository = companyRepository ?? throw new ArgumentNullException(nameof(companyRepository));
-            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+            _companyRepository = companyRepository;
+            _logger = logger;
         }
 
         public async Task<HttpResponseDto<CompanyDto>> Handle(ReadCompanyAllRequest readCompanyAllRequest, CancellationToken cancellationToken)

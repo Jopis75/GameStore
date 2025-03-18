@@ -22,10 +22,10 @@ namespace Application.Features.Genres.RequestHandlers.Commands
 
         public UpdateGenreRequestHandler(IGenreRepository genreRepository, IMapper mapper, IValidator<UpdateGenreRequest> validator, ILogger<UpdateGenreRequestHandler> logger)
         {
-            _genreRepository = genreRepository ?? throw new ArgumentNullException(nameof(genreRepository));
-            _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
-            _validator = validator ?? throw new ArgumentNullException(nameof(validator));
-            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+            _genreRepository = genreRepository;
+            _mapper = mapper;
+            _validator = validator;
+            _logger = logger;
         }
 
         public async Task<HttpResponseDto<GenreDto>> Handle(UpdateGenreRequest updateGenreRequest, CancellationToken cancellationToken)

@@ -19,9 +19,9 @@ namespace Application.Features.Addresses.RequestHandlers.Commands
 
         public DeleteAddressRequestHandler(IAddressRepository addressRepository, IValidator<DeleteAddressRequest> validator, ILogger<DeleteAddressRequestHandler> logger)
         {
-            _addressRepository = addressRepository ?? throw new ArgumentNullException(nameof(addressRepository));
-            _validator = validator ?? throw new ArgumentNullException(nameof(validator));
-            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+            _addressRepository = addressRepository;
+            _validator = validator;
+            _logger = logger;
         }
 
         public async Task<HttpResponseDto<AddressDto>> Handle(DeleteAddressRequest deleteAddressRequest, CancellationToken cancellationToken)

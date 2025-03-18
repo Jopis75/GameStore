@@ -18,8 +18,8 @@ namespace Infrastructure.Services
 
         public AzureServiceBusService(IAzureClientFactory<ServiceBusClient> azureClientFactory, ILogger<AzureServiceBusService> logger)
         {
-            _azureClientFactory = azureClientFactory ?? throw new ArgumentNullException(nameof(azureClientFactory));
-            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+            _azureClientFactory = azureClientFactory;
+            _logger = logger;
 
             _serviceBusClient = _azureClientFactory.CreateClient("ServiceBus");
         }

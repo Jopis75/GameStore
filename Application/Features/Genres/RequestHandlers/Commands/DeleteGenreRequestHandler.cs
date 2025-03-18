@@ -19,9 +19,9 @@ namespace Application.Features.Genres.RequestHandlers.Commands
 
         public DeleteGenreRequestHandler(IGenreRepository genreRepository, IValidator<DeleteGenreRequest> validator, ILogger<DeleteGenreRequestHandler> logger)
         {
-            _genreRepository = genreRepository ?? throw new ArgumentNullException(nameof(genreRepository));
-            _validator = validator ?? throw new ArgumentNullException(nameof(validator));
-            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+            _genreRepository = genreRepository;
+            _validator = validator;
+            _logger = logger;
         }
 
         public async Task<HttpResponseDto<GenreDto>> Handle(DeleteGenreRequest deleteGenreRequest, CancellationToken cancellationToken)

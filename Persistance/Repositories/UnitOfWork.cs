@@ -58,17 +58,17 @@ namespace Persistance.Repositories
             IVideoGameGenreRepository videoGameGenreRepository,
             IVideoGameRepository videoGameRepository)
         {
-            _gameStoreDbContext = gameStoreDbContext ?? throw new ArgumentNullException(nameof(gameStoreDbContext));
+            _gameStoreDbContext = gameStoreDbContext;
             //_httpContextAccessor = httpContextAccessor ?? throw new ArgumentNullException(nameof(httpContextAccessor));
-            _addressRepository = addressRepository ?? throw new ArgumentNullException(nameof(addressRepository));
-            _companyRepository = companyRepository ?? throw new ArgumentNullException(nameof(companyRepository));
-            _consoleRepository = consoleRepository ?? throw new ArgumentNullException(nameof(consoleRepository));
-            _consoleVideoGameRepository = consoleVideoGameRepository ?? throw new ArgumentNullException(nameof(consoleVideoGameRepository));
-            _genreRepository = genreRepository ?? throw new ArgumentNullException(nameof(genreRepository));
-            _reviewRepository = reviewRepository ?? throw new ArgumentNullException(nameof(reviewRepository));
-            _trophyRepository = trophyRepository ?? throw new ArgumentNullException(nameof(trophyRepository));
-            _videoGameGenreRepository = videoGameGenreRepository ?? throw new ArgumentNullException(nameof(videoGameGenreRepository));
-            _videoGameRepository = videoGameRepository ?? throw new ArgumentNullException(nameof(videoGameRepository));
+            _addressRepository = addressRepository;
+            _companyRepository = companyRepository;
+            _consoleRepository = consoleRepository;
+            _consoleVideoGameRepository = consoleVideoGameRepository;
+            _genreRepository = genreRepository;
+            _reviewRepository = reviewRepository;
+            _trophyRepository = trophyRepository;
+            _videoGameGenreRepository = videoGameGenreRepository;
+            _videoGameRepository = videoGameRepository;
         }
 
         public void Dispose()

@@ -18,8 +18,8 @@ namespace Infrastructure.Services
 
         public AzureBlobStorageService(IAzureClientFactory<BlobServiceClient> azureClientFactory, ILogger<AzureBlobStorageService> logger)
         {
-            _azureClientFactory = azureClientFactory ?? throw new ArgumentNullException(nameof(azureClientFactory));
-            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+            _azureClientFactory = azureClientFactory;
+            _logger = logger;
 
             _blobServiceClient = _azureClientFactory.CreateClient("BlobStorage");
         }

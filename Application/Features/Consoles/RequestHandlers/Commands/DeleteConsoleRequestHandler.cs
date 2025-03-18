@@ -19,9 +19,9 @@ namespace Application.Features.Consoles.RequestHandlers.Commands
 
         public DeleteConsoleRequestHandler(IConsoleRepository consoleRepository, IValidator<DeleteConsoleRequest> validator, ILogger<DeleteConsoleRequestHandler> logger)
         {
-            _consoleRepository = consoleRepository ?? throw new ArgumentNullException(nameof(consoleRepository));
-            _validator = validator ?? throw new ArgumentNullException(nameof(validator));
-            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+            _consoleRepository = consoleRepository;
+            _validator = validator;
+            _logger = logger;
         }
 
         public async Task<HttpResponseDto<ConsoleDto>> Handle(DeleteConsoleRequest deleteConsoleRequest, CancellationToken cancellationToken)

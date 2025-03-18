@@ -39,9 +39,9 @@ namespace Persistance.Repositories
 
         public RepositoryBase(GameStoreDbContext gameStoreDbContext, IMapper mapper)
         {
-            _gameStoreDbContext = gameStoreDbContext ?? throw new ArgumentNullException(nameof(gameStoreDbContext));
+            _gameStoreDbContext = gameStoreDbContext;
             _entities = _gameStoreDbContext.Set<TEntity>();
-            _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
+            _mapper = mapper;
         }
 
         public async Task<TDto> CreateAsync(TDto dto, CancellationToken cancellationToken)

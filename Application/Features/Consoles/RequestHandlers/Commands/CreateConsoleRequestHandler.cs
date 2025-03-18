@@ -22,10 +22,10 @@ namespace Application.Features.Consoles.RequestHandlers.Commands
 
         public CreateConsoleRequestHandler(IConsoleRepository consoleRepository, IMapper mapper, IValidator<CreateConsoleRequest> validator, ILogger<CreateConsoleRequestHandler> logger)
         {
-            _consoleRepository = consoleRepository ?? throw new ArgumentNullException(nameof(consoleRepository));
-            _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
-            _validator = validator ?? throw new ArgumentNullException(nameof(validator));
-            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+            _consoleRepository = consoleRepository;
+            _mapper = mapper;
+            _validator = validator;
+            _logger = logger;
         }
 
         public async Task<HttpResponseDto<ConsoleDto>> Handle(CreateConsoleRequest createConsoleRequest, CancellationToken cancellationToken)

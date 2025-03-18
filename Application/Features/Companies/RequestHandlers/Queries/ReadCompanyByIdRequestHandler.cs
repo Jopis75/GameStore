@@ -19,9 +19,9 @@ namespace Application.Features.Companies.RequestHandlers.Queries
 
         public ReadCompanyByIdRequestHandler(ICompanyRepository companyRepository, IValidator<ReadCompanyByIdRequest> validator, ILogger<ReadCompanyByIdRequestHandler> logger)
         {
-            _companyRepository = companyRepository ?? throw new ArgumentNullException(nameof(companyRepository));
-            _validator = validator ?? throw new ArgumentNullException(nameof(validator));
-            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+            _companyRepository = companyRepository;
+            _validator = validator;
+            _logger = logger;
         }
 
         public async Task<HttpResponseDto<CompanyDto>> Handle(ReadCompanyByIdRequest readCompanyByIdRequest, CancellationToken cancellationToken)

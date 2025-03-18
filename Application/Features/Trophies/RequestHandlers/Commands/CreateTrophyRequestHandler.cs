@@ -22,10 +22,10 @@ namespace Application.Features.Trophies.RequestHandlers.Commands
 
         public CreateTrophyRequestHandler(ITrophyRepository trophyRepository, IMapper mapper, IValidator<CreateTrophyRequest> validator, ILogger<CreateTrophyRequestHandler> logger)
         {
-            _trophyRepository = trophyRepository ?? throw new ArgumentNullException(nameof(trophyRepository));
-            _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
-            _validator = validator ?? throw new ArgumentNullException(nameof(validator));
-            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+            _trophyRepository = trophyRepository;
+            _mapper = mapper;
+            _validator = validator;
+            _logger = logger;
         }
 
         public async Task<HttpResponseDto<TrophyDto>> Handle(CreateTrophyRequest createTrophyRequest, CancellationToken cancellationToken)

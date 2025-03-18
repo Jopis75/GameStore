@@ -16,8 +16,8 @@ namespace Application.Features.Addresses.RequestHandlers.Queries
 
         public ReadAddressAllRequestHandler(IAddressRepository addressRepository, ILogger<ReadAddressAllRequestHandler> logger)
         {
-            _addressRepository = addressRepository ?? throw new ArgumentNullException(nameof(addressRepository));
-            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+            _addressRepository = addressRepository;
+            _logger = logger;
         }
 
         public async Task<HttpResponseDto<AddressDto>> Handle(ReadAddressAllRequest readAddressAllRequest, CancellationToken cancellationToken)

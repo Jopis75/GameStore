@@ -19,9 +19,9 @@ namespace Application.Features.ConsoleVideoGames.RequestHandlers.Queries
 
         public ReadConsoleVideoGameByIdRequestHandler(IConsoleVideoGameRepository consoleVideoGameRepository, IValidator<ReadConsoleVideoGameByIdRequest> validator, ILogger<ReadConsoleVideoGameByIdRequestHandler> logger)
         {
-            _consoleVideoGameRepository = consoleVideoGameRepository ?? throw new ArgumentNullException(nameof(consoleVideoGameRepository));
-            _validator = validator ?? throw new ArgumentNullException(nameof(validator));
-            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+            _consoleVideoGameRepository = consoleVideoGameRepository;
+            _validator = validator;
+            _logger = logger;
         }
 
         public async Task<HttpResponseDto<ConsoleVideoGameDto>> Handle(ReadConsoleVideoGameByIdRequest readConsoleVideoGameByIdRequest, CancellationToken cancellationToken)

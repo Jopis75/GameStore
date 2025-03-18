@@ -22,10 +22,10 @@ namespace Application.Features.ConsoleVideoGames.RequestHandlers.Commands
 
         public CreateConsoleVideoGameRequestHandler(IConsoleVideoGameRepository consoleVideoGameRepository, IMapper mapper, IValidator<CreateConsoleVideoGameRequest> validator, ILogger<CreateConsoleVideoGameRequestHandler> logger)
         {
-            _consoleVideoGameRepository = consoleVideoGameRepository ?? throw new ArgumentNullException(nameof(consoleVideoGameRepository));
-            _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
-            _validator = validator ?? throw new ArgumentNullException(nameof(validator));
-            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+            _consoleVideoGameRepository = consoleVideoGameRepository;
+            _mapper = mapper;
+            _validator = validator;
+            _logger = logger;
         }
 
         public async Task<HttpResponseDto<ConsoleVideoGameDto>> Handle(CreateConsoleVideoGameRequest createConsoleVideoGameRequest, CancellationToken cancellationToken)

@@ -24,11 +24,11 @@ namespace Application.Features.Companies.RequestHandlers.Commands
 
         public CreateCompanyWithHeadquarterRequestHandler(ICompanyRepository companyRepository, IAddressRepository addressRepository, IMapper mapper, IValidator<CreateCompanyWithHeadquarterRequest> validator, ILogger<CreateCompanyWithHeadquarterRequestHandler> logger)
         {
-            _companyRepository = companyRepository ?? throw new ArgumentNullException(nameof(companyRepository));
-            _addressRepository = addressRepository ?? throw new ArgumentNullException(nameof(addressRepository));
-            _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
-            _validator = validator ?? throw new ArgumentNullException(nameof(validator));
-            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+            _companyRepository = companyRepository;
+            _addressRepository = addressRepository;
+            _mapper = mapper;
+            _validator = validator;
+            _logger = logger;
         }
 
         public async Task<HttpResponseDto<CompanyDto>> Handle(CreateCompanyWithHeadquarterRequest createCompanyWithHeadquarterRequest, CancellationToken cancellationToken)

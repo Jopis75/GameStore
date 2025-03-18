@@ -22,10 +22,10 @@ namespace Application.Features.Reviews.RequestHandlers.Commands
 
         public CreateReviewRequestHandler(IReviewRepository reviewRepository, IMapper mapper, IValidator<CreateReviewRequest> validator, ILogger<CreateReviewRequestHandler> logger)
         {
-            _reviewRepository = reviewRepository ?? throw new ArgumentNullException(nameof(reviewRepository));
-            _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
-            _validator = validator ?? throw new ArgumentNullException(nameof(validator));
-            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+            _reviewRepository = reviewRepository;
+            _mapper = mapper;
+            _validator = validator;
+            _logger = logger;
         }
 
         public async Task<HttpResponseDto<ReviewDto>> Handle(CreateReviewRequest createReviewRequest, CancellationToken cancellationToken)

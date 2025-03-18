@@ -23,10 +23,10 @@ namespace Application.Features.VideoGames.RequestHandlers.Queries
 
         public DownloadExcelRequestHandler(IVideoGameRepository videoGameRepository, IConsoleRepository consoleRepository, IValidator<DownloadExcelRequest> validator, ILogger<DownloadExcelRequestHandler> logger)
         {
-            _videoGameRepository = videoGameRepository ?? throw new ArgumentNullException(nameof(videoGameRepository));
-            _consoleRepository = consoleRepository ?? throw new ArgumentNullException(nameof(consoleRepository));
-            _validator = validator ?? throw new ArgumentNullException(nameof(validator));
-            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+            _videoGameRepository = videoGameRepository;
+            _consoleRepository = consoleRepository;
+            _validator = validator;
+            _logger = logger;
         }
 
         public async Task<HttpResponseDto<DownloadExcelDto>> Handle(DownloadExcelRequest downloadExcelRequest, CancellationToken cancellationToken)

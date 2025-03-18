@@ -13,7 +13,7 @@ namespace GameStoreAPI.Controllers
 
         public AuthenticationController(IAuthenticationService authenticationService)
         {
-            _authenticationService = authenticationService ?? throw new ArgumentNullException(nameof(authenticationService));
+            _authenticationService = authenticationService;
         }
 
         [HttpPost]

@@ -19,9 +19,9 @@ namespace Application.Features.Reviews.RequestHandlers.Commands
 
         public DeleteReviewRequestHandler(IReviewRepository reviewRepository, IValidator<DeleteReviewRequest> validator, ILogger<DeleteReviewRequestHandler> logger)
         {
-            _reviewRepository = reviewRepository ?? throw new ArgumentNullException(nameof(reviewRepository));
-            _validator = validator ?? throw new ArgumentNullException(nameof(validator));
-            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+            _reviewRepository = reviewRepository;
+            _validator = validator;
+            _logger = logger;
         }
 
         public async Task<HttpResponseDto<ReviewDto>> Handle(DeleteReviewRequest deleteReviewRequest, CancellationToken cancellationToken)

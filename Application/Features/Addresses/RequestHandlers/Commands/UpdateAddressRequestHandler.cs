@@ -22,10 +22,10 @@ namespace Application.Features.Addresses.RequestHandlers.Commands
 
         public UpdateAddressRequestHandler(IAddressRepository addressRepository, IMapper mapper, IValidator<UpdateAddressRequest> validator, ILogger<UpdateAddressRequestHandler> logger)
         {
-            _addressRepository = addressRepository ?? throw new ArgumentNullException(nameof(addressRepository));
-            _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
-            _validator = validator ?? throw new ArgumentNullException(nameof(validator));
-            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+            _addressRepository = addressRepository;
+            _mapper = mapper;
+            _validator = validator;
+            _logger = logger;
         }
 
         public async Task<HttpResponseDto<AddressDto>> Handle(UpdateAddressRequest updateAddressRequest, CancellationToken cancellationToken)

@@ -20,9 +20,9 @@ namespace Identity.Services
 
         public UserService(UserManager<ApplicationUser> userManager, IMapper mapper, ILogger<UserService> logger)
         {
-            _userManager = userManager ?? throw new ArgumentNullException(nameof(userManager));
-            _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
-            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+            _userManager = userManager;
+            _mapper = mapper;
+            _logger = logger;
         }
 
         public async Task<HttpResponseDto<UserDto>> ReadAllAsync()

@@ -16,8 +16,8 @@ namespace Application.Features.Trophies.RequestHandlers.Queries
 
         public ReadTrophyAllRequestHandler(ITrophyRepository trophyRepository, ILogger<ReadTrophyAllRequestHandler> logger)
         {
-            _trophyRepository = trophyRepository ?? throw new ArgumentNullException(nameof(trophyRepository));
-            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+            _trophyRepository = trophyRepository;
+            _logger = logger;
         }
 
         public async Task<HttpResponseDto<TrophyDto>> Handle(ReadTrophyAllRequest readTrophyAllRequest, CancellationToken cancellationToken)

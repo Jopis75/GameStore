@@ -97,11 +97,11 @@ namespace GameStoreAPI.Controllers
         }
 
         [HttpPost]
-        [Route("UploadGameStoreAsync")]
+        [Route("UploadGameStoreFileAsync")]
         [ProducesResponseType(typeof(HttpResponseDto<UploadGameStoreFileDto<VideoGameDto>>), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult<HttpResponseDto<UploadGameStoreFileDto<VideoGameDto>>>> UploadGameStoreAsync(IFormFile formFile)
+        public async Task<ActionResult<HttpResponseDto<UploadGameStoreFileDto<VideoGameDto>>>> UploadGameStoreFileAsync(IFormFile formFile)
         {
             var httpResponseDto = await _mediator.Send(new UploadGameStoreFileRequest { FormFile = formFile });
             return StatusCode(httpResponseDto.StatusCode, httpResponseDto);

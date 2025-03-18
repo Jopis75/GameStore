@@ -5,7 +5,6 @@ using Application.Interfaces.Persistance;
 using Domain.Dtos;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
-using System.IO;
 
 namespace Infrastructure.Services
 {
@@ -52,7 +51,7 @@ namespace Infrastructure.Services
             var videoGameDtos = new List<VideoGameDto>();
 
             TextReader textReader = new StreamReader(stream);
-            var rows = (await textReader.ReadToEndAsync()).Split("\r\n");
+            var rows = (await textReader.ReadToEndAsync(cancellationToken)).Split("\r\n");
 
             foreach (var row in rows)
             {

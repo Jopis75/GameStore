@@ -15,7 +15,7 @@ namespace GameStoreAPI.Controllers
 
         public VideoGameController(IMediator mediator)
         {
-            _mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
+            _mediator = mediator;
         }
 
         [HttpPost]

@@ -132,6 +132,7 @@ namespace Persistance.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
+                    PublisherId = table.Column<int>(type: "int", nullable: false),
                     Title = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     TotalTimePlayed = table.Column<TimeSpan>(type: "time", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
@@ -155,8 +156,12 @@ namespace Persistance.Migrations
                         name: "FK_VideoGame_Company_DeveloperId",
                         column: x => x.DeveloperId,
                         principalTable: "Company",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_VideoGame_Company_PublisherId",
+                        column: x => x.PublisherId,
+                        principalTable: "Company",
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -286,10 +291,10 @@ namespace Persistance.Migrations
                 columns: new[] { "Id", "City", "Country", "CreatedAt", "CreatedBy", "DeletedAt", "DeletedBy", "PostalCode", "State", "StreetAddress", "UpdatedAt", "UpdatedBy" },
                 values: new object[,]
                 {
-                    { 1, "San Mateo", "USA", new DateTime(2024, 8, 9, 17, 2, 56, 531, DateTimeKind.Local).AddTicks(7015), "System", null, null, "94404", "California", "2207 Bridgepointe Pkwy", null, null },
-                    { 2, "San Mateo", "United States", new DateTime(2024, 8, 9, 17, 2, 56, 531, DateTimeKind.Local).AddTicks(7065), "System", null, null, "94404", "California", "2207 Bridgepointe Pkwy", null, null },
-                    { 3, "Amsterdam", "The Netherlands", new DateTime(2024, 8, 9, 17, 2, 56, 531, DateTimeKind.Local).AddTicks(7068), "System", null, null, "1012 RL", "", "Nieuwezijds Voorburgwal 225", null, null },
-                    { 4, "Bellevue", "United States", new DateTime(2024, 8, 9, 17, 2, 56, 531, DateTimeKind.Local).AddTicks(7108), "System", null, null, "98004", "Washington", "500 108th Avenue North East Suite 2600", null, null }
+                    { 1, "San Mateo", "USA", new DateTime(2025, 3, 20, 16, 11, 31, 861, DateTimeKind.Local).AddTicks(3482), "System", null, null, "94404", "California", "2207 Bridgepointe Pkwy", null, null },
+                    { 2, "San Mateo", "United States", new DateTime(2025, 3, 20, 16, 11, 31, 861, DateTimeKind.Local).AddTicks(3531), "System", null, null, "94404", "California", "2207 Bridgepointe Pkwy", null, null },
+                    { 3, "Amsterdam", "The Netherlands", new DateTime(2025, 3, 20, 16, 11, 31, 861, DateTimeKind.Local).AddTicks(3534), "System", null, null, "1012 RL", "", "Nieuwezijds Voorburgwal 225", null, null },
+                    { 4, "Bellevue", "United States", new DateTime(2025, 3, 20, 16, 11, 31, 861, DateTimeKind.Local).AddTicks(3537), "System", null, null, "98004", "Washington", "500 108th Avenue North East Suite 2600", null, null }
                 });
 
             migrationBuilder.InsertData(
@@ -327,10 +332,10 @@ namespace Persistance.Migrations
                 columns: new[] { "Id", "CompanyType", "CreatedAt", "CreatedBy", "DeletedAt", "DeletedBy", "EmailAddress", "HeadquarterId", "Industry", "LogoImageUri", "Name", "ParentCompanyId", "PhoneNumber", "TradeName", "UpdatedAt", "UpdatedBy", "WebsiteUrl" },
                 values: new object[,]
                 {
-                    { 1, 0, new DateTime(2024, 8, 9, 17, 2, 56, 531, DateTimeKind.Local).AddTicks(7383), "System", null, null, "", 1, 0, null, "Sony Interactive Entertainment", null, "", "Sony Interactive Entertainment", null, null, "https://sonyinteractive.com/en/" },
-                    { 2, 2, new DateTime(2024, 8, 9, 17, 2, 56, 531, DateTimeKind.Local).AddTicks(7388), "System", null, null, "", 2, 0, null, "PlayStation Studios", 2, "", "PlayStation Studios", null, null, "https://www.playstation.com/en-us/corporate/playstation-studios/" },
-                    { 3, 0, new DateTime(2024, 8, 9, 17, 2, 56, 531, DateTimeKind.Local).AddTicks(7391), "System", null, null, "", 3, 0, null, "Guerrilla", 2, "", "Guerrilla Games", null, null, "https://www.guerrilla-games.com/" },
-                    { 4, 0, new DateTime(2024, 8, 9, 17, 2, 56, 531, DateTimeKind.Local).AddTicks(7394), "System", null, null, "", 4, 0, null, "Sucker Punch", 2, "", "Sucker Punch Productions", null, null, "https://www.suckerpunch.com/" }
+                    { 1, 0, new DateTime(2025, 3, 20, 16, 11, 31, 861, DateTimeKind.Local).AddTicks(3783), "System", null, null, "", 1, 0, null, "Sony Interactive Entertainment", null, "", "Sony Interactive Entertainment", null, null, "https://sonyinteractive.com/en/" },
+                    { 2, 2, new DateTime(2025, 3, 20, 16, 11, 31, 861, DateTimeKind.Local).AddTicks(3788), "System", null, null, "", 2, 0, null, "PlayStation Studios", 2, "", "PlayStation Studios", null, null, "https://www.playstation.com/en-us/corporate/playstation-studios/" },
+                    { 3, 0, new DateTime(2025, 3, 20, 16, 11, 31, 861, DateTimeKind.Local).AddTicks(3815), "System", null, null, "", 3, 0, null, "Guerrilla", 2, "", "Guerrilla Games", null, null, "https://www.guerrilla-games.com/" },
+                    { 4, 0, new DateTime(2025, 3, 20, 16, 11, 31, 861, DateTimeKind.Local).AddTicks(3818), "System", null, null, "", 4, 0, null, "Sucker Punch", 2, "", "Sucker Punch Productions", null, null, "https://www.suckerpunch.com/" }
                 });
 
             migrationBuilder.InsertData(
@@ -338,24 +343,24 @@ namespace Persistance.Migrations
                 columns: new[] { "Id", "CreatedAt", "CreatedBy", "DeletedAt", "DeletedBy", "DeveloperId", "ImageUri", "Name", "Price", "PurchaseDate", "ReleaseDate", "UpdatedAt", "UpdatedBy", "Url" },
                 values: new object[,]
                 {
-                    { 1, new DateTime(2024, 8, 9, 17, 2, 56, 531, DateTimeKind.Local).AddTicks(7629), "System", null, null, 1, null, "PlayStation 5", 9988.0m, new DateTime(2022, 1, 29, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2020, 11, 12, 0, 0, 0, 0, DateTimeKind.Unspecified), null, null, "https://www.playstation.com/sv-se/ps5/" },
-                    { 2, new DateTime(2024, 8, 9, 17, 2, 56, 531, DateTimeKind.Local).AddTicks(7638), "System", null, null, 1, null, "PlayStation VR2", 7869.0m, new DateTime(2023, 2, 22, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2023, 2, 22, 0, 0, 0, 0, DateTimeKind.Unspecified), null, null, "https://www.playstation.com/sv-se/ps-vr2/" }
+                    { 1, new DateTime(2025, 3, 20, 16, 11, 31, 861, DateTimeKind.Local).AddTicks(4052), "System", null, null, 1, null, "PlayStation 5", 9988.0m, new DateTime(2022, 1, 29, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2020, 11, 12, 0, 0, 0, 0, DateTimeKind.Unspecified), null, null, "https://www.playstation.com/sv-se/ps5/" },
+                    { 2, new DateTime(2025, 3, 20, 16, 11, 31, 861, DateTimeKind.Local).AddTicks(4060), "System", null, null, 1, null, "PlayStation VR2", 7869.0m, new DateTime(2023, 2, 22, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2023, 2, 22, 0, 0, 0, 0, DateTimeKind.Unspecified), null, null, "https://www.playstation.com/sv-se/ps-vr2/" }
                 });
 
             migrationBuilder.InsertData(
                 table: "Review",
                 columns: new[] { "Id", "ConsoleId", "CreatedAt", "CreatedBy", "DeletedAt", "DeletedBy", "Grade", "ReviewDate", "ReviewText", "UpdatedAt", "UpdatedBy", "VideoGameId" },
-                values: new object[] { 1, 1, new DateTime(2024, 8, 9, 17, 2, 56, 531, DateTimeKind.Local).AddTicks(8146), "System", null, null, 100, new DateTime(2024, 8, 9, 17, 2, 56, 531, DateTimeKind.Local).AddTicks(8143), "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.", null, null, null });
+                values: new object[] { 1, 1, new DateTime(2025, 3, 20, 16, 11, 31, 861, DateTimeKind.Local).AddTicks(4498), "System", null, null, 100, new DateTime(2025, 3, 20, 16, 11, 31, 861, DateTimeKind.Local).AddTicks(4496), "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.", null, null, null });
 
             migrationBuilder.InsertData(
                 table: "VideoGame",
-                columns: new[] { "Id", "CreatedAt", "CreatedBy", "DeletedAt", "DeletedBy", "DeveloperId", "ImageUri", "Name", "Price", "PurchaseDate", "ReleaseDate", "Title", "TotalTimePlayed", "UpdatedAt", "UpdatedBy", "Url" },
+                columns: new[] { "Id", "CreatedAt", "CreatedBy", "DeletedAt", "DeletedBy", "DeveloperId", "ImageUri", "Name", "Price", "PublisherId", "PurchaseDate", "ReleaseDate", "Title", "TotalTimePlayed", "UpdatedAt", "UpdatedBy", "Url" },
                 values: new object[,]
                 {
-                    { 1, new DateTime(2024, 8, 9, 17, 2, 56, 531, DateTimeKind.Local).AddTicks(8404), "System", null, null, 3, null, "Horizon Zero Dawn - Complete Edition", 229.0m, new DateTime(2023, 4, 7, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2019, 6, 28, 0, 0, 0, 0, DateTimeKind.Unspecified), "Horizon Zero Dawn - Complete Edition", new TimeSpan(0, 0, 0, 0, 0), null, null, "https://store.playstation.com/sv-se/product/EP9000-CUSA10211_00-HRZCE00000000000" },
-                    { 2, new DateTime(2024, 8, 9, 17, 2, 56, 531, DateTimeKind.Local).AddTicks(8412), "System", null, null, 3, null, "Horizon Forbidden West - Complete Edition", 799.0m, new DateTime(2023, 11, 24, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2023, 10, 6, 0, 0, 0, 0, DateTimeKind.Unspecified), "Horizon Forbidden West - Complete Edition", new TimeSpan(0, 0, 0, 0, 0), null, null, "https://www.playstation.com/sv-se/games/horizon-forbidden-west/" },
-                    { 3, new DateTime(2024, 8, 9, 17, 2, 56, 531, DateTimeKind.Local).AddTicks(8420), "System", null, null, 3, null, "Horizon Call of the Mountain", 739.0m, new DateTime(2023, 2, 25, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2023, 2, 22, 0, 0, 0, 0, DateTimeKind.Unspecified), "Horizon Call of the Mountain", new TimeSpan(0, 0, 0, 0, 0), null, null, "https://www.playstation.com/sv-se/games/horizon-call-of-the-mountain/" },
-                    { 4, new DateTime(2024, 8, 9, 17, 2, 56, 531, DateTimeKind.Local).AddTicks(8427), "System", null, null, 4, null, "Ghost of Tsushima DIRECTOR’S CUT", 0.0m, new DateTime(2022, 5, 3, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2021, 8, 20, 0, 0, 0, 0, DateTimeKind.Unspecified), "Ghost of Tsushima DIRECTOR’S CUT", new TimeSpan(0, 0, 0, 0, 0), null, null, "https://www.playstation.com/en-se/games/ghost-of-tsushima/" }
+                    { 1, new DateTime(2025, 3, 20, 16, 11, 31, 861, DateTimeKind.Local).AddTicks(4689), "System", null, null, 3, null, "Horizon Zero Dawn - Complete Edition", 229.0m, 1, new DateTime(2023, 4, 7, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2019, 6, 28, 0, 0, 0, 0, DateTimeKind.Unspecified), "Horizon Zero Dawn - Complete Edition", new TimeSpan(0, 0, 0, 0, 0), null, null, "https://store.playstation.com/sv-se/product/EP9000-CUSA10211_00-HRZCE00000000000" },
+                    { 2, new DateTime(2025, 3, 20, 16, 11, 31, 861, DateTimeKind.Local).AddTicks(4698), "System", null, null, 3, null, "Horizon Forbidden West - Complete Edition", 799.0m, 1, new DateTime(2023, 11, 24, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2023, 10, 6, 0, 0, 0, 0, DateTimeKind.Unspecified), "Horizon Forbidden West - Complete Edition", new TimeSpan(0, 0, 0, 0, 0), null, null, "https://www.playstation.com/sv-se/games/horizon-forbidden-west/" },
+                    { 3, new DateTime(2025, 3, 20, 16, 11, 31, 861, DateTimeKind.Local).AddTicks(4705), "System", null, null, 3, null, "Horizon Call of the Mountain", 739.0m, 1, new DateTime(2023, 2, 25, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2023, 2, 22, 0, 0, 0, 0, DateTimeKind.Unspecified), "Horizon Call of the Mountain", new TimeSpan(0, 0, 0, 0, 0), null, null, "https://www.playstation.com/sv-se/games/horizon-call-of-the-mountain/" },
+                    { 4, new DateTime(2025, 3, 20, 16, 11, 31, 861, DateTimeKind.Local).AddTicks(4713), "System", null, null, 4, null, "Ghost of Tsushima DIRECTOR’S CUT", 0.0m, 1, new DateTime(2022, 5, 3, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2021, 8, 20, 0, 0, 0, 0, DateTimeKind.Unspecified), "Ghost of Tsushima DIRECTOR’S CUT", new TimeSpan(0, 0, 0, 0, 0), null, null, "https://www.playstation.com/en-se/games/ghost-of-tsushima/" }
                 });
 
             migrationBuilder.InsertData(
@@ -374,10 +379,10 @@ namespace Persistance.Migrations
                 columns: new[] { "Id", "ConsoleId", "CreatedAt", "CreatedBy", "DeletedAt", "DeletedBy", "Grade", "ReviewDate", "ReviewText", "UpdatedAt", "UpdatedBy", "VideoGameId" },
                 values: new object[,]
                 {
-                    { 2, null, new DateTime(2024, 8, 9, 17, 2, 56, 531, DateTimeKind.Local).AddTicks(8150), "System", null, null, 100, new DateTime(2024, 8, 9, 17, 2, 56, 531, DateTimeKind.Local).AddTicks(8149), "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.", null, null, 1 },
-                    { 3, null, new DateTime(2024, 8, 9, 17, 2, 56, 531, DateTimeKind.Local).AddTicks(8153), "System", null, null, 100, new DateTime(2024, 8, 9, 17, 2, 56, 531, DateTimeKind.Local).AddTicks(8152), "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.", null, null, 1 },
-                    { 4, null, new DateTime(2024, 8, 9, 17, 2, 56, 531, DateTimeKind.Local).AddTicks(8157), "System", null, null, 100, new DateTime(2024, 8, 9, 17, 2, 56, 531, DateTimeKind.Local).AddTicks(8156), "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.", null, null, 1 },
-                    { 5, null, new DateTime(2024, 8, 9, 17, 2, 56, 531, DateTimeKind.Local).AddTicks(8161), "System", null, null, 100, new DateTime(2024, 8, 9, 17, 2, 56, 531, DateTimeKind.Local).AddTicks(8159), "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.", null, null, 3 }
+                    { 2, null, new DateTime(2025, 3, 20, 16, 11, 31, 861, DateTimeKind.Local).AddTicks(4502), "System", null, null, 100, new DateTime(2025, 3, 20, 16, 11, 31, 861, DateTimeKind.Local).AddTicks(4501), "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.", null, null, 1 },
+                    { 3, null, new DateTime(2025, 3, 20, 16, 11, 31, 861, DateTimeKind.Local).AddTicks(4506), "System", null, null, 100, new DateTime(2025, 3, 20, 16, 11, 31, 861, DateTimeKind.Local).AddTicks(4505), "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.", null, null, 1 },
+                    { 4, null, new DateTime(2025, 3, 20, 16, 11, 31, 861, DateTimeKind.Local).AddTicks(4509), "System", null, null, 100, new DateTime(2025, 3, 20, 16, 11, 31, 861, DateTimeKind.Local).AddTicks(4508), "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.", null, null, 1 },
+                    { 5, null, new DateTime(2025, 3, 20, 16, 11, 31, 861, DateTimeKind.Local).AddTicks(4512), "System", null, null, 100, new DateTime(2025, 3, 20, 16, 11, 31, 861, DateTimeKind.Local).AddTicks(4511), "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.", null, null, 3 }
                 });
 
             migrationBuilder.InsertData(
@@ -440,6 +445,11 @@ namespace Persistance.Migrations
                 name: "IX_VideoGame_DeveloperId",
                 table: "VideoGame",
                 column: "DeveloperId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_VideoGame_PublisherId",
+                table: "VideoGame",
+                column: "PublisherId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_VideoGameGenre_GenreId",

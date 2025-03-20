@@ -12,7 +12,7 @@ using Persistance.DbContexts;
 namespace Persistance.Migrations
 {
     [DbContext(typeof(GameStoreDbContext))]
-    [Migration("20240809150256_InitialCreate")]
+    [Migration("20250320151131_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -81,7 +81,7 @@ namespace Persistance.Migrations
                             Id = 1,
                             City = "San Mateo",
                             Country = "USA",
-                            CreatedAt = new DateTime(2024, 8, 9, 17, 2, 56, 531, DateTimeKind.Local).AddTicks(7015),
+                            CreatedAt = new DateTime(2025, 3, 20, 16, 11, 31, 861, DateTimeKind.Local).AddTicks(3482),
                             CreatedBy = "System",
                             PostalCode = "94404",
                             State = "California",
@@ -92,7 +92,7 @@ namespace Persistance.Migrations
                             Id = 2,
                             City = "San Mateo",
                             Country = "United States",
-                            CreatedAt = new DateTime(2024, 8, 9, 17, 2, 56, 531, DateTimeKind.Local).AddTicks(7065),
+                            CreatedAt = new DateTime(2025, 3, 20, 16, 11, 31, 861, DateTimeKind.Local).AddTicks(3531),
                             CreatedBy = "System",
                             PostalCode = "94404",
                             State = "California",
@@ -103,7 +103,7 @@ namespace Persistance.Migrations
                             Id = 3,
                             City = "Amsterdam",
                             Country = "The Netherlands",
-                            CreatedAt = new DateTime(2024, 8, 9, 17, 2, 56, 531, DateTimeKind.Local).AddTicks(7068),
+                            CreatedAt = new DateTime(2025, 3, 20, 16, 11, 31, 861, DateTimeKind.Local).AddTicks(3534),
                             CreatedBy = "System",
                             PostalCode = "1012 RL",
                             State = "",
@@ -114,7 +114,7 @@ namespace Persistance.Migrations
                             Id = 4,
                             City = "Bellevue",
                             Country = "United States",
-                            CreatedAt = new DateTime(2024, 8, 9, 17, 2, 56, 531, DateTimeKind.Local).AddTicks(7108),
+                            CreatedAt = new DateTime(2025, 3, 20, 16, 11, 31, 861, DateTimeKind.Local).AddTicks(3537),
                             CreatedBy = "System",
                             PostalCode = "98004",
                             State = "Washington",
@@ -196,7 +196,7 @@ namespace Persistance.Migrations
                         {
                             Id = 1,
                             CompanyType = 0,
-                            CreatedAt = new DateTime(2024, 8, 9, 17, 2, 56, 531, DateTimeKind.Local).AddTicks(7383),
+                            CreatedAt = new DateTime(2025, 3, 20, 16, 11, 31, 861, DateTimeKind.Local).AddTicks(3783),
                             CreatedBy = "System",
                             EmailAddress = "",
                             HeadquarterId = 1,
@@ -210,7 +210,7 @@ namespace Persistance.Migrations
                         {
                             Id = 2,
                             CompanyType = 2,
-                            CreatedAt = new DateTime(2024, 8, 9, 17, 2, 56, 531, DateTimeKind.Local).AddTicks(7388),
+                            CreatedAt = new DateTime(2025, 3, 20, 16, 11, 31, 861, DateTimeKind.Local).AddTicks(3788),
                             CreatedBy = "System",
                             EmailAddress = "",
                             HeadquarterId = 2,
@@ -225,7 +225,7 @@ namespace Persistance.Migrations
                         {
                             Id = 3,
                             CompanyType = 0,
-                            CreatedAt = new DateTime(2024, 8, 9, 17, 2, 56, 531, DateTimeKind.Local).AddTicks(7391),
+                            CreatedAt = new DateTime(2025, 3, 20, 16, 11, 31, 861, DateTimeKind.Local).AddTicks(3815),
                             CreatedBy = "System",
                             EmailAddress = "",
                             HeadquarterId = 3,
@@ -240,7 +240,7 @@ namespace Persistance.Migrations
                         {
                             Id = 4,
                             CompanyType = 0,
-                            CreatedAt = new DateTime(2024, 8, 9, 17, 2, 56, 531, DateTimeKind.Local).AddTicks(7394),
+                            CreatedAt = new DateTime(2025, 3, 20, 16, 11, 31, 861, DateTimeKind.Local).AddTicks(3818),
                             CreatedBy = "System",
                             EmailAddress = "",
                             HeadquarterId = 4,
@@ -312,7 +312,7 @@ namespace Persistance.Migrations
                         new
                         {
                             Id = 1,
-                            CreatedAt = new DateTime(2024, 8, 9, 17, 2, 56, 531, DateTimeKind.Local).AddTicks(7629),
+                            CreatedAt = new DateTime(2025, 3, 20, 16, 11, 31, 861, DateTimeKind.Local).AddTicks(4052),
                             CreatedBy = "System",
                             DeveloperId = 1,
                             Name = "PlayStation 5",
@@ -324,7 +324,7 @@ namespace Persistance.Migrations
                         new
                         {
                             Id = 2,
-                            CreatedAt = new DateTime(2024, 8, 9, 17, 2, 56, 531, DateTimeKind.Local).AddTicks(7638),
+                            CreatedAt = new DateTime(2025, 3, 20, 16, 11, 31, 861, DateTimeKind.Local).AddTicks(4060),
                             CreatedBy = "System",
                             DeveloperId = 1,
                             Name = "PlayStation VR2",
@@ -612,49 +612,49 @@ namespace Persistance.Migrations
                         {
                             Id = 1,
                             ConsoleId = 1,
-                            CreatedAt = new DateTime(2024, 8, 9, 17, 2, 56, 531, DateTimeKind.Local).AddTicks(8146),
+                            CreatedAt = new DateTime(2025, 3, 20, 16, 11, 31, 861, DateTimeKind.Local).AddTicks(4498),
                             CreatedBy = "System",
                             Grade = 100,
-                            ReviewDate = new DateTime(2024, 8, 9, 17, 2, 56, 531, DateTimeKind.Local).AddTicks(8143),
+                            ReviewDate = new DateTime(2025, 3, 20, 16, 11, 31, 861, DateTimeKind.Local).AddTicks(4496),
                             ReviewText = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
                         },
                         new
                         {
                             Id = 2,
-                            CreatedAt = new DateTime(2024, 8, 9, 17, 2, 56, 531, DateTimeKind.Local).AddTicks(8150),
+                            CreatedAt = new DateTime(2025, 3, 20, 16, 11, 31, 861, DateTimeKind.Local).AddTicks(4502),
                             CreatedBy = "System",
                             Grade = 100,
-                            ReviewDate = new DateTime(2024, 8, 9, 17, 2, 56, 531, DateTimeKind.Local).AddTicks(8149),
+                            ReviewDate = new DateTime(2025, 3, 20, 16, 11, 31, 861, DateTimeKind.Local).AddTicks(4501),
                             ReviewText = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
                             VideoGameId = 1
                         },
                         new
                         {
                             Id = 3,
-                            CreatedAt = new DateTime(2024, 8, 9, 17, 2, 56, 531, DateTimeKind.Local).AddTicks(8153),
+                            CreatedAt = new DateTime(2025, 3, 20, 16, 11, 31, 861, DateTimeKind.Local).AddTicks(4506),
                             CreatedBy = "System",
                             Grade = 100,
-                            ReviewDate = new DateTime(2024, 8, 9, 17, 2, 56, 531, DateTimeKind.Local).AddTicks(8152),
+                            ReviewDate = new DateTime(2025, 3, 20, 16, 11, 31, 861, DateTimeKind.Local).AddTicks(4505),
                             ReviewText = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
                             VideoGameId = 1
                         },
                         new
                         {
                             Id = 4,
-                            CreatedAt = new DateTime(2024, 8, 9, 17, 2, 56, 531, DateTimeKind.Local).AddTicks(8157),
+                            CreatedAt = new DateTime(2025, 3, 20, 16, 11, 31, 861, DateTimeKind.Local).AddTicks(4509),
                             CreatedBy = "System",
                             Grade = 100,
-                            ReviewDate = new DateTime(2024, 8, 9, 17, 2, 56, 531, DateTimeKind.Local).AddTicks(8156),
+                            ReviewDate = new DateTime(2025, 3, 20, 16, 11, 31, 861, DateTimeKind.Local).AddTicks(4508),
                             ReviewText = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
                             VideoGameId = 1
                         },
                         new
                         {
                             Id = 5,
-                            CreatedAt = new DateTime(2024, 8, 9, 17, 2, 56, 531, DateTimeKind.Local).AddTicks(8161),
+                            CreatedAt = new DateTime(2025, 3, 20, 16, 11, 31, 861, DateTimeKind.Local).AddTicks(4512),
                             CreatedBy = "System",
                             Grade = 100,
-                            ReviewDate = new DateTime(2024, 8, 9, 17, 2, 56, 531, DateTimeKind.Local).AddTicks(8159),
+                            ReviewDate = new DateTime(2025, 3, 20, 16, 11, 31, 861, DateTimeKind.Local).AddTicks(4511),
                             ReviewText = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
                             VideoGameId = 3
                         });
@@ -745,6 +745,9 @@ namespace Persistance.Migrations
                         .HasPrecision(18, 2)
                         .HasColumnType("decimal(18,2)");
 
+                    b.Property<int>("PublisherId")
+                        .HasColumnType("int");
+
                     b.Property<DateTime>("PurchaseDate")
                         .HasColumnType("datetime2");
 
@@ -771,17 +774,20 @@ namespace Persistance.Migrations
 
                     b.HasIndex("DeveloperId");
 
+                    b.HasIndex("PublisherId");
+
                     b.ToTable("VideoGame", (string)null);
 
                     b.HasData(
                         new
                         {
                             Id = 1,
-                            CreatedAt = new DateTime(2024, 8, 9, 17, 2, 56, 531, DateTimeKind.Local).AddTicks(8404),
+                            CreatedAt = new DateTime(2025, 3, 20, 16, 11, 31, 861, DateTimeKind.Local).AddTicks(4689),
                             CreatedBy = "System",
                             DeveloperId = 3,
                             Name = "Horizon Zero Dawn - Complete Edition",
                             Price = 229.0m,
+                            PublisherId = 1,
                             PurchaseDate = new DateTime(2023, 4, 7, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             ReleaseDate = new DateTime(2019, 6, 28, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Title = "Horizon Zero Dawn - Complete Edition",
@@ -791,11 +797,12 @@ namespace Persistance.Migrations
                         new
                         {
                             Id = 2,
-                            CreatedAt = new DateTime(2024, 8, 9, 17, 2, 56, 531, DateTimeKind.Local).AddTicks(8412),
+                            CreatedAt = new DateTime(2025, 3, 20, 16, 11, 31, 861, DateTimeKind.Local).AddTicks(4698),
                             CreatedBy = "System",
                             DeveloperId = 3,
                             Name = "Horizon Forbidden West - Complete Edition",
                             Price = 799.0m,
+                            PublisherId = 1,
                             PurchaseDate = new DateTime(2023, 11, 24, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             ReleaseDate = new DateTime(2023, 10, 6, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Title = "Horizon Forbidden West - Complete Edition",
@@ -805,11 +812,12 @@ namespace Persistance.Migrations
                         new
                         {
                             Id = 3,
-                            CreatedAt = new DateTime(2024, 8, 9, 17, 2, 56, 531, DateTimeKind.Local).AddTicks(8420),
+                            CreatedAt = new DateTime(2025, 3, 20, 16, 11, 31, 861, DateTimeKind.Local).AddTicks(4705),
                             CreatedBy = "System",
                             DeveloperId = 3,
                             Name = "Horizon Call of the Mountain",
                             Price = 739.0m,
+                            PublisherId = 1,
                             PurchaseDate = new DateTime(2023, 2, 25, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             ReleaseDate = new DateTime(2023, 2, 22, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Title = "Horizon Call of the Mountain",
@@ -819,11 +827,12 @@ namespace Persistance.Migrations
                         new
                         {
                             Id = 4,
-                            CreatedAt = new DateTime(2024, 8, 9, 17, 2, 56, 531, DateTimeKind.Local).AddTicks(8427),
+                            CreatedAt = new DateTime(2025, 3, 20, 16, 11, 31, 861, DateTimeKind.Local).AddTicks(4713),
                             CreatedBy = "System",
                             DeveloperId = 4,
                             Name = "Ghost of Tsushima DIRECTOR’S CUT",
                             Price = 0.0m,
+                            PublisherId = 1,
                             PurchaseDate = new DateTime(2022, 5, 3, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             ReleaseDate = new DateTime(2021, 8, 20, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Title = "Ghost of Tsushima DIRECTOR’S CUT",
@@ -997,12 +1006,18 @@ namespace Persistance.Migrations
             modelBuilder.Entity("Domain.Entities.VideoGame", b =>
                 {
                     b.HasOne("Domain.Entities.Company", "Developer")
-                        .WithMany("VideoGames")
+                        .WithMany("DevelopedVideoGames")
                         .HasForeignKey("DeveloperId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Domain.Entities.Company", "Publisher")
+                        .WithMany("PublishedVideoGames")
+                        .HasForeignKey("PublisherId")
                         .IsRequired();
 
                     b.Navigation("Developer");
+
+                    b.Navigation("Publisher");
                 });
 
             modelBuilder.Entity("Domain.Entities.VideoGameGenre", b =>
@@ -1031,7 +1046,9 @@ namespace Persistance.Migrations
                 {
                     b.Navigation("Consoles");
 
-                    b.Navigation("VideoGames");
+                    b.Navigation("DevelopedVideoGames");
+
+                    b.Navigation("PublishedVideoGames");
                 });
 
             modelBuilder.Entity("Domain.Entities.Console", b =>

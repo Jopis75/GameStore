@@ -53,9 +53,14 @@ namespace Persistance.DbContexts
                 .HasKey(company => company.Id);
             modelBuilder
                 .Entity<Company>()
-                .HasMany(company => company.VideoGames)
+                .HasMany(company => company.DevelopedVideoGames)
                 .WithOne(videoGame => videoGame.Developer)
                 .HasForeignKey(videoGame => videoGame.DeveloperId);
+            modelBuilder
+                .Entity<Company>()
+                .HasMany(company => company.PublishedVideoGames)
+                .WithOne(videoGame => videoGame.Publisher)
+                .HasForeignKey(videoGame => videoGame.PublisherId);
             modelBuilder
                 .Entity<Company>()
                 .HasOne(company => company.Headquarter)
@@ -148,8 +153,15 @@ namespace Persistance.DbContexts
             modelBuilder
                 .Entity<VideoGame>()
                 .HasOne(videoGame => videoGame.Developer)
-                .WithMany(company => company.VideoGames)
-                .HasForeignKey(videoGame => videoGame.DeveloperId);
+                .WithMany(company => company.DevelopedVideoGames)
+                .HasForeignKey(videoGame => videoGame.DeveloperId)
+                .OnDelete(DeleteBehavior.ClientSetNull);
+            modelBuilder
+                .Entity<VideoGame>()
+                .HasOne(videoGame => videoGame.Publisher)
+                .WithMany(company => company.PublishedVideoGames)
+                .HasForeignKey(videoGame => videoGame.PublisherId)
+                .OnDelete(DeleteBehavior.ClientSetNull);
             modelBuilder
                 .Entity<VideoGame>()
                 .HasMany(videoGame => videoGame.Reviews)

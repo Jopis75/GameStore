@@ -8,6 +8,8 @@ namespace Domain.Dtos
 
         public List<ConsoleDto> Consoles { get; set; } = new();
 
+        public List<VideoGameDto> DevelopedVideoGames { get; set; } = new();
+
         public string EmailAddress { get; set; } = default!;
 
         public AddressDto Headquarter { get; set; } = default!;
@@ -26,9 +28,9 @@ namespace Domain.Dtos
 
         public string PhoneNumber { get; set; } = default!;
 
-        public string TradeName { get; set; } = default!;
+        public List<VideoGameDto> PublishedVideoGames { get; set; } = new();
 
-        public List<VideoGameDto> VideoGames { get; set; } = new();
+        public string TradeName { get; set; } = default!;
 
         public string? WebsiteUrl { get; set; }
     }

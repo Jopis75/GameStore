@@ -8,6 +8,8 @@ namespace Application.Features.VideoGames.Requests.Commands
     {
         public int DeveloperId { get; set; }
 
+        public int PublisherId { get; set; }
+
         public int Id { get; set; }
 
         public string? ImageUri { get; set; }

@@ -8,6 +8,8 @@ namespace Domain.Entities
 
         public virtual ICollection<Console> Consoles { get; set; } = new List<Console>();
 
+        public virtual ICollection<VideoGame> DevelopedVideoGames { get; set; } = new List<VideoGame>();
+
         public string EmailAddress { get; set; } = default!;
 
         public virtual Address Headquarter { get; set; } = default!;
@@ -26,9 +28,9 @@ namespace Domain.Entities
 
         public string PhoneNumber { get; set; } = default!;
 
-        public string TradeName { get; set; } = default!;
+        public virtual ICollection<VideoGame> PublishedVideoGames { get; set; } = new List<VideoGame>();
 
-        public virtual ICollection<VideoGame> VideoGames { get; set; } = new List<VideoGame>();
+        public string TradeName { get; set; } = default!;
 
         public string? WebsiteUrl { get; set; }
     }

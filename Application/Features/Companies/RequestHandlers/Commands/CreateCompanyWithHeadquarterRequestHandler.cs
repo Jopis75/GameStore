@@ -12,9 +12,7 @@ namespace Application.Features.Companies.RequestHandlers.Commands
 {
     public class CreateCompanyWithHeadquarterRequestHandler : IRequestHandler<CreateCompanyWithHeadquarterRequest, HttpResponseDto<CompanyDto>>
     {
-        private readonly ICompanyRepository _companyRepository;
-
-        private readonly IAddressRepository _addressRepository;
+        private readonly IUnitOfWork _unitOfWork;
 
         private readonly IMapper _mapper;
 
@@ -22,10 +20,9 @@ namespace Application.Features.Companies.RequestHandlers.Commands
 
         private readonly ILogger<CreateCompanyWithHeadquarterRequestHandler> _logger;
 
-        public CreateCompanyWithHeadquarterRequestHandler(ICompanyRepository companyRepository, IAddressRepository addressRepository, IMapper mapper, IValidator<CreateCompanyWithHeadquarterRequest> validator, ILogger<CreateCompanyWithHeadquarterRequestHandler> logger)
+        public CreateCompanyWithHeadquarterRequestHandler(IUnitOfWork unitOfWork, IMapper mapper, IValidator<CreateCompanyWithHeadquarterRequest> validator, ILogger<CreateCompanyWithHeadquarterRequestHandler> logger)
         {
-            _companyRepository = companyRepository;
-            _addressRepository = addressRepository;
+            _unitOfWork = unitOfWork;
             _mapper = mapper;
             _validator = validator;
             _logger = logger;
@@ -33,6 +30,8 @@ namespace Application.Features.Companies.RequestHandlers.Commands
 
         public async Task<HttpResponseDto<CompanyDto>> Handle(CreateCompanyWithHeadquarterRequest createCompanyWithHeadquarterRequest, CancellationToken cancellationToken)
         {
+            await _unitOfWork.BeginTransactionAsync(cancellationToken);
+
             try
             {
                 _logger.LogInformation("Begin CreateCompanyWithHeadquarter {@CreateCompanyWithHeadquarterRequest}.", createCompanyWithHeadquarterRequest);
@@ -56,10 +55,14 @@ namespace Application.Features.Companies.RequestHandlers.Commands
                 }
 
                 var addressDto = _mapper.Map<AddressDto>(createCompanyWithHeadquarterRequest);
-                var createdAddressDto = await _addressRepository.CreateAsync(addressDto, cancellationToken);
+                var createdAddressDto = await _unitOfWork.AddressRepository.CreateAsync(addressDto, cancellationToken);
+
                 createCompanyWithHeadquarterRequest.HeadquarterId = createdAddressDto.Id;
+
                 var companyDto = _mapper.Map<CompanyDto>(createCompanyWithHeadquarterRequest);
-                var createdCompanyDto = await _companyRepository.CreateAsync(companyDto, cancellationToken);
+                var createdCompanyDto = await _unitOfWork.CompanyRepository.CreateAsync(companyDto, cancellationToken);
+
+                await _unitOfWork.CommitTransactionAsync(cancellationToken);
 
                 var httpResponseDto = new HttpResponseDto<CompanyDto>(createdCompanyDto, StatusCodes.Status201Created);
                 _logger.LogInformation("Done CreateCompanyWithHeadquarter {@HttpResponseDto}.", httpResponseDto);
@@ -67,12 +70,16 @@ namespace Application.Features.Companies.RequestHandlers.Commands
             }
             catch (OperationCanceledException ex)
             {
+                await _unitOfWork.RollbackTransactionAsync(cancellationToken);
+
                 var httpResponseDto1 = new HttpResponseDto<CompanyDto>(ex.Message, StatusCodes.Status500InternalServerError);
                 _logger.LogError(ex, "Canceled CreateCompanyWithHeadquarter {@HttpResponseDto}.", httpResponseDto1);
                 return httpResponseDto1;
             }
             catch (Exception ex)
             {
+                await _unitOfWork.RollbackTransactionAsync(cancellationToken);
+
                 var httpResponseDto1 = new HttpResponseDto<CompanyDto>(ex.Message, StatusCodes.Status500InternalServerError);
                 _logger.LogError(ex, "Error CreateCompanyWithHeadquarter {@HttpResponseDto}.", httpResponseDto1);
                 return httpResponseDto1;

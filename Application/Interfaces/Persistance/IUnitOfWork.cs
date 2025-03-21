@@ -14,12 +14,18 @@
 
         IReviewRepository ReviewRepository { get; }
 
-        Task SaveAsync();
-
         ITrophyRepository TrophyRepository { get; }
 
         IVideoGameGenreRepository VideoGameGenreRepository { get; }
 
         IVideoGameRepository VideoGameRepository { get; }
+
+        Task BeginTransactionAsync(CancellationToken cancellationToken);
+
+        Task CommitTransactionAsync(CancellationToken cancellationToken);
+
+        Task RollbackTransactionAsync(CancellationToken cancellationToken);
+
+        Task SaveChangesAsync(CancellationToken cancellationToken);
     }
 }

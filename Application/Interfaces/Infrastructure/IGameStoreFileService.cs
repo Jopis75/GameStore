@@ -6,8 +6,8 @@ namespace Application.Interfaces.Infrastructure
 {
     public interface IGameStoreFileService
     {
-        Task<UploadGameStoreFileDto<VideoGameDto>> UpsertAsync(IFormFile formFile, CancellationToken cancellationToken);
+        Task<UploadGameStoreFileDto<VideoGameDto>> UploadAsync(IFormFile formFile, CancellationToken cancellationToken);
 
-        Task<UploadGameStoreFileDto<VideoGameDto>> UpsertAsync(Stream stream, CancellationToken cancellationToken);
+        Task<UploadGameStoreFileDto<VideoGameDto>> UploadAsync(Stream stream, CancellationToken cancellationToken);
     }
 }

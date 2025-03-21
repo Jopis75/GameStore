@@ -1,4 +1,5 @@
 ﻿using Application.Interfaces.Persistance;
+using Microsoft.EntityFrameworkCore.Storage;
 using Persistance.DbContexts;
 
 namespace Persistance.Repositories
@@ -6,8 +7,6 @@ namespace Persistance.Repositories
     public class UnitOfWork : IUnitOfWork
     {
         private readonly GameStoreDbContext _gameStoreDbContext;
-
-        //private readonly IHttpContextAccessor _httpContextAccessor;
 
         private readonly IAddressRepository _addressRepository;
 
@@ -20,6 +19,8 @@ namespace Persistance.Repositories
         private readonly IGenreRepository _genreRepository;
 
         private readonly IReviewRepository _reviewRepository;
+
+        private IDbContextTransaction _transaction = default!;
 
         private readonly ITrophyRepository _trophyRepository;
 
@@ -47,7 +48,6 @@ namespace Persistance.Repositories
 
         public UnitOfWork(
             GameStoreDbContext gameStoreDbContext,
-            /*IHttpContextAccessor httpContextAccessor, */
             IAddressRepository addressRepository,
             ICompanyRepository companyRepository,
             IConsoleRepository consoleRepository,
@@ -59,7 +59,6 @@ namespace Persistance.Repositories
             IVideoGameRepository videoGameRepository)
         {
             _gameStoreDbContext = gameStoreDbContext;
-            //_httpContextAccessor = httpContextAccessor ?? throw new ArgumentNullException(nameof(httpContextAccessor));
             _addressRepository = addressRepository;
             _companyRepository = companyRepository;
             _consoleRepository = consoleRepository;
@@ -71,16 +70,42 @@ namespace Persistance.Repositories
             _videoGameRepository = videoGameRepository;
         }
 
+        public async Task BeginTransactionAsync(CancellationToken cancellationToken)
+        {
+            _transaction = await _gameStoreDbContext.Database.BeginTransactionAsync(cancellationToken);
+        }
+
+        public async Task CommitTransactionAsync(CancellationToken cancellationToken)
+        {
+            try
+            {
+                await _gameStoreDbContext.SaveChangesAsync(cancellationToken);
+
+                await _transaction.CommitAsync(cancellationToken);
+            }
+            catch (Exception)
+            {
+                await _transaction.RollbackAsync(cancellationToken);
+
+                throw;
+            }
+        }
+
         public void Dispose()
         {
             _gameStoreDbContext.Dispose();
+
             GC.SuppressFinalize(this);
         }
 
-        public async Task SaveAsync()
+        public async Task RollbackTransactionAsync(CancellationToken cancellationToken)
         {
-            //var userName = _httpContextAccessor.HttpContext.User.FindFirst(String.Empty)?.Value;
-            await _gameStoreDbContext.SaveChangesAsync();
+            await _transaction.RollbackAsync(cancellationToken);
+        }
+
+        public async Task SaveChangesAsync(CancellationToken cancellationToken)
+        {
+            await _gameStoreDbContext.SaveChangesAsync(cancellationToken);
         }
     }
 }

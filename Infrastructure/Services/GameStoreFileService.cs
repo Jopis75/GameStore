@@ -35,47 +35,50 @@ namespace Infrastructure.Services
             _logger = logger;
         }
 
-        public async Task<UploadGameStoreFileDto<VideoGameDto>> UpsertAsync(IFormFile formFile, CancellationToken cancellationToken)
+        public async Task<UploadGameStoreFileDto<VideoGameDto>> UploadAsync(IFormFile formFile, CancellationToken cancellationToken)
         {
             var memoryStream = new MemoryStream();
             await formFile.CopyToAsync(memoryStream, cancellationToken);
             memoryStream.Position = 0;
 
-            var uploadGameStoreFileDto = await UpsertAsync(memoryStream, cancellationToken);
+            var uploadGameStoreFileDto = await UploadAsync(memoryStream, cancellationToken);
 
             return uploadGameStoreFileDto;
         }
 
-        public async Task<UploadGameStoreFileDto<VideoGameDto>> UpsertAsync(Stream stream, CancellationToken cancellationToken)
+        public async Task<UploadGameStoreFileDto<VideoGameDto>> UploadAsync(Stream stream, CancellationToken cancellationToken)
         {
             var videoGameDtos = new List<VideoGameDto>();
 
             TextReader textReader = new StreamReader(stream);
-            var rows = (await textReader.ReadToEndAsync(cancellationToken)).Split("\r\n");
+
+            var rows = (await textReader.ReadToEndAsync(cancellationToken)).Split("\r\n", StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
 
             foreach (var row in rows)
             {
+                //await context.Database.BeginTransactionAsync();
                 try
                 {
-                    var columns = row.Split('|');
+                    var columns = row.Split('|', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
 
                     // Trim and parse all file data.
-                    var videoGameTitle = columns[0].Trim();
-                    var consoleName = columns[1].Trim(); // Must exist in db.
-                    var developerName = columns[2].Trim(); // Must exist in db.
-                    var genreNames = columns[3].Trim().Split(';'); // Must exist in db.
-                    var videoGameReleaseDate = DateTime.Parse(columns[4].Trim());
-                    var videoGamePurchaseDate = DateTime.Parse(columns[5].Trim());
-                    var videoGamePrice = Decimal.Parse(columns[6].Trim());
+                    var videoGameTitle = columns[0];
+                    var developerName = columns[1]; // Must exist in db.
+                    var publisherName = columns[2]; // Must exist in db.
+                    var consoleName = columns[3]; // Must exist in db.
+                    var genreNames = columns[4].Split(';', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries); // Must exist in db.
+                    var videoGameReleaseDate = DateTime.Parse(columns[5]);
+                    var videoGamePurchaseDate = DateTime.Parse(columns[6]);
+                    var videoGamePrice = Decimal.Parse(columns[7]);
 
-                    // Update or insert VideoGame.
-                    var videoGameDto = await UpsertVideoGameAsync(videoGameTitle, videoGameReleaseDate, videoGamePurchaseDate, videoGamePrice, developerName, cancellationToken);
+                    // Create or update VideoGame.
+                    var videoGameDto = await CreateOrUpdateVideoGameAsync(videoGameTitle, videoGameReleaseDate, videoGamePurchaseDate, videoGamePrice, developerName, publisherName, cancellationToken);
 
-                    // Update or insert ConsoleVideoGame.
-                    var consoleVideoGameDtos = await UpsertConsoleVideoGamesAsync(consoleName, videoGameDto.Id, cancellationToken);
+                    // Create if not exist ConsoleVideoGame.
+                    var consoleVideoGameDtos = await CreateIfNotExistConsoleVideoGamesAsync(consoleName, videoGameDto.Id, cancellationToken);
 
                     // Update or insert VideoGameGenre.
-                    var videoGameGenreDtos = await UpsertVideoGameGenresAsync(videoGameDto.Id, genreNames, cancellationToken);
+                    var videoGameGenreDtos = await CreateOrUpdateVideoGameGenresAsync(videoGameDto.Id, genreNames, cancellationToken);
 
                     videoGameDtos.Add(videoGameDto);
 
@@ -98,7 +101,7 @@ namespace Infrastructure.Services
             return uploadGameStoreFileDto;
         }
 
-        private async Task<ConsoleVideoGameDto> UpsertConsoleVideoGamesAsync(string consoleName, int videoGameId, CancellationToken cancellationToken)
+        private async Task<ConsoleVideoGameDto> CreateIfNotExistConsoleVideoGamesAsync(string consoleName, int videoGameId, CancellationToken cancellationToken)
         {
             var consoleVideoGameDtos = await _consoleVideoGameRepository.ReadByVideoGameIdAsync(videoGameId, cancellationToken);
 
@@ -134,7 +137,72 @@ namespace Infrastructure.Services
             return new ConsoleVideoGameDto();
         }
 
-        private async Task<IEnumerable<VideoGameGenreDto>> UpsertVideoGameGenresAsync(int videoGameId, string[] genreNames, CancellationToken cancellationToken)
+        private async Task<VideoGameDto> CreateOrUpdateVideoGameAsync(string title, DateTime releaseDate, DateTime purchaseDate, decimal price, string developerName, string publisherName, CancellationToken cancellationToken)
+        {
+            var developerCompanyDtos = await _companyRepository.ReadByNameAsync(developerName, cancellationToken);
+
+            // Did not found an exact match.
+            if (developerCompanyDtos.Count() != 1)
+            {
+                throw new NotFoundException(developerName, developerName);
+            }
+
+            var developerId = developerCompanyDtos.First().Id;
+
+            var publisherCompanyDtos = await _companyRepository.ReadByNameAsync(publisherName, cancellationToken);
+
+            // Did not found an exact match.
+            if (publisherCompanyDtos.Count() != 1)
+            {
+                throw new NotFoundException(publisherName, publisherName);
+            }
+
+            var publisherId = publisherCompanyDtos.First().Id;
+
+            var videoGameDtos = await _videoGameRepository.ReadByTitleAsync(title, cancellationToken);
+
+            // Create if not exist.
+            if (videoGameDtos.Any() == false)
+            {
+                var videoGameDto = new VideoGameDto
+                {
+                    Title = title,
+                    ReleaseDate = releaseDate,
+                    PurchaseDate = purchaseDate,
+                    Price = price,
+                    DeveloperId = developerId,
+                    PublisherId = publisherId,
+                    CreatedAt = DateTime.Now,
+                    CreatedBy = "System",
+                    DeletedAt = null,
+                    DeletedBy = String.Empty,
+                    UpdatedAt = null,
+                    UpdatedBy = String.Empty
+                };
+
+                var createdVideoGameDto = await _videoGameRepository.CreateAsync(videoGameDto, cancellationToken);
+
+                return createdVideoGameDto;
+            }
+            else // Update if exist.
+            {
+                var videoGameDto = videoGameDtos.First();
+                videoGameDto.Title = title;
+                videoGameDto.ReleaseDate = releaseDate;
+                videoGameDto.PurchaseDate = purchaseDate;
+                videoGameDto.Price = price;
+                videoGameDto.DeveloperId = developerId;
+                videoGameDto.PublisherId = publisherId;
+                videoGameDto.UpdatedAt = DateTime.Now;
+                videoGameDto.UpdatedBy = "System";
+
+                var updatedVideoGameDto = await _videoGameRepository.UpdateAsync(videoGameDto, cancellationToken);
+
+                return updatedVideoGameDto;
+            }
+        }
+
+        private async Task<IEnumerable<VideoGameGenreDto>> CreateOrUpdateVideoGameGenresAsync(int videoGameId, string[] genreNames, CancellationToken cancellationToken)
         {
             var videoGameGenreDtos = await _videoGameGenreRepository.ReadByVideoGameIdAsync(videoGameId, cancellationToken);
 
@@ -175,59 +243,6 @@ namespace Infrastructure.Services
             }
 
             return createdVideoGameGenreDtos;
-        }
-
-        private async Task<VideoGameDto> UpsertVideoGameAsync(string title, DateTime releaseDate, DateTime purchaseDate, decimal price, string developerName, CancellationToken cancellationToken)
-        {
-            var videoGameDtos = await _videoGameRepository.ReadByTitleAsync(title, cancellationToken);
-
-            var companyDtos = await _companyRepository.ReadByNameAsync(developerName, cancellationToken);
-
-            // Did not found an exact match.
-            if (companyDtos.Count() != 1)
-            {
-                throw new NotFoundException(developerName, developerName);
-            }
-
-            var companyDto = companyDtos.First();
-
-            // Create if not exist.
-            if (videoGameDtos.Count() == 0)
-            {
-                var videoGameDto = new VideoGameDto
-                {
-                    Title = title,
-                    ReleaseDate = releaseDate,
-                    PurchaseDate = purchaseDate,
-                    Price = price,
-                    DeveloperId = companyDto.Id,
-                    CreatedAt = DateTime.Now,
-                    CreatedBy = "System",
-                    DeletedAt = null,
-                    DeletedBy = String.Empty,
-                    UpdatedAt = null,
-                    UpdatedBy = String.Empty
-                };
-
-                var createdVideoGameDto = await _videoGameRepository.CreateAsync(videoGameDto, cancellationToken);
-
-                return createdVideoGameDto;
-            }
-            else // Update if exist.
-            {
-                var videoGameDto = videoGameDtos.First();
-                videoGameDto.Title = title;
-                videoGameDto.ReleaseDate = releaseDate;
-                videoGameDto.PurchaseDate = purchaseDate;
-                videoGameDto.Price = price;
-                videoGameDto.DeveloperId = companyDto.Id;
-                videoGameDto.UpdatedAt = DateTime.Now;
-                videoGameDto.UpdatedBy = "System";
-
-                var updatedVideoGameDto = await _videoGameRepository.UpdateAsync(videoGameDto, cancellationToken);
-
-                return updatedVideoGameDto;
-            }
         }
     }
 }

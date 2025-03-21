@@ -48,7 +48,7 @@ namespace Application.Features.VideoGames.RequestHandlers.Commands
                     return httpResponseDto1;
                 }
 
-                var uploadGameStoreFileDto = await _gameStoreFileService.UpsertAsync(uploadGameStoreFileRequest.FormFile, cancellationToken);
+                var uploadGameStoreFileDto = await _gameStoreFileService.UploadAsync(uploadGameStoreFileRequest.FormFile, cancellationToken);
 
                 var httpResponseDto = new HttpResponseDto<UploadGameStoreFileDto<VideoGameDto>>(uploadGameStoreFileDto, StatusCodes.Status200OK);
                 _logger.LogInformation("Done UploadGameStoreFile {@HttpResponseDto}.", httpResponseDto);

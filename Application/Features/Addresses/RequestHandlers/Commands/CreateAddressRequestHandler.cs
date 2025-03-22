@@ -12,7 +12,7 @@ namespace Application.Features.Addresses.RequestHandlers.Commands
 {
     public class CreateAddressRequestHandler : IRequestHandler<CreateAddressRequest, HttpResponseDto<AddressDto>>
     {
-        private readonly IAddressRepository _addressRepository;
+        private readonly IUnitOfWork _unitOfWork;
 
         private readonly IMapper _mapper;
 
@@ -20,9 +20,9 @@ namespace Application.Features.Addresses.RequestHandlers.Commands
 
         private readonly ILogger<CreateAddressRequestHandler> _logger;
 
-        public CreateAddressRequestHandler(IAddressRepository addressRepository, IMapper mapper, IValidator<CreateAddressRequest> validator, ILogger<CreateAddressRequestHandler> logger)
+        public CreateAddressRequestHandler(IUnitOfWork unitOfWork, IMapper mapper, IValidator<CreateAddressRequest> validator, ILogger<CreateAddressRequestHandler> logger)
         {
-            _addressRepository = addressRepository;
+            _unitOfWork = unitOfWork;
             _mapper = mapper;
             _validator = validator;
             _logger = logger;
@@ -30,6 +30,8 @@ namespace Application.Features.Addresses.RequestHandlers.Commands
 
         public async Task<HttpResponseDto<AddressDto>> Handle(CreateAddressRequest createAddressRequest, CancellationToken cancellationToken)
         {
+            await _unitOfWork.BeginTransactionAsync(cancellationToken);
+
             try
             {
                 _logger.LogInformation("Begin CreateAddress {@CreateAddressRequest}.", createAddressRequest);
@@ -53,7 +55,9 @@ namespace Application.Features.Addresses.RequestHandlers.Commands
                 }
 
                 var addressDto = _mapper.Map<AddressDto>(createAddressRequest);
-                var createdAddressDto = await _addressRepository.CreateAsync(addressDto, cancellationToken);
+                var createdAddressDto = await _unitOfWork.AddressRepository.CreateAsync(addressDto, cancellationToken);
+
+                await _unitOfWork.CommitTransactionAsync(cancellationToken);
 
                 var httpResponseDto = new HttpResponseDto<AddressDto>(createdAddressDto, StatusCodes.Status201Created);
                 _logger.LogInformation("Done CreateAddress {@HttpResponseDto}.", httpResponseDto);
@@ -61,12 +65,16 @@ namespace Application.Features.Addresses.RequestHandlers.Commands
             }
             catch (OperationCanceledException ex)
             {
+                await _unitOfWork.RollbackTransactionAsync(cancellationToken);
+
                 var httpResponseDto1 = new HttpResponseDto<AddressDto>(ex.Message, StatusCodes.Status500InternalServerError);
                 _logger.LogError(ex, "Canceled CreateAddress {@HttpResponseDto}.", httpResponseDto1);
                 return httpResponseDto1;
             }
             catch (Exception ex)
             {
+                await _unitOfWork.RollbackTransactionAsync(cancellationToken);
+
                 var httpResponseDto1 = new HttpResponseDto<AddressDto>(ex.Message, StatusCodes.Status500InternalServerError);
                 _logger.LogError(ex, "Error CreateAddress {@HttpResponseDto}.", httpResponseDto1);
                 return httpResponseDto1;

@@ -56,7 +56,6 @@ namespace Infrastructure.Services
 
             foreach (var row in rows)
             {
-                //await context.Database.BeginTransactionAsync();
                 try
                 {
                     var columns = row.Split('|', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);

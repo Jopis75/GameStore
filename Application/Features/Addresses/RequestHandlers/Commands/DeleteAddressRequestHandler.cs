@@ -11,21 +11,23 @@ namespace Application.Features.Addresses.RequestHandlers.Commands
 {
     public class DeleteAddressRequestHandler : IRequestHandler<DeleteAddressRequest, HttpResponseDto<AddressDto>>
     {
-        private readonly IAddressRepository _addressRepository;
+        private readonly IUnitOfWork _unitOfWork;
 
         private readonly IValidator<DeleteAddressRequest> _validator;
 
         private readonly ILogger<DeleteAddressRequestHandler> _logger;
 
-        public DeleteAddressRequestHandler(IAddressRepository addressRepository, IValidator<DeleteAddressRequest> validator, ILogger<DeleteAddressRequestHandler> logger)
+        public DeleteAddressRequestHandler(IUnitOfWork unitOfWork, IValidator<DeleteAddressRequest> validator, ILogger<DeleteAddressRequestHandler> logger)
         {
-            _addressRepository = addressRepository;
+            _unitOfWork = unitOfWork;
             _validator = validator;
             _logger = logger;
         }
 
         public async Task<HttpResponseDto<AddressDto>> Handle(DeleteAddressRequest deleteAddressRequest, CancellationToken cancellationToken)
         {
+            await _unitOfWork.BeginTransactionAsync(cancellationToken);
+
             try
             {
                 _logger.LogInformation("Begin DeleteAddress {@DeleteAddressRequest}.", deleteAddressRequest);
@@ -48,7 +50,9 @@ namespace Application.Features.Addresses.RequestHandlers.Commands
                     return httpResponseDto1;
                 }
 
-                var deletedAddressDto = await _addressRepository.DeleteByIdAsync(deleteAddressRequest.Id, cancellationToken);
+                var deletedAddressDto = await _unitOfWork.AddressRepository.DeleteByIdAsync(deleteAddressRequest.Id, cancellationToken);
+
+                await _unitOfWork.CommitTransactionAsync(cancellationToken);
 
                 var httpResponseDto = new HttpResponseDto<AddressDto>(deletedAddressDto, StatusCodes.Status200OK);
                 _logger.LogInformation("Done DeleteAddress {@HttpResponseDto}.", httpResponseDto);
@@ -56,12 +60,16 @@ namespace Application.Features.Addresses.RequestHandlers.Commands
             }
             catch (OperationCanceledException ex)
             {
+                await _unitOfWork.RollbackTransactionAsync(cancellationToken);
+
                 var httpResponseDto1 = new HttpResponseDto<AddressDto>(ex.Message, StatusCodes.Status500InternalServerError);
                 _logger.LogError(ex, "Canceled DeleteAddress {@HttpResponseDto}.", httpResponseDto1);
                 return httpResponseDto1;
             }
             catch (Exception ex)
             {
+                await _unitOfWork.RollbackTransactionAsync(cancellationToken);
+
                 var httpResponseDto1 = new HttpResponseDto<AddressDto>(ex.Message, StatusCodes.Status500InternalServerError);
                 _logger.LogError(ex, "Error DeleteAddress {@HttpResponseDto}.", httpResponseDto1);
                 return httpResponseDto1;

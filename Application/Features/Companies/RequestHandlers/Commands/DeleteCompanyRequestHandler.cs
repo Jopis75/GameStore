@@ -11,21 +11,23 @@ namespace Application.Features.Companies.RequestHandlers.Commands
 {
     public class DeleteCompanyRequestHandler : IRequestHandler<DeleteCompanyRequest, HttpResponseDto<CompanyDto>>
     {
-        private readonly ICompanyRepository _companyRepository;
+        private readonly IUnitOfWork _unitOfWork;
 
         private readonly IValidator<DeleteCompanyRequest> _validator;
 
         private readonly ILogger<DeleteCompanyRequestHandler> _logger;
 
-        public DeleteCompanyRequestHandler(ICompanyRepository companyRepository, IValidator<DeleteCompanyRequest> validator, ILogger<DeleteCompanyRequestHandler> logger)
+        public DeleteCompanyRequestHandler(IUnitOfWork unitOfWork, IValidator<DeleteCompanyRequest> validator, ILogger<DeleteCompanyRequestHandler> logger)
         {
-            _companyRepository = companyRepository;
+            _unitOfWork = unitOfWork;
             _validator = validator;
             _logger = logger;
         }
 
         public async Task<HttpResponseDto<CompanyDto>> Handle(DeleteCompanyRequest deleteCompanyRequest, CancellationToken cancellationToken)
         {
+            await _unitOfWork.BeginTransactionAsync(cancellationToken);
+
             try
             {
                 _logger.LogInformation("Begin DeleteCompany {@DeleteCompanyRequest}.", deleteCompanyRequest);
@@ -48,7 +50,9 @@ namespace Application.Features.Companies.RequestHandlers.Commands
                     return httpResponseDto1;
                 }
 
-                var deletedCompanyDto = await _companyRepository.DeleteByIdAsync(deleteCompanyRequest.Id, cancellationToken);
+                var deletedCompanyDto = await _unitOfWork.CompanyRepository.DeleteByIdAsync(deleteCompanyRequest.Id, cancellationToken);
+
+                await _unitOfWork.CommitTransactionAsync(cancellationToken);
 
                 var httpResponseDto = new HttpResponseDto<CompanyDto>(deletedCompanyDto, StatusCodes.Status200OK);
                 _logger.LogInformation("Done DeleteCompany {@HttpResponseDto}.", httpResponseDto);
@@ -56,12 +60,16 @@ namespace Application.Features.Companies.RequestHandlers.Commands
             }
             catch (OperationCanceledException ex)
             {
+                await _unitOfWork.RollbackTransactionAsync(cancellationToken);
+
                 var httpResponseDto1 = new HttpResponseDto<CompanyDto>(ex.Message, StatusCodes.Status500InternalServerError);
                 _logger.LogError(ex, "Canceled DeleteCompany {@HttpResponseDto}.", httpResponseDto1);
                 return httpResponseDto1;
             }
             catch (Exception ex)
             {
+                await _unitOfWork.RollbackTransactionAsync(cancellationToken);
+
                 var httpResponseDto1 = new HttpResponseDto<CompanyDto>(ex.Message, StatusCodes.Status500InternalServerError);
                 _logger.LogError(ex, "Error DeleteCompany {@HttpResponseDto}.", httpResponseDto1);
                 return httpResponseDto1;

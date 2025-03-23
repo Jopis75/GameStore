@@ -12,7 +12,7 @@ namespace Application.Features.Consoles.RequestHandlers.Commands
 {
     public class UpdateConsoleRequestHandler : IRequestHandler<UpdateConsoleRequest, HttpResponseDto<ConsoleDto>>
     {
-        private readonly IConsoleRepository _consoleRepository;
+        private readonly IUnitOfWork _unitOfWork;
 
         private readonly IMapper _mapper;
 
@@ -20,9 +20,9 @@ namespace Application.Features.Consoles.RequestHandlers.Commands
 
         private readonly ILogger<UpdateConsoleRequestHandler> _logger;
 
-        public UpdateConsoleRequestHandler(IConsoleRepository consoleRepository, IMapper mapper, IValidator<UpdateConsoleRequest> validator, ILogger<UpdateConsoleRequestHandler> logger)
+        public UpdateConsoleRequestHandler(IUnitOfWork unitOfWork, IMapper mapper, IValidator<UpdateConsoleRequest> validator, ILogger<UpdateConsoleRequestHandler> logger)
         {
-            _consoleRepository = consoleRepository;
+            _unitOfWork = unitOfWork;
             _mapper = mapper;
             _validator = validator;
             _logger = logger;
@@ -30,6 +30,8 @@ namespace Application.Features.Consoles.RequestHandlers.Commands
 
         public async Task<HttpResponseDto<ConsoleDto>> Handle(UpdateConsoleRequest updateConsoleRequest, CancellationToken cancellationToken)
         {
+            await _unitOfWork.BeginTransactionAsync(cancellationToken);
+
             try
             {
                 _logger.LogInformation("Begin UpdateConsole {@UpdateConsoleRequest}.", updateConsoleRequest);
@@ -53,7 +55,9 @@ namespace Application.Features.Consoles.RequestHandlers.Commands
                 }
 
                 var consoleDto = _mapper.Map<ConsoleDto>(updateConsoleRequest);
-                var updatedConsoleDto = await _consoleRepository.UpdateAsync(consoleDto, cancellationToken);
+                var updatedConsoleDto = await _unitOfWork.ConsoleRepository.UpdateAsync(consoleDto, cancellationToken);
+
+                await _unitOfWork.CommitTransactionAsync(cancellationToken);
 
                 var httpResponseDto = new HttpResponseDto<ConsoleDto>(updatedConsoleDto, StatusCodes.Status200OK);
                 _logger.LogInformation("Done UpdateConsole {@HttpResponseDto}.", httpResponseDto);
@@ -61,12 +65,16 @@ namespace Application.Features.Consoles.RequestHandlers.Commands
             }
             catch (OperationCanceledException ex)
             {
+                await _unitOfWork.RollbackTransactionAsync(cancellationToken);
+
                 var httpResponseDto1 = new HttpResponseDto<ConsoleDto>(ex.Message, StatusCodes.Status500InternalServerError);
                 _logger.LogError(ex, "Canceled UpdateConsole {@HttpResponseDto}.", httpResponseDto1);
                 return httpResponseDto1;
             }
             catch (Exception ex)
             {
+                await _unitOfWork.RollbackTransactionAsync(cancellationToken);
+
                 var httpResponseDto1 = new HttpResponseDto<ConsoleDto>(ex.Message, StatusCodes.Status500InternalServerError);
                 _logger.LogError(ex, "Error UpdateConsole {@HttpResponseDto}.", httpResponseDto1);
                 return httpResponseDto1;

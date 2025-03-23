@@ -12,7 +12,7 @@ namespace Application.Features.Genres.RequestHandlers.Commands
 {
     public class CreateGenreRequestHandler : IRequestHandler<CreateGenreRequest, HttpResponseDto<GenreDto>>
     {
-        private readonly IGenreRepository _genreRepository;
+        private readonly IUnitOfWork _unitOfWork;
 
         private readonly IMapper _mapper;
 
@@ -20,9 +20,9 @@ namespace Application.Features.Genres.RequestHandlers.Commands
 
         private readonly ILogger<CreateGenreRequestHandler> _logger;
 
-        public CreateGenreRequestHandler(IGenreRepository genreRepository, IMapper mapper, IValidator<CreateGenreRequest> validator, ILogger<CreateGenreRequestHandler> logger)
+        public CreateGenreRequestHandler(IUnitOfWork unitOfWork, IMapper mapper, IValidator<CreateGenreRequest> validator, ILogger<CreateGenreRequestHandler> logger)
         {
-            _genreRepository = genreRepository;
+            _unitOfWork = unitOfWork;
             _mapper = mapper;
             _validator = validator;
             _logger = logger;
@@ -30,6 +30,8 @@ namespace Application.Features.Genres.RequestHandlers.Commands
 
         public async Task<HttpResponseDto<GenreDto>> Handle(CreateGenreRequest createGenreRequest, CancellationToken cancellationToken)
         {
+            await _unitOfWork.BeginTransactionAsync(cancellationToken);
+
             try
             {
                 _logger.LogInformation("Begin CreateGenre {@CreateGenreRequest}.", createGenreRequest);
@@ -53,7 +55,9 @@ namespace Application.Features.Genres.RequestHandlers.Commands
                 }
 
                 var genreDto = _mapper.Map<GenreDto>(createGenreRequest);
-                var createdGenreDto = await _genreRepository.CreateAsync(genreDto, cancellationToken);
+                var createdGenreDto = await _unitOfWork.GenreRepository.CreateAsync(genreDto, cancellationToken);
+
+                await _unitOfWork.CommitTransactionAsync(cancellationToken);
 
                 var httpResponseDto = new HttpResponseDto<GenreDto>(createdGenreDto, StatusCodes.Status201Created);
                 _logger.LogInformation("Done CreateGenre {@HttpResponseDto}.", httpResponseDto);
@@ -61,12 +65,16 @@ namespace Application.Features.Genres.RequestHandlers.Commands
             }
             catch (OperationCanceledException ex)
             {
+                await _unitOfWork.RollbackTransactionAsync(cancellationToken);
+
                 var httpResponseDto1 = new HttpResponseDto<GenreDto>(ex.Message, StatusCodes.Status500InternalServerError);
                 _logger.LogError(ex, "Canceled CreateGenre {@HttpResponseDto}.", httpResponseDto1);
                 return httpResponseDto1;
             }
             catch (Exception ex)
             {
+                await _unitOfWork.RollbackTransactionAsync(cancellationToken);
+
                 var httpResponseDto1 = new HttpResponseDto<GenreDto>(ex.Message, StatusCodes.Status500InternalServerError);
                 _logger.LogError(ex, "Error CreateGenre {@HttpResponseDto}.", httpResponseDto1);
                 return httpResponseDto1;

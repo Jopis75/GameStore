@@ -12,7 +12,7 @@ namespace Application.Features.Genres.RequestHandlers.Commands
 {
     public class UpdateGenreRequestHandler : IRequestHandler<UpdateGenreRequest, HttpResponseDto<GenreDto>>
     {
-        private readonly IGenreRepository _genreRepository;
+        private readonly IUnitOfWork _unitOfWork;
 
         private readonly IMapper _mapper;
 
@@ -20,9 +20,9 @@ namespace Application.Features.Genres.RequestHandlers.Commands
 
         private readonly ILogger<UpdateGenreRequestHandler> _logger;
 
-        public UpdateGenreRequestHandler(IGenreRepository genreRepository, IMapper mapper, IValidator<UpdateGenreRequest> validator, ILogger<UpdateGenreRequestHandler> logger)
+        public UpdateGenreRequestHandler(IUnitOfWork unitOfWork, IMapper mapper, IValidator<UpdateGenreRequest> validator, ILogger<UpdateGenreRequestHandler> logger)
         {
-            _genreRepository = genreRepository;
+            _unitOfWork = unitOfWork;
             _mapper = mapper;
             _validator = validator;
             _logger = logger;
@@ -30,6 +30,8 @@ namespace Application.Features.Genres.RequestHandlers.Commands
 
         public async Task<HttpResponseDto<GenreDto>> Handle(UpdateGenreRequest updateGenreRequest, CancellationToken cancellationToken)
         {
+            await _unitOfWork.BeginTransactionAsync(cancellationToken);
+
             try
             {
                 _logger.LogInformation("Begin UpdateGenre {@UpdateGenreRequest}.", updateGenreRequest);
@@ -53,7 +55,9 @@ namespace Application.Features.Genres.RequestHandlers.Commands
                 }
 
                 var genreDto = _mapper.Map<GenreDto>(updateGenreRequest);
-                var updatedGenreDto = await _genreRepository.UpdateAsync(genreDto, cancellationToken);
+                var updatedGenreDto = await _unitOfWork.GenreRepository.UpdateAsync(genreDto, cancellationToken);
+
+                await _unitOfWork.CommitTransactionAsync(cancellationToken);
 
                 var httpResponseDto = new HttpResponseDto<GenreDto>(updatedGenreDto, StatusCodes.Status200OK);
                 _logger.LogInformation("Done UpdateGenre {@HttpResponseDto}.", httpResponseDto);
@@ -61,12 +65,16 @@ namespace Application.Features.Genres.RequestHandlers.Commands
             }
             catch (OperationCanceledException ex)
             {
+                await _unitOfWork.RollbackTransactionAsync(cancellationToken);
+
                 var httpResponseDto1 = new HttpResponseDto<GenreDto>(ex.Message, StatusCodes.Status500InternalServerError);
                 _logger.LogError(ex, "Canceled UpdateGenre {@HttpResponseDto}.", httpResponseDto1);
                 return httpResponseDto1;
             }
             catch (Exception ex)
             {
+                await _unitOfWork.RollbackTransactionAsync(cancellationToken);
+
                 var httpResponseDto1 = new HttpResponseDto<GenreDto>(ex.Message, StatusCodes.Status500InternalServerError);
                 _logger.LogError(ex, "Error UpdateGenre {@HttpResponseDto}.", httpResponseDto1);
                 return httpResponseDto1;

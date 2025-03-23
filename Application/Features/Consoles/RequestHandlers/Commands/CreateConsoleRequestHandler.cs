@@ -12,7 +12,7 @@ namespace Application.Features.Consoles.RequestHandlers.Commands
 {
     public class CreateConsoleRequestHandler : IRequestHandler<CreateConsoleRequest, HttpResponseDto<ConsoleDto>>
     {
-        private readonly IConsoleRepository _consoleRepository;
+        private readonly IUnitOfWork _unitOfWork;
 
         private readonly IMapper _mapper;
 
@@ -20,9 +20,9 @@ namespace Application.Features.Consoles.RequestHandlers.Commands
 
         private readonly ILogger<CreateConsoleRequestHandler> _logger;
 
-        public CreateConsoleRequestHandler(IConsoleRepository consoleRepository, IMapper mapper, IValidator<CreateConsoleRequest> validator, ILogger<CreateConsoleRequestHandler> logger)
+        public CreateConsoleRequestHandler(IUnitOfWork unitOfWork, IMapper mapper, IValidator<CreateConsoleRequest> validator, ILogger<CreateConsoleRequestHandler> logger)
         {
-            _consoleRepository = consoleRepository;
+            _unitOfWork = unitOfWork;
             _mapper = mapper;
             _validator = validator;
             _logger = logger;
@@ -30,6 +30,8 @@ namespace Application.Features.Consoles.RequestHandlers.Commands
 
         public async Task<HttpResponseDto<ConsoleDto>> Handle(CreateConsoleRequest createConsoleRequest, CancellationToken cancellationToken)
         {
+            await _unitOfWork.BeginTransactionAsync(cancellationToken);
+
             try
             {
                 _logger.LogInformation("Begin CreateConsole {@CreateConsoleRequest}.", createConsoleRequest);
@@ -53,7 +55,9 @@ namespace Application.Features.Consoles.RequestHandlers.Commands
                 }
 
                 var consoleDto = _mapper.Map<ConsoleDto>(createConsoleRequest);
-                var createdConsoleDto = await _consoleRepository.CreateAsync(consoleDto, cancellationToken);
+                var createdConsoleDto = await _unitOfWork.ConsoleRepository.CreateAsync(consoleDto, cancellationToken);
+
+                await _unitOfWork.CommitTransactionAsync(cancellationToken);
 
                 var httpResponseDto = new HttpResponseDto<ConsoleDto>(createdConsoleDto, StatusCodes.Status201Created);
                 _logger.LogInformation("Done CreateConsole {@HttpResponseDto}.", httpResponseDto);
@@ -61,12 +65,16 @@ namespace Application.Features.Consoles.RequestHandlers.Commands
             }
             catch (OperationCanceledException ex)
             {
+                await _unitOfWork.RollbackTransactionAsync(cancellationToken);
+
                 var httpResponseDto1 = new HttpResponseDto<ConsoleDto>(ex.Message, StatusCodes.Status500InternalServerError);
                 _logger.LogError(ex, "Canceled CreateConsole {@HttpResponseDto}.", httpResponseDto1);
                 return httpResponseDto1;
             }
             catch (Exception ex)
             {
+                await _unitOfWork.RollbackTransactionAsync(cancellationToken);
+
                 var httpResponseDto1 = new HttpResponseDto<ConsoleDto>(ex.Message, StatusCodes.Status500InternalServerError);
                 _logger.LogError(ex, "Error CreateConsole {@HttpResponseDto}.", httpResponseDto1);
                 return httpResponseDto1;

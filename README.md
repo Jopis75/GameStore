@@ -27,4 +27,3 @@ Next up:
 - Integration with PlayStation Trophy API.
 - CI/CD using GitHub Actions.
 - Using ADO.NET to read data.
-- Use EF Core Transaction.

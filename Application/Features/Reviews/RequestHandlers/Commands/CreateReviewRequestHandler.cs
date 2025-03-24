@@ -12,7 +12,7 @@ namespace Application.Features.Reviews.RequestHandlers.Commands
 {
     public class CreateReviewRequestHandler : IRequestHandler<CreateReviewRequest, HttpResponseDto<ReviewDto>>
     {
-        private readonly IReviewRepository _reviewRepository;
+        private readonly IUnitOfWork _unitOfWork;
 
         private readonly IMapper _mapper;
 
@@ -20,9 +20,9 @@ namespace Application.Features.Reviews.RequestHandlers.Commands
 
         private readonly ILogger<CreateReviewRequestHandler> _logger;
 
-        public CreateReviewRequestHandler(IReviewRepository reviewRepository, IMapper mapper, IValidator<CreateReviewRequest> validator, ILogger<CreateReviewRequestHandler> logger)
+        public CreateReviewRequestHandler(IUnitOfWork unitOfWork, IMapper mapper, IValidator<CreateReviewRequest> validator, ILogger<CreateReviewRequestHandler> logger)
         {
-            _reviewRepository = reviewRepository;
+            _unitOfWork = unitOfWork;
             _mapper = mapper;
             _validator = validator;
             _logger = logger;
@@ -30,6 +30,8 @@ namespace Application.Features.Reviews.RequestHandlers.Commands
 
         public async Task<HttpResponseDto<ReviewDto>> Handle(CreateReviewRequest createReviewRequest, CancellationToken cancellationToken)
         {
+            await _unitOfWork.BeginTransactionAsync(cancellationToken);
+
             try
             {
                 _logger.LogInformation("Begin CreateReview {@CreateReviewRequest}.", createReviewRequest);
@@ -53,7 +55,9 @@ namespace Application.Features.Reviews.RequestHandlers.Commands
                 }
 
                 var reviewDto = _mapper.Map<ReviewDto>(createReviewRequest);
-                var createdReviewDto = await _reviewRepository.CreateAsync(reviewDto, cancellationToken);
+                var createdReviewDto = await _unitOfWork.ReviewRepository.CreateAsync(reviewDto, cancellationToken);
+
+                await _unitOfWork.CommitTransactionAsync(cancellationToken);
 
                 var httpResponseDto = new HttpResponseDto<ReviewDto>(createdReviewDto, StatusCodes.Status201Created);
                 _logger.LogInformation("Done CreateReview {@HttpResponseDto}.", httpResponseDto);
@@ -61,12 +65,16 @@ namespace Application.Features.Reviews.RequestHandlers.Commands
             }
             catch (OperationCanceledException ex)
             {
+                await _unitOfWork.RollbackTransactionAsync(cancellationToken);
+
                 var httpResponseDto1 = new HttpResponseDto<ReviewDto>(ex.Message, StatusCodes.Status500InternalServerError);
                 _logger.LogError(ex, "Canceled CreateReview {@HttpResponseDto}.", httpResponseDto1);
                 return httpResponseDto1;
             }
             catch (Exception ex)
             {
+                await _unitOfWork.RollbackTransactionAsync(cancellationToken);
+
                 var httpResponseDto1 = new HttpResponseDto<ReviewDto>(ex.Message, StatusCodes.Status500InternalServerError);
                 _logger.LogError(ex, "Error CreateReview {@HttpResponseDto}.", httpResponseDto1);
                 return httpResponseDto1;

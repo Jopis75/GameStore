@@ -1,7 +1,6 @@
 ﻿using Application.Dtos.General;
 using Application.Features.VideoGames.Requests.Commands;
 using Application.Interfaces.Persistance;
-using AutoMapper;
 using Domain.Dtos;
 using FluentValidation;
 using MediatR;
@@ -12,21 +11,23 @@ namespace Application.Features.VideoGames.RequestHandlers.Commands
 {
     public class DeleteVideoGameRequestHandler : IRequestHandler<DeleteVideoGameRequest, HttpResponseDto<VideoGameDto>>
     {
-        private readonly IVideoGameRepository _videoGameRepository;
+        private readonly IUnitOfWork _unitOfWork;
 
         private readonly IValidator<DeleteVideoGameRequest> _validator;
 
         private readonly ILogger<DeleteVideoGameRequestHandler> _logger;
 
-        public DeleteVideoGameRequestHandler(IVideoGameRepository videoGameRepository, IValidator<DeleteVideoGameRequest> validator, ILogger<DeleteVideoGameRequestHandler> logger)
+        public DeleteVideoGameRequestHandler(IUnitOfWork unitOfWork, IValidator<DeleteVideoGameRequest> validator, ILogger<DeleteVideoGameRequestHandler> logger)
         {
-            _videoGameRepository = videoGameRepository;
+            _unitOfWork = unitOfWork;
             _validator = validator;
             _logger = logger;
         }
 
         public async Task<HttpResponseDto<VideoGameDto>> Handle(DeleteVideoGameRequest deleteVideoGameRequest, CancellationToken cancellationToken)
         {
+            await _unitOfWork.BeginTransactionAsync(cancellationToken);
+
             try
             {
                 _logger.LogInformation("Begin DeleteVideoGame {@DeleteVideoGameRequest}.", deleteVideoGameRequest);
@@ -49,7 +50,9 @@ namespace Application.Features.VideoGames.RequestHandlers.Commands
                     return httpResponseDto1;
                 }
 
-                var deletedVideoGameDto = await _videoGameRepository.DeleteByIdAsync(deleteVideoGameRequest.Id, cancellationToken);
+                var deletedVideoGameDto = await _unitOfWork.VideoGameRepository.DeleteByIdAsync(deleteVideoGameRequest.Id, cancellationToken);
+
+                await _unitOfWork.CommitTransactionAsync(cancellationToken);
 
                 var httpResponseDto = new HttpResponseDto<VideoGameDto>(deletedVideoGameDto, StatusCodes.Status200OK);
                 _logger.LogInformation("Done DeleteVideoGame {@HttpResponseDto}.", httpResponseDto);
@@ -57,12 +60,16 @@ namespace Application.Features.VideoGames.RequestHandlers.Commands
             }
             catch (OperationCanceledException ex)
             {
+                await _unitOfWork.RollbackTransactionAsync(cancellationToken);
+
                 var httpResponseDto1 = new HttpResponseDto<VideoGameDto>(ex.Message, StatusCodes.Status500InternalServerError);
                 _logger.LogError(ex, "Canceled DeleteVideoGame {@HttpResponseDto}.", httpResponseDto1);
                 return httpResponseDto1;
             }
             catch (Exception ex)
             {
+                await _unitOfWork.RollbackTransactionAsync(cancellationToken);
+
                 var httpResponseDto1 = new HttpResponseDto<VideoGameDto>(ex.Message, StatusCodes.Status500InternalServerError);
                 _logger.LogError(ex, "Error DeleteVideoGame {@HttpResponseDto}.", httpResponseDto1);
                 return httpResponseDto1;

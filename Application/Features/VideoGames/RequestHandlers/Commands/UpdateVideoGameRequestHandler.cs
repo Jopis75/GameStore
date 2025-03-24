@@ -12,7 +12,7 @@ namespace Application.Features.VideoGames.RequestHandlers.Commands
 {
     public class UpdateVideoGameRequestHandler : IRequestHandler<UpdateVideoGameRequest, HttpResponseDto<VideoGameDto>>
     {
-        private readonly IVideoGameRepository _videoGameRepository;
+        private readonly IUnitOfWork _unitOfWork;
 
         private readonly IMapper _mapper;
 
@@ -20,9 +20,9 @@ namespace Application.Features.VideoGames.RequestHandlers.Commands
 
         private readonly ILogger<UpdateVideoGameRequestHandler> _logger;
 
-        public UpdateVideoGameRequestHandler(IVideoGameRepository videoGameRepository, IMapper mapper, IValidator<UpdateVideoGameRequest> validator, ILogger<UpdateVideoGameRequestHandler> logger)
+        public UpdateVideoGameRequestHandler(IUnitOfWork unitOfWork, IMapper mapper, IValidator<UpdateVideoGameRequest> validator, ILogger<UpdateVideoGameRequestHandler> logger)
         {
-            _videoGameRepository = videoGameRepository;
+            _unitOfWork = unitOfWork;
             _mapper = mapper;
             _validator = validator;
             _logger = logger;
@@ -30,6 +30,8 @@ namespace Application.Features.VideoGames.RequestHandlers.Commands
 
         public async Task<HttpResponseDto<VideoGameDto>> Handle(UpdateVideoGameRequest updateVideoGameRequest, CancellationToken cancellationToken)
         {
+            await _unitOfWork.BeginTransactionAsync(cancellationToken);
+
             try
             {
                 _logger.LogInformation("Begin UpdateVideoGame {@UpdateVideoGameRequest}.", updateVideoGameRequest);
@@ -53,7 +55,9 @@ namespace Application.Features.VideoGames.RequestHandlers.Commands
                 }
 
                 var videoGameDto = _mapper.Map<VideoGameDto>(updateVideoGameRequest);
-                var updatedVideoGameDto = await _videoGameRepository.UpdateAsync(videoGameDto, cancellationToken);
+                var updatedVideoGameDto = await _unitOfWork.VideoGameRepository.UpdateAsync(videoGameDto, cancellationToken);
+
+                await _unitOfWork.CommitTransactionAsync(cancellationToken);
 
                 var httpResponseDto = new HttpResponseDto<VideoGameDto>(updatedVideoGameDto, StatusCodes.Status200OK);
                 _logger.LogInformation("Done UpdateVideoGame {@HttpResponseDto}.", httpResponseDto);
@@ -61,12 +65,16 @@ namespace Application.Features.VideoGames.RequestHandlers.Commands
             }
             catch (OperationCanceledException ex)
             {
+                await _unitOfWork.RollbackTransactionAsync(cancellationToken);
+
                 var httpResponseDto1 = new HttpResponseDto<VideoGameDto>(ex.Message, StatusCodes.Status500InternalServerError);
                 _logger.LogError(ex, "Canceled UpdateVideoGame {@HttpResponseDto}.", httpResponseDto1);
                 return httpResponseDto1;
             }
             catch (Exception ex)
             {
+                await _unitOfWork.RollbackTransactionAsync(cancellationToken);
+
                 var httpResponseDto1 = new HttpResponseDto<VideoGameDto>(ex.Message, StatusCodes.Status500InternalServerError);
                 _logger.LogError(ex, "Error UpdateVideoGame {@HttpResponseDto}.", httpResponseDto1);
                 return httpResponseDto1;

@@ -10,28 +10,13 @@ namespace Infrastructure.Services
 {
     public class GameStoreFileService : IGameStoreFileService
     {
-        private readonly ICompanyRepository _companyRepository;
-
-        private readonly IConsoleRepository _consoleRepository;
-
-        private readonly IConsoleVideoGameRepository _consoleVideoGameRepository;
-
-        private readonly IGenreRepository _genreRepository;
-
-        private readonly IVideoGameRepository _videoGameRepository;
-
-        private readonly IVideoGameGenreRepository _videoGameGenreRepository;
+        private readonly IUnitOfWork _unitOfWork;
 
         private readonly ILogger<GameStoreFileService> _logger;
 
-        public GameStoreFileService(ICompanyRepository companyRepository, IConsoleRepository consoleRepository, IConsoleVideoGameRepository consoleVideoGameRepository, IGenreRepository genreRepository, IVideoGameRepository videoGameRepository, IVideoGameGenreRepository videoGameGenreRepository, ILogger<GameStoreFileService> logger)
+        public GameStoreFileService(IUnitOfWork unitOfWork, ILogger<GameStoreFileService> logger)
         {
-            _companyRepository = companyRepository;
-            _consoleRepository = consoleRepository;
-            _consoleVideoGameRepository = consoleVideoGameRepository;
-            _genreRepository = genreRepository;
-            _videoGameRepository = videoGameRepository;
-            _videoGameGenreRepository = videoGameGenreRepository;
+            _unitOfWork = unitOfWork;
             _logger = logger;
         }
 
@@ -56,6 +41,8 @@ namespace Infrastructure.Services
 
             foreach (var row in rows)
             {
+                await _unitOfWork.BeginTransactionAsync(cancellationToken);
+
                 try
                 {
                     var columns = row.Split('|', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
@@ -76,8 +63,10 @@ namespace Infrastructure.Services
                     // Create if not exist ConsoleVideoGame.
                     var consoleVideoGameDtos = await CreateIfNotExistConsoleVideoGamesAsync(consoleName, videoGameDto.Id, cancellationToken);
 
-                    // Update or insert VideoGameGenre.
+                    // Create or update VideoGameGenre.
                     var videoGameGenreDtos = await CreateOrUpdateVideoGameGenresAsync(videoGameDto.Id, genreNames, cancellationToken);
+
+                    await _unitOfWork.CommitTransactionAsync(cancellationToken);
 
                     videoGameDtos.Add(videoGameDto);
 
@@ -86,12 +75,15 @@ namespace Infrastructure.Services
                 }
                 catch (OperationCanceledException)
                 {
+                    await _unitOfWork.RollbackTransactionAsync(cancellationToken);
+
                     throw;
                 }
                 catch (Exception ex)
                 {
-                    // Log error.
-                    _logger.LogError(ex, $"Error Upsert {row}.");
+                    await _unitOfWork.RollbackTransactionAsync(cancellationToken);
+
+                    _logger.LogError(ex, $"Error Upload {row}.");
                 }
             }
 
@@ -102,9 +94,9 @@ namespace Infrastructure.Services
 
         private async Task<ConsoleVideoGameDto> CreateIfNotExistConsoleVideoGamesAsync(string consoleName, int videoGameId, CancellationToken cancellationToken)
         {
-            var consoleVideoGameDtos = await _consoleVideoGameRepository.ReadByVideoGameIdAsync(videoGameId, cancellationToken);
+            var consoleVideoGameDtos = await _unitOfWork.ConsoleVideoGameRepository.ReadByVideoGameIdAsync(videoGameId, cancellationToken);
 
-            var consoleDtos = await _consoleRepository.ReadByNameAsync(consoleName, cancellationToken);
+            var consoleDtos = await _unitOfWork.ConsoleRepository.ReadByNameAsync(consoleName, cancellationToken);
 
             // Did not found an exact match.
             if (consoleDtos.Count() != 1)
@@ -128,7 +120,7 @@ namespace Infrastructure.Services
                     UpdatedBy = String.Empty
                 };
 
-                var createdConsoleVideoGameDto = await _consoleVideoGameRepository.CreateAsync(consoleVideoGameDto, cancellationToken);
+                var createdConsoleVideoGameDto = await _unitOfWork.ConsoleVideoGameRepository.CreateAsync(consoleVideoGameDto, cancellationToken);
 
                 return createdConsoleVideoGameDto;
             }
@@ -138,7 +130,7 @@ namespace Infrastructure.Services
 
         private async Task<VideoGameDto> CreateOrUpdateVideoGameAsync(string title, DateTime releaseDate, DateTime purchaseDate, decimal price, string developerName, string publisherName, CancellationToken cancellationToken)
         {
-            var developerCompanyDtos = await _companyRepository.ReadByNameAsync(developerName, cancellationToken);
+            var developerCompanyDtos = await _unitOfWork.CompanyRepository.ReadByNameAsync(developerName, cancellationToken);
 
             // Did not found an exact match.
             if (developerCompanyDtos.Count() != 1)
@@ -148,7 +140,7 @@ namespace Infrastructure.Services
 
             var developerId = developerCompanyDtos.First().Id;
 
-            var publisherCompanyDtos = await _companyRepository.ReadByNameAsync(publisherName, cancellationToken);
+            var publisherCompanyDtos = await _unitOfWork.CompanyRepository.ReadByNameAsync(publisherName, cancellationToken);
 
             // Did not found an exact match.
             if (publisherCompanyDtos.Count() != 1)
@@ -158,7 +150,7 @@ namespace Infrastructure.Services
 
             var publisherId = publisherCompanyDtos.First().Id;
 
-            var videoGameDtos = await _videoGameRepository.ReadByTitleAsync(title, cancellationToken);
+            var videoGameDtos = await _unitOfWork.VideoGameRepository.ReadByTitleAsync(title, cancellationToken);
 
             // Create if not exist.
             if (videoGameDtos.Any() == false)
@@ -179,7 +171,7 @@ namespace Infrastructure.Services
                     UpdatedBy = String.Empty
                 };
 
-                var createdVideoGameDto = await _videoGameRepository.CreateAsync(videoGameDto, cancellationToken);
+                var createdVideoGameDto = await _unitOfWork.VideoGameRepository.CreateAsync(videoGameDto, cancellationToken);
 
                 return createdVideoGameDto;
             }
@@ -195,7 +187,7 @@ namespace Infrastructure.Services
                 videoGameDto.UpdatedAt = DateTime.Now;
                 videoGameDto.UpdatedBy = "System";
 
-                var updatedVideoGameDto = await _videoGameRepository.UpdateAsync(videoGameDto, cancellationToken);
+                var updatedVideoGameDto = await _unitOfWork.VideoGameRepository.UpdateAsync(videoGameDto, cancellationToken);
 
                 return updatedVideoGameDto;
             }
@@ -203,18 +195,18 @@ namespace Infrastructure.Services
 
         private async Task<IEnumerable<VideoGameGenreDto>> CreateOrUpdateVideoGameGenresAsync(int videoGameId, string[] genreNames, CancellationToken cancellationToken)
         {
-            var videoGameGenreDtos = await _videoGameGenreRepository.ReadByVideoGameIdAsync(videoGameId, cancellationToken);
+            var videoGameGenreDtos = await _unitOfWork.VideoGameGenreRepository.ReadByVideoGameIdAsync(videoGameId, cancellationToken);
 
             foreach (var videoGameGenreDto in videoGameGenreDtos)
             {
-                await _videoGameGenreRepository.DeleteAsync(videoGameGenreDto, cancellationToken);
+                await _unitOfWork.VideoGameGenreRepository.DeleteAsync(videoGameGenreDto, cancellationToken);
             }
 
             var createdVideoGameGenreDtos = new List<VideoGameGenreDto>();
 
             foreach (var genreName in genreNames)
             {
-                var genreDtos = await _genreRepository.ReadByNameAsync(genreName, cancellationToken);
+                var genreDtos = await _unitOfWork.GenreRepository.ReadByNameAsync(genreName, cancellationToken);
 
                 // Did not found exact match.
                 if (genreDtos.Count() != 1)
@@ -236,7 +228,7 @@ namespace Infrastructure.Services
                     UpdatedBy = String.Empty
                 };
 
-                var createdVideoGameGenreDto = await _videoGameGenreRepository.CreateAsync(videoGameGenreDto, cancellationToken);
+                var createdVideoGameGenreDto = await _unitOfWork.VideoGameGenreRepository.CreateAsync(videoGameGenreDto, cancellationToken);
 
                 createdVideoGameGenreDtos.Add(createdVideoGameGenreDto);
             }

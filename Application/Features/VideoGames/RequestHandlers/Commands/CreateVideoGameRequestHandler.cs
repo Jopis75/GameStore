@@ -12,7 +12,7 @@ namespace Application.Features.VideoGames.RequestHandlers.Commands
 {
     public class CreateVideoGameRequestHandler : IRequestHandler<CreateVideoGameRequest, HttpResponseDto<VideoGameDto>>
     {
-        private readonly IVideoGameRepository _videoGameRepository;
+        private readonly IUnitOfWork _unitOfWork;
 
         private readonly IMapper _mapper;
 
@@ -20,9 +20,9 @@ namespace Application.Features.VideoGames.RequestHandlers.Commands
 
         private readonly ILogger<CreateVideoGameRequestHandler> _logger;
 
-        public CreateVideoGameRequestHandler(IVideoGameRepository videoGameRepository, IMapper mapper, IValidator<CreateVideoGameRequest> validator, ILogger<CreateVideoGameRequestHandler> logger)
+        public CreateVideoGameRequestHandler(IUnitOfWork unitOfWork, IMapper mapper, IValidator<CreateVideoGameRequest> validator, ILogger<CreateVideoGameRequestHandler> logger)
         {
-            _videoGameRepository = videoGameRepository;
+            _unitOfWork = unitOfWork;
             _mapper = mapper;
             _validator = validator;
             _logger = logger;
@@ -30,6 +30,8 @@ namespace Application.Features.VideoGames.RequestHandlers.Commands
 
         public async Task<HttpResponseDto<VideoGameDto>> Handle(CreateVideoGameRequest createVideoGameRequest, CancellationToken cancellationToken)
         {
+            await _unitOfWork.BeginTransactionAsync(cancellationToken);
+
             try
             {
                 _logger.LogInformation("Begin CreateVideoGame {@CreateVideoGameRequest}.", createVideoGameRequest);
@@ -53,7 +55,9 @@ namespace Application.Features.VideoGames.RequestHandlers.Commands
                 }
 
                 var videoGameDto = _mapper.Map<VideoGameDto>(createVideoGameRequest);
-                var createdVideoGameDto = await _videoGameRepository.CreateAsync(videoGameDto, cancellationToken);
+                var createdVideoGameDto = await _unitOfWork.VideoGameRepository.CreateAsync(videoGameDto, cancellationToken);
+
+                await _unitOfWork.CommitTransactionAsync(cancellationToken);
 
                 var httpResponseDto = new HttpResponseDto<VideoGameDto>(createdVideoGameDto, StatusCodes.Status201Created);
                 _logger.LogInformation("Done CreateVideoGame {@HttpResponseDto}.", httpResponseDto);
@@ -61,12 +65,16 @@ namespace Application.Features.VideoGames.RequestHandlers.Commands
             }
             catch (OperationCanceledException ex)
             {
+                await _unitOfWork.RollbackTransactionAsync(cancellationToken);
+
                 var httpResponseDto1 = new HttpResponseDto<VideoGameDto>(ex.Message, StatusCodes.Status500InternalServerError);
                 _logger.LogError(ex, "Canceled CreateVideoGame {@HttpResponseDto}.", httpResponseDto1);
                 return httpResponseDto1;
             }
             catch (Exception ex)
             {
+                await _unitOfWork.RollbackTransactionAsync(cancellationToken);
+
                 var httpResponseDto1 = new HttpResponseDto<VideoGameDto>(ex.Message, StatusCodes.Status500InternalServerError);
                 _logger.LogError(ex, "Error CreateVideoGame {@HttpResponseDto}.", httpResponseDto1);
                 return httpResponseDto1;

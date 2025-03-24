@@ -12,7 +12,7 @@ namespace Application.Features.Trophies.RequestHandlers.Commands
 {
     public class CreateTrophyRequestHandler : IRequestHandler<CreateTrophyRequest, HttpResponseDto<TrophyDto>>
     {
-        private readonly ITrophyRepository _trophyRepository;
+        private readonly IUnitOfWork _unitOfWork;
 
         private readonly IMapper _mapper;
 
@@ -20,9 +20,9 @@ namespace Application.Features.Trophies.RequestHandlers.Commands
 
         private readonly ILogger<CreateTrophyRequestHandler> _logger;
 
-        public CreateTrophyRequestHandler(ITrophyRepository trophyRepository, IMapper mapper, IValidator<CreateTrophyRequest> validator, ILogger<CreateTrophyRequestHandler> logger)
+        public CreateTrophyRequestHandler(IUnitOfWork unitOfWork, IMapper mapper, IValidator<CreateTrophyRequest> validator, ILogger<CreateTrophyRequestHandler> logger)
         {
-            _trophyRepository = trophyRepository;
+            _unitOfWork = unitOfWork;
             _mapper = mapper;
             _validator = validator;
             _logger = logger;
@@ -30,6 +30,8 @@ namespace Application.Features.Trophies.RequestHandlers.Commands
 
         public async Task<HttpResponseDto<TrophyDto>> Handle(CreateTrophyRequest createTrophyRequest, CancellationToken cancellationToken)
         {
+            await _unitOfWork.BeginTransactionAsync(cancellationToken);
+
             try
             {
                 _logger.LogInformation("Begin CreateTrophy {@CreateTrophyRequest}.", createTrophyRequest);
@@ -53,7 +55,9 @@ namespace Application.Features.Trophies.RequestHandlers.Commands
                 }
 
                 var trophyDto = _mapper.Map<TrophyDto>(createTrophyRequest);
-                var createdTrophyDto = await _trophyRepository.CreateAsync(trophyDto, cancellationToken);
+                var createdTrophyDto = await _unitOfWork.TrophyRepository.CreateAsync(trophyDto, cancellationToken);
+
+                await _unitOfWork.CommitTransactionAsync(cancellationToken);
 
                 var httpResponseDto = new HttpResponseDto<TrophyDto>(createdTrophyDto, StatusCodes.Status201Created);
                 _logger.LogInformation("Done CreateTrophy {@HttpResponseDto}.", httpResponseDto);
@@ -61,12 +65,16 @@ namespace Application.Features.Trophies.RequestHandlers.Commands
             }
             catch (OperationCanceledException ex)
             {
+                await _unitOfWork.RollbackTransactionAsync(cancellationToken);
+
                 var httpResponseDto1 = new HttpResponseDto<TrophyDto>(ex.Message, StatusCodes.Status500InternalServerError);
                 _logger.LogError(ex, "Canceled CreateTrophy {@HttpResponseDto}.", httpResponseDto1);
                 return httpResponseDto1;
             }
             catch (Exception ex)
             {
+                await _unitOfWork.RollbackTransactionAsync(cancellationToken);
+
                 var httpResponseDto1 = new HttpResponseDto<TrophyDto>(ex.Message, StatusCodes.Status500InternalServerError);
                 _logger.LogError(ex, "Error CreateTrophy {@HttpResponseDto}.", httpResponseDto1);
                 return httpResponseDto1;

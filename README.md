@@ -11,6 +11,7 @@
 - Mediator Pattern.
 - Service Layer Pattern.
 - Repository Pattern.
+- UnitOfWork Pattern.
 - DTO Pattern.
 - Null Object Pattern.
 - AutoMapper.
@@ -26,4 +27,3 @@ Next up:
 - Integration with PlayStation Trophy API.
 - CI/CD using GitHub Actions.
 - Using ADO.NET to read data.
-- Use EF Core Transaction.

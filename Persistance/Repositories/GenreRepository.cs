@@ -46,5 +46,20 @@ namespace Persistance.Repositories
 
             return genres.Select(Mapper.Map<GenreDto>);
         }
+
+        public async Task<GenreDto> ReadByNameExactAsync(string name, CancellationToken cancellationToken)
+        {
+            var genre = await Entities
+                .AsNoTracking()
+                .Where(genre => genre.Name == name)
+                .SingleOrDefaultAsync(cancellationToken);
+
+            if (genre == null)
+            {
+                return NullObject;
+            }
+
+            return Mapper.Map<GenreDto>(genre);
+        }
     }
 }

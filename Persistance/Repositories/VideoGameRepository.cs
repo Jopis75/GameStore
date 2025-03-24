@@ -145,6 +145,21 @@ namespace Persistance.Repositories
             return videoGames.Select(Mapper.Map<VideoGameDto>);
         }
 
+        public async Task<VideoGameDto> ReadByTitleExactAsync(string title, CancellationToken cancellationToken)
+        {
+            var videoGame = await Entities
+                .AsNoTracking()
+                .Where(videoGame => videoGame.Title == title)
+                .SingleOrDefaultAsync(cancellationToken);
+
+            if (videoGame == null)
+            {
+                return NullObject;
+            }
+
+            return Mapper.Map<VideoGameDto>(videoGame);
+        }
+
         public async Task<VideoGameDto> ReadMostPlayedByConsoleIdAsync(int consoleId, CancellationToken cancellationToken)
         {
             var videoGame = await Entities
@@ -165,7 +180,7 @@ namespace Persistance.Repositories
 
             if (videoGame == null)
             {
-                return new VideoGameDto();
+                return NullObject;
             }
 
             return Mapper.Map<VideoGameDto>(videoGame);

@@ -9,13 +9,15 @@ namespace Application.Interfaces.Persistance
         where TDto : DtoBase, new()
         where TFilter : FilterBase, new()
     {
+        TDto NullObject { get; }
+
         Task<TDto> CreateAsync(TDto dto, CancellationToken cancellationToken);
 
         Task<TDto> DeleteAsync(TDto dto, CancellationToken cancellationToken);
 
         Task<TDto> DeleteByIdAsync(int id, CancellationToken cancellationToken);
 
-        Task<bool> ExistsAsync(int id);
+        Task<bool> ExistsAsync(int id, CancellationToken cancellationToken);
 
         Task<IEnumerable<TDto>> ReadAllAsync(CancellationToken cancellationToken);
 

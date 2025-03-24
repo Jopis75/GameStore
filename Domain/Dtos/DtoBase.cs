@@ -14,6 +14,8 @@ namespace Domain.Dtos
 
         public int Id { get; set; }
 
+        public bool IsNullObject => Id == 0;
+
         public DateTime? UpdatedAt { get; set; }
 
         public string? UpdatedBy { get; set; }

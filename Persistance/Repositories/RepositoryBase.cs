@@ -22,20 +22,13 @@ namespace Persistance.Repositories
 
         private readonly IMapper _mapper;
 
-        protected GameStoreDbContext DbContext
-        {
-            get { return _gameStoreDbContext; }
-        }
+        protected GameStoreDbContext DbContext => _gameStoreDbContext;
 
-        protected DbSet<TEntity> Entities
-        {
-            get { return _entities; }
-        }
+        protected DbSet<TEntity> Entities => _entities;
 
-        protected IMapper Mapper
-        {
-            get { return _mapper; }
-        }
+        protected IMapper Mapper => _mapper;
+
+        public TDto NullObject => new();
 
         public RepositoryBase(GameStoreDbContext gameStoreDbContext, IMapper mapper)
         {
@@ -79,9 +72,9 @@ namespace Persistance.Repositories
             return _mapper.Map<TDto>(entityEntry.Entity);
         }
 
-        public async Task<bool> ExistsAsync(int id)
+        public async Task<bool> ExistsAsync(int id, CancellationToken cancellationToken)
         {
-            return await Entities.AnyAsync(entity => entity.Id == id);
+            return await Entities.AnyAsync(entity => entity.Id == id, cancellationToken);
         }
 
         public async Task<IEnumerable<TDto>> ReadAllAsync(CancellationToken cancellationToken)
@@ -145,7 +138,7 @@ namespace Persistance.Repositories
 
             if (entity == null)
             {
-                return new TDto();
+                return NullObject;
             }
 
             return _mapper.Map<TDto>(entity);

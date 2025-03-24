@@ -71,7 +71,7 @@ namespace Infrastructure.Services
                     videoGameDtos.Add(videoGameDto);
 
                     // Log success.
-                    _logger.LogInformation("Success Upsert {@VideoGameDto}.", videoGameDto);
+                    _logger.LogInformation("Success Upload {@VideoGameDto}.", videoGameDto);
                 }
                 catch (OperationCanceledException)
                 {
@@ -130,39 +130,35 @@ namespace Infrastructure.Services
 
         private async Task<VideoGameDto> CreateOrUpdateVideoGameAsync(string title, DateTime releaseDate, DateTime purchaseDate, decimal price, string developerName, string publisherName, CancellationToken cancellationToken)
         {
-            var developerCompanyDtos = await _unitOfWork.CompanyRepository.ReadByNameAsync(developerName, cancellationToken);
+            var developerCompanyDto = await _unitOfWork.CompanyRepository.ReadByNameExactAsync(developerName, cancellationToken);
 
             // Did not found an exact match.
-            if (developerCompanyDtos.Count() != 1)
+            if (developerCompanyDto.IsNullObject)
             {
                 throw new NotFoundException(developerName, developerName);
             }
 
-            var developerId = developerCompanyDtos.First().Id;
-
-            var publisherCompanyDtos = await _unitOfWork.CompanyRepository.ReadByNameAsync(publisherName, cancellationToken);
+            var publisherCompanyDto = await _unitOfWork.CompanyRepository.ReadByNameExactAsync(publisherName, cancellationToken);
 
             // Did not found an exact match.
-            if (publisherCompanyDtos.Count() != 1)
+            if (publisherCompanyDto.IsNullObject)
             {
                 throw new NotFoundException(publisherName, publisherName);
             }
 
-            var publisherId = publisherCompanyDtos.First().Id;
-
-            var videoGameDtos = await _unitOfWork.VideoGameRepository.ReadByTitleAsync(title, cancellationToken);
+            var videoGameDto = await _unitOfWork.VideoGameRepository.ReadByTitleExactAsync(title, cancellationToken);
 
             // Create if not exist.
-            if (videoGameDtos.Any() == false)
+            if (videoGameDto.IsNullObject)
             {
-                var videoGameDto = new VideoGameDto
+                var videoGameDto1 = new VideoGameDto
                 {
                     Title = title,
                     ReleaseDate = releaseDate,
                     PurchaseDate = purchaseDate,
                     Price = price,
-                    DeveloperId = developerId,
-                    PublisherId = publisherId,
+                    DeveloperId = developerCompanyDto.Id,
+                    PublisherId = publisherCompanyDto.Id,
                     CreatedAt = DateTime.Now,
                     CreatedBy = "System",
                     DeletedAt = null,
@@ -171,19 +167,18 @@ namespace Infrastructure.Services
                     UpdatedBy = String.Empty
                 };
 
-                var createdVideoGameDto = await _unitOfWork.VideoGameRepository.CreateAsync(videoGameDto, cancellationToken);
+                var createdVideoGameDto = await _unitOfWork.VideoGameRepository.CreateAsync(videoGameDto1, cancellationToken);
 
                 return createdVideoGameDto;
             }
             else // Update if exist.
             {
-                var videoGameDto = videoGameDtos.First();
                 videoGameDto.Title = title;
                 videoGameDto.ReleaseDate = releaseDate;
                 videoGameDto.PurchaseDate = purchaseDate;
                 videoGameDto.Price = price;
-                videoGameDto.DeveloperId = developerId;
-                videoGameDto.PublisherId = publisherId;
+                videoGameDto.DeveloperId = developerCompanyDto.Id;
+                videoGameDto.PublisherId = publisherCompanyDto.Id;
                 videoGameDto.UpdatedAt = DateTime.Now;
                 videoGameDto.UpdatedBy = "System";
 
@@ -206,15 +201,13 @@ namespace Infrastructure.Services
 
             foreach (var genreName in genreNames)
             {
-                var genreDtos = await _unitOfWork.GenreRepository.ReadByNameAsync(genreName, cancellationToken);
+                var genreDto = await _unitOfWork.GenreRepository.ReadByNameExactAsync(genreName, cancellationToken);
 
                 // Did not found exact match.
-                if (genreDtos.Count() != 1)
+                if (genreDto.IsNullObject)
                 {
                     throw new NotFoundException(genreName, genreName);
                 }
-
-                var genreDto = genreDtos.First();
 
                 var videoGameGenreDto = new VideoGameGenreDto
                 {

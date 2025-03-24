@@ -7,5 +7,7 @@ namespace Application.Interfaces.Persistance
     public interface IGenreRepository : IRepositoryBase<Genre, GenreDto, GenreFilter>
     {
         Task<IEnumerable<GenreDto>> ReadByNameAsync(string name, CancellationToken cancellationToken);
+
+        Task<GenreDto> ReadByNameExactAsync(string name, CancellationToken cancellationToken);
     }
 }

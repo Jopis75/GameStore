@@ -1,13 +1,12 @@
 ﻿using Abp.Linq.Expressions;
 using Application.Interfaces.Persistance;
 using AutoMapper;
-using DocumentFormat.OpenXml.Wordprocessing;
 using Domain.Dtos;
-using Domain.Entities;
 using Domain.Filters;
 using Microsoft.EntityFrameworkCore;
 using Persistance.DbContexts;
 using System.Linq.Expressions;
+using Company = Domain.Entities.Company;
 
 namespace Persistance.Repositories
 {
@@ -27,7 +26,7 @@ namespace Persistance.Repositories
 
             if (company == null)
             {
-                return new CompanyDto();
+                return NullObject;
             }
 
             return Mapper.Map<CompanyDto>(company);
@@ -42,7 +41,7 @@ namespace Persistance.Repositories
 
             if (filter.EmailAddress != null)
             {
-                predicate = predicate.And(company => company.EmailAddress  == filter.EmailAddress);
+                predicate = predicate.And(company => company.EmailAddress == filter.EmailAddress);
             }
 
             if (filter.HeadquarterId != null)
@@ -103,19 +102,29 @@ namespace Persistance.Repositories
             return companies.Select(Mapper.Map<CompanyDto>);
         }
 
-        public async Task<CompanyDto> ReadByPhoneNumberAsync(string phoneNumber, CancellationToken cancellationToken)
+        public async Task<CompanyDto> ReadByNameExactAsync(string name, CancellationToken cancellationToken)
         {
             var company = await Entities
                 .AsNoTracking()
-                .Where(company => company.PhoneNumber == phoneNumber)
+                .Where(company => company.Name == name)
                 .SingleOrDefaultAsync(cancellationToken);
 
             if (company == null)
             {
-                return new CompanyDto();
+                return NullObject;
             }
 
             return Mapper.Map<CompanyDto>(company);
+        }
+
+        public async Task<IEnumerable<CompanyDto>> ReadByPhoneNumberAsync(string phoneNumber, CancellationToken cancellationToken)
+        {
+            var companies = await Entities
+                .AsNoTracking()
+                .Where(company => EF.Functions.Like(company.PhoneNumber, $"{phoneNumber}%"))
+                .ToArrayAsync(cancellationToken);
+
+            return companies.Select(Mapper.Map<CompanyDto>);
         }
 
         public async Task<IEnumerable<CompanyDto>> ReadByTradeNameAsync(string tradeName, CancellationToken cancellationToken)

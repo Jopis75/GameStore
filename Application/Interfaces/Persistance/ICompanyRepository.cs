@@ -10,7 +10,9 @@ namespace Application.Interfaces.Persistance
 
         Task<IEnumerable<CompanyDto>> ReadByNameAsync(string name, CancellationToken cancellationToken);
 
-        Task<CompanyDto> ReadByPhoneNumberAsync(string phoneNumber, CancellationToken cancellationToken);
+        Task<CompanyDto> ReadByNameExactAsync(string name, CancellationToken cancellationToken);
+
+        Task<IEnumerable<CompanyDto>> ReadByPhoneNumberAsync(string phoneNumber, CancellationToken cancellationToken);
 
         Task<IEnumerable<CompanyDto>> ReadByTradeNameAsync(string tradeName, CancellationToken cancellationToken);
     }

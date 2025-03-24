@@ -36,7 +36,6 @@ using Application.Validators.Requests.VideoGames.Commands;
 using Application.Validators.Requests.VideoGames.Queries;
 using Domain.Dtos;
 using FluentValidation;
-using MediatR;
 using Microsoft.Extensions.DependencyInjection;
 using System.Reflection;
 
@@ -109,7 +108,7 @@ namespace Application
             serviceCollection.AddScoped<IValidator<ReadConsoleVideoGameByIdRequest>, ReadConsoleVideoGameByIdRequestValidator>();
 
             // Features.Genres.Requests.
-            serviceCollection.AddScoped<IValidator<Features.Genres.Requests.Commands.CreateGenreRequest>, CreateGenreRequestValidator>();
+            serviceCollection.AddScoped<IValidator<CreateGenreRequest>, CreateGenreRequestValidator>();
             serviceCollection.AddScoped<IValidator<DeleteGenreRequest>, DeleteGenreRequestValidator>();
             serviceCollection.AddScoped<IValidator<UpdateGenreRequest>, UpdateGenreRequestValidator>();
             serviceCollection.AddScoped<IValidator<ReadGenreByIdRequest>, ReadGenreByIdRequestValidator>();

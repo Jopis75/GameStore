@@ -20,6 +20,8 @@ namespace Application.Interfaces.Persistance
 
         Task<IEnumerable<VideoGameDto>> ReadByTitleAsync(string title, CancellationToken cancellationToken);
 
+        Task<VideoGameDto> ReadByTitleExactAsync(string title, CancellationToken cancellationToken);
+
         Task<VideoGameDto> ReadMostPlayedByConsoleIdAsync(int consoleId, CancellationToken cancellationToken);
     }
 }

@@ -10,13 +10,13 @@ namespace Application.Features.ConsoleVideoGames.RequestHandlers.Queries
 {
     public class ReadConsoleVideoGameAllRequestHandler : IRequestHandler<ReadConsoleVideoGameAllRequest, HttpResponseDto<ConsoleVideoGameDto>>
     {
-        private readonly IConsoleVideoGameRepository _consoleVideoGameRepository;
+        private readonly IUnitOfWork _unitOfWork;
 
         private readonly ILogger<ReadConsoleVideoGameAllRequestHandler> _logger;
 
-        public ReadConsoleVideoGameAllRequestHandler(IConsoleVideoGameRepository consoleVideoGameRepository, ILogger<ReadConsoleVideoGameAllRequestHandler> logger)
+        public ReadConsoleVideoGameAllRequestHandler(IUnitOfWork unitOfWork, ILogger<ReadConsoleVideoGameAllRequestHandler> logger)
         {
-            _consoleVideoGameRepository = consoleVideoGameRepository;
+            _unitOfWork = unitOfWork;
             _logger = logger;
         }
 
@@ -26,7 +26,15 @@ namespace Application.Features.ConsoleVideoGames.RequestHandlers.Queries
             {
                 _logger.LogInformation("Begin ReadConsoleVideoGameAll {@ReadConsoleVideoGameAllRequest}.", readConsoleVideoGameAllRequest);
 
-                var consoleVideoGameDtos = await _consoleVideoGameRepository.ReadAllAsync(cancellationToken);
+                if (readConsoleVideoGameAllRequest == null)
+                {
+                    var ex = new ArgumentNullException(nameof(readConsoleVideoGameAllRequest));
+                    var httpResponseDto1 = new HttpResponseDto<ConsoleVideoGameDto>(ex.Message, StatusCodes.Status400BadRequest);
+                    _logger.LogError(ex, "Error ReadConsoleVideoGameAll {@HttpResponseDto}.", httpResponseDto1);
+                    return httpResponseDto1;
+                }
+
+                var consoleVideoGameDtos = await _unitOfWork.ConsoleVideoGameRepository.ReadAllAsync(cancellationToken);
 
                 var httpResponseDto = new HttpResponseDto<ConsoleVideoGameDto>(consoleVideoGameDtos.ToArray(), StatusCodes.Status200OK);
                 _logger.LogInformation("Done ReadConsoleVideoGameAll {@HttpResponseDto}.", httpResponseDto);

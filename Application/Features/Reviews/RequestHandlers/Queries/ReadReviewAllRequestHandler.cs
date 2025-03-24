@@ -10,13 +10,13 @@ namespace Application.Features.Reviews.RequestHandlers.Queries
 {
     public class ReadReviewAllRequestHandler : IRequestHandler<ReadReviewAllRequest, HttpResponseDto<ReviewDto>>
     {
-        private readonly IReviewRepository _reviewRepository;
+        private readonly IUnitOfWork _unitOfWork;
 
         private readonly ILogger<ReadReviewAllRequestHandler> _logger;
 
-        public ReadReviewAllRequestHandler(IReviewRepository reviewRepository, ILogger<ReadReviewAllRequestHandler> logger)
+        public ReadReviewAllRequestHandler(IUnitOfWork unitOfWork, ILogger<ReadReviewAllRequestHandler> logger)
         {
-            _reviewRepository = reviewRepository;
+            _unitOfWork = unitOfWork;
             _logger = logger;
         }
 
@@ -26,7 +26,15 @@ namespace Application.Features.Reviews.RequestHandlers.Queries
             {
                 _logger.LogInformation("Begin ReadReviewAll {@ReadReviewAllRequest}.", readReviewAllRequest);
 
-                var reviewDtos = await _reviewRepository.ReadAllAsync(cancellationToken);
+                if (readReviewAllRequest == null)
+                {
+                    var ex = new ArgumentNullException(nameof(readReviewAllRequest));
+                    var httpResponseDto1 = new HttpResponseDto<ReviewDto>(ex.Message, StatusCodes.Status400BadRequest);
+                    _logger.LogError(ex, "Error ReadReviewAll {@HttpResponseDto}.", httpResponseDto1);
+                    return httpResponseDto1;
+                }
+
+                var reviewDtos = await _unitOfWork.ReviewRepository.ReadAllAsync(cancellationToken);
 
                 var httpResponseDto = new HttpResponseDto<ReviewDto>(reviewDtos.ToArray(), StatusCodes.Status200OK);
                 _logger.LogInformation("Done ReadReviewAll {@HttpResponseDto}.", httpResponseDto);

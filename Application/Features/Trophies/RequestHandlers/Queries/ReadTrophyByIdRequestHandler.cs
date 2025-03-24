@@ -11,15 +11,15 @@ namespace Application.Features.Trophies.RequestHandlers.Queries
 {
     public class ReadTrophyByIdRequestHandler : IRequestHandler<ReadTrophyByIdRequest, HttpResponseDto<TrophyDto>>
     {
-        private readonly ITrophyRepository _trophyRepository;
+        private readonly IUnitOfWork _unitOfWork;
 
         private readonly IValidator<ReadTrophyByIdRequest> _validator;
 
         private readonly ILogger<ReadTrophyByIdRequestHandler> _logger;
 
-        public ReadTrophyByIdRequestHandler(ITrophyRepository trophyRepository, IValidator<ReadTrophyByIdRequest> validator, ILogger<ReadTrophyByIdRequestHandler> logger)
+        public ReadTrophyByIdRequestHandler(IUnitOfWork unitOfWork, IValidator<ReadTrophyByIdRequest> validator, ILogger<ReadTrophyByIdRequestHandler> logger)
         {
-            _trophyRepository = trophyRepository;
+            _unitOfWork = unitOfWork;
             _validator = validator;
             _logger = logger;
         }
@@ -48,7 +48,7 @@ namespace Application.Features.Trophies.RequestHandlers.Queries
                     return httpResponseDto1;
                 }
 
-                var trophyDto = await _trophyRepository.ReadByIdAsync(readTrophyByIdRequest.Id, cancellationToken);
+                var trophyDto = await _unitOfWork.TrophyRepository.ReadByIdAsync(readTrophyByIdRequest.Id, cancellationToken);
 
                 var httpResponseDto = new HttpResponseDto<TrophyDto>(trophyDto, StatusCodes.Status200OK);
                 _logger.LogInformation("Done ReadTrophyById {@HttpResponseDto}.", httpResponseDto);

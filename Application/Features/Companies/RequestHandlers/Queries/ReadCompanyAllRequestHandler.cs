@@ -10,13 +10,13 @@ namespace Application.Features.Companies.RequestHandlers.Queries
 {
     public class ReadCompanyAllRequestHandler : IRequestHandler<ReadCompanyAllRequest, HttpResponseDto<CompanyDto>>
     {
-        private readonly ICompanyRepository _companyRepository;
+        private readonly IUnitOfWork _unitOfWork;
 
         private readonly ILogger<ReadCompanyAllRequestHandler> _logger;
 
-        public ReadCompanyAllRequestHandler(ICompanyRepository companyRepository, ILogger<ReadCompanyAllRequestHandler> logger)
+        public ReadCompanyAllRequestHandler(IUnitOfWork unitOfWork, ILogger<ReadCompanyAllRequestHandler> logger)
         {
-            _companyRepository = companyRepository;
+            _unitOfWork = unitOfWork;
             _logger = logger;
         }
 
@@ -26,7 +26,15 @@ namespace Application.Features.Companies.RequestHandlers.Queries
             {
                 _logger.LogInformation("Begin ReadCompanyAll {@ReadCompanyAllRequest}.", readCompanyAllRequest);
 
-                var companyDtos = await _companyRepository.ReadAllAsync(cancellationToken);
+                if (readCompanyAllRequest == null)
+                {
+                    var ex = new ArgumentNullException(nameof(readCompanyAllRequest));
+                    var httpResponseDto1 = new HttpResponseDto<CompanyDto>(ex.Message, StatusCodes.Status400BadRequest);
+                    _logger.LogError(ex, "Error ReadCompanyAll {@HttpResponseDto}.", httpResponseDto1);
+                    return httpResponseDto1;
+                }
+
+                var companyDtos = await _unitOfWork.CompanyRepository.ReadAllAsync(cancellationToken);
 
                 var httpResponseDto = new HttpResponseDto<CompanyDto>(companyDtos.ToArray(), StatusCodes.Status200OK);
                 _logger.LogInformation("Done ReadCompanyAll {@HttpResponseDto}.", httpResponseDto);

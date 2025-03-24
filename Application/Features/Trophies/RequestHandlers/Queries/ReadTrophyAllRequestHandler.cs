@@ -10,13 +10,13 @@ namespace Application.Features.Trophies.RequestHandlers.Queries
 {
     public class ReadTrophyAllRequestHandler : IRequestHandler<ReadTrophyAllRequest, HttpResponseDto<TrophyDto>>
     {
-        private readonly ITrophyRepository _trophyRepository;
+        private readonly IUnitOfWork _unitOfWork;
 
         private readonly ILogger<ReadTrophyAllRequestHandler> _logger;
 
-        public ReadTrophyAllRequestHandler(ITrophyRepository trophyRepository, ILogger<ReadTrophyAllRequestHandler> logger)
+        public ReadTrophyAllRequestHandler(IUnitOfWork unitOfWork, ILogger<ReadTrophyAllRequestHandler> logger)
         {
-            _trophyRepository = trophyRepository;
+            _unitOfWork = unitOfWork;
             _logger = logger;
         }
 
@@ -26,7 +26,15 @@ namespace Application.Features.Trophies.RequestHandlers.Queries
             {
                 _logger.LogInformation("Begin ReadTrophyAll {@ReadTrophyAllRequest}.", readTrophyAllRequest);
 
-                var trophyDtos = await _trophyRepository.ReadAllAsync(cancellationToken);
+                if (readTrophyAllRequest == null)
+                {
+                    var ex = new ArgumentNullException(nameof(readTrophyAllRequest));
+                    var httpResponseDto1 = new HttpResponseDto<TrophyDto>(ex.Message, StatusCodes.Status400BadRequest);
+                    _logger.LogError(ex, "Error ReadTrophyAll {@HttpResponseDto}.", httpResponseDto1);
+                    return httpResponseDto1;
+                }
+
+                var trophyDtos = await _unitOfWork.TrophyRepository.ReadAllAsync(cancellationToken);
 
                 var httpResponseDto = new HttpResponseDto<TrophyDto>(trophyDtos.ToArray(), StatusCodes.Status200OK);
                 _logger.LogInformation("Done ReadTrophyAll {@HttpResponseDto}.", httpResponseDto);

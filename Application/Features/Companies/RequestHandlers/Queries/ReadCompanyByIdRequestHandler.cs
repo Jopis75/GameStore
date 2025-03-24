@@ -11,15 +11,15 @@ namespace Application.Features.Companies.RequestHandlers.Queries
 {
     public class ReadCompanyByIdRequestHandler : IRequestHandler<ReadCompanyByIdRequest, HttpResponseDto<CompanyDto>>
     {
-        private readonly ICompanyRepository _companyRepository;
+        private readonly IUnitOfWork _unitOfWork;
 
         private readonly IValidator<ReadCompanyByIdRequest> _validator;
 
         private readonly ILogger<ReadCompanyByIdRequestHandler> _logger;
 
-        public ReadCompanyByIdRequestHandler(ICompanyRepository companyRepository, IValidator<ReadCompanyByIdRequest> validator, ILogger<ReadCompanyByIdRequestHandler> logger)
+        public ReadCompanyByIdRequestHandler(IUnitOfWork unitOfWork, IValidator<ReadCompanyByIdRequest> validator, ILogger<ReadCompanyByIdRequestHandler> logger)
         {
-            _companyRepository = companyRepository;
+            _unitOfWork = unitOfWork;
             _validator = validator;
             _logger = logger;
         }
@@ -48,7 +48,7 @@ namespace Application.Features.Companies.RequestHandlers.Queries
                     return httpResponseDto1;
                 }
 
-                var companyDto = await _companyRepository.ReadByIdAsync(readCompanyByIdRequest.Id, cancellationToken);
+                var companyDto = await _unitOfWork.CompanyRepository.ReadByIdAsync(readCompanyByIdRequest.Id, cancellationToken);
 
                 var httpResponseDto = new HttpResponseDto<CompanyDto>(companyDto, StatusCodes.Status200OK);
                 _logger.LogInformation("Done ReadCompanyById {@HttpResponseDto}.", httpResponseDto);

@@ -11,15 +11,15 @@ namespace Application.Features.VideoGames.RequestHandlers.Queries
 {
     public class ReadVideoGameByIdRequestHandler : IRequestHandler<ReadVideoGameByIdRequest, HttpResponseDto<VideoGameDto>>
     {
-        private readonly IVideoGameRepository _videoGameRepository;
+        private readonly IUnitOfWork _unitOfWork;
 
         private readonly IValidator<ReadVideoGameByIdRequest> _validator;
 
         private readonly ILogger<ReadVideoGameByIdRequestHandler> _logger;
 
-        public ReadVideoGameByIdRequestHandler(IVideoGameRepository videoGameRepository, IValidator<ReadVideoGameByIdRequest> validator, ILogger<ReadVideoGameByIdRequestHandler> logger)
+        public ReadVideoGameByIdRequestHandler(IUnitOfWork unitOfWork, IValidator<ReadVideoGameByIdRequest> validator, ILogger<ReadVideoGameByIdRequestHandler> logger)
         {
-            _videoGameRepository = videoGameRepository;
+            _unitOfWork = unitOfWork;
             _validator = validator;
             _logger = logger;
         }
@@ -48,7 +48,7 @@ namespace Application.Features.VideoGames.RequestHandlers.Queries
                     return httpResponseDto1;
                 }
 
-                var videoGameDto = await _videoGameRepository.ReadByIdAsync(readVideoGameByIdRequest.Id, cancellationToken);
+                var videoGameDto = await _unitOfWork.VideoGameRepository.ReadByIdAsync(readVideoGameByIdRequest.Id, cancellationToken);
 
                 var httpResponseDto = new HttpResponseDto<VideoGameDto>(videoGameDto, StatusCodes.Status200OK);
                 _logger.LogInformation("Done ReadVideoGameById {@HttpResponseDto}.", httpResponseDto);

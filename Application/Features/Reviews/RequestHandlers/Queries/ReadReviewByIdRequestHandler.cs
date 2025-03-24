@@ -11,15 +11,15 @@ namespace Application.Features.Reviews.RequestHandlers.Queries
 {
     public class ReadReviewByIdRequestHandler : IRequestHandler<ReadReviewByIdRequest, HttpResponseDto<ReviewDto>>
     {
-        private readonly IReviewRepository _reviewRepository;
+        private readonly IUnitOfWork _unitOfWork;
 
         private readonly IValidator<ReadReviewByIdRequest> _validator;
 
         private readonly ILogger<ReadReviewByIdRequestHandler> _logger;
 
-        public ReadReviewByIdRequestHandler(IReviewRepository reviewRepository, IValidator<ReadReviewByIdRequest> validator, ILogger<ReadReviewByIdRequestHandler> logger)
+        public ReadReviewByIdRequestHandler(IUnitOfWork unitOfWork, IValidator<ReadReviewByIdRequest> validator, ILogger<ReadReviewByIdRequestHandler> logger)
         {
-            _reviewRepository = reviewRepository;
+            _unitOfWork = unitOfWork;
             _validator = validator;
             _logger = logger;
         }
@@ -48,7 +48,7 @@ namespace Application.Features.Reviews.RequestHandlers.Queries
                     return httpResponseDto1;
                 }
 
-                var reviewDto = await _reviewRepository.ReadByIdAsync(readReviewByIdRequest.Id, cancellationToken);
+                var reviewDto = await _unitOfWork.ReviewRepository.ReadByIdAsync(readReviewByIdRequest.Id, cancellationToken);
 
                 var httpResponseDto = new HttpResponseDto<ReviewDto>(reviewDto, StatusCodes.Status200OK);
                 _logger.LogInformation("Done ReadReviewById {@HttpResponseDto}.", httpResponseDto);

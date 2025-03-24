@@ -12,6 +12,8 @@
 
         int Id { get; }
 
+        bool IsNullObject { get; }
+
         DateTime? UpdatedAt { get; }
 
         string? UpdatedBy { get; }

@@ -11,15 +11,15 @@ namespace Application.Features.Addresses.RequestHandlers.Queries
 {
     public class ReadAddressByIdRequestHandler : IRequestHandler<ReadAddressByIdRequest, HttpResponseDto<AddressDto>>
     {
-        private readonly IAddressRepository _addressRepository;
+        private readonly IUnitOfWork _unitOfWork;
 
         private readonly IValidator<ReadAddressByIdRequest> _validator;
 
         private readonly ILogger<ReadAddressByIdRequestHandler> _logger;
 
-        public ReadAddressByIdRequestHandler(IAddressRepository addressRepository, IValidator<ReadAddressByIdRequest> validator, ILogger<ReadAddressByIdRequestHandler> logger)
+        public ReadAddressByIdRequestHandler(IUnitOfWork unitOfWork, IValidator<ReadAddressByIdRequest> validator, ILogger<ReadAddressByIdRequestHandler> logger)
         {
-            _addressRepository = addressRepository;
+            _unitOfWork = unitOfWork;
             _validator = validator;
             _logger = logger;
         }
@@ -48,7 +48,7 @@ namespace Application.Features.Addresses.RequestHandlers.Queries
                     return httpResponseDto1;
                 }
 
-                var addressDto = await _addressRepository.ReadByIdAsync(readAddressByIdRequest.Id, cancellationToken);
+                var addressDto = await _unitOfWork.AddressRepository.ReadByIdAsync(readAddressByIdRequest.Id, cancellationToken);
 
                 var httpResponseDto = new HttpResponseDto<AddressDto>(addressDto, StatusCodes.Status200OK);
                 _logger.LogInformation("Done ReadAddressById {@HttpResponseDto}.", httpResponseDto);

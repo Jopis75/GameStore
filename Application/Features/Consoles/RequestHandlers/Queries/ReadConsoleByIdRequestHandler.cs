@@ -11,15 +11,15 @@ namespace Application.Features.Consoles.RequestHandlers.Queries
 {
     public class ReadConsoleByIdRequestHandler : IRequestHandler<ReadConsoleByIdRequest, HttpResponseDto<ConsoleDto>>
     {
-        private readonly IConsoleRepository _consoleRepository;
+        private readonly IUnitOfWork _unitOfWork;
 
         private readonly IValidator<ReadConsoleByIdRequest> _validator;
 
         private readonly ILogger<ReadConsoleByIdRequestHandler> _logger;
 
-        public ReadConsoleByIdRequestHandler(IConsoleRepository consoleRepository, IValidator<ReadConsoleByIdRequest> validator, ILogger<ReadConsoleByIdRequestHandler> logger)
+        public ReadConsoleByIdRequestHandler(IUnitOfWork unitOfWork, IValidator<ReadConsoleByIdRequest> validator, ILogger<ReadConsoleByIdRequestHandler> logger)
         {
-            _consoleRepository = consoleRepository;
+            _unitOfWork = unitOfWork;
             _validator = validator;
             _logger = logger;
         }
@@ -48,7 +48,7 @@ namespace Application.Features.Consoles.RequestHandlers.Queries
                     return httpResponseDto1;
                 }
 
-                var consoleDto = await _consoleRepository.ReadByIdAsync(readConsoleByIdRequest.Id, cancellationToken);
+                var consoleDto = await _unitOfWork.ConsoleRepository.ReadByIdAsync(readConsoleByIdRequest.Id, cancellationToken);
 
                 var httpResponseDto = new HttpResponseDto<ConsoleDto>(consoleDto, StatusCodes.Status200OK);
                 _logger.LogInformation("Done ReadConsoleById {@HttpResponseDto}.", httpResponseDto);

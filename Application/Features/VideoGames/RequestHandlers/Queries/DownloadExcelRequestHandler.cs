@@ -13,18 +13,15 @@ namespace Application.Features.VideoGames.RequestHandlers.Queries
 {
     public class DownloadExcelRequestHandler : IRequestHandler<DownloadExcelRequest, HttpResponseDto<DownloadExcelDto>>
     {
-        private readonly IVideoGameRepository _videoGameRepository;
-
-        private readonly IConsoleRepository _consoleRepository;
+        private readonly IUnitOfWork _unitOfWork;
 
         private readonly IValidator<DownloadExcelRequest> _validator;
 
         private readonly ILogger<DownloadExcelRequestHandler> _logger;
 
-        public DownloadExcelRequestHandler(IVideoGameRepository videoGameRepository, IConsoleRepository consoleRepository, IValidator<DownloadExcelRequest> validator, ILogger<DownloadExcelRequestHandler> logger)
+        public DownloadExcelRequestHandler(IUnitOfWork unitOfWork, IValidator<DownloadExcelRequest> validator, ILogger<DownloadExcelRequestHandler> logger)
         {
-            _videoGameRepository = videoGameRepository;
-            _consoleRepository = consoleRepository;
+            _unitOfWork = unitOfWork;
             _validator = validator;
             _logger = logger;
         }
@@ -53,8 +50,8 @@ namespace Application.Features.VideoGames.RequestHandlers.Queries
                     return httpResponseDto1;
                 }
 
-                var videoGameDtos = await _videoGameRepository.ReadByConsoleIdAsync(downloadExcelRequest.ConsoleId, cancellationToken);
-                var console = await _consoleRepository.ReadByIdAsync(downloadExcelRequest.ConsoleId, cancellationToken);
+                var videoGameDtos = await _unitOfWork.VideoGameRepository.ReadByConsoleIdAsync(downloadExcelRequest.ConsoleId, cancellationToken);
+                var console = await _unitOfWork.ConsoleRepository.ReadByIdAsync(downloadExcelRequest.ConsoleId, cancellationToken);
 
                 var fileContents = GetFileContents(videoGameDtos, console.Name);
 

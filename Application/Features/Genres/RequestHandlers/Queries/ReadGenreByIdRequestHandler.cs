@@ -11,15 +11,15 @@ namespace Application.Features.Genres.RequestHandlers.Queries
 {
     public class ReadGenreByIdRequestHandler : IRequestHandler<ReadGenreByIdRequest, HttpResponseDto<GenreDto>>
     {
-        private readonly IGenreRepository _genreRepository;
+        private readonly IUnitOfWork _unitOfWork;
 
         private readonly IValidator<ReadGenreByIdRequest> _validator;
 
         private readonly ILogger<ReadGenreByIdRequestHandler> _logger;
 
-        public ReadGenreByIdRequestHandler(IGenreRepository genreRepository, IValidator<ReadGenreByIdRequest> validator, ILogger<ReadGenreByIdRequestHandler> logger)
+        public ReadGenreByIdRequestHandler(IUnitOfWork unitOfWork, IValidator<ReadGenreByIdRequest> validator, ILogger<ReadGenreByIdRequestHandler> logger)
         {
-            _genreRepository = genreRepository;
+           _unitOfWork = unitOfWork;
             _validator = validator;
             _logger = logger;
         }
@@ -48,7 +48,7 @@ namespace Application.Features.Genres.RequestHandlers.Queries
                     return httpResponseDto1;
                 }
 
-                var genreDto = await _genreRepository.ReadByIdAsync(readGenreByIdRequest.Id, cancellationToken);
+                var genreDto = await _unitOfWork.GenreRepository.ReadByIdAsync(readGenreByIdRequest.Id, cancellationToken);
 
                 var httpResponseDto = new HttpResponseDto<GenreDto>(genreDto, StatusCodes.Status200OK);
                 _logger.LogInformation("Done ReadGenreById {@HttpResponseDto}.", httpResponseDto);

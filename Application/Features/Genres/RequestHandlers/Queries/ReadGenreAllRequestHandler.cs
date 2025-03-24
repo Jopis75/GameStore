@@ -2,7 +2,6 @@
 using Application.Features.Genres.Requests.Queries;
 using Application.Interfaces.Persistance;
 using Domain.Dtos;
-using FluentValidation;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
@@ -11,13 +10,13 @@ namespace Application.Features.Genres.RequestHandlers.Queries
 {
     public class ReadGenreAllRequestHandler : IRequestHandler<ReadGenreAllRequest, HttpResponseDto<GenreDto>>
     {
-        private readonly IGenreRepository _genreRepository;
+        private readonly IUnitOfWork _unitOfWork;
 
         private readonly ILogger<ReadGenreAllRequestHandler> _logger;
 
-        public ReadGenreAllRequestHandler(IGenreRepository genreRepository, ILogger<ReadGenreAllRequestHandler> logger)
+        public ReadGenreAllRequestHandler(IUnitOfWork unitOfWork, ILogger<ReadGenreAllRequestHandler> logger)
         {
-            _genreRepository = genreRepository;
+            _unitOfWork = unitOfWork;
             _logger = logger;
         }
 
@@ -27,7 +26,15 @@ namespace Application.Features.Genres.RequestHandlers.Queries
             {
                 _logger.LogInformation("Begin ReadGenreAll {@ReadGenreAllRequest}.", readGenreAllRequest);
 
-                var genreDtos = await _genreRepository.ReadAllAsync(cancellationToken);
+                if (readGenreAllRequest == null)
+                {
+                    var ex = new ArgumentNullException(nameof(readGenreAllRequest));
+                    var httpResponseDto1 = new HttpResponseDto<GenreDto>(ex.Message, StatusCodes.Status400BadRequest);
+                    _logger.LogError(ex, "Error ReadGenreAll {@HttpResponseDto}.", httpResponseDto1);
+                    return httpResponseDto1;
+                }
+
+                var genreDtos = await _unitOfWork.GenreRepository.ReadAllAsync(cancellationToken);
 
                 var httpResponseDto = new HttpResponseDto<GenreDto>(genreDtos.ToArray(), StatusCodes.Status200OK);
                 _logger.LogInformation("Done ReadGenreAll {@HttpResponseDto}.", httpResponseDto);

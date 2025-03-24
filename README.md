@@ -11,6 +11,7 @@
 - Mediator Pattern.
 - Service Layer Pattern.
 - Repository Pattern.
+- UnitOfWork Pattern.
 - DTO Pattern.
 - Null Object Pattern.
 - AutoMapper.

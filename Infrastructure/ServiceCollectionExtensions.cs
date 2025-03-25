@@ -45,6 +45,7 @@ namespace Infrastructure
         {
             serviceCollection.AddScoped<IAzureBlobStorageService, AzureBlobStorageService>();
             serviceCollection.AddScoped<IGameStoreFileService, GameStoreFileService>();
+            serviceCollection.AddScoped<IExcelFileService, ExcelFileService>();
 
             return serviceCollection;
         }

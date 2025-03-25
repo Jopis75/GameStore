@@ -41,13 +41,13 @@ namespace GameStoreAPI.Controllers
         }
 
         [HttpPost]
-        [Route("DownloadExcelAsync")]
-        [ProducesResponseType(typeof(HttpResponseDto<DownloadExcelDto>), StatusCodes.Status200OK)]
+        [Route("DownloadExcelFileAsync")]
+        [ProducesResponseType(typeof(HttpResponseDto<FileDownloadDto>), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult<HttpResponseDto<DownloadExcelDto>>> DownloadExcelAsync([FromBody] DownloadExcelRequest downloadExcelRequest)
+        public async Task<ActionResult<HttpResponseDto<FileDownloadDto>>> DownloadExcelFileAsync([FromBody] DownloadExcelFileByConsoleIdRequest downloadExcelFileByConsoleIdRequest)
         {
-            var httpResponseDto = await _mediator.Send(downloadExcelRequest);
+            var httpResponseDto = await _mediator.Send(downloadExcelFileByConsoleIdRequest);
             return httpResponseDto.Successful
                 ? File(httpResponseDto.Data[0].FileContents, httpResponseDto.Data[0].ContentType, httpResponseDto.Data[0].FileDownloadName)
                 : StatusCode(httpResponseDto.StatusCode, httpResponseDto);
@@ -98,10 +98,10 @@ namespace GameStoreAPI.Controllers
 
         [HttpPost]
         [Route("UploadGameStoreFileAsync")]
-        [ProducesResponseType(typeof(HttpResponseDto<UploadGameStoreFileDto<VideoGameDto>>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(HttpResponseDto<GameStoreFileUploadDto<VideoGameDto>>), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult<HttpResponseDto<UploadGameStoreFileDto<VideoGameDto>>>> UploadGameStoreFileAsync(IFormFile formFile)
+        public async Task<ActionResult<HttpResponseDto<GameStoreFileUploadDto<VideoGameDto>>>> UploadGameStoreFileAsync(IFormFile formFile)
         {
             var httpResponseDto = await _mediator.Send(new UploadGameStoreFileRequest { FormFile = formFile });
             return StatusCode(httpResponseDto.StatusCode, httpResponseDto);

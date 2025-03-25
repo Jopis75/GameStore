@@ -20,7 +20,7 @@ namespace Infrastructure.Services
             _logger = logger;
         }
 
-        public async Task<UploadGameStoreFileDto<VideoGameDto>> UploadAsync(IFormFile formFile, CancellationToken cancellationToken)
+        public async Task<GameStoreFileUploadDto<VideoGameDto>> UploadAsync(IFormFile formFile, CancellationToken cancellationToken)
         {
             var memoryStream = new MemoryStream();
             await formFile.CopyToAsync(memoryStream, cancellationToken);
@@ -31,7 +31,7 @@ namespace Infrastructure.Services
             return uploadGameStoreFileDto;
         }
 
-        public async Task<UploadGameStoreFileDto<VideoGameDto>> UploadAsync(Stream stream, CancellationToken cancellationToken)
+        public async Task<GameStoreFileUploadDto<VideoGameDto>> UploadAsync(Stream stream, CancellationToken cancellationToken)
         {
             var videoGameDtos = new List<VideoGameDto>();
 
@@ -87,7 +87,7 @@ namespace Infrastructure.Services
                 }
             }
 
-            var uploadGameStoreFileDto = new UploadGameStoreFileDto<VideoGameDto>(videoGameDtos.ToArray(), DateTime.Now, "System");
+            var uploadGameStoreFileDto = new GameStoreFileUploadDto<VideoGameDto>(videoGameDtos.ToArray());
 
             return uploadGameStoreFileDto;
         }

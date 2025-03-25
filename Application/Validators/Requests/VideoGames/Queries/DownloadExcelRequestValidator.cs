@@ -3,7 +3,7 @@ using FluentValidation;
 
 namespace Application.Validators.Requests.VideoGames.Queries
 {
-    public class DownloadExcelRequestValidator : AbstractValidator<DownloadExcelRequest>
+    public class DownloadExcelRequestValidator : AbstractValidator<DownloadExcelFileByConsoleIdRequest>
     {
         public DownloadExcelRequestValidator()
         {

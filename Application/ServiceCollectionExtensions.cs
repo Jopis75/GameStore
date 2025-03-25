@@ -131,7 +131,7 @@ namespace Application
             serviceCollection.AddScoped<IValidator<DeleteVideoGameRequest>, DeleteVideoGameRequestValidator>();
             serviceCollection.AddScoped<IValidator<UpdateVideoGameRequest>, UpdateVideoGameRequestValidator>();
             serviceCollection.AddScoped<IValidator<UploadGameStoreFileRequest>, UploadGameStoreRequestValidator>();
-            serviceCollection.AddScoped<IValidator<DownloadExcelRequest>, DownloadExcelRequestValidator>();
+            serviceCollection.AddScoped<IValidator<DownloadExcelFileByConsoleIdRequest>, DownloadExcelRequestValidator>();
             serviceCollection.AddScoped<IValidator<ReadMostPlayedVideoGameByConsoleIdRequest>, ReadMostPlayedVideoGameByConsoleIdRequestValidator>();
             serviceCollection.AddScoped<IValidator<ReadVideoGameByIdRequest>, ReadVideoGameByIdRequestValidator>();
             serviceCollection.AddScoped<IValidator<ReadVideoGamesByConsoleIdRequest>, ReadVideoGamesByConsoleIdRequestValidator>();

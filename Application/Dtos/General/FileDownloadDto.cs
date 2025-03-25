@@ -2,7 +2,7 @@
 
 namespace Application.Dtos.General
 {
-    public class DownloadExcelDto : DtoBase
+    public class FileDownloadDto : DtoBase
     {
         public string ContentType { get; set; } = string.Empty;
 

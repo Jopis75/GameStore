@@ -41,11 +41,11 @@ namespace GameStoreAPI.Controllers
         }
 
         [HttpPost]
-        [Route("DownloadExcelFileAsync")]
+        [Route("DownloadExcelFileByConsoleIdAsync")]
         [ProducesResponseType(typeof(HttpResponseDto<FileDownloadDto>), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult<HttpResponseDto<FileDownloadDto>>> DownloadExcelFileAsync([FromBody] DownloadExcelFileByConsoleIdRequest downloadExcelFileByConsoleIdRequest)
+        public async Task<ActionResult<HttpResponseDto<FileDownloadDto>>> DownloadExcelFileByConsoleIdAsync([FromBody] DownloadExcelFileByConsoleIdRequest downloadExcelFileByConsoleIdRequest)
         {
             var httpResponseDto = await _mediator.Send(downloadExcelFileByConsoleIdRequest);
             return httpResponseDto.Successful

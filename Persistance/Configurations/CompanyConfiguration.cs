@@ -14,6 +14,7 @@ namespace Persistance.Configurations
                 {
                     Id = 1,
                     CompanyType = CompanyType.Subsidiary,
+                    Industry = Industry.VideoGame,
                     Name = "Sony Interactive Entertainment",
                     TradeName = "Sony Interactive Entertainment",
                     HeadquarterId = 1,
@@ -33,6 +34,7 @@ namespace Persistance.Configurations
                 {
                     Id = 2,
                     CompanyType = CompanyType.Division,
+                    Industry = Industry.VideoGame,
                     Name = "PlayStation Studios",
                     TradeName = "PlayStation Studios",
                     HeadquarterId = 2,
@@ -52,6 +54,7 @@ namespace Persistance.Configurations
                 {
                     Id = 3,
                     CompanyType = CompanyType.Subsidiary,
+                    Industry = Industry.VideoGame,
                     Name = "Guerrilla",
                     TradeName = "Guerrilla Games",
                     HeadquarterId = 3,
@@ -71,6 +74,7 @@ namespace Persistance.Configurations
                 {
                     Id = 4,
                     CompanyType = CompanyType.Subsidiary,
+                    Industry = Industry.VideoGame,
                     Name = "Sucker Punch",
                     TradeName = "Sucker Punch Productions",
                     HeadquarterId = 4,
@@ -78,6 +82,26 @@ namespace Persistance.Configurations
                     EmailAddress = String.Empty,
                     PhoneNumber = String.Empty,
                     WebsiteUrl = "https://www.suckerpunch.com/",
+                    LogoImageUri = null,
+                    CreatedBy = "System",
+                    CreatedAt = DateTime.Now,
+                    UpdatedBy = null,
+                    UpdatedAt = null,
+                    DeletedBy = null,
+                    DeletedAt = null
+                },
+                new Company
+                {
+                    Id = 5,
+                    CompanyType = CompanyType.Public,
+                    Industry = Industry.VideoGame,
+                    Name = "Capcom",
+                    TradeName = "Capcom Co., Ltd.",
+                    HeadquarterId = 5,
+                    ParentCompanyId = null,
+                    EmailAddress = String.Empty,
+                    PhoneNumber = String.Empty,
+                    WebsiteUrl = "https://www.capcom.co.jp/",
                     LogoImageUri = null,
                     CreatedBy = "System",
                     CreatedAt = DateTime.Now,

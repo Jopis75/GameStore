@@ -4,6 +4,7 @@
     {
         Subsidiary,
         Parent,
-        Division
+        Division,
+        Public
     }
 }

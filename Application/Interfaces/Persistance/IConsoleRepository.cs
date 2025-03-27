@@ -7,5 +7,7 @@ namespace Application.Interfaces.Persistance
     public interface IConsoleRepository : IRepositoryBase<Console, ConsoleDto, ConsoleFilter>
     {
         Task<IEnumerable<ConsoleDto>> ReadByNameAsync(string name, CancellationToken cancellationToken);
+
+        Task<ConsoleDto> ReadByNameExactAsync(string name, CancellationToken cancellationToken);
     }
 }

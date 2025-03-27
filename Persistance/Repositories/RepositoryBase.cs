@@ -40,6 +40,7 @@ namespace Persistance.Repositories
         public async Task<TDto> CreateAsync(TDto dto, CancellationToken cancellationToken)
         {
             var entity = _mapper.Map<TEntity>(dto);
+
             EntityEntry<TEntity> entityEntry = await _gameStoreDbContext.AddAsync<TEntity>(entity, cancellationToken);
             await _gameStoreDbContext.SaveChangesAsync();
 

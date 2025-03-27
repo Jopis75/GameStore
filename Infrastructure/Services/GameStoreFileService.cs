@@ -94,17 +94,15 @@ namespace Infrastructure.Services
 
         private async Task<ConsoleVideoGameDto> CreateIfNotExistConsoleVideoGamesAsync(string consoleName, int videoGameId, CancellationToken cancellationToken)
         {
-            var consoleVideoGameDtos = await _unitOfWork.ConsoleVideoGameRepository.ReadByVideoGameIdAsync(videoGameId, cancellationToken);
-
-            var consoleDtos = await _unitOfWork.ConsoleRepository.ReadByNameAsync(consoleName, cancellationToken);
+            var consoleDto = await _unitOfWork.ConsoleRepository.ReadByNameExactAsync(consoleName, cancellationToken);
 
             // Did not found an exact match.
-            if (consoleDtos.Count() != 1)
+            if (consoleDto.IsNullObject)
             {
                 throw new NotFoundException(consoleName, consoleName);
             }
 
-            var consoleDto = consoleDtos.First();
+            var consoleVideoGameDtos = await _unitOfWork.ConsoleVideoGameRepository.ReadByVideoGameIdAsync(videoGameId, cancellationToken);
 
             if (consoleVideoGameDtos.Any(cvgd => cvgd.ConsoleId == consoleDto.Id) == false)
             {
@@ -125,7 +123,7 @@ namespace Infrastructure.Services
                 return createdConsoleVideoGameDto;
             }
 
-            return new ConsoleVideoGameDto();
+            return _unitOfWork.ConsoleVideoGameRepository.NullObject;
         }
 
         private async Task<VideoGameDto> CreateOrUpdateVideoGameAsync(string title, DateTime releaseDate, DateTime purchaseDate, decimal price, string developerName, string publisherName, CancellationToken cancellationToken)
@@ -154,6 +152,7 @@ namespace Infrastructure.Services
                 var videoGameDto1 = new VideoGameDto
                 {
                     Title = title,
+                    Name = title,
                     ReleaseDate = releaseDate,
                     PurchaseDate = purchaseDate,
                     Price = price,

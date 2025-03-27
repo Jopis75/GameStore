@@ -71,5 +71,20 @@ namespace Persistance.Repositories
 
             return consoles.Select(Mapper.Map<ConsoleDto>);
         }
+
+        public async Task<ConsoleDto> ReadByNameExactAsync(string name, CancellationToken cancellationToken)
+        {
+            var console = await Entities
+                .AsNoTracking()
+                .Where(console => console.Name == name)
+                .SingleOrDefaultAsync(cancellationToken);
+
+            if (console == null)
+            {
+                return NullObject;
+            }
+
+            return Mapper.Map<ConsoleDto>(console);
+        }
     }
 }

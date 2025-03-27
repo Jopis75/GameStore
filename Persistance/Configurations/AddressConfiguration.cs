@@ -68,6 +68,25 @@ namespace Persistance.Configurations
                     UpdatedAt = null,
                     DeletedBy = null,
                     DeletedAt = null
+                },
+                new Address
+                {
+                    //3-1-3 Uchihirano-machi, Chuo-ku, Osaka
+                    //540-0037, Japan
+                    //TEL : 81(6)6920-3600
+                    //FAX: 81(6)6920-5100
+                    Id = 5,
+                    StreetAddress = "3-1-3 Uchihirano-machi",
+                    PostalCode = "540-0037",
+                    City = "Osaka",
+                    State = "Chuo-ku",
+                    Country = "Japan",
+                    CreatedBy = "System",
+                    CreatedAt = DateTime.Now,
+                    UpdatedBy = null,
+                    UpdatedAt = null,
+                    DeletedBy = null,
+                    DeletedAt = null
                 }
             );
         }

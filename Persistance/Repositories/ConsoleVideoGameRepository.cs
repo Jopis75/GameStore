@@ -10,13 +10,8 @@ using System.Linq.Expressions;
 
 namespace Persistance.Repositories
 {
-    public class ConsoleVideoGameRepository : RepositoryBase<ConsoleVideoGame, ConsoleVideoGameDto, ConsoleVideoGameFilter>, IConsoleVideoGameRepository
+    public class ConsoleVideoGameRepository(GameStoreDbContext gameStoreDbContext, IMapper mapper) : RepositoryBase<ConsoleVideoGame, ConsoleVideoGameDto, ConsoleVideoGameFilter>(gameStoreDbContext, mapper), IConsoleVideoGameRepository
     {
-        public ConsoleVideoGameRepository(GameStoreDbContext gameStoreDbContext, IMapper mapper)
-            : base(gameStoreDbContext, mapper)
-        {
-        }
-
         protected override async Task<IEnumerable<ConsoleVideoGameDto>> ReadByFilterAsync(ConsoleVideoGameFilter filter, Expression<Func<ConsoleVideoGame, bool>> predicate, CancellationToken cancellationToken)
         {
             if (filter.ConsoleId != null)

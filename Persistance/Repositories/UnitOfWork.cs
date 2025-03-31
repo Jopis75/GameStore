@@ -4,88 +4,54 @@ using Persistance.DbContexts;
 
 namespace Persistance.Repositories
 {
-    public class UnitOfWork : IUnitOfWork
+    public class UnitOfWork(
+        GameStoreDbContext gameStoreDbContext,
+        IAddressRepository addressRepository,
+        ICompanyRepository companyRepository,
+        IConsoleRepository consoleRepository,
+        IConsoleVideoGameRepository consoleVideoGameRepository,
+        IGenreRepository genreRepository,
+        IReviewRepository reviewRepository,
+        ITrophyRepository trophyRepository,
+        IVideoGameGenreRepository videoGameGenreRepository,
+        IVideoGameRepository videoGameRepository) : IUnitOfWork
     {
-        private readonly GameStoreDbContext _gameStoreDbContext;
+        private IDbContextTransaction _dbContextTransaction = default!;
 
-        private readonly IAddressRepository _addressRepository;
+        public IAddressRepository AddressRepository => addressRepository;
 
-        private readonly ICompanyRepository _companyRepository;
+        public ICompanyRepository CompanyRepository => companyRepository;
 
-        private readonly IConsoleRepository _consoleRepository;
+        public IConsoleRepository ConsoleRepository => consoleRepository;
 
-        private readonly IConsoleVideoGameRepository _consoleVideoGameRepository;
+        public IConsoleVideoGameRepository ConsoleVideoGameRepository => consoleVideoGameRepository;
 
-        private readonly IGenreRepository _genreRepository;
+        public IGenreRepository GenreRepository => genreRepository;
 
-        private readonly IReviewRepository _reviewRepository;
+        public IReviewRepository ReviewRepository => reviewRepository;
 
-        private IDbContextTransaction _transaction = default!;
+        public ITrophyRepository TrophyRepository => trophyRepository;
 
-        private readonly ITrophyRepository _trophyRepository;
+        public IVideoGameGenreRepository VideoGameGenreRepository => videoGameGenreRepository;
 
-        private readonly IVideoGameGenreRepository _videoGameGenreRepository;
-
-        private readonly IVideoGameRepository _videoGameRepository;
-
-        public IAddressRepository AddressRepository => _addressRepository;
-
-        public ICompanyRepository CompanyRepository => _companyRepository;
-
-        public IConsoleRepository ConsoleRepository => _consoleRepository;
-
-        public IConsoleVideoGameRepository ConsoleVideoGameRepository => _consoleVideoGameRepository;
-
-        public IGenreRepository GenreRepository => _genreRepository;
-
-        public IReviewRepository ReviewRepository => _reviewRepository;
-
-        public ITrophyRepository TrophyRepository => _trophyRepository;
-
-        public IVideoGameGenreRepository VideoGameGenreRepository => _videoGameGenreRepository;
-
-        public IVideoGameRepository VideoGameRepository => _videoGameRepository;
-
-        public UnitOfWork(
-            GameStoreDbContext gameStoreDbContext,
-            IAddressRepository addressRepository,
-            ICompanyRepository companyRepository,
-            IConsoleRepository consoleRepository,
-            IConsoleVideoGameRepository consoleVideoGameRepository,
-            IGenreRepository genreRepository,
-            IReviewRepository reviewRepository,
-            ITrophyRepository trophyRepository,
-            IVideoGameGenreRepository videoGameGenreRepository,
-            IVideoGameRepository videoGameRepository)
-        {
-            _gameStoreDbContext = gameStoreDbContext;
-            _addressRepository = addressRepository;
-            _companyRepository = companyRepository;
-            _consoleRepository = consoleRepository;
-            _consoleVideoGameRepository = consoleVideoGameRepository;
-            _genreRepository = genreRepository;
-            _reviewRepository = reviewRepository;
-            _trophyRepository = trophyRepository;
-            _videoGameGenreRepository = videoGameGenreRepository;
-            _videoGameRepository = videoGameRepository;
-        }
+        public IVideoGameRepository VideoGameRepository => videoGameRepository;
 
         public async Task BeginTransactionAsync(CancellationToken cancellationToken)
         {
-            _transaction = await _gameStoreDbContext.Database.BeginTransactionAsync(cancellationToken);
+            _dbContextTransaction = await gameStoreDbContext.Database.BeginTransactionAsync(cancellationToken);
         }
 
         public async Task CommitTransactionAsync(CancellationToken cancellationToken)
         {
             try
             {
-                await _gameStoreDbContext.SaveChangesAsync(cancellationToken);
+                await gameStoreDbContext.SaveChangesAsync(cancellationToken);
 
-                await _transaction.CommitAsync(cancellationToken);
+                await _dbContextTransaction.CommitAsync(cancellationToken);
             }
             catch (Exception)
             {
-                await _transaction.RollbackAsync(cancellationToken);
+                await _dbContextTransaction.RollbackAsync(cancellationToken);
 
                 throw;
             }
@@ -93,19 +59,19 @@ namespace Persistance.Repositories
 
         public void Dispose()
         {
-            _gameStoreDbContext.Dispose();
+            gameStoreDbContext.Dispose();
 
             GC.SuppressFinalize(this);
         }
 
         public async Task RollbackTransactionAsync(CancellationToken cancellationToken)
         {
-            await _transaction.RollbackAsync(cancellationToken);
+            await _dbContextTransaction.RollbackAsync(cancellationToken);
         }
 
         public async Task SaveChangesAsync(CancellationToken cancellationToken)
         {
-            await _gameStoreDbContext.SaveChangesAsync(cancellationToken);
+            await gameStoreDbContext.SaveChangesAsync(cancellationToken);
         }
     }
 }

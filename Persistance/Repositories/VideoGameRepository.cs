@@ -10,13 +10,8 @@ using System.Linq.Expressions;
 
 namespace Persistance.Repositories
 {
-    public class VideoGameRepository : RepositoryBase<VideoGame, VideoGameDto, VideoGameFilter>, IVideoGameRepository
+    public class VideoGameRepository(GameStoreDbContext gameStoreDbContext, IMapper mapper) : RepositoryBase<VideoGame, VideoGameDto, VideoGameFilter>(gameStoreDbContext, mapper), IVideoGameRepository
     {
-        public VideoGameRepository(GameStoreDbContext gameStoreDbContext, IMapper mapper)
-            : base(gameStoreDbContext, mapper)
-        {
-        }
-
         public async Task<IEnumerable<VideoGameDto>> ReadByConsoleIdAsync(int consoleId, CancellationToken cancellationToken)
         {
             var videoGames = await Entities

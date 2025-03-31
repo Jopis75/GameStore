@@ -11,52 +11,39 @@ using System.Linq.Expressions;
 
 namespace Persistance.Repositories
 {
-    public abstract class RepositoryBase<TEntity, TDto, TFilter> : IRepositoryBase<TEntity, TDto, TFilter>
+    public abstract class RepositoryBase<TEntity, TDto, TFilter>(GameStoreDbContext gameStoreDbContext, IMapper mapper) : IRepositoryBase<TEntity, TDto, TFilter>
         where TEntity : EntityBase, new()
         where TDto : DtoBase, new()
         where TFilter : FilterBase, new()
     {
-        private readonly GameStoreDbContext _gameStoreDbContext;
+        protected GameStoreDbContext DbContext => gameStoreDbContext;
 
-        private readonly DbSet<TEntity> _entities;
+        protected DbSet<TEntity> Entities => gameStoreDbContext.Set<TEntity>();
 
-        private readonly IMapper _mapper;
-
-        protected GameStoreDbContext DbContext => _gameStoreDbContext;
-
-        protected DbSet<TEntity> Entities => _entities;
-
-        protected IMapper Mapper => _mapper;
+        protected IMapper Mapper => mapper;
 
         public TDto NullObject => new();
 
-        public RepositoryBase(GameStoreDbContext gameStoreDbContext, IMapper mapper)
-        {
-            _gameStoreDbContext = gameStoreDbContext;
-            _entities = _gameStoreDbContext.Set<TEntity>();
-            _mapper = mapper;
-        }
-
         public async Task<TDto> CreateAsync(TDto dto, CancellationToken cancellationToken)
         {
-            var entity = _mapper.Map<TEntity>(dto);
+            var entity = Mapper.Map<TEntity>(dto);
 
-            EntityEntry<TEntity> entityEntry = await _gameStoreDbContext.AddAsync<TEntity>(entity, cancellationToken);
-            await _gameStoreDbContext.SaveChangesAsync();
+            EntityEntry<TEntity> entityEntry = await DbContext.AddAsync<TEntity>(entity, cancellationToken);
+            await DbContext.SaveChangesAsync();
 
-            return _mapper.Map<TDto>(entityEntry.Entity);
+            return Mapper.Map<TDto>(entityEntry.Entity);
         }
 
         public async Task<TDto> DeleteAsync(TDto dto, CancellationToken cancellationToken)
         {
-            var entity = _mapper.Map<TEntity>(dto);
+            var entity = Mapper.Map<TEntity>(dto);
 
             cancellationToken.ThrowIfCancellationRequested();
 
-            EntityEntry<TEntity> entityEntry = _gameStoreDbContext.Remove<TEntity>(entity);
-            await _gameStoreDbContext.SaveChangesAsync();
+            EntityEntry<TEntity> entityEntry = DbContext.Remove<TEntity>(entity);
+            await DbContext.SaveChangesAsync();
 
-            return _mapper.Map<TDto>(entityEntry.Entity);
+            return Mapper.Map<TDto>(entityEntry.Entity);
         }
 
         public async Task<TDto> DeleteByIdAsync(int id, CancellationToken cancellationToken)
@@ -67,10 +54,10 @@ namespace Persistance.Repositories
 
             cancellationToken.ThrowIfCancellationRequested();
 
-            var entityEntry = _gameStoreDbContext.Remove<TEntity>(entity);
-            await _gameStoreDbContext.SaveChangesAsync();
+            var entityEntry = DbContext.Remove<TEntity>(entity);
+            await DbContext.SaveChangesAsync();
 
-            return _mapper.Map<TDto>(entityEntry.Entity);
+            return Mapper.Map<TDto>(entityEntry.Entity);
         }
 
         public async Task<bool> ExistsAsync(int id, CancellationToken cancellationToken)
@@ -84,7 +71,7 @@ namespace Persistance.Repositories
                 .AsNoTracking()
                 .ToArrayAsync(cancellationToken);
 
-            return entities.Select(_mapper.Map<TDto>);
+            return entities.Select(Mapper.Map<TDto>);
         }
 
         public async Task<IEnumerable<TDto>> ReadByFilterAsync(TFilter filter, CancellationToken cancellationToken)
@@ -142,19 +129,19 @@ namespace Persistance.Repositories
                 return NullObject;
             }
 
-            return _mapper.Map<TDto>(entity);
+            return Mapper.Map<TDto>(entity);
         }
 
         public async Task<TDto> UpdateAsync(TDto dto, CancellationToken cancellationToken)
         {
-            var entity = _mapper.Map<TEntity>(dto);
+            var entity = Mapper.Map<TEntity>(dto);
 
             cancellationToken.ThrowIfCancellationRequested();
 
-            EntityEntry<TEntity> entityEntry = _gameStoreDbContext.Update<TEntity>(entity);
-            await _gameStoreDbContext.SaveChangesAsync();
+            EntityEntry<TEntity> entityEntry = DbContext.Update<TEntity>(entity);
+            await DbContext.SaveChangesAsync();
 
-            return _mapper.Map<TDto>(entityEntry.Entity);
+            return Mapper.Map<TDto>(entityEntry.Entity);
         }
     }
 }

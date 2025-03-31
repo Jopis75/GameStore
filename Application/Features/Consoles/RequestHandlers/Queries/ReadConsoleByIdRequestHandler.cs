@@ -9,61 +9,48 @@ using Microsoft.Extensions.Logging;
 
 namespace Application.Features.Consoles.RequestHandlers.Queries
 {
-    public class ReadConsoleByIdRequestHandler : IRequestHandler<ReadConsoleByIdRequest, HttpResponseDto<ConsoleDto>>
+    public class ReadConsoleByIdRequestHandler(IUnitOfWork unitOfWork, IValidator<ReadConsoleByIdRequest> validator, ILogger<ReadConsoleByIdRequestHandler> logger) : IRequestHandler<ReadConsoleByIdRequest, HttpResponseDto<ConsoleDto>>
     {
-        private readonly IUnitOfWork _unitOfWork;
-
-        private readonly IValidator<ReadConsoleByIdRequest> _validator;
-
-        private readonly ILogger<ReadConsoleByIdRequestHandler> _logger;
-
-        public ReadConsoleByIdRequestHandler(IUnitOfWork unitOfWork, IValidator<ReadConsoleByIdRequest> validator, ILogger<ReadConsoleByIdRequestHandler> logger)
-        {
-            _unitOfWork = unitOfWork;
-            _validator = validator;
-            _logger = logger;
-        }
-
         public async Task<HttpResponseDto<ConsoleDto>> Handle(ReadConsoleByIdRequest readConsoleByIdRequest, CancellationToken cancellationToken)
         {
             try
             {
-                _logger.LogInformation("Begin ReadConsoleById {@ReadConsoleByIdRequest}.", readConsoleByIdRequest);
+                logger.LogInformation("Begin ReadConsoleById {@ReadConsoleByIdRequest}.", readConsoleByIdRequest);
 
                 if (readConsoleByIdRequest == null)
                 {
                     var ex = new ArgumentNullException(nameof(readConsoleByIdRequest));
                     var httpResponseDto1 = new HttpResponseDto<ConsoleDto>(ex.Message, StatusCodes.Status400BadRequest);
-                    _logger.LogError(ex, "Error ReadConsoleById {@HttpResponseDto}.", httpResponseDto1);
+                    logger.LogError(ex, "Error ReadConsoleById {@HttpResponseDto}.", httpResponseDto1);
                     return httpResponseDto1;
                 }
 
-                var validationResult = await _validator.ValidateAsync(readConsoleByIdRequest, cancellationToken);
+                var validationResult = await validator.ValidateAsync(readConsoleByIdRequest, cancellationToken);
 
                 if (validationResult.IsValid == false)
                 {
                     var ex = new ValidationException(validationResult.Errors);
                     var httpResponseDto1 = new HttpResponseDto<ConsoleDto>(ex.Message, StatusCodes.Status400BadRequest);
-                    _logger.LogError(ex, "Error ReadConsoleById {@HttpResponseDto}.", httpResponseDto1);
+                    logger.LogError(ex, "Error ReadConsoleById {@HttpResponseDto}.", httpResponseDto1);
                     return httpResponseDto1;
                 }
 
-                var consoleDto = await _unitOfWork.ConsoleRepository.ReadByIdAsync(readConsoleByIdRequest.Id, cancellationToken);
+                var consoleDto = await unitOfWork.ConsoleRepository.ReadByIdAsync(readConsoleByIdRequest.Id, cancellationToken);
 
                 var httpResponseDto = new HttpResponseDto<ConsoleDto>(consoleDto, StatusCodes.Status200OK);
-                _logger.LogInformation("Done ReadConsoleById {@HttpResponseDto}.", httpResponseDto);
+                logger.LogInformation("Done ReadConsoleById {@HttpResponseDto}.", httpResponseDto);
                 return httpResponseDto;
             }
             catch (OperationCanceledException ex)
             {
                 var httpResponseDto1 = new HttpResponseDto<ConsoleDto>(ex.Message, StatusCodes.Status500InternalServerError);
-                _logger.LogError(ex, "Canceled ReadConsoleById {@HttpResponseDto}.", httpResponseDto1);
+                logger.LogError(ex, "Canceled ReadConsoleById {@HttpResponseDto}.", httpResponseDto1);
                 return httpResponseDto1;
             }
             catch (Exception ex)
             {
                 var httpResponseDto1 = new HttpResponseDto<ConsoleDto>(ex.Message, StatusCodes.Status500InternalServerError);
-                _logger.LogError(ex, "Error ReadConsoleById {@HttpResponseDto}.", httpResponseDto1);
+                logger.LogError(ex, "Error ReadConsoleById {@HttpResponseDto}.", httpResponseDto1);
                 return httpResponseDto1;
             }
         }

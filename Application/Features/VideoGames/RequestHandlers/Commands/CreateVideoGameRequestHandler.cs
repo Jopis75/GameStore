@@ -10,73 +10,57 @@ using Microsoft.Extensions.Logging;
 
 namespace Application.Features.VideoGames.RequestHandlers.Commands
 {
-    public class CreateVideoGameRequestHandler : IRequestHandler<CreateVideoGameRequest, HttpResponseDto<VideoGameDto>>
+    public class CreateVideoGameRequestHandler(IUnitOfWork unitOfWork, IMapper mapper, IValidator<CreateVideoGameRequest> validator, ILogger<CreateVideoGameRequestHandler> logger) : IRequestHandler<CreateVideoGameRequest, HttpResponseDto<VideoGameDto>>
     {
-        private readonly IUnitOfWork _unitOfWork;
-
-        private readonly IMapper _mapper;
-
-        private readonly IValidator<CreateVideoGameRequest> _validator;
-
-        private readonly ILogger<CreateVideoGameRequestHandler> _logger;
-
-        public CreateVideoGameRequestHandler(IUnitOfWork unitOfWork, IMapper mapper, IValidator<CreateVideoGameRequest> validator, ILogger<CreateVideoGameRequestHandler> logger)
-        {
-            _unitOfWork = unitOfWork;
-            _mapper = mapper;
-            _validator = validator;
-            _logger = logger;
-        }
-
         public async Task<HttpResponseDto<VideoGameDto>> Handle(CreateVideoGameRequest createVideoGameRequest, CancellationToken cancellationToken)
         {
-            await _unitOfWork.BeginTransactionAsync(cancellationToken);
+            await unitOfWork.BeginTransactionAsync(cancellationToken);
 
             try
             {
-                _logger.LogInformation("Begin CreateVideoGame {@CreateVideoGameRequest}.", createVideoGameRequest);
+                logger.LogInformation("Begin CreateVideoGame {@CreateVideoGameRequest}.", createVideoGameRequest);
 
                 if (createVideoGameRequest == null)
                 {
                     var ex = new ArgumentNullException(nameof(createVideoGameRequest));
                     var httpResponseDto1 = new HttpResponseDto<VideoGameDto>(ex.Message, StatusCodes.Status400BadRequest);
-                    _logger.LogError(ex, "Error CreateVideoGame {@HttpResponseDto}.", httpResponseDto1);
+                    logger.LogError(ex, "Error CreateVideoGame {@HttpResponseDto}.", httpResponseDto1);
                     return httpResponseDto1;
                 }
 
-                var validationResult = await _validator.ValidateAsync(createVideoGameRequest, cancellationToken);
+                var validationResult = await validator.ValidateAsync(createVideoGameRequest, cancellationToken);
 
                 if (validationResult.IsValid == false)
                 {
                     var ex = new ValidationException(validationResult.Errors);
                     var httpResponseDto1 = new HttpResponseDto<VideoGameDto>(ex.Message, StatusCodes.Status400BadRequest);
-                    _logger.LogError(ex, "Error CreateVideoGame {@HttpResponseDto}.", httpResponseDto1);
+                    logger.LogError(ex, "Error CreateVideoGame {@HttpResponseDto}.", httpResponseDto1);
                     return httpResponseDto1;
                 }
 
-                var videoGameDto = _mapper.Map<VideoGameDto>(createVideoGameRequest);
-                var createdVideoGameDto = await _unitOfWork.VideoGameRepository.CreateAsync(videoGameDto, cancellationToken);
+                var videoGameDto = mapper.Map<VideoGameDto>(createVideoGameRequest);
+                var createdVideoGameDto = await unitOfWork.VideoGameRepository.CreateAsync(videoGameDto, cancellationToken);
 
-                await _unitOfWork.CommitTransactionAsync(cancellationToken);
+                await unitOfWork.CommitTransactionAsync(cancellationToken);
 
                 var httpResponseDto = new HttpResponseDto<VideoGameDto>(createdVideoGameDto, StatusCodes.Status201Created);
-                _logger.LogInformation("Done CreateVideoGame {@HttpResponseDto}.", httpResponseDto);
+                logger.LogInformation("Done CreateVideoGame {@HttpResponseDto}.", httpResponseDto);
                 return httpResponseDto;
             }
             catch (OperationCanceledException ex)
             {
-                await _unitOfWork.RollbackTransactionAsync(cancellationToken);
+                await unitOfWork.RollbackTransactionAsync(cancellationToken);
 
                 var httpResponseDto1 = new HttpResponseDto<VideoGameDto>(ex.Message, StatusCodes.Status500InternalServerError);
-                _logger.LogError(ex, "Canceled CreateVideoGame {@HttpResponseDto}.", httpResponseDto1);
+                logger.LogError(ex, "Canceled CreateVideoGame {@HttpResponseDto}.", httpResponseDto1);
                 return httpResponseDto1;
             }
             catch (Exception ex)
             {
-                await _unitOfWork.RollbackTransactionAsync(cancellationToken);
+                await unitOfWork.RollbackTransactionAsync(cancellationToken);
 
                 var httpResponseDto1 = new HttpResponseDto<VideoGameDto>(ex.Message, StatusCodes.Status500InternalServerError);
-                _logger.LogError(ex, "Error CreateVideoGame {@HttpResponseDto}.", httpResponseDto1);
+                logger.LogError(ex, "Error CreateVideoGame {@HttpResponseDto}.", httpResponseDto1);
                 return httpResponseDto1;
             }
         }

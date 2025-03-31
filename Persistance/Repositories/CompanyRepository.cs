@@ -10,13 +10,8 @@ using Company = Domain.Entities.Company;
 
 namespace Persistance.Repositories
 {
-    public class CompanyRepository : RepositoryBase<Company, CompanyDto, CompanyFilter>, ICompanyRepository
+    public class CompanyRepository(GameStoreDbContext gameStoreDbContext, IMapper mapper) : RepositoryBase<Company, CompanyDto, CompanyFilter>(gameStoreDbContext, mapper), ICompanyRepository
     {
-        public CompanyRepository(GameStoreDbContext gameStoreDbContext, IMapper mapper)
-            : base(gameStoreDbContext, mapper)
-        {
-        }
-
         public async Task<CompanyDto> ReadByEmailAddressAsync(string emailAddress, CancellationToken cancellationToken)
         {
             var company = await Entities

@@ -10,13 +10,8 @@ using Console = Domain.Entities.Console;
 
 namespace Persistance.Repositories
 {
-    public class ConsoleRepository : RepositoryBase<Console, ConsoleDto, ConsoleFilter>, IConsoleRepository
+    public class ConsoleRepository(GameStoreDbContext gameStoreDbContext, IMapper mapper) : RepositoryBase<Console, ConsoleDto, ConsoleFilter>(gameStoreDbContext, mapper), IConsoleRepository
     {
-        public ConsoleRepository(GameStoreDbContext gameStoreDbContext, IMapper mapper)
-            : base(gameStoreDbContext, mapper)
-        {
-        }
-
         protected override async Task<IEnumerable<ConsoleDto>> ReadByFilterAsync(ConsoleFilter filter, Expression<Func<Console, bool>> predicate, CancellationToken cancellationToken)
         {
             if (filter.DeveloperId != null)

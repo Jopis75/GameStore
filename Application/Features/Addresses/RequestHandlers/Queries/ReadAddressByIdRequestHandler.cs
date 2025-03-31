@@ -9,61 +9,48 @@ using Microsoft.Extensions.Logging;
 
 namespace Application.Features.Addresses.RequestHandlers.Queries
 {
-    public class ReadAddressByIdRequestHandler : IRequestHandler<ReadAddressByIdRequest, HttpResponseDto<AddressDto>>
+    public class ReadAddressByIdRequestHandler(IUnitOfWork unitOfWork, IValidator<ReadAddressByIdRequest> validator, ILogger<ReadAddressByIdRequestHandler> logger) : IRequestHandler<ReadAddressByIdRequest, HttpResponseDto<AddressDto>>
     {
-        private readonly IUnitOfWork _unitOfWork;
-
-        private readonly IValidator<ReadAddressByIdRequest> _validator;
-
-        private readonly ILogger<ReadAddressByIdRequestHandler> _logger;
-
-        public ReadAddressByIdRequestHandler(IUnitOfWork unitOfWork, IValidator<ReadAddressByIdRequest> validator, ILogger<ReadAddressByIdRequestHandler> logger)
-        {
-            _unitOfWork = unitOfWork;
-            _validator = validator;
-            _logger = logger;
-        }
-
         public async Task<HttpResponseDto<AddressDto>> Handle(ReadAddressByIdRequest readAddressByIdRequest, CancellationToken cancellationToken)
         {
             try
             {
-                _logger.LogInformation("Begin ReadAddressById {@ReadAddressByIdRequest}.", readAddressByIdRequest);
+                logger.LogInformation("Begin ReadAddressById {@ReadAddressByIdRequest}.", readAddressByIdRequest);
 
                 if (readAddressByIdRequest == null)
                 {
                     var ex = new ArgumentNullException(nameof(readAddressByIdRequest));
                     var httpResponseDto1 = new HttpResponseDto<AddressDto>(ex.Message, StatusCodes.Status400BadRequest);
-                    _logger.LogError(ex, "Error ReadAddressById {@HttpResponseDto}.", httpResponseDto1);
+                    logger.LogError(ex, "Error ReadAddressById {@HttpResponseDto}.", httpResponseDto1);
                     return httpResponseDto1;
                 }
 
-                var validationResult = await _validator.ValidateAsync(readAddressByIdRequest, cancellationToken);
+                var validationResult = await validator.ValidateAsync(readAddressByIdRequest, cancellationToken);
 
                 if (validationResult.IsValid == false)
                 {
                     var ex = new ValidationException(validationResult.Errors);
                     var httpResponseDto1 = new HttpResponseDto<AddressDto>(ex.Message, StatusCodes.Status400BadRequest);
-                    _logger.LogError(ex, "Error ReadAddressById {@HttpResponseDto}.", httpResponseDto1);
+                    logger.LogError(ex, "Error ReadAddressById {@HttpResponseDto}.", httpResponseDto1);
                     return httpResponseDto1;
                 }
 
-                var addressDto = await _unitOfWork.AddressRepository.ReadByIdAsync(readAddressByIdRequest.Id, cancellationToken);
+                var addressDto = await unitOfWork.AddressRepository.ReadByIdAsync(readAddressByIdRequest.Id, cancellationToken);
 
                 var httpResponseDto = new HttpResponseDto<AddressDto>(addressDto, StatusCodes.Status200OK);
-                _logger.LogInformation("Done ReadAddressById {@HttpResponseDto}.", httpResponseDto);
+                logger.LogInformation("Done ReadAddressById {@HttpResponseDto}.", httpResponseDto);
                 return httpResponseDto;
             }
             catch (OperationCanceledException ex)
             {
                 var httpResponseDto1 = new HttpResponseDto<AddressDto>(ex.Message, StatusCodes.Status500InternalServerError);
-                _logger.LogError(ex, "Canceled ReadAddressById {@HttpResponseDto}.", httpResponseDto1);
+                logger.LogError(ex, "Canceled ReadAddressById {@HttpResponseDto}.", httpResponseDto1);
                 return httpResponseDto1;
             }
             catch (Exception ex)
             {
                 var httpResponseDto1 = new HttpResponseDto<AddressDto>(ex.Message, StatusCodes.Status500InternalServerError);
-                _logger.LogError(ex, "Error ReadAddressById {@HttpResponseDto}.", httpResponseDto1);
+                logger.LogError(ex, "Error ReadAddressById {@HttpResponseDto}.", httpResponseDto1);
                 return httpResponseDto1;
             }
         }

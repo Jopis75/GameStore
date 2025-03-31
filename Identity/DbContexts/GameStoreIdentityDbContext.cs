@@ -5,11 +5,8 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Identity.DbContexts
 {
-    public class GameStoreIdentityDbContext : IdentityDbContext<ApplicationUser>
+    public class GameStoreIdentityDbContext(DbContextOptions<GameStoreIdentityDbContext> dbContextOptions) : IdentityDbContext<ApplicationUser>(dbContextOptions)
     {
-        public GameStoreIdentityDbContext(DbContextOptions<GameStoreIdentityDbContext> dbContextOptions)
-            : base(dbContextOptions) { }
-
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);

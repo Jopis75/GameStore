@@ -9,15 +9,8 @@ namespace GameStoreAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class GenreController : ControllerBase
+    public class GenreController(IMediator mediator) : ControllerBase
     {
-        private readonly IMediator _mediator;
-
-        public GenreController(IMediator mediator)
-        {
-            _mediator = mediator;
-        }
-
         [HttpPost]
         [Route("CreateAsync")]
         [ProducesResponseType(typeof(HttpResponseDto<GenreDto>), StatusCodes.Status201Created)]
@@ -25,7 +18,7 @@ namespace GameStoreAPI.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<ActionResult<HttpResponseDto<GenreDto>>> CreateAsync([FromBody] CreateGenreRequest createGenreRequest)
         {
-            var httpResponseDto = await _mediator.Send(createGenreRequest);
+            var httpResponseDto = await mediator.Send(createGenreRequest);
             return StatusCode(httpResponseDto.StatusCode, httpResponseDto);
         }
 
@@ -36,7 +29,7 @@ namespace GameStoreAPI.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<ActionResult<HttpResponseDto<GenreDto>>> DeleteAsync(int id)
         {
-            var httpResponseDto = await _mediator.Send(new DeleteGenreRequest { Id = id });
+            var httpResponseDto = await mediator.Send(new DeleteGenreRequest { Id = id });
             return StatusCode(httpResponseDto.StatusCode, httpResponseDto);
         }
 
@@ -46,7 +39,7 @@ namespace GameStoreAPI.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<ActionResult<HttpResponseDto<GenreDto>>> ReadAllAsync()
         {
-            var httpResponseDto = await _mediator.Send(new ReadGenreAllRequest());
+            var httpResponseDto = await mediator.Send(new ReadGenreAllRequest());
             return StatusCode(httpResponseDto.StatusCode, httpResponseDto);
         }
 
@@ -57,7 +50,7 @@ namespace GameStoreAPI.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<ActionResult<HttpResponseDto<GenreDto>>> ReadByIdAsync(int id)
         {
-            var httpResponseDto = await _mediator.Send(new ReadGenreByIdRequest { Id = id });
+            var httpResponseDto = await mediator.Send(new ReadGenreByIdRequest { Id = id });
             return StatusCode(httpResponseDto.StatusCode, httpResponseDto);
         }
 
@@ -68,7 +61,7 @@ namespace GameStoreAPI.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<ActionResult<HttpResponseDto<GenreDto>>> UpdateAsync([FromBody] UpdateGenreRequest updateGenreRequest)
         {
-            var httpResponseDto = await _mediator.Send(updateGenreRequest);
+            var httpResponseDto = await mediator.Send(updateGenreRequest);
             return StatusCode(httpResponseDto.StatusCode, httpResponseDto);
         }
     }

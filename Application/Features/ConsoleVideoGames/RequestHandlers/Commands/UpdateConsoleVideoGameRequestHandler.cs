@@ -10,73 +10,57 @@ using Microsoft.Extensions.Logging;
 
 namespace Application.Features.ConsoleVideoGames.RequestHandlers.Commands
 {
-    public class UpdateConsoleVideoGameRequestHandler : IRequestHandler<UpdateConsoleVideoGameRequest, HttpResponseDto<ConsoleVideoGameDto>>
+    public class UpdateConsoleVideoGameRequestHandler(IUnitOfWork unitOfWork, IMapper mapper, IValidator<UpdateConsoleVideoGameRequest> validator, ILogger<UpdateConsoleVideoGameRequestHandler> logger) : IRequestHandler<UpdateConsoleVideoGameRequest, HttpResponseDto<ConsoleVideoGameDto>>
     {
-        private readonly IUnitOfWork _unitOfWork;
-
-        private readonly IMapper _mapper;
-
-        private readonly IValidator<UpdateConsoleVideoGameRequest> _validator;
-
-        private readonly ILogger<UpdateConsoleVideoGameRequestHandler> _logger;
-
-        public UpdateConsoleVideoGameRequestHandler(IUnitOfWork unitOfWork, IMapper mapper, IValidator<UpdateConsoleVideoGameRequest> validator, ILogger<UpdateConsoleVideoGameRequestHandler> logger)
-        {
-            _unitOfWork = unitOfWork;
-            _mapper = mapper;
-            _validator = validator;
-            _logger = logger;
-        }
-
         public async Task<HttpResponseDto<ConsoleVideoGameDto>> Handle(UpdateConsoleVideoGameRequest updateConsoleVideoGameRequest, CancellationToken cancellationToken)
         {
-            await _unitOfWork.BeginTransactionAsync(cancellationToken);
+            await unitOfWork.BeginTransactionAsync(cancellationToken);
 
             try
             {
-                _logger.LogInformation("Begin UpdateConsoleVideoGame {@UpdateConsoleVideoGameRequest}.", updateConsoleVideoGameRequest);
+                logger.LogInformation("Begin UpdateConsoleVideoGame {@UpdateConsoleVideoGameRequest}.", updateConsoleVideoGameRequest);
 
                 if (updateConsoleVideoGameRequest == null)
                 {
                     var ex = new ArgumentNullException(nameof(updateConsoleVideoGameRequest));
                     var httpResponseDto1 = new HttpResponseDto<ConsoleVideoGameDto>(ex.Message, StatusCodes.Status400BadRequest);
-                    _logger.LogError(ex, "Error UpdateConsoleVideoGame {@HttpResponseDto}.", httpResponseDto1);
+                    logger.LogError(ex, "Error UpdateConsoleVideoGame {@HttpResponseDto}.", httpResponseDto1);
                     return httpResponseDto1;
                 }
 
-                var validationResult = await _validator.ValidateAsync(updateConsoleVideoGameRequest, cancellationToken);
+                var validationResult = await validator.ValidateAsync(updateConsoleVideoGameRequest, cancellationToken);
 
                 if (validationResult.IsValid == false)
                 {
                     var ex = new ValidationException(validationResult.Errors);
                     var httpResponseDto1 = new HttpResponseDto<ConsoleVideoGameDto>(ex.Message, StatusCodes.Status400BadRequest);
-                    _logger.LogError(ex, "Error UpdateConsoleVideoGame {@HttpResponseDto}.", httpResponseDto1);
+                    logger.LogError(ex, "Error UpdateConsoleVideoGame {@HttpResponseDto}.", httpResponseDto1);
                     return httpResponseDto1;
                 }
 
-                var consoleVideoGameDto = _mapper.Map<ConsoleVideoGameDto>(updateConsoleVideoGameRequest);
-                var updatedConsoleVideoGameDto = await _unitOfWork.ConsoleVideoGameRepository.UpdateAsync(consoleVideoGameDto, cancellationToken);
+                var consoleVideoGameDto = mapper.Map<ConsoleVideoGameDto>(updateConsoleVideoGameRequest);
+                var updatedConsoleVideoGameDto = await unitOfWork.ConsoleVideoGameRepository.UpdateAsync(consoleVideoGameDto, cancellationToken);
 
-                await _unitOfWork.CommitTransactionAsync(cancellationToken);
+                await unitOfWork.CommitTransactionAsync(cancellationToken);
 
                 var httpResponseDto = new HttpResponseDto<ConsoleVideoGameDto>(updatedConsoleVideoGameDto, StatusCodes.Status200OK);
-                _logger.LogInformation("Done UpdateConsoleVideoGame {@HttpResponseDto}.", httpResponseDto);
+                logger.LogInformation("Done UpdateConsoleVideoGame {@HttpResponseDto}.", httpResponseDto);
                 return httpResponseDto;
             }
             catch (OperationCanceledException ex)
             {
-                await _unitOfWork.RollbackTransactionAsync(cancellationToken);
+                await unitOfWork.RollbackTransactionAsync(cancellationToken);
 
                 var httpResponseDto1 = new HttpResponseDto<ConsoleVideoGameDto>(ex.Message, StatusCodes.Status500InternalServerError);
-                _logger.LogError(ex, "Canceled UpdateConsoleVideoGame {@HttpResponseDto}.", httpResponseDto1);
+                logger.LogError(ex, "Canceled UpdateConsoleVideoGame {@HttpResponseDto}.", httpResponseDto1);
                 return httpResponseDto1;
             }
             catch (Exception ex)
             {
-                await _unitOfWork.RollbackTransactionAsync(cancellationToken);
+                await unitOfWork.RollbackTransactionAsync(cancellationToken);
 
                 var httpResponseDto1 = new HttpResponseDto<ConsoleVideoGameDto>(ex.Message, StatusCodes.Status500InternalServerError);
-                _logger.LogError(ex, "Error UpdateConsoleVideoGame {@HttpResponseDto}.", httpResponseDto1);
+                logger.LogError(ex, "Error UpdateConsoleVideoGame {@HttpResponseDto}.", httpResponseDto1);
                 return httpResponseDto1;
             }
         }

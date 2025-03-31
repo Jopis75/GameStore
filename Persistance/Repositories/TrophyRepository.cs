@@ -11,13 +11,8 @@ using System.Linq.Expressions;
 
 namespace Persistance.Repositories
 {
-    public class TrophyRepository : RepositoryBase<Trophy, TrophyDto, TrophyFilter>, ITrophyRepository
+    public class TrophyRepository(GameStoreDbContext gameStoreDbContext, IMapper mapper) : RepositoryBase<Trophy, TrophyDto, TrophyFilter>(gameStoreDbContext, mapper), ITrophyRepository
     {
-        public TrophyRepository(GameStoreDbContext gameStoreDbContext, IMapper mapper)
-            : base(gameStoreDbContext, mapper)
-        {
-        }
-
         protected override async Task<IEnumerable<TrophyDto>> ReadByFilterAsync(TrophyFilter filter, Expression<Func<Trophy, bool>> predicate, CancellationToken cancellationToken)
         {
             if (filter.Name != null)

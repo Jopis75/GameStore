@@ -9,61 +9,48 @@ using Microsoft.Extensions.Logging;
 
 namespace Application.Features.VideoGames.RequestHandlers.Commands
 {
-    public class UploadGameStoreFileRequestHandler : IRequestHandler<UploadGameStoreFileRequest, HttpResponseDto<GameStoreFileUploadDto<VideoGameDto>>>
+    public class UploadGameStoreFileRequestHandler(IGameStoreFileService gameStoreFileService, IValidator<UploadGameStoreFileRequest> validator, ILogger<UploadGameStoreFileRequestHandler> logger) : IRequestHandler<UploadGameStoreFileRequest, HttpResponseDto<GameStoreFileUploadResponseDto<VideoGameDto>>>
     {
-        private readonly IGameStoreFileService _gameStoreFileService;
-
-        private readonly IValidator<UploadGameStoreFileRequest> _validator;
-
-        private readonly ILogger<UploadGameStoreFileRequestHandler> _logger;
-
-        public UploadGameStoreFileRequestHandler(IGameStoreFileService gameStoreFileService, IValidator<UploadGameStoreFileRequest> validator, ILogger<UploadGameStoreFileRequestHandler> logger)
-        {
-            _gameStoreFileService = gameStoreFileService;
-            _validator = validator;
-            _logger = logger;
-        }
-
-        public async Task<HttpResponseDto<GameStoreFileUploadDto<VideoGameDto>>> Handle(UploadGameStoreFileRequest uploadGameStoreFileRequest, CancellationToken cancellationToken)
+        public async Task<HttpResponseDto<GameStoreFileUploadResponseDto<VideoGameDto>>> Handle(UploadGameStoreFileRequest uploadGameStoreFileRequest, CancellationToken cancellationToken)
         {
             try
             {
-                _logger.LogInformation("Begin UploadGameStoreFile {@UploadGameStoreFileRequest}.", uploadGameStoreFileRequest);
+                logger.LogInformation("Begin UploadGameStoreFile {@UploadGameStoreFileRequest}.", uploadGameStoreFileRequest);
 
                 if (uploadGameStoreFileRequest == null)
                 {
                     var ex = new ArgumentNullException(nameof(uploadGameStoreFileRequest));
-                    var httpResponseDto1 = new HttpResponseDto<GameStoreFileUploadDto<VideoGameDto>>(ex.Message, StatusCodes.Status400BadRequest);
-                    _logger.LogError(ex, "Error UploadGameStoreFile {@HttpResponseDto}.", httpResponseDto1);
+                    var httpResponseDto1 = new HttpResponseDto<GameStoreFileUploadResponseDto<VideoGameDto>>(ex.Message, StatusCodes.Status400BadRequest);
+                    logger.LogError(ex, "Error UploadGameStoreFile {@HttpResponseDto}.", httpResponseDto1);
                     return httpResponseDto1;
                 }
 
-                var validationResult = await _validator.ValidateAsync(uploadGameStoreFileRequest, cancellationToken);
+                var validationResult = await validator.ValidateAsync(uploadGameStoreFileRequest, cancellationToken);
 
                 if (validationResult.IsValid == false)
                 {
                     var ex = new ValidationException(validationResult.Errors);
-                    var httpResponseDto1 = new HttpResponseDto<GameStoreFileUploadDto<VideoGameDto>>(ex.Message, StatusCodes.Status400BadRequest);
-                    _logger.LogError(ex, "Error UploadGameStoreFile {@HttpResponseDto}.", httpResponseDto1);
+                    var httpResponseDto1 = new HttpResponseDto<GameStoreFileUploadResponseDto<VideoGameDto>>(ex.Message, StatusCodes.Status400BadRequest);
+                    logger.LogError(ex, "Error UploadGameStoreFile {@HttpResponseDto}.", httpResponseDto1);
                     return httpResponseDto1;
                 }
 
-                var gameStoreFileUploadDto = await _gameStoreFileService.UploadAsync(uploadGameStoreFileRequest.FormFile, cancellationToken);
+                var gameStoreFileUploadDto = await gameStoreFileService.UploadAsync(uploadGameStoreFileRequest.FormFile, cancellationToken);
 
-                var httpResponseDto = new HttpResponseDto<GameStoreFileUploadDto<VideoGameDto>>(gameStoreFileUploadDto, StatusCodes.Status200OK);
-                _logger.LogInformation("Done UploadGameStoreFile {@HttpResponseDto}.", httpResponseDto);
+                var httpResponseDto = new HttpResponseDto<GameStoreFileUploadResponseDto<VideoGameDto>>(gameStoreFileUploadDto, StatusCodes.Status200OK);
+                logger.LogInformation("Done UploadGameStoreFile {@HttpResponseDto}.", httpResponseDto);
                 return httpResponseDto;
             }
             catch (OperationCanceledException ex)
             {
-                var httpResponseDto1 = new HttpResponseDto<GameStoreFileUploadDto<VideoGameDto>>(ex.Message, StatusCodes.Status500InternalServerError);
-                _logger.LogError(ex, "Canceled UploadGameStoreFile {@HttpResponseDto}.", httpResponseDto1);
+                var httpResponseDto1 = new HttpResponseDto<GameStoreFileUploadResponseDto<VideoGameDto>>(ex.Message, StatusCodes.Status500InternalServerError);
+                logger.LogError(ex, "Canceled UploadGameStoreFile {@HttpResponseDto}.", httpResponseDto1);
                 return httpResponseDto1;
             }
             catch (Exception ex)
             {
-                var httpResponseDto1 = new HttpResponseDto<GameStoreFileUploadDto<VideoGameDto>>(ex.Message, StatusCodes.Status500InternalServerError);
-                _logger.LogError(ex, "Error UploadGameStoreFile {@HttpResponseDto}.", httpResponseDto1);
+                var httpResponseDto1 = new HttpResponseDto<GameStoreFileUploadResponseDto<VideoGameDto>>(ex.Message, StatusCodes.Status500InternalServerError);
+                logger.LogError(ex, "Error UploadGameStoreFile {@HttpResponseDto}.", httpResponseDto1);
                 return httpResponseDto1;
             }
         }

@@ -24,7 +24,7 @@ namespace Infrastructure.Services
             _serviceBusClient = _azureClientFactory.CreateClient("ServiceBus");
         }
 
-        public async Task<HttpResponseDto<AzureServiceBusSendMessagesResponseDto>> SendMessagesAsync(AzureServiceBusSendMessagesRequestDto azureServiceBusSendMessagesRequestDto)
+        public async Task<HttpResponseDto<AzureServiceBusSendMessagesResponseDto>> SendMessagesAsync(AzureServiceBusSendMessagesRequestDto azureServiceBusSendMessagesRequestDto, CancellationToken cancellationToken)
         {
             ServiceBusSender serviceBusSender = null!;
 
@@ -34,26 +34,25 @@ namespace Infrastructure.Services
 
                 if (azureServiceBusSendMessagesRequestDto == null)
                 {
-                    var httpResponseDto1 = new HttpResponseDto<AzureServiceBusSendMessagesResponseDto>(new ArgumentNullException(nameof(azureServiceBusSendMessagesRequestDto)).Message, StatusCodes.Status400BadRequest);
-                    _logger.LogError("Error SendMessagesAsync {@HttpResponseDto}.", httpResponseDto1);
+                    var ex = new ArgumentNullException(nameof(azureServiceBusSendMessagesRequestDto));
+                    var httpResponseDto1 = new HttpResponseDto<AzureServiceBusSendMessagesResponseDto>(ex.Message, StatusCodes.Status400BadRequest);
+                    _logger.LogError(ex, "Error SendMessagesAsync {@HttpResponseDto}.", httpResponseDto1);
                     return httpResponseDto1;
                 }
 
                 serviceBusSender = _serviceBusClient.CreateSender(azureServiceBusSendMessagesRequestDto.QueueOrTopicName);
 
-                using (var serviceBusMessageBatch = await serviceBusSender.CreateMessageBatchAsync())
+                using (var serviceBusMessageBatch = await serviceBusSender.CreateMessageBatchAsync(cancellationToken))
                 {
                     foreach (var message in azureServiceBusSendMessagesRequestDto.Messages)
                     {
-                        if (!serviceBusMessageBatch.TryAddMessage(message))
+                        if (serviceBusMessageBatch.TryAddMessage(message) == false)
                         {
-                            var httpResponseDto1 = new HttpResponseDto<AzureServiceBusSendMessagesResponseDto>(new ArgumentOutOfRangeException(nameof(azureServiceBusSendMessagesRequestDto)).Message, StatusCodes.Status400BadRequest);
-                            _logger.LogError("Error SendMessagesAsync {@HttpResponseDto}.", httpResponseDto1);
-                            return httpResponseDto1;
+                            // ToDo: Implement a way to handle the case where the message is too large to fit in the batch.
                         }
                     }
 
-                    await serviceBusSender.SendMessagesAsync(serviceBusMessageBatch);
+                    await serviceBusSender.SendMessagesAsync(serviceBusMessageBatch, cancellationToken);
 
                     var azureServiceBusSendMessagesResponseDto = new AzureServiceBusSendMessagesResponseDto();
 
@@ -65,7 +64,7 @@ namespace Infrastructure.Services
             catch (Exception ex)
             {
                 var httpResponseDto1 = new HttpResponseDto<AzureServiceBusSendMessagesResponseDto>(ex.Message, StatusCodes.Status500InternalServerError);
-                _logger.LogError("Error SendMessagesAsync {@HttpResponseDto}.", httpResponseDto1);
+                _logger.LogError(ex, "Error SendMessagesAsync {@HttpResponseDto}.", httpResponseDto1);
                 return httpResponseDto1;
             }
             finally
@@ -77,9 +76,9 @@ namespace Infrastructure.Services
             }
         }
 
-        public async Task<HttpResponseDto<AzureServiceBusStartProcessingResponseDto>> StartProcessingAsync(AzureServiceBusStartProcessingRequestDto azureServiceBusStartProcessingRequestDto)
+        public async Task<HttpResponseDto<AzureServiceBusStartProcessingResponseDto>> StartProcessingAsync(AzureServiceBusStartProcessingRequestDto azureServiceBusStartProcessingRequestDto, CancellationToken cancellationToken)
         {
-            ServiceBusProcessor serviceBusProcessor = null!;
+            ServiceBusProcessor serviceBusProcessor = null!; // ToDo: Change this to ServiceBusProcessor? when the Azure.Messaging.ServiceBus package is updated.
 
             try
             {
@@ -87,15 +86,16 @@ namespace Infrastructure.Services
 
                 if (azureServiceBusStartProcessingRequestDto == null)
                 {
-                    var httpResponseDto1 = new HttpResponseDto<AzureServiceBusStartProcessingResponseDto>(new ArgumentNullException(nameof(azureServiceBusStartProcessingRequestDto)).Message, StatusCodes.Status400BadRequest);
-                    _logger.LogError("Error StartProcessingAsync {@HttpResponseDto}.", httpResponseDto1);
+                    var ex = new ArgumentNullException(nameof(azureServiceBusStartProcessingRequestDto));
+                    var httpResponseDto1 = new HttpResponseDto<AzureServiceBusStartProcessingResponseDto>(ex.Message, StatusCodes.Status400BadRequest);
+                    _logger.LogError(ex, "Error StartProcessingAsync {@HttpResponseDto}.", httpResponseDto1);
                     return httpResponseDto1;
                 }
 
-                serviceBusProcessor = _serviceBusClient.CreateProcessor(azureServiceBusStartProcessingRequestDto.QueueName, new ServiceBusProcessorOptions());
+                serviceBusProcessor = _serviceBusClient.CreateProcessor(azureServiceBusStartProcessingRequestDto.QueueName);
                 serviceBusProcessor.ProcessMessageAsync += azureServiceBusStartProcessingRequestDto.ProcessMessageAsync;
                 serviceBusProcessor.ProcessErrorAsync += azureServiceBusStartProcessingRequestDto.ProcessErrorAsync;
-                await serviceBusProcessor.StartProcessingAsync();
+                await serviceBusProcessor.StartProcessingAsync(cancellationToken);
 
                 var azureServiceBusStartProcessingResponseDto = new AzureServiceBusStartProcessingResponseDto();
 
@@ -106,7 +106,7 @@ namespace Infrastructure.Services
             catch (Exception ex)
             {
                 var httpResponseDto1 = new HttpResponseDto<AzureServiceBusStartProcessingResponseDto>(ex.Message, StatusCodes.Status500InternalServerError);
-                _logger.LogError("Error StartProcessingAsync {@HttpResponseDto}.", httpResponseDto1);
+                _logger.LogError(ex, "Error StartProcessingAsync {@HttpResponseDto}.", httpResponseDto1);
                 return httpResponseDto1;
             }
             finally
@@ -118,22 +118,21 @@ namespace Infrastructure.Services
             }
         }
 
-        public async Task<HttpResponseDto<AzureServiceBusStopProcessingResponseDto>> StopProcessingAsync(AzureServiceBusStopProcessingRequestDto azureServiceBusStopProcessingRequestDto)
+        public async Task<HttpResponseDto<AzureServiceBusStopProcessingResponseDto>> StopProcessingAsync(AzureServiceBusStopProcessingRequestDto azureServiceBusStopProcessingRequestDto, CancellationToken cancellationToken)
         {
-            ServiceBusProcessor serviceBusProcessor = null!;
-
             try
             {
                 _logger.LogInformation("Begin StopProcessingAsync {@AzureServiceBusStopProcessingRequestDto}.", azureServiceBusStopProcessingRequestDto);
 
                 if (azureServiceBusStopProcessingRequestDto == null || azureServiceBusStopProcessingRequestDto.ServiceBusProcessor == null)
                 {
-                    var httpResponseDto1 = new HttpResponseDto<AzureServiceBusStopProcessingResponseDto>(new ArgumentNullException(nameof(azureServiceBusStopProcessingRequestDto)).Message, StatusCodes.Status400BadRequest);
-                    _logger.LogError("Error StopProcessingAsync {@HttpResponseDto}.", httpResponseDto1);
+                    var ex = new ArgumentNullException(nameof(azureServiceBusStopProcessingRequestDto));
+                    var httpResponseDto1 = new HttpResponseDto<AzureServiceBusStopProcessingResponseDto>(ex.Message, StatusCodes.Status400BadRequest);
+                    _logger.LogError(ex, "Error StopProcessingAsync {@HttpResponseDto}.", httpResponseDto1);
                     return httpResponseDto1;
                 }
                 
-                await azureServiceBusStopProcessingRequestDto.ServiceBusProcessor.StopProcessingAsync();
+                await azureServiceBusStopProcessingRequestDto.ServiceBusProcessor.StopProcessingAsync(cancellationToken);
 
                 var azureServiceBusStopProcessingResponseDto = new AzureServiceBusStopProcessingResponseDto();
 
@@ -144,15 +143,8 @@ namespace Infrastructure.Services
             catch (Exception ex)
             {
                 var httpResponseDto1 = new HttpResponseDto<AzureServiceBusStopProcessingResponseDto>(ex.Message, StatusCodes.Status500InternalServerError);
-                _logger.LogError("Error StopProcessingAsync {@HttpResponseDto}.", httpResponseDto1);
+                _logger.LogError(ex, "Error StopProcessingAsync {@HttpResponseDto}.", httpResponseDto1);
                 return httpResponseDto1;
-            }
-            finally
-            {
-                if (serviceBusProcessor != null)
-                {
-                    await serviceBusProcessor.DisposeAsync();
-                }
             }
         }
     }

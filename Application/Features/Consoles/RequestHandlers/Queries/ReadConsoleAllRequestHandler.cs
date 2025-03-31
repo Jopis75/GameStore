@@ -8,48 +8,38 @@ using Microsoft.Extensions.Logging;
 
 namespace Application.Features.Consoles.RequestHandlers.Queries
 {
-    public class ReadConsoleAllRequestHandler : IRequestHandler<ReadConsoleAllRequest, HttpResponseDto<ConsoleDto>>
+    public class ReadConsoleAllRequestHandler(IUnitOfWork unitOfWork, ILogger<ReadConsoleAllRequestHandler> logger) : IRequestHandler<ReadConsoleAllRequest, HttpResponseDto<ConsoleDto>>
     {
-        private readonly IUnitOfWork _unitOfWork;
-
-        private readonly ILogger<ReadConsoleAllRequestHandler> _logger;
-
-        public ReadConsoleAllRequestHandler(IUnitOfWork unitOfWork, ILogger<ReadConsoleAllRequestHandler> logger)
-        {
-            _unitOfWork = unitOfWork;
-            _logger = logger;
-        }
-
         public async Task<HttpResponseDto<ConsoleDto>> Handle(ReadConsoleAllRequest readConsoleAllRequest, CancellationToken cancellationToken)
         {
             try
             {
-                _logger.LogInformation("Begin ReadConsoleAll {@ReadConsoleAllRequest}.", readConsoleAllRequest);
+                logger.LogInformation("Begin ReadConsoleAll {@ReadConsoleAllRequest}.", readConsoleAllRequest);
 
                 if (readConsoleAllRequest == null)
                 {
                     var ex = new ArgumentNullException(nameof(readConsoleAllRequest));
                     var httpResponseDto1 = new HttpResponseDto<ConsoleDto>(ex.Message, StatusCodes.Status400BadRequest);
-                    _logger.LogError(ex, "Error ReadConsoleAll {@HttpResponseDto}.", httpResponseDto1);
+                    logger.LogError(ex, "Error ReadConsoleAll {@HttpResponseDto}.", httpResponseDto1);
                     return httpResponseDto1;
                 }
 
-                var consoleDtos = await _unitOfWork.ConsoleRepository.ReadAllAsync(cancellationToken);
+                var consoleDtos = await unitOfWork.ConsoleRepository.ReadAllAsync(cancellationToken);
 
                 var httpResponseDto = new HttpResponseDto<ConsoleDto>(consoleDtos.ToArray(), StatusCodes.Status200OK);
-                _logger.LogInformation("Done ReadConsoleAll {@HttpResponseDto}.", httpResponseDto);
+                logger.LogInformation("Done ReadConsoleAll {@HttpResponseDto}.", httpResponseDto);
                 return httpResponseDto;
             }
             catch (OperationCanceledException ex)
             {
                 var httpResponseDto1 = new HttpResponseDto<ConsoleDto>(ex.Message, StatusCodes.Status500InternalServerError);
-                _logger.LogError(ex, "Canceled ReadConsoleAll {@HttpResponseDto}.", httpResponseDto1);
+                logger.LogError(ex, "Canceled ReadConsoleAll {@HttpResponseDto}.", httpResponseDto1);
                 return httpResponseDto1;
             }
             catch (Exception ex)
             {
                 var httpResponseDto1 = new HttpResponseDto<ConsoleDto>(ex.Message, StatusCodes.Status500InternalServerError);
-                _logger.LogError(ex, "Error ReadConsoleAll {@HttpResponseDto}.", httpResponseDto1);
+                logger.LogError(ex, "Error ReadConsoleAll {@HttpResponseDto}.", httpResponseDto1);
                 return httpResponseDto1;
             }
         }

@@ -15,7 +15,7 @@ namespace Infrastructure.Services
             _unitOfWork = unitOfWork;
         }
 
-        public async Task<FileDownloadDto> CreateFileDownloadForVideoGamesByConsoleIdAsync(int consoleId, string fileDownloadName, CancellationToken cancellationToken)
+        public async Task<FileDownloadResponseDto> CreateFileDownloadForVideoGamesByConsoleIdAsync(int consoleId, string fileDownloadName, CancellationToken cancellationToken)
         {
             var consoleDto = await _unitOfWork.ConsoleRepository.ReadByIdAsync(consoleId, cancellationToken);
 
@@ -58,19 +58,17 @@ namespace Infrastructure.Services
                 }
             }
 
-            var fileDownloadDto = new FileDownloadDto
+            var fileDownloadResponseDto = new FileDownloadResponseDto
             {
                 ContentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
                 FileContents = fileContents,
-                FileDownloadName = fileDownloadName,
-                CreatedAt = DateTime.Now,
-                CreatedBy = String.Empty
+                FileDownloadName = fileDownloadName
             };
 
-            return fileDownloadDto;
+            return fileDownloadResponseDto;
         }
 
-        public Task<FileDownloadDto> CreateFileDownloadForVideoGamesByGenreIdAsync(int genreId, string fileDownloadName, CancellationToken cancellationToken)
+        public Task<FileDownloadResponseDto> CreateFileDownloadForVideoGamesByGenreIdAsync(int genreId, string fileDownloadName, CancellationToken cancellationToken)
         {
             throw new NotImplementedException();
         }

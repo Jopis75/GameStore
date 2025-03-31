@@ -10,13 +10,8 @@ using System.Linq.Expressions;
 
 namespace Persistance.Repositories
 {
-    public class ReviewRepository : RepositoryBase<Review, ReviewDto, ReviewFilter>, IReviewRepository
+    public class ReviewRepository(GameStoreDbContext gameStoreDbContext, IMapper mapper) : RepositoryBase<Review, ReviewDto, ReviewFilter>(gameStoreDbContext, mapper), IReviewRepository
     {
-        public ReviewRepository(GameStoreDbContext gameStoreDbContext, IMapper mapper)
-            : base(gameStoreDbContext, mapper)
-        {
-        }
-
         protected override async Task<IEnumerable<ReviewDto>> ReadByFilterAsync(ReviewFilter filter, Expression<Func<Review, bool>> predicate, CancellationToken cancellationToken)
         {
             if (filter.Grade != null)

@@ -10,73 +10,57 @@ using Microsoft.Extensions.Logging;
 
 namespace Application.Features.Addresses.RequestHandlers.Commands
 {
-    public class UpdateAddressRequestHandler : IRequestHandler<UpdateAddressRequest, HttpResponseDto<AddressDto>>
+    public class UpdateAddressRequestHandler(IUnitOfWork unitOfWork, IMapper mapper, IValidator<UpdateAddressRequest> validator, ILogger<UpdateAddressRequestHandler> logger) : IRequestHandler<UpdateAddressRequest, HttpResponseDto<AddressDto>>
     {
-        private readonly IUnitOfWork _unitOfWork;
-
-        private readonly IMapper _mapper;
-
-        private readonly IValidator<UpdateAddressRequest> _validator;
-
-        private readonly ILogger<UpdateAddressRequestHandler> _logger;
-
-        public UpdateAddressRequestHandler(IUnitOfWork unitOfWork, IMapper mapper, IValidator<UpdateAddressRequest> validator, ILogger<UpdateAddressRequestHandler> logger)
-        {
-            _unitOfWork = unitOfWork;
-            _mapper = mapper;
-            _validator = validator;
-            _logger = logger;
-        }
-
         public async Task<HttpResponseDto<AddressDto>> Handle(UpdateAddressRequest updateAddressRequest, CancellationToken cancellationToken)
         {
-            await _unitOfWork.BeginTransactionAsync(cancellationToken);
+            await unitOfWork.BeginTransactionAsync(cancellationToken);
 
             try
             {
-                _logger.LogInformation("Begin UpdateAddress {@UpdateAddressRequest}.", updateAddressRequest);
+                logger.LogInformation("Begin UpdateAddress {@UpdateAddressRequest}.", updateAddressRequest);
 
                 if (updateAddressRequest == null)
                 {
                     var ex = new ArgumentNullException(nameof(updateAddressRequest));
                     var httpResponseDto1 = new HttpResponseDto<AddressDto>(ex.Message, StatusCodes.Status400BadRequest);
-                    _logger.LogError(ex, "Error UpdateAddress {@HttpResponseDto}.", httpResponseDto1);
+                    logger.LogError(ex, "Error UpdateAddress {@HttpResponseDto}.", httpResponseDto1);
                     return httpResponseDto1;
                 }
 
-                var validationResult = await _validator.ValidateAsync(updateAddressRequest, cancellationToken);
+                var validationResult = await validator.ValidateAsync(updateAddressRequest, cancellationToken);
 
                 if (validationResult.IsValid == false)
                 {
                     var ex = new ValidationException(validationResult.Errors);
                     var httpResponseDto1 = new HttpResponseDto<AddressDto>(ex.Message, StatusCodes.Status400BadRequest);
-                    _logger.LogError(ex, "Error UpdateAddress {@HttpResponseDto}.", httpResponseDto1);
+                    logger.LogError(ex, "Error UpdateAddress {@HttpResponseDto}.", httpResponseDto1);
                     return httpResponseDto1;
                 }
 
-                var addressDto = _mapper.Map<AddressDto>(updateAddressRequest);
-                var updatedAddressDto = await _unitOfWork.AddressRepository.UpdateAsync(addressDto, cancellationToken);
+                var addressDto = mapper.Map<AddressDto>(updateAddressRequest);
+                var updatedAddressDto = await unitOfWork.AddressRepository.UpdateAsync(addressDto, cancellationToken);
 
-                await _unitOfWork.CommitTransactionAsync(cancellationToken);
+                await unitOfWork.CommitTransactionAsync(cancellationToken);
 
                 var httpResponseDto = new HttpResponseDto<AddressDto>(updatedAddressDto, StatusCodes.Status200OK);
-                _logger.LogInformation("Done UpdateAddress {@HttpResponseDto}.", httpResponseDto);
+                logger.LogInformation("Done UpdateAddress {@HttpResponseDto}.", httpResponseDto);
                 return httpResponseDto;
             }
             catch (OperationCanceledException ex)
             {
-                await _unitOfWork.RollbackTransactionAsync(cancellationToken);
+                await unitOfWork.RollbackTransactionAsync(cancellationToken);
 
                 var httpResponseDto1 = new HttpResponseDto<AddressDto>(ex.Message, StatusCodes.Status500InternalServerError);
-                _logger.LogError(ex, "Canceled UpdateAddress {@HttpResponseDto}.", httpResponseDto1);
+                logger.LogError(ex, "Canceled UpdateAddress {@HttpResponseDto}.", httpResponseDto1);
                 return httpResponseDto1;
             }
             catch (Exception ex)
             {
-                await _unitOfWork.RollbackTransactionAsync(cancellationToken);
+                await unitOfWork.RollbackTransactionAsync(cancellationToken);
 
                 var httpResponseDto1 = new HttpResponseDto<AddressDto>(ex.Message, StatusCodes.Status500InternalServerError);
-                _logger.LogError(ex, "Error UpdateAddress {@HttpResponseDto}.", httpResponseDto1);
+                logger.LogError(ex, "Error UpdateAddress {@HttpResponseDto}.", httpResponseDto1);
                 return httpResponseDto1;
             }
         }

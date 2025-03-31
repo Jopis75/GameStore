@@ -10,73 +10,57 @@ using Microsoft.Extensions.Logging;
 
 namespace Application.Features.Companies.RequestHandlers.Commands
 {
-    public class UpdateCompanyRequestHandler : IRequestHandler<UpdateCompanyRequest, HttpResponseDto<CompanyDto>>
+    public class UpdateCompanyRequestHandler(IUnitOfWork unitOfWork, IMapper mapper, IValidator<UpdateCompanyRequest> validator, ILogger<UpdateCompanyRequestHandler> logger) : IRequestHandler<UpdateCompanyRequest, HttpResponseDto<CompanyDto>>
     {
-        private readonly IUnitOfWork _unitOfWork;
-
-        private readonly IMapper _mapper;
-
-        private readonly IValidator<UpdateCompanyRequest> _validator;
-
-        private readonly ILogger<UpdateCompanyRequestHandler> _logger;
-
-        public UpdateCompanyRequestHandler(IUnitOfWork unitOfWork, IMapper mapper, IValidator<UpdateCompanyRequest> validator, ILogger<UpdateCompanyRequestHandler> logger)
-        {
-            _unitOfWork = unitOfWork;
-            _mapper = mapper;
-            _validator = validator;
-            _logger = logger;
-        }
-
         public async Task<HttpResponseDto<CompanyDto>> Handle(UpdateCompanyRequest updateCompanyRequest, CancellationToken cancellationToken)
         {
-            await _unitOfWork.BeginTransactionAsync(cancellationToken);
+            await unitOfWork.BeginTransactionAsync(cancellationToken);
 
             try
             {
-                _logger.LogInformation("Begin UpdateCompany {@UpdateCompanyRequest}.", updateCompanyRequest);
+                logger.LogInformation("Begin UpdateCompany {@UpdateCompanyRequest}.", updateCompanyRequest);
 
                 if (updateCompanyRequest == null)
                 {
                     var ex = new ArgumentNullException(nameof(updateCompanyRequest));
                     var httpResponseDto1 = new HttpResponseDto<CompanyDto>(ex.Message, StatusCodes.Status400BadRequest);
-                    _logger.LogError(ex, "Error UpdateCompany {@HttpResponseDto}.", httpResponseDto1);
+                    logger.LogError(ex, "Error UpdateCompany {@HttpResponseDto}.", httpResponseDto1);
                     return httpResponseDto1;
                 }
 
-                var validationResult = await _validator.ValidateAsync(updateCompanyRequest, cancellationToken);
+                var validationResult = await validator.ValidateAsync(updateCompanyRequest, cancellationToken);
 
                 if (validationResult.IsValid == false)
                 {
                     var ex = new ValidationException(validationResult.Errors);
                     var httpResponseDto1 = new HttpResponseDto<CompanyDto>(ex.Message, StatusCodes.Status400BadRequest);
-                    _logger.LogError(ex, "Error UpdateCompany {@HttpResponseDto}.", httpResponseDto1);
+                    logger.LogError(ex, "Error UpdateCompany {@HttpResponseDto}.", httpResponseDto1);
                     return httpResponseDto1;
                 }
 
-                var companyDto = _mapper.Map<CompanyDto>(updateCompanyRequest);
-                var updatedCompanyDto = await _unitOfWork.CompanyRepository.UpdateAsync(companyDto, cancellationToken);
+                var companyDto = mapper.Map<CompanyDto>(updateCompanyRequest);
+                var updatedCompanyDto = await unitOfWork.CompanyRepository.UpdateAsync(companyDto, cancellationToken);
 
-                await _unitOfWork.CommitTransactionAsync(cancellationToken);
+                await unitOfWork.CommitTransactionAsync(cancellationToken);
 
                 var httpResponseDto = new HttpResponseDto<CompanyDto>(updatedCompanyDto, StatusCodes.Status200OK);
-                _logger.LogInformation("Done UpdateCompany {@HttpResponseDto}.", httpResponseDto);
+                logger.LogInformation("Done UpdateCompany {@HttpResponseDto}.", httpResponseDto);
                 return httpResponseDto;
             }
             catch (OperationCanceledException ex)
             {
-                await _unitOfWork.RollbackTransactionAsync(cancellationToken);
+                await unitOfWork.RollbackTransactionAsync(cancellationToken);
 
                 var httpResponseDto1 = new HttpResponseDto<CompanyDto>(ex.Message, StatusCodes.Status500InternalServerError);
-                _logger.LogError(ex, "Canceled UpdateCompany {@HttpResponseDto}.", httpResponseDto1);
+                logger.LogError(ex, "Canceled UpdateCompany {@HttpResponseDto}.", httpResponseDto1);
                 return httpResponseDto1;
             }
             catch (Exception ex)
             {
-                await _unitOfWork.RollbackTransactionAsync(cancellationToken);
+                await unitOfWork.RollbackTransactionAsync(cancellationToken);
 
                 var httpResponseDto1 = new HttpResponseDto<CompanyDto>(ex.Message, StatusCodes.Status500InternalServerError);
-                _logger.LogError(ex, "Error UpdateCompany {@HttpResponseDto}.", httpResponseDto1);
+                logger.LogError(ex, "Error UpdateCompany {@HttpResponseDto}.", httpResponseDto1);
                 return httpResponseDto1;
             }
         }

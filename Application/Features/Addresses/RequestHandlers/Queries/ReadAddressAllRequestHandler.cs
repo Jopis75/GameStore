@@ -8,48 +8,38 @@ using Microsoft.Extensions.Logging;
 
 namespace Application.Features.Addresses.RequestHandlers.Queries
 {
-    public class ReadAddressAllRequestHandler : IRequestHandler<ReadAddressAllRequest, HttpResponseDto<AddressDto>>
+    public class ReadAddressAllRequestHandler(IUnitOfWork unitOfWork, ILogger<ReadAddressAllRequestHandler> logger) : IRequestHandler<ReadAddressAllRequest, HttpResponseDto<AddressDto>>
     {
-        private readonly IUnitOfWork _unitOfWork;
-
-        private readonly ILogger<ReadAddressAllRequestHandler> _logger;
-
-        public ReadAddressAllRequestHandler(IUnitOfWork unitOfWork, ILogger<ReadAddressAllRequestHandler> logger)
-        {
-            _unitOfWork = unitOfWork;
-            _logger = logger;
-        }
-
         public async Task<HttpResponseDto<AddressDto>> Handle(ReadAddressAllRequest readAddressAllRequest, CancellationToken cancellationToken)
         {
             try
             {
-                _logger.LogInformation("Begin ReadAddressAll {@ReadAddressAllRequest}.", readAddressAllRequest);
+                logger.LogInformation("Begin ReadAddressAll {@ReadAddressAllRequest}.", readAddressAllRequest);
 
                 if (readAddressAllRequest == null)
                 {
                     var ex = new ArgumentNullException(nameof(readAddressAllRequest));
                     var httpResponseDto1 = new HttpResponseDto<AddressDto>(ex.Message, StatusCodes.Status400BadRequest);
-                    _logger.LogError(ex, "Error ReadAddressAll {@HttpResponseDto}.", httpResponseDto1);
+                    logger.LogError(ex, "Error ReadAddressAll {@HttpResponseDto}.", httpResponseDto1);
                     return httpResponseDto1;
                 }
 
-                var addressDtos = await _unitOfWork.AddressRepository.ReadAllAsync(cancellationToken);
+                var addressDtos = await unitOfWork.AddressRepository.ReadAllAsync(cancellationToken);
 
                 var httpResponseDto = new HttpResponseDto<AddressDto>(addressDtos.ToArray(), StatusCodes.Status200OK);
-                _logger.LogInformation("Done ReadAddressAll {@HttpResponseDto}.", httpResponseDto);
+                logger.LogInformation("Done ReadAddressAll {@HttpResponseDto}.", httpResponseDto);
                 return httpResponseDto;
             }
             catch (OperationCanceledException ex)
             {
                 var httpResponseDto1 = new HttpResponseDto<AddressDto>(ex.Message, StatusCodes.Status500InternalServerError);
-                _logger.LogError(ex, "Canceled ReadAddressAll {@HttpResponseDto}.", httpResponseDto1);
+                logger.LogError(ex, "Canceled ReadAddressAll {@HttpResponseDto}.", httpResponseDto1);
                 return httpResponseDto1;
             }
             catch (Exception ex)
             {
                 var httpResponseDto1 = new HttpResponseDto<AddressDto>(ex.Message, StatusCodes.Status500InternalServerError);
-                _logger.LogError(ex, "Error ReadAddressAll {@HttpResponseDto}.", httpResponseDto1);
+                logger.LogError(ex, "Error ReadAddressAll {@HttpResponseDto}.", httpResponseDto1);
                 return httpResponseDto1;
             }
         }

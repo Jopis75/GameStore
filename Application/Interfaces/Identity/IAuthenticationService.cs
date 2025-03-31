@@ -5,8 +5,8 @@ namespace Application.Interfaces.Identity
 {
     public interface IAuthenticationService
     {
-        Task<HttpResponseDto<LoginResponseDto>> LoginAsync(LoginRequestDto authenticationRequest);
+        Task<HttpResponseDto<LoginResponseDto>> LoginAsync(LoginRequestDto authenticationRequestDto, CancellationToken cancellationToken);
 
-        Task<HttpResponseDto<RegistrationResponseDto>> RegisterAsync(RegistrationRequestDto registrationRequest);
+        Task<HttpResponseDto<RegistrationResponseDto>> RegisterAsync(RegistrationRequestDto registrationRequestDto, CancellationToken cancellationToken);
     }
 }

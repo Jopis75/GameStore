@@ -8,48 +8,38 @@ using Microsoft.Extensions.Logging;
 
 namespace Application.Features.Companies.RequestHandlers.Queries
 {
-    public class ReadCompanyAllRequestHandler : IRequestHandler<ReadCompanyAllRequest, HttpResponseDto<CompanyDto>>
+    public class ReadCompanyAllRequestHandler(IUnitOfWork unitOfWork, ILogger<ReadCompanyAllRequestHandler> logger) : IRequestHandler<ReadCompanyAllRequest, HttpResponseDto<CompanyDto>>
     {
-        private readonly IUnitOfWork _unitOfWork;
-
-        private readonly ILogger<ReadCompanyAllRequestHandler> _logger;
-
-        public ReadCompanyAllRequestHandler(IUnitOfWork unitOfWork, ILogger<ReadCompanyAllRequestHandler> logger)
-        {
-            _unitOfWork = unitOfWork;
-            _logger = logger;
-        }
-
         public async Task<HttpResponseDto<CompanyDto>> Handle(ReadCompanyAllRequest readCompanyAllRequest, CancellationToken cancellationToken)
         {
             try
             {
-                _logger.LogInformation("Begin ReadCompanyAll {@ReadCompanyAllRequest}.", readCompanyAllRequest);
+                logger.LogInformation("Begin ReadCompanyAll {@ReadCompanyAllRequest}.", readCompanyAllRequest);
 
                 if (readCompanyAllRequest == null)
                 {
                     var ex = new ArgumentNullException(nameof(readCompanyAllRequest));
                     var httpResponseDto1 = new HttpResponseDto<CompanyDto>(ex.Message, StatusCodes.Status400BadRequest);
-                    _logger.LogError(ex, "Error ReadCompanyAll {@HttpResponseDto}.", httpResponseDto1);
+                    logger.LogError(ex, "Error ReadCompanyAll {@HttpResponseDto}.", httpResponseDto1);
                     return httpResponseDto1;
                 }
 
-                var companyDtos = await _unitOfWork.CompanyRepository.ReadAllAsync(cancellationToken);
+                var companyDtos = await unitOfWork.CompanyRepository.ReadAllAsync(cancellationToken);
 
                 var httpResponseDto = new HttpResponseDto<CompanyDto>(companyDtos.ToArray(), StatusCodes.Status200OK);
-                _logger.LogInformation("Done ReadCompanyAll {@HttpResponseDto}.", httpResponseDto);
+                logger.LogInformation("Done ReadCompanyAll {@HttpResponseDto}.", httpResponseDto);
                 return httpResponseDto;
             }
             catch (OperationCanceledException ex)
             {
                 var httpResponseDto1 = new HttpResponseDto<CompanyDto>(ex.Message, StatusCodes.Status500InternalServerError);
-                _logger.LogError(ex, "Canceled ReadCompanyAll {@HttpResponseDto}.", httpResponseDto1);
+                logger.LogError(ex, "Canceled ReadCompanyAll {@HttpResponseDto}.", httpResponseDto1);
                 return httpResponseDto1;
             }
             catch (Exception ex)
             {
                 var httpResponseDto1 = new HttpResponseDto<CompanyDto>(ex.Message, StatusCodes.Status500InternalServerError);
-                _logger.LogError(ex, "Error ReadCompanyAll {@HttpResponseDto}.", httpResponseDto1);
+                logger.LogError(ex, "Error ReadCompanyAll {@HttpResponseDto}.", httpResponseDto1);
                 return httpResponseDto1;
             }
         }

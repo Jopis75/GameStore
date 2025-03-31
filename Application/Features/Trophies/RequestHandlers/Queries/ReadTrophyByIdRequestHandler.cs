@@ -9,61 +9,48 @@ using Microsoft.Extensions.Logging;
 
 namespace Application.Features.Trophies.RequestHandlers.Queries
 {
-    public class ReadTrophyByIdRequestHandler : IRequestHandler<ReadTrophyByIdRequest, HttpResponseDto<TrophyDto>>
+    public class ReadTrophyByIdRequestHandler(IUnitOfWork unitOfWork, IValidator<ReadTrophyByIdRequest> validator, ILogger<ReadTrophyByIdRequestHandler> logger) : IRequestHandler<ReadTrophyByIdRequest, HttpResponseDto<TrophyDto>>
     {
-        private readonly IUnitOfWork _unitOfWork;
-
-        private readonly IValidator<ReadTrophyByIdRequest> _validator;
-
-        private readonly ILogger<ReadTrophyByIdRequestHandler> _logger;
-
-        public ReadTrophyByIdRequestHandler(IUnitOfWork unitOfWork, IValidator<ReadTrophyByIdRequest> validator, ILogger<ReadTrophyByIdRequestHandler> logger)
-        {
-            _unitOfWork = unitOfWork;
-            _validator = validator;
-            _logger = logger;
-        }
-
         public async Task<HttpResponseDto<TrophyDto>> Handle(ReadTrophyByIdRequest readTrophyByIdRequest, CancellationToken cancellationToken)
         {
             try
             {
-                _logger.LogInformation("Begin ReadTrophyById {@ReadTrophyByIdRequest}.", readTrophyByIdRequest);
+                logger.LogInformation("Begin ReadTrophyById {@ReadTrophyByIdRequest}.", readTrophyByIdRequest);
 
                 if (readTrophyByIdRequest == null)
                 {
                     var ex = new ArgumentNullException(nameof(readTrophyByIdRequest));
                     var httpResponseDto1 = new HttpResponseDto<TrophyDto>(ex.Message, StatusCodes.Status400BadRequest);
-                    _logger.LogError(ex, "Error ReadTrophyById {@HttpResponseDto}.", httpResponseDto1);
+                    logger.LogError(ex, "Error ReadTrophyById {@HttpResponseDto}.", httpResponseDto1);
                     return httpResponseDto1;
                 }
 
-                var validationResult = await _validator.ValidateAsync(readTrophyByIdRequest, cancellationToken);
+                var validationResult = await validator.ValidateAsync(readTrophyByIdRequest, cancellationToken);
 
                 if (validationResult.IsValid == false)
                 {
                     var ex = new ValidationException(validationResult.Errors);
                     var httpResponseDto1 = new HttpResponseDto<TrophyDto>(ex.Message, StatusCodes.Status400BadRequest);
-                    _logger.LogError(ex, "Error ReadTrophyById {@HttpResponseDto}.", httpResponseDto1);
+                    logger.LogError(ex, "Error ReadTrophyById {@HttpResponseDto}.", httpResponseDto1);
                     return httpResponseDto1;
                 }
 
-                var trophyDto = await _unitOfWork.TrophyRepository.ReadByIdAsync(readTrophyByIdRequest.Id, cancellationToken);
+                var trophyDto = await unitOfWork.TrophyRepository.ReadByIdAsync(readTrophyByIdRequest.Id, cancellationToken);
 
                 var httpResponseDto = new HttpResponseDto<TrophyDto>(trophyDto, StatusCodes.Status200OK);
-                _logger.LogInformation("Done ReadTrophyById {@HttpResponseDto}.", httpResponseDto);
+                logger.LogInformation("Done ReadTrophyById {@HttpResponseDto}.", httpResponseDto);
                 return httpResponseDto;
             }
             catch (OperationCanceledException ex)
             {
                 var httpResponseDto1 = new HttpResponseDto<TrophyDto>(ex.Message, StatusCodes.Status500InternalServerError);
-                _logger.LogError(ex, "Canceled ReadTrophyById {@HttpResponseDto}.", httpResponseDto1);
+                logger.LogError(ex, "Canceled ReadTrophyById {@HttpResponseDto}.", httpResponseDto1);
                 return httpResponseDto1;
             }
             catch (Exception ex)
             {
                 var httpResponseDto1 = new HttpResponseDto<TrophyDto>(ex.Message, StatusCodes.Status500InternalServerError);
-                _logger.LogError(ex, "Error ReadTrophyById {@HttpResponseDto}.", httpResponseDto1);
+                logger.LogError(ex, "Error ReadTrophyById {@HttpResponseDto}.", httpResponseDto1);
                 return httpResponseDto1;
             }
         }

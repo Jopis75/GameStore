@@ -10,73 +10,57 @@ using Microsoft.Extensions.Logging;
 
 namespace Application.Features.Reviews.RequestHandlers.Commands
 {
-    public class UpdateReviewRequestHandler : IRequestHandler<UpdateReviewRequest, HttpResponseDto<ReviewDto>>
+    public class UpdateReviewRequestHandler(IUnitOfWork unitOfWork, IMapper mapper, IValidator<UpdateReviewRequest> validator, ILogger<UpdateReviewRequestHandler> logger) : IRequestHandler<UpdateReviewRequest, HttpResponseDto<ReviewDto>>
     {
-        private readonly IUnitOfWork _unitOfWork;
-
-        private readonly IMapper _mapper;
-
-        private readonly IValidator<UpdateReviewRequest> _validator;
-
-        private readonly ILogger<UpdateReviewRequestHandler> _logger;
-
-        public UpdateReviewRequestHandler(IUnitOfWork unitOfWork, IMapper mapper, IValidator<UpdateReviewRequest> validator, ILogger<UpdateReviewRequestHandler> logger)
-        {
-            _unitOfWork = unitOfWork;
-            _mapper = mapper;
-            _validator = validator;
-            _logger = logger;
-        }
-
         public async Task<HttpResponseDto<ReviewDto>> Handle(UpdateReviewRequest updateReviewRequest, CancellationToken cancellationToken)
         {
-            await _unitOfWork.BeginTransactionAsync(cancellationToken);
+            await unitOfWork.BeginTransactionAsync(cancellationToken);
 
             try
             {
-                _logger.LogInformation("Begin UpdateReview {@UpdateReviewRequest}.", updateReviewRequest);
+                logger.LogInformation("Begin UpdateReview {@UpdateReviewRequest}.", updateReviewRequest);
 
                 if (updateReviewRequest == null)
                 {
                     var ex = new ArgumentNullException(nameof(updateReviewRequest));
                     var httpResponseDto1 = new HttpResponseDto<ReviewDto>(ex.Message, StatusCodes.Status400BadRequest);
-                    _logger.LogError(ex, "Error UpdateReview {@HttpResponseDto}.", httpResponseDto1);
+                    logger.LogError(ex, "Error UpdateReview {@HttpResponseDto}.", httpResponseDto1);
                     return httpResponseDto1;
                 }
 
-                var validationResult = await _validator.ValidateAsync(updateReviewRequest, cancellationToken);
+                var validationResult = await validator.ValidateAsync(updateReviewRequest, cancellationToken);
 
                 if (validationResult.IsValid == false)
                 {
                     var ex = new ValidationException(validationResult.Errors);
                     var httpResponseDto1 = new HttpResponseDto<ReviewDto>(ex.Message, StatusCodes.Status400BadRequest);
-                    _logger.LogError(ex, "Error UpdateReview {@HttpResponseDto}.", httpResponseDto1);
+                    logger.LogError(ex, "Error UpdateReview {@HttpResponseDto}.", httpResponseDto1);
                     return httpResponseDto1;
                 }
 
-                var reviewDto = _mapper.Map<ReviewDto>(updateReviewRequest);
-                var updatedReviewDto = await _unitOfWork.ReviewRepository.UpdateAsync(reviewDto, cancellationToken);
+                var reviewDto = mapper.Map<ReviewDto>(updateReviewRequest);
+                var updatedReviewDto = await unitOfWork.ReviewRepository.UpdateAsync(reviewDto, cancellationToken);
 
-                await _unitOfWork.CommitTransactionAsync(cancellationToken);
+                await unitOfWork.CommitTransactionAsync(cancellationToken);
 
                 var httpResponseDto = new HttpResponseDto<ReviewDto>(updatedReviewDto, StatusCodes.Status200OK);
-                _logger.LogInformation("Done UpdateReview {@HttpResponseDto}.", httpResponseDto);
+                logger.LogInformation("Done UpdateReview {@HttpResponseDto}.", httpResponseDto);
                 return httpResponseDto;
             }
             catch (OperationCanceledException ex)
             {
-                await _unitOfWork.RollbackTransactionAsync(cancellationToken);
+                await unitOfWork.RollbackTransactionAsync(cancellationToken);
 
                 var httpResponseDto1 = new HttpResponseDto<ReviewDto>(ex.Message, StatusCodes.Status500InternalServerError);
-                _logger.LogError(ex, "Canceled UpdateReview {@HttpResponseDto}.", httpResponseDto1);
+                logger.LogError(ex, "Canceled UpdateReview {@HttpResponseDto}.", httpResponseDto1);
                 return httpResponseDto1;
             }
             catch (Exception ex)
             {
-                await _unitOfWork.RollbackTransactionAsync(cancellationToken);
+                await unitOfWork.RollbackTransactionAsync(cancellationToken);
 
                 var httpResponseDto1 = new HttpResponseDto<ReviewDto>(ex.Message, StatusCodes.Status500InternalServerError);
-                _logger.LogError(ex, "Error UpdateReview {@HttpResponseDto}.", httpResponseDto1);
+                logger.LogError(ex, "Error UpdateReview {@HttpResponseDto}.", httpResponseDto1);
                 return httpResponseDto1;
             }
         }

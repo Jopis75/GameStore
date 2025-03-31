@@ -10,13 +10,8 @@ using System.Linq.Expressions;
 
 namespace Persistance.Repositories
 {
-    public class GenreRepository : RepositoryBase<Genre, GenreDto, GenreFilter>, IGenreRepository
+    public class GenreRepository(GameStoreDbContext gameStoreDbContext, IMapper mapper) : RepositoryBase<Genre, GenreDto, GenreFilter>(gameStoreDbContext, mapper), IGenreRepository
     {
-        public GenreRepository(GameStoreDbContext gameStoreDbContext, IMapper mapper)
-            : base(gameStoreDbContext, mapper)
-        {
-        }
-
         protected override async Task<IEnumerable<GenreDto>> ReadByFilterAsync(GenreFilter filter, Expression<Func<Genre, bool>> predicate, CancellationToken cancellationToken)
         {
             if (filter.Name != null)

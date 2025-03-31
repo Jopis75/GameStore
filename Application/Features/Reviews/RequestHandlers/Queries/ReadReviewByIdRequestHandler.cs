@@ -9,61 +9,48 @@ using Microsoft.Extensions.Logging;
 
 namespace Application.Features.Reviews.RequestHandlers.Queries
 {
-    public class ReadReviewByIdRequestHandler : IRequestHandler<ReadReviewByIdRequest, HttpResponseDto<ReviewDto>>
+    public class ReadReviewByIdRequestHandler(IUnitOfWork unitOfWork, IValidator<ReadReviewByIdRequest> validator, ILogger<ReadReviewByIdRequestHandler> logger) : IRequestHandler<ReadReviewByIdRequest, HttpResponseDto<ReviewDto>>
     {
-        private readonly IUnitOfWork _unitOfWork;
-
-        private readonly IValidator<ReadReviewByIdRequest> _validator;
-
-        private readonly ILogger<ReadReviewByIdRequestHandler> _logger;
-
-        public ReadReviewByIdRequestHandler(IUnitOfWork unitOfWork, IValidator<ReadReviewByIdRequest> validator, ILogger<ReadReviewByIdRequestHandler> logger)
-        {
-            _unitOfWork = unitOfWork;
-            _validator = validator;
-            _logger = logger;
-        }
-
         public async Task<HttpResponseDto<ReviewDto>> Handle(ReadReviewByIdRequest readReviewByIdRequest, CancellationToken cancellationToken)
         {
             try
             {
-                _logger.LogInformation("Begin ReadReviewById {@ReadReviewByIdRequest}.", readReviewByIdRequest);
+                logger.LogInformation("Begin ReadReviewById {@ReadReviewByIdRequest}.", readReviewByIdRequest);
 
                 if (readReviewByIdRequest == null)
                 {
                     var ex = new ArgumentNullException(nameof(readReviewByIdRequest));
                     var httpResponseDto1 = new HttpResponseDto<ReviewDto>(ex.Message, StatusCodes.Status400BadRequest);
-                    _logger.LogError(ex, "Error ReadReviewById {@HttpResponseDto}.", httpResponseDto1);
+                    logger.LogError(ex, "Error ReadReviewById {@HttpResponseDto}.", httpResponseDto1);
                     return httpResponseDto1;
                 }
 
-                var validationResult = await _validator.ValidateAsync(readReviewByIdRequest, cancellationToken);
+                var validationResult = await validator.ValidateAsync(readReviewByIdRequest, cancellationToken);
 
                 if (validationResult.IsValid == false)
                 {
                     var ex = new ValidationException(validationResult.Errors);
                     var httpResponseDto1 = new HttpResponseDto<ReviewDto>(ex.Message, StatusCodes.Status400BadRequest);
-                    _logger.LogError(ex, "Error ReadReviewById {@HttpResponseDto}.", httpResponseDto1);
+                    logger.LogError(ex, "Error ReadReviewById {@HttpResponseDto}.", httpResponseDto1);
                     return httpResponseDto1;
                 }
 
-                var reviewDto = await _unitOfWork.ReviewRepository.ReadByIdAsync(readReviewByIdRequest.Id, cancellationToken);
+                var reviewDto = await unitOfWork.ReviewRepository.ReadByIdAsync(readReviewByIdRequest.Id, cancellationToken);
 
                 var httpResponseDto = new HttpResponseDto<ReviewDto>(reviewDto, StatusCodes.Status200OK);
-                _logger.LogInformation("Done ReadReviewById {@HttpResponseDto}.", httpResponseDto);
+                logger.LogInformation("Done ReadReviewById {@HttpResponseDto}.", httpResponseDto);
                 return httpResponseDto;
             }
             catch (OperationCanceledException ex)
             {
                 var httpResponseDto1 = new HttpResponseDto<ReviewDto>(ex.Message, StatusCodes.Status500InternalServerError);
-                _logger.LogError(ex, "Canceled ReadReviewById {@HttpResponseDto}.", httpResponseDto1);
+                logger.LogError(ex, "Canceled ReadReviewById {@HttpResponseDto}.", httpResponseDto1);
                 return httpResponseDto1;
             }
             catch (Exception ex)
             {
                 var httpResponseDto1 = new HttpResponseDto<ReviewDto>(ex.Message, StatusCodes.Status500InternalServerError);
-                _logger.LogError(ex, "Error ReadReviewById {@HttpResponseDto}.", httpResponseDto1);
+                logger.LogError(ex, "Error ReadReviewById {@HttpResponseDto}.", httpResponseDto1);
                 return httpResponseDto1;
             }
         }

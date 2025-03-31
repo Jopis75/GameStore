@@ -25,7 +25,7 @@ namespace Persistance.DbContexts
 
         public DbSet<VideoGame> VideoGames { get; set; }
 
-        public GameStoreDbContext(DbContextOptions<GameStoreDbContext> dbContextOptions) 
+        public GameStoreDbContext(DbContextOptions<GameStoreDbContext> dbContextOptions)
             : base(dbContextOptions)
         {
         }

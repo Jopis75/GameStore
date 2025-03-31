@@ -8,48 +8,38 @@ using Microsoft.Extensions.Logging;
 
 namespace Application.Features.ConsoleVideoGames.RequestHandlers.Queries
 {
-    public class ReadConsoleVideoGameAllRequestHandler : IRequestHandler<ReadConsoleVideoGameAllRequest, HttpResponseDto<ConsoleVideoGameDto>>
+    public class ReadConsoleVideoGameAllRequestHandler(IUnitOfWork unitOfWork, ILogger<ReadConsoleVideoGameAllRequestHandler> logger) : IRequestHandler<ReadConsoleVideoGameAllRequest, HttpResponseDto<ConsoleVideoGameDto>>
     {
-        private readonly IUnitOfWork _unitOfWork;
-
-        private readonly ILogger<ReadConsoleVideoGameAllRequestHandler> _logger;
-
-        public ReadConsoleVideoGameAllRequestHandler(IUnitOfWork unitOfWork, ILogger<ReadConsoleVideoGameAllRequestHandler> logger)
-        {
-            _unitOfWork = unitOfWork;
-            _logger = logger;
-        }
-
         public async Task<HttpResponseDto<ConsoleVideoGameDto>> Handle(ReadConsoleVideoGameAllRequest readConsoleVideoGameAllRequest, CancellationToken cancellationToken)
         {
             try
             {
-                _logger.LogInformation("Begin ReadConsoleVideoGameAll {@ReadConsoleVideoGameAllRequest}.", readConsoleVideoGameAllRequest);
+                logger.LogInformation("Begin ReadConsoleVideoGameAll {@ReadConsoleVideoGameAllRequest}.", readConsoleVideoGameAllRequest);
 
                 if (readConsoleVideoGameAllRequest == null)
                 {
                     var ex = new ArgumentNullException(nameof(readConsoleVideoGameAllRequest));
                     var httpResponseDto1 = new HttpResponseDto<ConsoleVideoGameDto>(ex.Message, StatusCodes.Status400BadRequest);
-                    _logger.LogError(ex, "Error ReadConsoleVideoGameAll {@HttpResponseDto}.", httpResponseDto1);
+                    logger.LogError(ex, "Error ReadConsoleVideoGameAll {@HttpResponseDto}.", httpResponseDto1);
                     return httpResponseDto1;
                 }
 
-                var consoleVideoGameDtos = await _unitOfWork.ConsoleVideoGameRepository.ReadAllAsync(cancellationToken);
+                var consoleVideoGameDtos = await unitOfWork.ConsoleVideoGameRepository.ReadAllAsync(cancellationToken);
 
                 var httpResponseDto = new HttpResponseDto<ConsoleVideoGameDto>(consoleVideoGameDtos.ToArray(), StatusCodes.Status200OK);
-                _logger.LogInformation("Done ReadConsoleVideoGameAll {@HttpResponseDto}.", httpResponseDto);
+                logger.LogInformation("Done ReadConsoleVideoGameAll {@HttpResponseDto}.", httpResponseDto);
                 return httpResponseDto;
             }
             catch (OperationCanceledException ex)
             {
                 var httpResponseDto1 = new HttpResponseDto<ConsoleVideoGameDto>(ex.Message, StatusCodes.Status500InternalServerError);
-                _logger.LogError(ex, "Canceled ReadConsoleVideoGameAll {@HttpResponseDto}.", httpResponseDto1);
+                logger.LogError(ex, "Canceled ReadConsoleVideoGameAll {@HttpResponseDto}.", httpResponseDto1);
                 return httpResponseDto1;
             }
             catch (Exception ex)
             {
                 var httpResponseDto1 = new HttpResponseDto<ConsoleVideoGameDto>(ex.Message, StatusCodes.Status500InternalServerError);
-                _logger.LogError(ex, "Error ReadConsoleVideoGameAll {@HttpResponseDto}.", httpResponseDto1);
+                logger.LogError(ex, "Error ReadConsoleVideoGameAll {@HttpResponseDto}.", httpResponseDto1);
                 return httpResponseDto1;
             }
         }

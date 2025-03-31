@@ -2,6 +2,7 @@
 using Application.Dtos.General;
 using Application.Interfaces.Infrastructure;
 using Azure.Storage.Blobs;
+using Azure.Storage.Blobs.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Azure;
 using Microsoft.Extensions.Logging;
@@ -24,7 +25,7 @@ namespace Infrastructure.Services
             _blobServiceClient = _azureClientFactory.CreateClient("BlobStorage");
         }
 
-        public async Task<HttpResponseDto<AzureBlobStorageCreateContainerResponseDto>> CreateContainerAsync(AzureBlobStorageCreateContainerRequestDto azureBlobStorageCreateContainerRequestDto)
+        public async Task<HttpResponseDto<AzureBlobStorageCreateContainerResponseDto>> CreateContainerAsync(AzureBlobStorageCreateContainerRequestDto azureBlobStorageCreateContainerRequestDto, CancellationToken cancellationToken)
         {
             try
             {
@@ -32,12 +33,13 @@ namespace Infrastructure.Services
 
                 if (azureBlobStorageCreateContainerRequestDto == null)
                 {
-                    var httpResponseDto1 = new HttpResponseDto<AzureBlobStorageCreateContainerResponseDto>(new ArgumentNullException(nameof(azureBlobStorageCreateContainerRequestDto)).Message, StatusCodes.Status400BadRequest);
-                    _logger.LogError("Error CreateContainerAsync {@HttpResponseDto}.", httpResponseDto1);
+                    var ex = new ArgumentNullException(nameof(azureBlobStorageCreateContainerRequestDto));
+                    var httpResponseDto1 = new HttpResponseDto<AzureBlobStorageCreateContainerResponseDto>(ex.Message, StatusCodes.Status400BadRequest);
+                    _logger.LogError(ex, "Error CreateContainerAsync {@HttpResponseDto}.", httpResponseDto1);
                     return httpResponseDto1;
                 }
 
-                var blobContainerClient = await _blobServiceClient.CreateBlobContainerAsync(azureBlobStorageCreateContainerRequestDto.BlobContainerName);
+                var blobContainerClient = await _blobServiceClient.CreateBlobContainerAsync(azureBlobStorageCreateContainerRequestDto.BlobContainerName, PublicAccessType.None, null, cancellationToken);
 
                 var azureBlobStorageCreateContainerResponseDto = new AzureBlobStorageCreateContainerResponseDto
                 {
@@ -51,12 +53,12 @@ namespace Infrastructure.Services
             catch (Exception ex)
             {
                 var httpResponseDto1 = new HttpResponseDto<AzureBlobStorageCreateContainerResponseDto>(ex.Message, StatusCodes.Status500InternalServerError);
-                _logger.LogError("Error CreateContainerAsync {@HttpResponseDto}.", httpResponseDto1);
+                _logger.LogError(ex, "Error CreateContainerAsync {@HttpResponseDto}.", httpResponseDto1);
                 return httpResponseDto1;
             }
         }
 
-        public async Task<HttpResponseDto<AzureBlobStorageDeleteContainerResponseDto>> DeleteContainerAsync(AzureBlobStorageDeleteContainerRequestDto azureBlobStorageDeleteContainerRequestDto)
+        public async Task<HttpResponseDto<AzureBlobStorageDeleteContainerResponseDto>> DeleteContainerAsync(AzureBlobStorageDeleteContainerRequestDto azureBlobStorageDeleteContainerRequestDto, CancellationToken cancellationToken)
         {
             try
             {
@@ -64,15 +66,17 @@ namespace Infrastructure.Services
 
                 if (azureBlobStorageDeleteContainerRequestDto == null)
                 {
-                    var httpResponseDto1 = new HttpResponseDto<AzureBlobStorageDeleteContainerResponseDto>(new ArgumentNullException(nameof(azureBlobStorageDeleteContainerRequestDto)).Message, StatusCodes.Status400BadRequest);
-                    _logger.LogError("Error DeleteContainerAsync {@HttpResponseDto}.", httpResponseDto1);
+                    var ex = new ArgumentNullException(nameof(azureBlobStorageDeleteContainerRequestDto));
+                    var httpResponseDto1 = new HttpResponseDto<AzureBlobStorageDeleteContainerResponseDto>(ex.Message, StatusCodes.Status400BadRequest);
+                    _logger.LogError(ex, "Error DeleteContainerAsync {@HttpResponseDto}.", httpResponseDto1);
                     return httpResponseDto1;
                 }
 
                 var blobContainerClient = _blobServiceClient.GetBlobContainerClient(azureBlobStorageDeleteContainerRequestDto.BlobContainerName);
-                await blobContainerClient.DeleteAsync();
 
-                var azureBlobStorageDeleteContainerResponseDto = new AzureBlobStorageDeleteContainerResponseDto();
+                var response = await blobContainerClient.DeleteAsync(null, cancellationToken);
+
+                var azureBlobStorageDeleteContainerResponseDto = new AzureBlobStorageDeleteContainerResponseDto(); // ToDo: Populate the response object
 
                 var httpResponseDto = new HttpResponseDto<AzureBlobStorageDeleteContainerResponseDto>(azureBlobStorageDeleteContainerResponseDto, StatusCodes.Status200OK);
                 _logger.LogInformation("Done DeleteContainerAsync {@HttpResponseDto}.", httpResponseDto);
@@ -81,12 +85,12 @@ namespace Infrastructure.Services
             catch (Exception ex)
             {
                 var httpResponseDto1 = new HttpResponseDto<AzureBlobStorageDeleteContainerResponseDto>(ex.Message, StatusCodes.Status500InternalServerError);
-                _logger.LogError("Error DeleteContainerAsync {@HttpResponseDto}.", httpResponseDto1);
+                _logger.LogError(ex, "Error DeleteContainerAsync {@HttpResponseDto}.", httpResponseDto1);
                 return httpResponseDto1;
             }
         }
 
-        public async Task<HttpResponseDto<AzureBlobStorageDownloadResponseDto>> DownloadAsync(AzureBlobStorageDownloadRequestDto azureBlobStorageDownloadRequestDto)
+        public async Task<HttpResponseDto<AzureBlobStorageDownloadResponseDto>> DownloadAsync(AzureBlobStorageDownloadRequestDto azureBlobStorageDownloadRequestDto, CancellationToken cancellationToken)
         {
             try
             {
@@ -94,17 +98,19 @@ namespace Infrastructure.Services
 
                 if (azureBlobStorageDownloadRequestDto == null)
                 {
-                    var httpResponseDto1 = new HttpResponseDto<AzureBlobStorageDownloadResponseDto>(new ArgumentNullException(nameof(azureBlobStorageDownloadRequestDto)).Message, StatusCodes.Status400BadRequest);
-                    _logger.LogError("Error DownloadAsync {@HttpResponseDto}.", httpResponseDto1);
+                    var ex = new ArgumentNullException(nameof(azureBlobStorageDownloadRequestDto));
+                    var httpResponseDto1 = new HttpResponseDto<AzureBlobStorageDownloadResponseDto>(ex.Message, StatusCodes.Status400BadRequest);
+                    _logger.LogError(ex, "Error DownloadAsync {@HttpResponseDto}.", httpResponseDto1);
                     return httpResponseDto1;
                 }
 
                 var blobContainerClient = _blobServiceClient.GetBlobContainerClient(azureBlobStorageDownloadRequestDto.BlobContainerName);
+
                 var blobClient = blobContainerClient.GetBlobClient(Path.GetFileName(azureBlobStorageDownloadRequestDto.Path));
 
                 using (var fileStream = File.OpenWrite(azureBlobStorageDownloadRequestDto.Path))
                 {
-                    await blobClient.DownloadToAsync(fileStream);
+                    var response = await blobClient.DownloadToAsync(fileStream, cancellationToken); // ToDo: Populate the response object
 
                     var azureBlobStorageDownloadResponseDto = new AzureBlobStorageDownloadResponseDto();
 
@@ -116,12 +122,12 @@ namespace Infrastructure.Services
             catch (Exception ex)
             {
                 var httpResponseDto1 = new HttpResponseDto<AzureBlobStorageDownloadResponseDto>(ex.Message, StatusCodes.Status500InternalServerError);
-                _logger.LogError("Error DownloadAsync {@HttpResponseDto}.", httpResponseDto1);
+                _logger.LogError(ex, "Error DownloadAsync {@HttpResponseDto}.", httpResponseDto1);
                 return httpResponseDto1;
             }
         }
 
-        public async Task<HttpResponseDto<AzureBlobStorageGetByFlatResponseDto>> GetByFlatAsync(AzureBlobStorageGetByFlatRequestDto azureBlobStorageGetByFlatRequestDto)
+        public async Task<HttpResponseDto<AzureBlobStorageGetByFlatResponseDto>> GetByFlatAsync(AzureBlobStorageGetByFlatRequestDto azureBlobStorageGetByFlatRequestDto, CancellationToken cancellationToken)
         {
             try
             {
@@ -129,14 +135,16 @@ namespace Infrastructure.Services
 
                 if (azureBlobStorageGetByFlatRequestDto == null)
                 {
-                    var httpResponseDto1 = new HttpResponseDto<AzureBlobStorageGetByFlatResponseDto>(new ArgumentNullException(nameof(azureBlobStorageGetByFlatRequestDto)).Message, StatusCodes.Status400BadRequest);
-                    _logger.LogError("Error GetByFlatAsync {@HttpResponseDto}.", httpResponseDto1);
+                    var ex = new ArgumentNullException(nameof(azureBlobStorageGetByFlatRequestDto));
+                    var httpResponseDto1 = new HttpResponseDto<AzureBlobStorageGetByFlatResponseDto>(ex.Message, StatusCodes.Status400BadRequest);
+                    _logger.LogError(ex, "Error GetByFlatAsync {@HttpResponseDto}.", httpResponseDto1);
                     return httpResponseDto1;
                 }
 
                 var blobContainerClient = _blobServiceClient.GetBlobContainerClient(azureBlobStorageGetByFlatRequestDto.BlobContainerName);
+
                 var pages = blobContainerClient
-                    .GetBlobsAsync()
+                    .GetBlobsAsync(BlobTraits.None, BlobStates.None, null, cancellationToken)
                     .AsPages(azureBlobStorageGetByFlatRequestDto.ContinuationToken, azureBlobStorageGetByFlatRequestDto.PageSizeHint);
 
                 var azureBlobStorageGetByFlatResponseDto = new AzureBlobStorageGetByFlatResponseDto();
@@ -154,17 +162,17 @@ namespace Infrastructure.Services
             catch (Exception ex)
             {
                 var httpResponseDto1 = new HttpResponseDto<AzureBlobStorageGetByFlatResponseDto>(ex.Message, StatusCodes.Status500InternalServerError);
-                _logger.LogError("Error GetByFlatAsync {@HttpResponseDto}.", httpResponseDto1);
+                _logger.LogError(ex, "Error GetByFlatAsync {@HttpResponseDto}.", httpResponseDto1);
                 return httpResponseDto1;
             }
         }
 
-        public Task<HttpResponseDto<AzureBlobStorageGetByHierarchyResponseDto>> GetByHierarchyAsync(AzureBlobStorageGetByHierarchyRequestDto azureBlobStorageGetByHierarchyRequestDto)
+        public Task<HttpResponseDto<AzureBlobStorageGetByHierarchyResponseDto>> GetByHierarchyAsync(AzureBlobStorageGetByHierarchyRequestDto azureBlobStorageGetByHierarchyRequestDto, CancellationToken cancellationToken)
         {
             throw new NotImplementedException();
         }
 
-        public async Task<HttpResponseDto<AzureBlobStorageUploadResponseDto>> UploadAsync(AzureBlobStorageUploadRequestDto azureBlobStorageUploadRequestDto)
+        public async Task<HttpResponseDto<AzureBlobStorageUploadResponseDto>> UploadAsync(AzureBlobStorageUploadRequestDto azureBlobStorageUploadRequestDto, CancellationToken cancellationToken)
         {
             try
             {
@@ -172,17 +180,19 @@ namespace Infrastructure.Services
 
                 if (azureBlobStorageUploadRequestDto == null)
                 {
-                    var httpResponseDto1 = new HttpResponseDto<AzureBlobStorageUploadResponseDto>(new ArgumentNullException(nameof(azureBlobStorageUploadRequestDto)).Message, StatusCodes.Status400BadRequest);
-                    _logger.LogError("Error UploadAsync {@HttpResponseDto}.", httpResponseDto1);
+                    var ex = new ArgumentNullException(nameof(azureBlobStorageUploadRequestDto));
+                    var httpResponseDto1 = new HttpResponseDto<AzureBlobStorageUploadResponseDto>(ex.Message, StatusCodes.Status400BadRequest);
+                    _logger.LogError(ex, "Error UploadAsync {@HttpResponseDto}.", httpResponseDto1);
                     return httpResponseDto1;
                 }
 
                 var blobContainerClient = _blobServiceClient.GetBlobContainerClient(azureBlobStorageUploadRequestDto.BlobContainerName);
+
                 var blobClient = blobContainerClient.GetBlobClient(Path.GetFileName(azureBlobStorageUploadRequestDto.Path));
 
                 using (var fileStream = File.OpenRead(azureBlobStorageUploadRequestDto.Path))
                 {
-                    var blobContentInfo = (await blobClient.UploadAsync(fileStream, true)).Value;
+                    var blobContentInfo = (await blobClient.UploadAsync(fileStream, true, cancellationToken)).Value;
 
                     var azureBlobStorageUploadResponseDto = new AzureBlobStorageUploadResponseDto
                     {
@@ -197,7 +207,7 @@ namespace Infrastructure.Services
             catch (Exception ex)
             {
                 var httpResponseDto1 = new HttpResponseDto<AzureBlobStorageUploadResponseDto>(ex.Message, StatusCodes.Status500InternalServerError);
-                _logger.LogError("Error UploadAsync {@HttpResponseDto}.", httpResponseDto1);
+                _logger.LogError(ex, "Error UploadAsync {@HttpResponseDto}.", httpResponseDto1);
                 return httpResponseDto1;
             }
         }

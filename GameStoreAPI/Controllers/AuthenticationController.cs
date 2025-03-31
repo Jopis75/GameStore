@@ -7,20 +7,13 @@ namespace GameStoreAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class AuthenticationController : ControllerBase
+    public class AuthenticationController(IAuthenticationService authenticationService) : ControllerBase
     {
-        private readonly IAuthenticationService _authenticationService;
-
-        public AuthenticationController(IAuthenticationService authenticationService)
-        {
-            _authenticationService = authenticationService;
-        }
-
         [HttpPost]
         [Route("LoginAsync")]
         public async Task<ActionResult<HttpResponseDto<LoginResponseDto>>> LoginAsync(LoginRequestDto loginRequestDto)
         {
-            var httpResponseDto = await _authenticationService.LoginAsync(loginRequestDto);
+            var httpResponseDto = await authenticationService.LoginAsync(loginRequestDto, CancellationToken.None);
             return StatusCode(httpResponseDto.StatusCode, httpResponseDto);
         }
 
@@ -28,7 +21,7 @@ namespace GameStoreAPI.Controllers
         [Route("RegisterAsync")]
         public async Task<ActionResult<HttpResponseDto<RegistrationResponseDto>>> RegisterAsync(RegistrationRequestDto registrationRequestDto)
         {
-            var httpResponseDto = await _authenticationService.RegisterAsync(registrationRequestDto);
+            var httpResponseDto = await authenticationService.RegisterAsync(registrationRequestDto, CancellationToken.None);
             return StatusCode(httpResponseDto.StatusCode, httpResponseDto);
         }
     }

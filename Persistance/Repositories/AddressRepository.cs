@@ -10,13 +10,8 @@ using System.Linq.Expressions;
 
 namespace Persistance.Repositories
 {
-    public class AddressRepository : RepositoryBase<Address, AddressDto, AddressFilter>, IAddressRepository
+    public class AddressRepository(GameStoreDbContext gameStoreDbContext, IMapper mapper) : RepositoryBase<Address, AddressDto, AddressFilter>(gameStoreDbContext, mapper), IAddressRepository
     {
-        public AddressRepository(GameStoreDbContext gameStoreDbContext, IMapper mapper)
-            : base(gameStoreDbContext, mapper)
-        {
-        }
-
         public async Task<bool> IsUniqueAsync(string streetAddress, string postalCode, string city, CancellationToken cancellationToken)
         {
             var isUnique = await Entities

@@ -3,7 +3,7 @@ using MediatR;
 
 namespace Application.Features.VideoGames.Requests.Queries
 {
-    public class DownloadExcelFileByConsoleIdRequest : IRequest<HttpResponseDto<FileDownloadDto>>
+    public class DownloadExcelFileByConsoleIdRequest : IRequest<HttpResponseDto<FileDownloadResponseDto>>
     {
         public int ConsoleId { get; set; }
 

@@ -20,7 +20,7 @@ namespace Infrastructure.Services
             _logger = logger;
         }
 
-        public async Task<GameStoreFileUploadDto<VideoGameDto>> UploadAsync(IFormFile formFile, CancellationToken cancellationToken)
+        public async Task<GameStoreFileUploadResponseDto<VideoGameDto>> UploadAsync(IFormFile formFile, CancellationToken cancellationToken)
         {
             var memoryStream = new MemoryStream();
             await formFile.CopyToAsync(memoryStream, cancellationToken);
@@ -31,7 +31,7 @@ namespace Infrastructure.Services
             return uploadGameStoreFileDto;
         }
 
-        public async Task<GameStoreFileUploadDto<VideoGameDto>> UploadAsync(Stream stream, CancellationToken cancellationToken)
+        public async Task<GameStoreFileUploadResponseDto<VideoGameDto>> UploadAsync(Stream stream, CancellationToken cancellationToken)
         {
             var videoGameDtos = new List<VideoGameDto>();
 
@@ -57,8 +57,20 @@ namespace Infrastructure.Services
                     var videoGamePurchaseDate = DateTime.Parse(columns[6]);
                     var videoGamePrice = Decimal.Parse(columns[7]);
 
+                    var gameStoreFileUploadRequestDto = new GameStoreFileUploadRequestDto
+                    {
+                        VideoGameTitle = columns[0],
+                        DeveloperName = columns[1],
+                        PublisherName = columns[2],
+                        ConsoleName = columns[3],
+                        GenreNames = columns[4],
+                        VideoGameReleaseDate = columns[5],
+                        VideoGamePurchaseDate = columns[6],
+                        VideoGamePrice = columns[7]
+                    };
+
                     // Create or update VideoGame.
-                    var videoGameDto = await CreateOrUpdateVideoGameAsync(videoGameTitle, videoGameReleaseDate, videoGamePurchaseDate, videoGamePrice, developerName, publisherName, cancellationToken);
+                    var videoGameDto = await CreateOrUpdateVideoGameAsync(gameStoreFileUploadRequestDto, cancellationToken);
 
                     // Create if not exist ConsoleVideoGame.
                     var consoleVideoGameDtos = await CreateIfNotExistConsoleVideoGamesAsync(consoleName, videoGameDto.Id, cancellationToken);
@@ -87,9 +99,9 @@ namespace Infrastructure.Services
                 }
             }
 
-            var uploadGameStoreFileDto = new GameStoreFileUploadDto<VideoGameDto>(videoGameDtos.ToArray());
+            var uploadGameStoreFileResponseDto = new GameStoreFileUploadResponseDto<VideoGameDto>(videoGameDtos.ToArray());
 
-            return uploadGameStoreFileDto;
+            return uploadGameStoreFileResponseDto;
         }
 
         private async Task<ConsoleVideoGameDto> CreateIfNotExistConsoleVideoGamesAsync(string consoleName, int videoGameId, CancellationToken cancellationToken)
@@ -126,33 +138,37 @@ namespace Infrastructure.Services
             return _unitOfWork.ConsoleVideoGameRepository.NullObject;
         }
 
-        private async Task<VideoGameDto> CreateOrUpdateVideoGameAsync(string title, DateTime releaseDate, DateTime purchaseDate, decimal price, string developerName, string publisherName, CancellationToken cancellationToken)
+        private async Task<VideoGameDto> CreateOrUpdateVideoGameAsync(GameStoreFileUploadRequestDto gameStoreFileUploadRequestDto, CancellationToken cancellationToken)
         {
-            var developerCompanyDto = await _unitOfWork.CompanyRepository.ReadByNameExactAsync(developerName, cancellationToken);
+            var developerCompanyDto = await _unitOfWork.CompanyRepository.ReadByNameExactAsync(gameStoreFileUploadRequestDto.DeveloperName, cancellationToken);
 
             // Did not found an exact match.
             if (developerCompanyDto.IsNullObject)
             {
-                throw new NotFoundException(developerName, developerName);
+                throw new NotFoundException(gameStoreFileUploadRequestDto.DeveloperName, gameStoreFileUploadRequestDto.DeveloperName);
             }
 
-            var publisherCompanyDto = await _unitOfWork.CompanyRepository.ReadByNameExactAsync(publisherName, cancellationToken);
+            var publisherCompanyDto = await _unitOfWork.CompanyRepository.ReadByNameExactAsync(gameStoreFileUploadRequestDto.PublisherName, cancellationToken);
 
             // Did not found an exact match.
             if (publisherCompanyDto.IsNullObject)
             {
-                throw new NotFoundException(publisherName, publisherName);
+                throw new NotFoundException(gameStoreFileUploadRequestDto.PublisherName, gameStoreFileUploadRequestDto.PublisherName);
             }
 
-            var videoGameDto = await _unitOfWork.VideoGameRepository.ReadByTitleExactAsync(title, cancellationToken);
+            var videoGameDto = await _unitOfWork.VideoGameRepository.ReadByTitleExactAsync(gameStoreFileUploadRequestDto.VideoGameTitle, cancellationToken);
+
+            var releaseDate = DateTime.Parse(gameStoreFileUploadRequestDto.VideoGameReleaseDate);
+            var purchaseDate = DateTime.Parse(gameStoreFileUploadRequestDto.VideoGamePurchaseDate);
+            var price = Decimal.Parse(gameStoreFileUploadRequestDto.VideoGamePrice);
 
             // Create if not exist.
             if (videoGameDto.IsNullObject)
             {
                 var videoGameDto1 = new VideoGameDto
                 {
-                    Title = title,
-                    Name = title,
+                    Title = gameStoreFileUploadRequestDto.VideoGameTitle,
+                    Name = gameStoreFileUploadRequestDto.VideoGameTitle,
                     ReleaseDate = releaseDate,
                     PurchaseDate = purchaseDate,
                     Price = price,
@@ -172,7 +188,7 @@ namespace Infrastructure.Services
             }
             else // Update if exist.
             {
-                videoGameDto.Title = title;
+                videoGameDto.Title = gameStoreFileUploadRequestDto.VideoGameTitle;
                 videoGameDto.ReleaseDate = releaseDate;
                 videoGameDto.PurchaseDate = purchaseDate;
                 videoGameDto.Price = price;

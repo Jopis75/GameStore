@@ -12,69 +12,51 @@ using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using ValidationException = FluentValidation.ValidationException;
 
 namespace Identity.Services
 {
-    public class AuthenticationService : IAuthenticationService
+    public class AuthenticationService(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, IValidator<LoginRequestDto> loginRequestDtoValidator, IValidator<RegistrationRequestDto> registrationRequestDtoValidator, ILogger<AuthenticationService> logger, IOptions<JwtSettings> options) : IAuthenticationService
     {
-        private readonly UserManager<ApplicationUser> _userManager;
-
-        private readonly SignInManager<ApplicationUser> _signInManager;
-
-        private readonly IValidator<LoginRequestDto> _loginRequestDtoValidator;
-
-        private readonly IValidator<RegistrationRequestDto> _registrationRequestDtoValidator;
-
-        private readonly ILogger<AuthenticationService> _logger;
-
-        private readonly IOptions<JwtSettings> _options;
-
-        public AuthenticationService(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, IValidator<LoginRequestDto> loginRequestDtoValidator, IValidator<RegistrationRequestDto> registrationRequestDtoValidator, ILogger<AuthenticationService> logger, IOptions<JwtSettings> options)
-        {
-            _userManager = userManager;
-            _signInManager = signInManager;
-            _loginRequestDtoValidator = loginRequestDtoValidator;
-            _registrationRequestDtoValidator = registrationRequestDtoValidator;
-            _logger = logger;
-            _options = options;
-        }
-
-        public async Task<HttpResponseDto<LoginResponseDto>> LoginAsync(LoginRequestDto loginRequestDto)
+        public async Task<HttpResponseDto<LoginResponseDto>> LoginAsync(LoginRequestDto loginRequestDto, CancellationToken cancellationToken)
         {
             try
             {
-                _logger.LogInformation("Begin LoginAsync {@LoginRequestDto}.", loginRequestDto);
+                logger.LogInformation("Begin LoginAsync {@LoginRequestDto}.", loginRequestDto);
 
                 if (loginRequestDto == null)
                 {
-                    var httpResponseDto1 = new HttpResponseDto<LoginResponseDto>(new ArgumentNullException(nameof(loginRequestDto)).Message, StatusCodes.Status400BadRequest);
-                    _logger.LogError("Error LoginAsync {@HttpResponseDto}.", httpResponseDto1);
+                    var ex = new ArgumentNullException(nameof(loginRequestDto));
+                    var httpResponseDto1 = new HttpResponseDto<LoginResponseDto>(ex.Message, StatusCodes.Status400BadRequest);
+                    logger.LogError(ex, "Error LoginAsync {@HttpResponseDto}.", httpResponseDto1);
                     return httpResponseDto1;
                 }
 
-                var validationResult = await _loginRequestDtoValidator.ValidateAsync(loginRequestDto);
+                var validationResult = await loginRequestDtoValidator.ValidateAsync(loginRequestDto, cancellationToken);
 
-                if (!validationResult.IsValid)
+                if (validationResult.IsValid == false)
                 {
-                    var httpResponseDto1 = new HttpResponseDto<LoginResponseDto>(new FluentValidation.ValidationException(validationResult.Errors).Message, StatusCodes.Status400BadRequest);
-                    _logger.LogError("Error LoginAsync {@HttpResponseDto}.", httpResponseDto1);
+                    var ex = new ValidationException(validationResult.Errors);
+                    var httpResponseDto1 = new HttpResponseDto<LoginResponseDto>(ex.Message, StatusCodes.Status400BadRequest);
+                    logger.LogError(ex, "Error LoginAsync {@HttpResponseDto}.", httpResponseDto1);
                     return httpResponseDto1;
                 }
 
-                var applicationUser = await _userManager.FindByEmailAsync(loginRequestDto.UserName);
+                var applicationUser = await userManager.FindByEmailAsync(loginRequestDto.UserName);
 
                 if (applicationUser == null)
                 {
-                    var httpResponseDto1 = new HttpResponseDto<LoginResponseDto>(new NotFoundException($"Could not find user {loginRequestDto.UserName}.", loginRequestDto.UserName).Message, StatusCodes.Status404NotFound);
-                    _logger.LogError("Error LoginAsync {@HttpResponseDto}.", httpResponseDto1);
+                    var ex = new NotFoundException($"Could not find user {loginRequestDto.UserName}.", loginRequestDto.UserName);
+                    var httpResponseDto1 = new HttpResponseDto<LoginResponseDto>(ex.Message, StatusCodes.Status404NotFound);
+                    logger.LogError(ex, "Error LoginAsync {@HttpResponseDto}.", httpResponseDto1);
                     return httpResponseDto1;
                 }
 
-                var signInResult = await _signInManager.CheckPasswordSignInAsync(applicationUser, loginRequestDto.Password, false);
+                var signInResult = await signInManager.CheckPasswordSignInAsync(applicationUser, loginRequestDto.Password, loginRequestDto.LockoutOnFailure);
 
-                if (!signInResult.Succeeded)
+                if (signInResult.Succeeded == false)
                 {
-                    var message = $"The user {loginRequestDto.UserName} failed to sign-in.";
+                    string message;
 
                     if (signInResult.IsLockedOut)
                     {
@@ -88,9 +70,14 @@ namespace Identity.Services
                     {
                         message = $"The user {loginRequestDto.UserName} requires two factor authentication.";
                     }
+                    else
+                    {
+                        message = $"The user {loginRequestDto.UserName} failed to sign-in.";
+                    }
 
-                    var httpResponseDto1 = new HttpResponseDto<LoginResponseDto>(new BadRequestException(message).Message, StatusCodes.Status400BadRequest);
-                    _logger.LogError("Error LoginAsync {@HttpResponseDto}.", httpResponseDto1);
+                    var ex = new BadRequestException(message);
+                    var httpResponseDto1 = new HttpResponseDto<LoginResponseDto>(ex.Message, StatusCodes.Status400BadRequest);
+                    logger.LogError(ex, "Error LoginAsync {@HttpResponseDto}.", httpResponseDto1);
                     return httpResponseDto1;
                 }
 
@@ -105,36 +92,38 @@ namespace Identity.Services
                 };
 
                 var httpResponseDto = new HttpResponseDto<LoginResponseDto>(loginResponseDto, StatusCodes.Status200OK);
-                _logger.LogInformation("Done LoginAsync {@HttpResponseDto}.", httpResponseDto);
+                logger.LogInformation("Done LoginAsync {@HttpResponseDto}.", httpResponseDto);
                 return httpResponseDto;
             }
             catch (Exception ex)
             {
                 var httpResponseDto1 = new HttpResponseDto<LoginResponseDto>(ex.Message, StatusCodes.Status500InternalServerError);
-                _logger.LogError("Error LoginAsync {@HttpResponseDto}.", httpResponseDto1);
+                logger.LogError(ex, "Error LoginAsync {@HttpResponseDto}.", httpResponseDto1);
                 return httpResponseDto1;
             }
         }
 
-        public async Task<HttpResponseDto<RegistrationResponseDto>> RegisterAsync(RegistrationRequestDto registrationRequestDto)
+        public async Task<HttpResponseDto<RegistrationResponseDto>> RegisterAsync(RegistrationRequestDto registrationRequestDto, CancellationToken cancellationToken)
         {
             try
             {
-                _logger.LogInformation("Begin RegisterAsync {@RegistrationRequestDto}.", registrationRequestDto);
+                logger.LogInformation("Begin RegisterAsync {@RegistrationRequestDto}.", registrationRequestDto);
 
                 if (registrationRequestDto == null)
                 {
-                    var httpResponseDto1 = new HttpResponseDto<RegistrationResponseDto>(new ArgumentNullException(nameof(registrationRequestDto)).Message, StatusCodes.Status400BadRequest);
-                    _logger.LogError("Error RegisterAsync {@HttpResponseDto}.", httpResponseDto1);
+                    var ex = new ArgumentNullException(nameof(registrationRequestDto));
+                    var httpResponseDto1 = new HttpResponseDto<RegistrationResponseDto>(ex.Message, StatusCodes.Status400BadRequest);
+                    logger.LogError(ex, "Error RegisterAsync {@HttpResponseDto}.", httpResponseDto1);
                     return httpResponseDto1;
                 }
 
-                var validationResult = await _registrationRequestDtoValidator.ValidateAsync(registrationRequestDto);
+                var validationResult = await registrationRequestDtoValidator.ValidateAsync(registrationRequestDto, cancellationToken);
 
-                if (!validationResult.IsValid)
+                if (validationResult.IsValid == false)
                 {
-                    var httpResponseDto1 = new HttpResponseDto<RegistrationResponseDto>(new FluentValidation.ValidationException(validationResult.Errors).Message, StatusCodes.Status400BadRequest);
-                    _logger.LogError("Error RegisterAsync {@HttpResponseDto}.", httpResponseDto1);
+                    var ex = new ValidationException(validationResult.Errors);
+                    var httpResponseDto1 = new HttpResponseDto<RegistrationResponseDto>(ex.Message, StatusCodes.Status400BadRequest);
+                    logger.LogError(ex, "Error RegisterAsync {@HttpResponseDto}.", httpResponseDto1);
                     return httpResponseDto1;
                 }
 
@@ -147,9 +136,9 @@ namespace Identity.Services
                     EmailConfirmed = true
                 };
 
-                var identityResult = await _userManager.CreateAsync(applicationUser, registrationRequestDto.Password);
+                var identityResult = await userManager.CreateAsync(applicationUser, registrationRequestDto.Password);
 
-                if (!identityResult.Succeeded)
+                if (identityResult.Succeeded == false)
                 {
                     var stringBuilder = new StringBuilder();
 
@@ -158,12 +147,13 @@ namespace Identity.Services
                         stringBuilder.AppendLine($"{error.Code}: {error.Description}");
                     }
 
-                    var httpResponseDto1 = new HttpResponseDto<RegistrationResponseDto>(new BadRequestException(stringBuilder.ToString()).Message, StatusCodes.Status400BadRequest);
-                    _logger.LogError("Error RegisterAsync {@HttpResponseDto}.", httpResponseDto1);
+                    var ex = new BadRequestException(stringBuilder.ToString());
+                    var httpResponseDto1 = new HttpResponseDto<RegistrationResponseDto>(ex.Message, StatusCodes.Status400BadRequest);
+                    logger.LogError(ex, "Error RegisterAsync {@HttpResponseDto}.", httpResponseDto1);
                     return httpResponseDto1;
                 }
 
-                await _userManager.AddToRoleAsync(applicationUser, registrationRequestDto.Role.ToString());
+                await userManager.AddToRoleAsync(applicationUser, registrationRequestDto.Role.ToString());
 
                 var registrationResponseDto = new RegistrationResponseDto
                 {
@@ -171,44 +161,44 @@ namespace Identity.Services
                 };
 
                 var httpResponseDto = new HttpResponseDto<RegistrationResponseDto>(registrationResponseDto, StatusCodes.Status200OK);
-                _logger.LogInformation("Done RegisterAsync {@HttpResponseDto}.", httpResponseDto);
+                logger.LogInformation("Done RegisterAsync {@HttpResponseDto}.", httpResponseDto);
                 return httpResponseDto;
             }
             catch (Exception ex)
             {
                 var httpResponseDto1 = new HttpResponseDto<RegistrationResponseDto>(ex.Message, StatusCodes.Status500InternalServerError);
-                _logger.LogError("Error RegisterAsync {@HttpResponseDto}.", httpResponseDto1);
+                logger.LogError(ex, "Error RegisterAsync {@HttpResponseDto}.", httpResponseDto1);
                 return httpResponseDto1;
             }
         }
 
         private async Task<JwtSecurityToken> GenerateJwtSecurityTokenAsync(ApplicationUser applicationUser)
         {
-            var userClaims = await _userManager.GetClaimsAsync(applicationUser);
+            var userClaims = await userManager.GetClaimsAsync(applicationUser);
 
-            var roleClaims = (await _userManager
+            var roleClaims = (await userManager
                 .GetRolesAsync(applicationUser))
                 .Select(role => new Claim(ClaimTypes.Role, role))
                 .ToList();
 
             var claims = new[]
             {
-                new Claim(JwtRegisteredClaimNames.Sub, applicationUser.UserName),
+                new Claim(JwtRegisteredClaimNames.Sub, applicationUser.UserName ?? String.Empty),
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-                new Claim(JwtRegisteredClaimNames.Email, applicationUser.Email),
+                new Claim(JwtRegisteredClaimNames.Email, applicationUser.Email ?? String.Empty),
                 new Claim("uid", applicationUser.Id)
             }
             .Union(userClaims)
             .Union(roleClaims);
 
-            var symmetricSecuritykey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_options.Value.Key));
+            var symmetricSecuritykey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(options.Value.Key));
             var signingCredentials = new SigningCredentials(symmetricSecuritykey, SecurityAlgorithms.HmacSha256);
 
             return new JwtSecurityToken(
-                issuer: _options.Value.Issuer,
-                audience: _options.Value.Audience,
+                issuer: options.Value.Issuer,
+                audience: options.Value.Audience,
                 claims: claims,
-                expires: DateTime.Now.AddMinutes(_options.Value.DurationInMinutes),
+                expires: DateTime.Now.AddMinutes(options.Value.DurationInMinutes),
                 signingCredentials: signingCredentials
             );
         }

@@ -2,6 +2,7 @@
 
 namespace Application.Dtos.General
 {
+    // This is a test comment.
     public class HttpResponseDto<TDto> : IHttpResponseDto<TDto>
         where TDto : new()
     {

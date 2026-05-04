@@ -24,3 +24,4 @@
 Next up:
 - Event Sourcing.
 - Kafka.
+- MongoDB.

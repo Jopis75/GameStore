@@ -22,5 +22,5 @@
 
 
 Next up:
-- Integration with PlayStation Trophy API.
-- CI/CD using GitHub Actions.
+- Event Sourcing.
+- Kafka.

@@ -1,8 +1,7 @@
 ﻿namespace Application.Exceptions
 {
-    public class NotFoundException : ApplicationException
+    // ToDo: Fix error message.
+    public class NotFoundException(string name, object key) : ApplicationException($"Could not found {name} ({key}).")
     {
-        public NotFoundException(string name, object key)
-            : base($"Could not found {name} ({key}).") { }
     }
 }

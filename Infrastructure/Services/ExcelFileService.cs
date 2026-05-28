@@ -6,20 +6,13 @@ using System.Data;
 
 namespace Infrastructure.Services
 {
-    public class ExcelFileService : IExcelFileService
+    public class ExcelFileService(IUnitOfWork unitOfWork) : IExcelFileService
     {
-        private readonly IUnitOfWork _unitOfWork;
-
-        public ExcelFileService(IUnitOfWork unitOfWork)
-        {
-            _unitOfWork = unitOfWork;
-        }
-
         public async Task<FileDownloadResponseDto> CreateFileDownloadForVideoGamesByConsoleIdAsync(int consoleId, string fileDownloadName, CancellationToken cancellationToken)
         {
-            var consoleDto = await _unitOfWork.ConsoleRepository.ReadByIdAsync(consoleId, cancellationToken);
+            var consoleDto = await unitOfWork.ConsoleRepository.ReadByIdAsync(consoleId, cancellationToken);
 
-            var videoGameDtos = await _unitOfWork.VideoGameRepository.ReadByConsoleIdAsync(consoleId, cancellationToken);
+            var videoGameDtos = await unitOfWork.VideoGameRepository.ReadByConsoleIdAsync(consoleId, cancellationToken);
 
             var dataTable = new DataTable($"{consoleDto.Name} Games");
             dataTable.Columns.Add("Title", typeof(string));

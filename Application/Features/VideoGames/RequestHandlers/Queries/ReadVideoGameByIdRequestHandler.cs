@@ -1,4 +1,5 @@
 ﻿using Application.Dtos.General;
+using Application.Exceptions;
 using Application.Features.VideoGames.Requests.Queries;
 using Application.Interfaces.Persistance;
 using Domain.Dtos;
@@ -36,6 +37,14 @@ namespace Application.Features.VideoGames.RequestHandlers.Queries
                 }
 
                 var videoGameDto = await unitOfWork.VideoGameRepository.ReadByIdAsync(readVideoGameByIdRequest.Id, cancellationToken);
+
+                if (videoGameDto.IsNullObject)
+                {
+                    var ex = new NotFoundException($"Could not find VideoGame object with Id {readVideoGameByIdRequest.Id}.");
+                    var httpResponseDto1 = new HttpResponseDto<VideoGameDto>(ex.Message, StatusCodes.Status404NotFound);
+                    logger.LogError(ex, "Error ReadVideoGameById {@HttpResponseDto}.", httpResponseDto1);
+                    return httpResponseDto1;
+                }
 
                 var httpResponseDto = new HttpResponseDto<VideoGameDto>(videoGameDto, StatusCodes.Status200OK);
                 logger.LogInformation("Done ReadVideoGameById {@HttpResponseDto}.", httpResponseDto);

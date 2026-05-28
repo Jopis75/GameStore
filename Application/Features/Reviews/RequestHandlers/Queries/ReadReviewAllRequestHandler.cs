@@ -26,7 +26,9 @@ namespace Application.Features.Reviews.RequestHandlers.Queries
 
                 var reviewDtos = await unitOfWork.ReviewRepository.ReadAllAsync(cancellationToken);
 
-                var httpResponseDto = new HttpResponseDto<ReviewDto>(reviewDtos.ToArray(), StatusCodes.Status200OK);
+                var httpResponseDto = new HttpResponseDto<ReviewDto>(reviewDtos.ToArray(), reviewDtos.Any()
+                    ? StatusCodes.Status200OK
+                    : StatusCodes.Status204NoContent);
                 logger.LogInformation("Done ReadReviewAll {@HttpResponseDto}.", httpResponseDto);
                 return httpResponseDto;
             }

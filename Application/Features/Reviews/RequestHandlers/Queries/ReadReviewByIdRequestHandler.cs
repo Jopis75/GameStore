@@ -1,4 +1,5 @@
 ﻿using Application.Dtos.General;
+using Application.Exceptions;
 using Application.Features.Reviews.Requests.Queries;
 using Application.Interfaces.Persistance;
 using Domain.Dtos;
@@ -36,6 +37,14 @@ namespace Application.Features.Reviews.RequestHandlers.Queries
                 }
 
                 var reviewDto = await unitOfWork.ReviewRepository.ReadByIdAsync(readReviewByIdRequest.Id, cancellationToken);
+
+                if (reviewDto.IsNullObject)
+                {
+                    var ex = new NotFoundException($"Could not find Review object with Id {readReviewByIdRequest.Id}.");
+                    var httpResponseDto1 = new HttpResponseDto<ReviewDto>(ex.Message, StatusCodes.Status404NotFound);
+                    logger.LogError(ex, "Error ReadReviewById {@HttpResponseDto}.", httpResponseDto1);
+                    return httpResponseDto1;
+                }
 
                 var httpResponseDto = new HttpResponseDto<ReviewDto>(reviewDto, StatusCodes.Status200OK);
                 logger.LogInformation("Done ReadReviewById {@HttpResponseDto}.", httpResponseDto);

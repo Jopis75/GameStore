@@ -37,7 +37,9 @@ namespace Application.Features.VideoGames.RequestHandlers.Queries
 
                 var videoGameDtos = await unitOfWork.VideoGameRepository.ReadByConsoleIdAsync(readVideoGamesByConsoleIdRequest.ConsoleId, cancellationToken);
 
-                var httpResponseDto = new HttpResponseDto<VideoGameDto>(videoGameDtos.ToArray(), StatusCodes.Status200OK);
+                var httpResponseDto = new HttpResponseDto<VideoGameDto>(videoGameDtos.ToArray(), videoGameDtos.Any()
+                    ? StatusCodes.Status200OK
+                    : StatusCodes.Status204NoContent);
                 logger.LogInformation("Done ReadVideoGamesByConsoleId {@HttpResponseDto}.", httpResponseDto);
                 return httpResponseDto;
             }

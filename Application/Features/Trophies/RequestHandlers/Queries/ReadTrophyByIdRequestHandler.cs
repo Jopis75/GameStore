@@ -1,4 +1,5 @@
 ﻿using Application.Dtos.General;
+using Application.Exceptions;
 using Application.Features.Trophies.Requests.Queries;
 using Application.Interfaces.Persistance;
 using Domain.Dtos;
@@ -36,6 +37,14 @@ namespace Application.Features.Trophies.RequestHandlers.Queries
                 }
 
                 var trophyDto = await unitOfWork.TrophyRepository.ReadByIdAsync(readTrophyByIdRequest.Id, cancellationToken);
+
+                if (trophyDto.IsNullObject)
+                {
+                    var ex = new NotFoundException($"Could not find Trophy object with Id {readTrophyByIdRequest.Id}.");
+                    var httpResponseDto1 = new HttpResponseDto<TrophyDto>(ex.Message, StatusCodes.Status404NotFound);
+                    logger.LogError(ex, "Error ReadTrophyById {@HttpResponseDto}.", httpResponseDto1);
+                    return httpResponseDto1;
+                }
 
                 var httpResponseDto = new HttpResponseDto<TrophyDto>(trophyDto, StatusCodes.Status200OK);
                 logger.LogInformation("Done ReadTrophyById {@HttpResponseDto}.", httpResponseDto);

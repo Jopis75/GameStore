@@ -1,4 +1,6 @@
 ﻿using Application.Dtos.General;
+using Application.Exceptions;
+using Application.Features.Companies.Requests.Queries;
 using Application.Features.Consoles.Requests.Queries;
 using Application.Interfaces.Persistance;
 using Domain.Dtos;
@@ -36,6 +38,14 @@ namespace Application.Features.Consoles.RequestHandlers.Queries
                 }
 
                 var consoleDto = await unitOfWork.ConsoleRepository.ReadByIdAsync(readConsoleByIdRequest.Id, cancellationToken);
+
+                if (consoleDto.IsNullObject)
+                {
+                    var ex = new NotFoundException($"Could not find Console object with Id {readConsoleByIdRequest.Id}.");
+                    var httpResponseDto1 = new HttpResponseDto<ConsoleDto>(ex.Message, StatusCodes.Status404NotFound);
+                    logger.LogError(ex, "Error ReadConsoleById {@HttpResponseDto}.", httpResponseDto1);
+                    return httpResponseDto1;
+                }
 
                 var httpResponseDto = new HttpResponseDto<ConsoleDto>(consoleDto, StatusCodes.Status200OK);
                 logger.LogInformation("Done ReadConsoleById {@HttpResponseDto}.", httpResponseDto);

@@ -1,4 +1,5 @@
 ﻿using Application.Dtos.General;
+using Application.Exceptions;
 using Application.Features.Genres.Requests.Queries;
 using Application.Interfaces.Persistance;
 using Domain.Dtos;
@@ -36,6 +37,14 @@ namespace Application.Features.Genres.RequestHandlers.Queries
                 }
 
                 var genreDto = await unitOfWork.GenreRepository.ReadByIdAsync(readGenreByIdRequest.Id, cancellationToken);
+
+                if (genreDto.IsNullObject)
+                {
+                    var ex = new NotFoundException($"Could not find Genre object with Id {readGenreByIdRequest.Id}.");
+                    var httpResponseDto1 = new HttpResponseDto<GenreDto>(ex.Message, StatusCodes.Status404NotFound);
+                    logger.LogError(ex, "Error ReadGenreById {@HttpResponseDto}.", httpResponseDto1);
+                    return httpResponseDto1;
+                }
 
                 var httpResponseDto = new HttpResponseDto<GenreDto>(genreDto, StatusCodes.Status200OK);
                 logger.LogInformation("Done ReadGenreById {@HttpResponseDto}.", httpResponseDto);

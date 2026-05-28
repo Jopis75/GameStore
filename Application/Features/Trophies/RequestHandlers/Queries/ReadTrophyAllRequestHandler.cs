@@ -26,7 +26,9 @@ namespace Application.Features.Trophies.RequestHandlers.Queries
 
                 var trophyDtos = await unitOfWork.TrophyRepository.ReadAllAsync(cancellationToken);
 
-                var httpResponseDto = new HttpResponseDto<TrophyDto>(trophyDtos.ToArray(), StatusCodes.Status200OK);
+                var httpResponseDto = new HttpResponseDto<TrophyDto>(trophyDtos.ToArray(), trophyDtos.Any()
+                    ? StatusCodes.Status200OK
+                    : StatusCodes.Status204NoContent);
                 logger.LogInformation("Done ReadTrophyAll {@HttpResponseDto}.", httpResponseDto);
                 return httpResponseDto;
             }

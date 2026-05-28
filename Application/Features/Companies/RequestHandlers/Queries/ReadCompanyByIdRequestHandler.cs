@@ -1,4 +1,5 @@
 ﻿using Application.Dtos.General;
+using Application.Exceptions;
 using Application.Features.Companies.Requests.Queries;
 using Application.Interfaces.Persistance;
 using Domain.Dtos;
@@ -36,6 +37,14 @@ namespace Application.Features.Companies.RequestHandlers.Queries
                 }
 
                 var companyDto = await unitOfWork.CompanyRepository.ReadByIdAsync(readCompanyByIdRequest.Id, cancellationToken);
+
+                if (companyDto.IsNullObject)
+                {
+                    var ex = new NotFoundException($"Could not find Company object with Id {readCompanyByIdRequest.Id}.");
+                    var httpResponseDto1 = new HttpResponseDto<CompanyDto>(ex.Message, StatusCodes.Status404NotFound);
+                    logger.LogError(ex, "Error ReadCompanyById {@HttpResponseDto}.", httpResponseDto1);
+                    return httpResponseDto1;
+                }
 
                 var httpResponseDto = new HttpResponseDto<CompanyDto>(companyDto, StatusCodes.Status200OK);
                 logger.LogInformation("Done ReadCompanyById {@HttpResponseDto}.", httpResponseDto);

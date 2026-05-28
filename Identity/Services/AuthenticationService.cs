@@ -46,7 +46,7 @@ namespace Identity.Services
 
                 if (applicationUser == null)
                 {
-                    var ex = new NotFoundException($"Could not find user {loginRequestDto.UserName}.", loginRequestDto.UserName);
+                    var ex = new NotFoundException($"Could not find user {loginRequestDto.UserName}.");
                     var httpResponseDto1 = new HttpResponseDto<LoginResponseDto>(ex.Message, StatusCodes.Status404NotFound);
                     logger.LogError(ex, "Error LoginAsync {@HttpResponseDto}.", httpResponseDto1);
                     return httpResponseDto1;

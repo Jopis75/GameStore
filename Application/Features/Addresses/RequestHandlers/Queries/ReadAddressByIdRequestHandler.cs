@@ -1,4 +1,5 @@
 ﻿using Application.Dtos.General;
+using Application.Exceptions;
 using Application.Features.Addresses.Requests.Queries;
 using Application.Interfaces.Persistance;
 using Domain.Dtos;
@@ -36,6 +37,14 @@ namespace Application.Features.Addresses.RequestHandlers.Queries
                 }
 
                 var addressDto = await unitOfWork.AddressRepository.ReadByIdAsync(readAddressByIdRequest.Id, cancellationToken);
+
+                if (addressDto.IsNullObject)
+                {
+                    var ex = new NotFoundException($"Could not find Address object with Id {readAddressByIdRequest.Id}.");
+                    var httpResponseDto1 = new HttpResponseDto<AddressDto>(ex.Message, StatusCodes.Status404NotFound);
+                    logger.LogError(ex, "Error ReadAddressById {@HttpResponseDto}.", httpResponseDto1);
+                    return httpResponseDto1;
+                }
 
                 var httpResponseDto = new HttpResponseDto<AddressDto>(addressDto, StatusCodes.Status200OK);
                 logger.LogInformation("Done ReadAddressById {@HttpResponseDto}.", httpResponseDto);

@@ -66,7 +66,7 @@ namespace Identity.Services
 
                 if (applicationUser == null)
                 {
-                    var httpResponseDto1 = new HttpResponseDto<UserDto>(new NotFoundException($"Could not find user {id}.", id).Message, StatusCodes.Status404NotFound);
+                    var httpResponseDto1 = new HttpResponseDto<UserDto>(new NotFoundException($"Could not find user {id}.").Message, StatusCodes.Status404NotFound);
                     _logger.LogError("Error UserService.ReadByIdAsync {@HttpResponseDto}.", httpResponseDto1);
                     return httpResponseDto1;
                 }

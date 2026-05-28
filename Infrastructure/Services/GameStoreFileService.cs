@@ -101,7 +101,7 @@ namespace Infrastructure.Services
             // Did not found an exact match.
             if (consoleDto.IsNullObject)
             {
-                throw new NotFoundException(consoleName, consoleName);
+                throw new NotFoundException(consoleName);
             }
 
             var consoleVideoGameDtos = await unitOfWork.ConsoleVideoGameRepository.ReadByVideoGameIdAsync(videoGameId, cancellationToken);
@@ -135,7 +135,7 @@ namespace Infrastructure.Services
             // Did not found an exact match.
             if (developerCompanyDto.IsNullObject)
             {
-                throw new NotFoundException(gameStoreFileUploadRequestDto.DeveloperName, gameStoreFileUploadRequestDto.DeveloperName);
+                throw new NotFoundException(gameStoreFileUploadRequestDto.DeveloperName);
             }
 
             var publisherCompanyDto = await unitOfWork.CompanyRepository.ReadByNameExactAsync(gameStoreFileUploadRequestDto.PublisherName, cancellationToken);
@@ -143,7 +143,7 @@ namespace Infrastructure.Services
             // Did not found an exact match.
             if (publisherCompanyDto.IsNullObject)
             {
-                throw new NotFoundException(gameStoreFileUploadRequestDto.PublisherName, gameStoreFileUploadRequestDto.PublisherName);
+                throw new NotFoundException(gameStoreFileUploadRequestDto.PublisherName);
             }
 
             // ToDo: Validate GameStoreFileUploadRequestDto object.
@@ -212,7 +212,7 @@ namespace Infrastructure.Services
                 // Did not found exact match.
                 if (genreDto.IsNullObject)
                 {
-                    throw new NotFoundException(genreName, genreName);
+                    throw new NotFoundException(genreName);
                 }
 
                 var videoGameGenreDto = new VideoGameGenreDto

@@ -26,7 +26,9 @@ namespace Application.Features.Addresses.RequestHandlers.Queries
 
                 var addressDtos = await unitOfWork.AddressRepository.ReadAllAsync(cancellationToken);
 
-                var httpResponseDto = new HttpResponseDto<AddressDto>(addressDtos.ToArray(), StatusCodes.Status200OK);
+                var httpResponseDto = new HttpResponseDto<AddressDto>(addressDtos.ToArray(), addressDtos.Any()
+                    ? StatusCodes.Status200OK
+                    : StatusCodes.Status204NoContent);
                 logger.LogInformation("Done ReadAddressAll {@HttpResponseDto}.", httpResponseDto);
                 return httpResponseDto;
             }

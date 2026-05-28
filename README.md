@@ -1,7 +1,7 @@
 # GameStore
 
-- .NET 7.
-- C# 11.
+- .NET 9.
+- C# 13.
 - EF Core.
 - ASP.NET Core.
 - Web API Core.
@@ -22,8 +22,6 @@
 
 
 Next up:
-- Convert the solution and all projects to .NET 9.
-- Add paging to repository queries.
-- Integration with PlayStation Trophy API.
-- CI/CD using GitHub Actions.
-- Using ADO.NET to read data.
+- Event Sourcing.
+- Kafka.
+- MongoDB.

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Application.Events.Addresses
 {
-    public class DeleteAddressEvent() : EventBase(nameof(DeleteAddressEvent))
+    public class AddressDeletedEvent() : EventBase(nameof(AddressDeletedEvent))
     {
     }
 }

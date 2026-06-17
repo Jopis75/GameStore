@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Application.Events.Addresses
 {
-    public class UpdateAddressEvent() : EventBase(nameof(UpdateAddressEvent))
+    public class AddressCreatedEvent() : EventBase(nameof(AddressCreatedEvent))
     {
         public string City { get; set; } = String.Empty;
 

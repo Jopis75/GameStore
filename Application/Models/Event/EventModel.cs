@@ -16,7 +16,7 @@ namespace Application.Models.Event
 
         public string AggregateType { get; set; } = String.Empty;
 
-        public int AggregateVersion { get; set; }
+        public int Version { get; set; }
 
         public string EventType { get; set; } = String.Empty;
 

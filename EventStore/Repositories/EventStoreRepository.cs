@@ -23,7 +23,12 @@ namespace EventStore.Repositories
                 .ToListAsync()
                 .ConfigureAwait(false);
 
-            return eventModels;
+            if (eventModels is null)
+            {
+                return [];
+            }
+
+            return [.. eventModels];
         }
 
         public async Task SaveAsync(EventModel eventModel)

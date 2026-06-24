@@ -1,6 +1,6 @@
 ﻿using Application.Interfaces.EventStore;
 using Application.Models.Event;
-using EventStore.Configs;
+using EventStore.Configurations;
 using Microsoft.Extensions.Options;
 using MongoDB.Driver;
 

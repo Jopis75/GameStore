@@ -1,4 +1,5 @@
 using Application;
+using EventStore;
 using Identity;
 using Infrastructure;
 using Microsoft.OpenApi.Models;
@@ -10,6 +11,7 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddPersistanceServices(builder.Configuration);
 builder.Services.AddApplicationServices();
+builder.Services.AddEventStoreServices(builder.Configuration);
 builder.Services.AddInfrastructureServices(builder.Configuration);
 builder.Services.AddIdentityServices(builder.Configuration);
 builder.Services.AddControllers();

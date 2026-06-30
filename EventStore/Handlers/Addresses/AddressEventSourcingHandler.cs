@@ -1,5 +1,6 @@
 ﻿using Application.Aggregates.Addresses;
 using Application.Interfaces.EventSourcing;
+using Application.Interfaces.EventSourcing.Handlers;
 
 namespace EventSourcing.Handlers.Addresses
 {

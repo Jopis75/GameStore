@@ -1,6 +1,8 @@
 ﻿using Application.Interfaces.EventSourcing;
+using Application.Interfaces.EventSourcing.Producers;
 using Confluent.Kafka;
 using EventSourcing.Configurations;
+using EventSourcing.Producers;
 using EventSourcing.Repositories;
 using EventSourcing.Services;
 using Microsoft.Extensions.Configuration;
@@ -15,6 +17,7 @@ namespace EventSourcing
             serviceCollection.AddConfigurations(configuration);
             serviceCollection.AddRepositories();
             serviceCollection.AddServices();
+            serviceCollection.AddProducers();
 
             return serviceCollection;
         }
@@ -24,6 +27,13 @@ namespace EventSourcing
             serviceCollection.Configure<MongoDbConfig>(configuration.GetSection("MongoDbConfig"));
             serviceCollection.Configure<ProducerConfig>(configuration.GetSection("ProducerConfig"));
 
+            return serviceCollection;
+        }
+
+        private static IServiceCollection AddProducers(this IServiceCollection serviceCollection)
+        {
+            serviceCollection.AddScoped<IEventProducer, EventProducer>();
+           
             return serviceCollection;
         }
 

@@ -1,11 +1,12 @@
 ﻿using Application.Aggregates.Addresses;
 using Application.Events;
 using Application.Interfaces.EventSourcing;
+using Application.Interfaces.EventSourcing.Producers;
 using Application.Models.Event;
 
 namespace EventSourcing.Services
 {
-    public class EventStoreService(IEventStoreRepository eventStoreRepository) : IEventStoreService
+    public class EventStoreService(IEventStoreRepository eventStoreRepository, IEventProducer eventProducer) : IEventStoreService
     {
         public async Task<IEnumerable<EventBase>> ReadByAggregateIdAsync(Guid aggregateId)
         {
@@ -45,6 +46,12 @@ namespace EventSourcing.Services
 
                 await eventStoreRepository
                     .SaveAsync(eventModel)
+                    .ConfigureAwait(false);
+
+                var topic = Environment.GetEnvironmentVariable("KAFKA_TOPIC") ?? throw new InvalidOperationException("KAFKA_TOPIC environment variable is not set.");
+
+                await eventProducer
+                    .ProduceAsync(topic, @event)
                     .ConfigureAwait(false);
             }
         }

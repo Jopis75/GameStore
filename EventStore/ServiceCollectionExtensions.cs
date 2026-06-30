@@ -1,4 +1,5 @@
 ﻿using Application.Interfaces.EventSourcing;
+using Confluent.Kafka;
 using EventSourcing.Configurations;
 using EventSourcing.Repositories;
 using EventSourcing.Services;

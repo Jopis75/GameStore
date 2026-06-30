@@ -13,9 +13,9 @@ namespace EventStore.Services
                 .ReadByAggregateIdAsync(aggregateId)
                 .ConfigureAwait(false);
 
-            return [.. eventModels
+            return eventModels
                 .OrderBy(eventModel => eventModel.Version)
-                .Select(eventModel => eventModel.Event)];
+                .Select(eventModel => eventModel.Event);
         }
 
         public async Task SaveAsync(Guid aggregateId, IEnumerable<EventBase> events, int expectedVersion)
@@ -43,7 +43,9 @@ namespace EventStore.Services
                     TimeStamp = DateTime.Now
                 };
 
-                await eventStoreRepository.SaveAsync(eventModel);
+                await eventStoreRepository
+                    .SaveAsync(eventModel)
+                    .ConfigureAwait(false);
             }
         }
     }

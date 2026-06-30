@@ -28,7 +28,7 @@ namespace EventStore.Repositories
                 return [];
             }
 
-            return [.. eventModels];
+            return eventModels;
         }
 
         public async Task SaveAsync(EventModel eventModel)

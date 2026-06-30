@@ -5,14 +5,32 @@ namespace EventStore.Handlers.Addresses
 {
     public class AddressEventSourcingHandler(IEventStoreService eventStoreService) : IEventSourcingHandler<AddressAggregate>
     {
-        public Task<AddressAggregate> GetByIdAsync(Guid aggregateId)
+        public async Task<AddressAggregate> ReadByAggregateIdAsync(Guid aggregateId)
         {
-            throw new NotImplementedException();
+            var addressAggregate = new AddressAggregate();
+
+            var events = await eventStoreService
+                .ReadByAggregateIdAsync(aggregateId)
+                .ConfigureAwait(false);
+
+            if (events == null || !events.Any())
+            {
+                return addressAggregate;
+            }
+
+            addressAggregate.ReplayEvents(events);
+            addressAggregate.Version = events.Max(@event => @event.Version);
+
+            return addressAggregate;
         }
 
-        public Task SaveAsync(AddressAggregate aggregate)
+        public async Task SaveAsync(AddressAggregate addressAggregate)
         {
-            throw new NotImplementedException();
+            await eventStoreService
+                .SaveAsync(addressAggregate.Id, addressAggregate.GetUncommittedChanges(), addressAggregate.Version)
+                .ConfigureAwait(false);
+
+            addressAggregate.MarkChangesAsCommitted();
         }
     }
 }

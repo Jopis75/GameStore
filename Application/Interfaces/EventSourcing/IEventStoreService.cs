@@ -1,6 +1,6 @@
 ﻿using Application.Events;
 
-namespace Application.Interfaces.EventStore
+namespace Application.Interfaces.EventSourcing
 {
     public interface IEventStoreService
     {

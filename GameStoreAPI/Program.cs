@@ -1,5 +1,5 @@
 using Application;
-using EventStore;
+using EventSourcing;
 using Identity;
 using Infrastructure;
 using Microsoft.OpenApi.Models;

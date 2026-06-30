@@ -1,6 +1,6 @@
 ﻿using Application.Models.Event;
 
-namespace Application.Interfaces.EventStore
+namespace Application.Interfaces.EventSourcing
 {
     public interface IEventStoreRepository
     {

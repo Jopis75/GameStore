@@ -1,4 +1,4 @@
-﻿namespace EventStore.Configurations
+﻿namespace EventSourcing.Configurations
 {
     public class MongoDbConfig
     {

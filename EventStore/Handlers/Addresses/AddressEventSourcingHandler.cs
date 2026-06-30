@@ -1,7 +1,7 @@
 ﻿using Application.Aggregates.Addresses;
-using Application.Interfaces.EventStore;
+using Application.Interfaces.EventSourcing;
 
-namespace EventStore.Handlers.Addresses
+namespace EventSourcing.Handlers.Addresses
 {
     public class AddressEventSourcingHandler(IEventStoreService eventStoreService) : IEventSourcingHandler<AddressAggregate>
     {

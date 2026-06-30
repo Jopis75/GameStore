@@ -1,9 +1,9 @@
 ﻿using Application.Aggregates.Addresses;
 using Application.Events;
-using Application.Interfaces.EventStore;
+using Application.Interfaces.EventSourcing;
 using Application.Models.Event;
 
-namespace EventStore.Services
+namespace EventSourcing.Services
 {
     public class EventStoreService(IEventStoreRepository eventStoreRepository) : IEventStoreService
     {

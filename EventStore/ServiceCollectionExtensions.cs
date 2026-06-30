@@ -1,11 +1,11 @@
-﻿using Application.Interfaces.EventStore;
-using EventStore.Configurations;
-using EventStore.Repositories;
-using EventStore.Services;
+﻿using Application.Interfaces.EventSourcing;
+using EventSourcing.Configurations;
+using EventSourcing.Repositories;
+using EventSourcing.Services;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace EventStore
+namespace EventSourcing
 {
     public static class ServiceCollectionExtensions
     {
@@ -21,6 +21,7 @@ namespace EventStore
         private static IServiceCollection AddConfigurations(this IServiceCollection serviceCollection, IConfiguration configuration)
         {
             serviceCollection.Configure<MongoDbConfig>(configuration.GetSection("MongoDbConfig"));
+            serviceCollection.Configure<ProducerConfig>(configuration.GetSection("ProducerConfig"));
 
             return serviceCollection;
         }

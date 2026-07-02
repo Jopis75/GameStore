@@ -11,7 +11,7 @@ namespace Application.Aggregates
     {
         private readonly List<EventBase> _changes = [];
 
-        public Guid Id { get; protected set; }
+        public int Id { get; protected set; }
 
         public int Version { get; set; } = -1;
 

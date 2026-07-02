@@ -1,7 +1,9 @@
 ﻿using Application.Interfaces.EventSourcing;
+using Application.Interfaces.EventSourcing.Handlers.Addresses;
 using Application.Interfaces.EventSourcing.Producers;
 using Confluent.Kafka;
 using EventSourcing.Configurations;
+using EventSourcing.Handlers.Addresses;
 using EventSourcing.Producers;
 using EventSourcing.Repositories;
 using EventSourcing.Services;
@@ -17,6 +19,7 @@ namespace EventSourcing
             serviceCollection.AddConfigurations(configuration);
             serviceCollection.AddRepositories();
             serviceCollection.AddServices();
+            serviceCollection.AddHandlers();
             serviceCollection.AddProducers();
 
             return serviceCollection;
@@ -26,6 +29,13 @@ namespace EventSourcing
         {
             serviceCollection.Configure<MongoDbConfig>(configuration.GetSection("MongoDbConfig"));
             serviceCollection.Configure<ProducerConfig>(configuration.GetSection("ProducerConfig"));
+
+            return serviceCollection;
+        }
+
+        private static IServiceCollection AddHandlers(this IServiceCollection serviceCollection)
+        {
+            serviceCollection.AddScoped<IAddressEventHandler, AddressEventHandler>();
 
             return serviceCollection;
         }

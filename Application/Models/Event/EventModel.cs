@@ -12,7 +12,7 @@ namespace Application.Models.Event
 
         public DateTime TimeStamp { get; set; }
 
-        public Guid AggregateId { get; set; }
+        public int AggregateId { get; set; }
 
         public string AggregateType { get; set; } = String.Empty;
 

@@ -4,7 +4,7 @@ namespace Application.Interfaces.EventSourcing
 {
     public interface IEventStoreRepository
     {
-        Task<IEnumerable<EventModel>> ReadByAggregateIdAsync(Guid aggregateId);
+        Task<IEnumerable<EventModel>> ReadByAggregateIdAsync(int aggregateId);
 
         Task SaveAsync(EventModel eventModel);
     }

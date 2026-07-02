@@ -8,7 +8,7 @@ namespace EventSourcing.Services
 {
     public class EventStoreService(IEventStoreRepository eventStoreRepository, IEventProducer eventProducer) : IEventStoreService
     {
-        public async Task<IEnumerable<EventBase>> ReadByAggregateIdAsync(Guid aggregateId)
+        public async Task<IEnumerable<EventBase>> ReadByAggregateIdAsync(int aggregateId)
         {
             var eventModels = await eventStoreRepository
                 .ReadByAggregateIdAsync(aggregateId)
@@ -19,7 +19,7 @@ namespace EventSourcing.Services
                 .Select(eventModel => eventModel.Event);
         }
 
-        public async Task SaveAsync(Guid aggregateId, IEnumerable<EventBase> events, int expectedVersion)
+        public async Task SaveAsync(int aggregateId, IEnumerable<EventBase> events, int expectedVersion)
         {
             if (expectedVersion != -1 && events.Last().Version != expectedVersion)
             {

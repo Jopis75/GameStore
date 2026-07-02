@@ -6,7 +6,7 @@ namespace EventSourcing.Handlers.Addresses
 {
     public class AddressEventSourcingHandler(IEventStoreService eventStoreService) : IEventSourcingHandler<AddressAggregate>
     {
-        public async Task<AddressAggregate> ReadByAggregateIdAsync(Guid aggregateId)
+        public async Task<AddressAggregate> ReadByAggregateIdAsync(int aggregateId)
         {
             var addressAggregate = new AddressAggregate();
 

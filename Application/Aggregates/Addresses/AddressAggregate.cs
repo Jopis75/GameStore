@@ -16,9 +16,9 @@ namespace Application.Aggregates.Addresses
         {
         }
 
-        public AddressAggregate(Guid id, string streetAddress, string postalCode, string city, string state, string country)
+        public AddressAggregate(string streetAddress, string postalCode, string city, string state, string country)
         {
-            CreateAddress(id, streetAddress, postalCode, city, state, country);
+            CreateAddress(streetAddress, postalCode, city, state, country);
         }
 
         public void Apply(AddressCreatedEvent addressCreatedEvent)
@@ -38,11 +38,10 @@ namespace Application.Aggregates.Addresses
             Id = addressUpdatedEvent.Id;
         }
 
-        private void CreateAddress(Guid id, string streetAddress, string postalCode, string city, string state, string country)
+        private void CreateAddress(string streetAddress, string postalCode, string city, string state, string country)
         {
-            RaiseEvent(new AddressCreatedEvent()
+            RaiseEvent(new AddressCreatedEvent
             {
-                Id = id,
                 StreetAddress = streetAddress,
                 PostalCode = postalCode,
                 City = city,
@@ -58,7 +57,7 @@ namespace Application.Aggregates.Addresses
                 throw new InvalidOperationException($"Unable to delete the inactive post with Id {Id}.");
             }
 
-            RaiseEvent(new AddressDeletedEvent()
+            RaiseEvent(new AddressDeletedEvent
             {
                 Id = Id
             });
@@ -71,7 +70,7 @@ namespace Application.Aggregates.Addresses
                 throw new InvalidOperationException($"Unable to update the inactive post with Id {Id}.");
             }
 
-            RaiseEvent(new AddressUpdatedEvent()
+            RaiseEvent(new AddressUpdatedEvent
             {
                 Id = Id,
                 StreetAddress = streetAddress,

@@ -4,8 +4,8 @@ namespace Application.Interfaces.EventSourcing
 {
     public interface IEventStoreService
     {
-        Task<IEnumerable<EventBase>> ReadByAggregateIdAsync(Guid aggregateId);
+        Task<IEnumerable<EventBase>> ReadByAggregateIdAsync(int aggregateId);
 
-        Task SaveAsync(Guid aggregateId, IEnumerable<EventBase> events, int expectedVersion);
+        Task SaveAsync(int aggregateId, IEnumerable<EventBase> events, int expectedVersion);
     }
 }

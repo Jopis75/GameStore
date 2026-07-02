@@ -8,6 +8,6 @@ namespace Application.Messages
 {
     public abstract class Message
     {
-        public Guid Id { get; set; }
+        public int Id { get; set; }
     }
 }

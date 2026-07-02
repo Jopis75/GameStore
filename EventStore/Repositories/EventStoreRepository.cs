@@ -16,7 +16,7 @@ namespace EventSourcing.Repositories
             var mongoDatabase = mongoClient.GetDatabase(mongoDbConfig.Value.Database);
             _mongoCollection = mongoDatabase.GetCollection<EventModel>(mongoDbConfig.Value.Collection);
         }
-        public async Task<IEnumerable<EventModel>> ReadByAggregateIdAsync(Guid aggregateId)
+        public async Task<IEnumerable<EventModel>> ReadByAggregateIdAsync(int aggregateId)
         {
             var eventModels = await _mongoCollection
                 .Find(eventModel => eventModel.AggregateId == aggregateId)

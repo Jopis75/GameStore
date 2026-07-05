@@ -1,8 +1,10 @@
 ﻿using Application.Interfaces.EventSourcing;
+using Application.Interfaces.EventSourcing.Consumers;
 using Application.Interfaces.EventSourcing.Handlers.Addresses;
 using Application.Interfaces.EventSourcing.Producers;
 using Confluent.Kafka;
 using EventSourcing.Configurations;
+using EventSourcing.Consumers;
 using EventSourcing.Handlers.Addresses;
 using EventSourcing.Producers;
 using EventSourcing.Repositories;
@@ -30,6 +32,14 @@ namespace EventSourcing
             serviceCollection.Configure<MongoDbConfig>(configuration.GetSection("MongoDbConfig"));
             serviceCollection.Configure<ProducerConfig>(configuration.GetSection("ProducerConfig"));
             serviceCollection.Configure<ConsumerConfig>(configuration.GetSection("ConsumerConfig"));
+
+            return serviceCollection;
+        }
+
+        private static IServiceCollection AddConsumers(this IServiceCollection serviceCollection)
+        {
+            serviceCollection.AddScoped<IEventConsumer, EventConsumer>();
+            serviceCollection.AddHostedService<ConsumerHostedService>();
 
             return serviceCollection;
         }

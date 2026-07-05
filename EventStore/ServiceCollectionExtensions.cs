@@ -29,6 +29,7 @@ namespace EventSourcing
         {
             serviceCollection.Configure<MongoDbConfig>(configuration.GetSection("MongoDbConfig"));
             serviceCollection.Configure<ProducerConfig>(configuration.GetSection("ProducerConfig"));
+            serviceCollection.Configure<ConsumerConfig>(configuration.GetSection("ConsumerConfig"));
 
             return serviceCollection;
         }

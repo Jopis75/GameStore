@@ -16,13 +16,14 @@ namespace EventSourcing
 {
     public static class ServiceCollectionExtensions
     {
-        public static IServiceCollection AddEventStoreServices(this IServiceCollection serviceCollection, IConfiguration configuration)
+        public static IServiceCollection AddEventSourcingServices(this IServiceCollection serviceCollection, IConfiguration configuration)
         {
             serviceCollection.AddConfigurations(configuration);
             serviceCollection.AddRepositories();
             serviceCollection.AddServices();
             serviceCollection.AddHandlers();
             serviceCollection.AddProducers();
+            serviceCollection.AddConsumers();
 
             return serviceCollection;
         }

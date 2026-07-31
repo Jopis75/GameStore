@@ -1,4 +1,5 @@
-﻿using Application.Dtos.Identity;
+﻿using Application.Aggregates.Addresses;
+using Application.Dtos.Identity;
 using Application.Features.Addresses.Requests.Commands;
 using Application.Features.Companies.Requests.Commands;
 using Application.Features.Consoles.Requests.Commands;
@@ -11,6 +12,7 @@ using Application.Models.Identity;
 using AutoMapper;
 using Domain.Dtos;
 using Domain.Entities;
+using MongoDB.Driver;
 using Console = Domain.Entities.Console;
 
 namespace Application.Profiles
@@ -30,6 +32,9 @@ namespace Application.Profiles
             CreateMap<Trophy, TrophyDto>().ReverseMap();
             CreateMap<VideoGame, VideoGameDto>().ReverseMap();
             CreateMap<VideoGameGenre, VideoGameGenreDto>().ReverseMap();
+
+            // Domain.Dtos.
+            CreateMap<AddressAggregate, AddressDto>().ReverseMap();
 
             // Application.Dtos.Identity.
             CreateMap<ApplicationUser, UserDto>().ReverseMap();

@@ -1,5 +1,7 @@
-﻿using Application.Interfaces.EventSourcing;
+﻿using Application.Aggregates.Addresses;
+using Application.Interfaces.EventSourcing;
 using Application.Interfaces.EventSourcing.Consumers;
+using Application.Interfaces.EventSourcing.Handlers;
 using Application.Interfaces.EventSourcing.Handlers.Addresses;
 using Application.Interfaces.EventSourcing.Producers;
 using Confluent.Kafka;
@@ -48,6 +50,7 @@ namespace EventSourcing
         private static IServiceCollection AddHandlers(this IServiceCollection serviceCollection)
         {
             serviceCollection.AddScoped<IAddressEventHandler, AddressEventHandler>();
+            serviceCollection.AddScoped<IEventSourcingHandler<AddressAggregate>, AddressEventSourcingHandler>();
 
             return serviceCollection;
         }

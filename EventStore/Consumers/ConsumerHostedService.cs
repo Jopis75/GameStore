@@ -9,7 +9,7 @@ namespace EventSourcing.Consumers
     {
         public Task StartAsync(CancellationToken cancellationToken)
         {
-            logger.LogInformation("Starting consumer hosted service.");
+            logger.LogInformation("Start ConsumerHostedService.");
 
             using (var scope = serviceProvider.CreateScope())
             {
@@ -25,7 +25,7 @@ namespace EventSourcing.Consumers
 
         public Task StopAsync(CancellationToken cancellationToken)
         {
-            logger.LogInformation("Stopping consumer hosted service.");
+            logger.LogInformation("Stop ConsumerHostedService.");
 
             return Task.CompletedTask;
         }

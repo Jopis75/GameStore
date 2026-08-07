@@ -20,7 +20,9 @@ namespace Persistance
 
         private static IServiceCollection AddDbContext(this IServiceCollection serviceCollection, IConfiguration configuration)
         {
-            serviceCollection.AddDbContext<GameStoreDbContext>(optionsBuilder => optionsBuilder.UseSqlServer(configuration.GetConnectionString("GameStoreConnectionString")));
+            Action<DbContextOptionsBuilder> dbContextOptionsBuilder = dbContextOptionsBuilder => dbContextOptionsBuilder.UseSqlServer(configuration.GetConnectionString("GameStoreConnectionString"));
+            serviceCollection.AddDbContext<GameStoreDbContext>(dbContextOptionsBuilder);
+            serviceCollection.AddSingleton(new GameStoreDbContextFactory(dbContextOptionsBuilder));
 
             return serviceCollection;
         }

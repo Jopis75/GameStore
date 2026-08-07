@@ -10,11 +10,14 @@ using System.Linq.Expressions;
 
 namespace Persistance.Repositories
 {
-    public class VideoGameRepository(GameStoreDbContext gameStoreDbContext, IMapper mapper) : RepositoryBase<VideoGame, VideoGameDto, VideoGameFilter>(gameStoreDbContext, mapper), IVideoGameRepository
+    public class VideoGameRepository(GameStoreDbContextFactory gameStoreDbContextFactory, IMapper mapper) : RepositoryBase<VideoGame, VideoGameDto, VideoGameFilter>(gameStoreDbContextFactory, mapper), IVideoGameRepository
     {
         public async Task<IEnumerable<VideoGameDto>> ReadByConsoleIdAsync(int consoleId, CancellationToken cancellationToken)
         {
-            var videoGames = await Entities
+            using var gameStoreDbContext = gameStoreDbContextFactory.CreateGameStoreDbContext();
+
+            var videoGames = await gameStoreDbContext
+                .Set<VideoGame>()
                 .AsNoTracking()
                 .Include(videoGame => videoGame.Developer)
                     .ThenInclude(developer => developer.Headquarter)
@@ -32,7 +35,10 @@ namespace Persistance.Repositories
 
         public async Task<IEnumerable<VideoGameDto>> ReadByDeveloperIdAsync(int developerId, CancellationToken cancellationToken)
         {
-            var videoGames = await Entities
+            using var gameStoreDbContext = gameStoreDbContextFactory.CreateGameStoreDbContext();
+
+            var videoGames = await gameStoreDbContext
+                .Set<VideoGame>()
                 .AsNoTracking()
                 .Where(videoGame => videoGame.DeveloperId == developerId)
                 .ToArrayAsync(cancellationToken);
@@ -82,7 +88,10 @@ namespace Persistance.Repositories
                 predicate = predicate.And(videoGame => EF.Functions.Like(videoGame.Title, $"{filter.Title}%"));
             }
 
-            var videoGames = await Entities
+            using var gameStoreDbContext = gameStoreDbContextFactory.CreateGameStoreDbContext();
+
+            var videoGames = await gameStoreDbContext
+                .Set<VideoGame>()
                 .AsNoTracking()
                 .Where(predicate)
                 .ToArrayAsync(cancellationToken);
@@ -92,7 +101,10 @@ namespace Persistance.Repositories
 
         public async Task<IEnumerable<VideoGameDto>> ReadByPublisherIdAsync(int publisherId, CancellationToken cancellationToken)
         {
-            var videoGames = await Entities
+            using var gameStoreDbContext = gameStoreDbContextFactory.CreateGameStoreDbContext();
+
+            var videoGames = await gameStoreDbContext
+                .Set<VideoGame>()
                 .AsNoTracking()
                 .Where(videoGame => videoGame.PublisherId == publisherId)
                 .ToArrayAsync(cancellationToken);
@@ -102,7 +114,10 @@ namespace Persistance.Repositories
 
         public async Task<IEnumerable<VideoGameDto>> ReadByPriceAsync(decimal fromPrice, decimal toPrice, CancellationToken cancellationToken)
         {
-            var videoGames = await Entities
+            using var gameStoreDbContext = gameStoreDbContextFactory.CreateGameStoreDbContext();
+
+            var videoGames = await gameStoreDbContext
+                .Set<VideoGame>()
                 .AsNoTracking()
                 .Where(videoGame => videoGame.Price >= fromPrice && videoGame.Price <= toPrice)
                 .ToArrayAsync(cancellationToken);
@@ -112,7 +127,10 @@ namespace Persistance.Repositories
 
         public async Task<IEnumerable<VideoGameDto>> ReadByPurchaseDateAsync(DateTime fromPurchaseDate, DateTime toPurchaseDate, CancellationToken cancellationToken)
         {
-            var videoGames = await Entities
+            using var gameStoreDbContext = gameStoreDbContextFactory.CreateGameStoreDbContext();
+
+            var videoGames = await gameStoreDbContext
+                .Set<VideoGame>()
                 .AsNoTracking()
                 .Where(videoGame => videoGame.PurchaseDate.Date >= fromPurchaseDate.Date && videoGame.PurchaseDate.Date <= toPurchaseDate.Date)
                 .ToArrayAsync(cancellationToken);
@@ -122,7 +140,10 @@ namespace Persistance.Repositories
 
         public async Task<IEnumerable<VideoGameDto>> ReadByReleaseDateAsync(DateTime fromReleaseDate, DateTime toReleaseDate, CancellationToken cancellationToken)
         {
-            var videoGames = await Entities
+            using var gameStoreDbContext = gameStoreDbContextFactory.CreateGameStoreDbContext();
+
+            var videoGames = await gameStoreDbContext
+                .Set<VideoGame>()
                 .AsNoTracking()
                 .Where(videoGame => videoGame.ReleaseDate.Date >= fromReleaseDate.Date && videoGame.ReleaseDate.Date <= toReleaseDate.Date)
                 .ToArrayAsync(cancellationToken);
@@ -132,7 +153,10 @@ namespace Persistance.Repositories
 
         public async Task<IEnumerable<VideoGameDto>> ReadByTitleAsync(string title, CancellationToken cancellationToken)
         {
-            var videoGames = await Entities
+            using var gameStoreDbContext = gameStoreDbContextFactory.CreateGameStoreDbContext();
+
+            var videoGames = await gameStoreDbContext
+                .Set<VideoGame>()
                 .AsNoTracking()
                 .Where(videoGame => EF.Functions.Like(videoGame.Title, $"{title}%"))
                 .ToArrayAsync(cancellationToken);
@@ -142,7 +166,10 @@ namespace Persistance.Repositories
 
         public async Task<VideoGameDto> ReadByTitleExactAsync(string title, CancellationToken cancellationToken)
         {
-            var videoGame = await Entities
+            using var gameStoreDbContext = gameStoreDbContextFactory.CreateGameStoreDbContext();
+
+            var videoGame = await gameStoreDbContext
+                .Set<VideoGame>()
                 .AsNoTracking()
                 .Where(videoGame => videoGame.Title == title)
                 .SingleOrDefaultAsync(cancellationToken);
@@ -157,7 +184,10 @@ namespace Persistance.Repositories
 
         public async Task<VideoGameDto> ReadMostPlayedByConsoleIdAsync(int consoleId, CancellationToken cancellationToken)
         {
-            var videoGame = await Entities
+            using var gameStoreDbContext = gameStoreDbContextFactory.CreateGameStoreDbContext();
+
+            var videoGame = await gameStoreDbContext
+                .Set<VideoGame>()
                 .AsNoTracking()
                 .Include(videoGame => videoGame.Developer)
                     .ThenInclude(company => company.Headquarter)

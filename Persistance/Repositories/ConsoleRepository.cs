@@ -10,7 +10,7 @@ using Console = Domain.Entities.Console;
 
 namespace Persistance.Repositories
 {
-    public class ConsoleRepository(GameStoreDbContext gameStoreDbContext, IMapper mapper) : RepositoryBase<Console, ConsoleDto, ConsoleFilter>(gameStoreDbContext, mapper), IConsoleRepository
+    public class ConsoleRepository(GameStoreDbContextFactory gameStoreDbContextFactory, IMapper mapper) : RepositoryBase<Console, ConsoleDto, ConsoleFilter>(gameStoreDbContextFactory, mapper), IConsoleRepository
     {
         protected override async Task<IEnumerable<ConsoleDto>> ReadByFilterAsync(ConsoleFilter filter, Expression<Func<Console, bool>> predicate, CancellationToken cancellationToken)
         {
@@ -49,7 +49,10 @@ namespace Persistance.Repositories
                 predicate = predicate.And(console => console.Url != null && EF.Functions.Like(console.Url, $"{filter.Url}%"));
             }
 
-            var consoles = await Entities
+            using var gameStoreDbContext = gameStoreDbContextFactory.CreateGameStoreDbContext();
+
+            var consoles = await gameStoreDbContext
+                .Set<Console>()
                 .AsNoTracking()
                 .Where(predicate)
                 .ToArrayAsync(cancellationToken);
@@ -59,7 +62,10 @@ namespace Persistance.Repositories
 
         public async Task<IEnumerable<ConsoleDto>> ReadByNameAsync(string name, CancellationToken cancellationToken)
         {
-            var consoles = await Entities
+            using var gameStoreDbContext = gameStoreDbContextFactory.CreateGameStoreDbContext();
+
+            var consoles = await gameStoreDbContext
+                .Set<Console>()
                 .AsNoTracking()
                 .Where(console => EF.Functions.Like(console.Name, $"{name}%"))
                 .ToArrayAsync(cancellationToken);
@@ -69,7 +75,10 @@ namespace Persistance.Repositories
 
         public async Task<ConsoleDto> ReadByNameExactAsync(string name, CancellationToken cancellationToken)
         {
-            var console = await Entities
+            using var gameStoreDbContext = gameStoreDbContextFactory.CreateGameStoreDbContext();
+
+            var console = await gameStoreDbContext
+                .Set<Console>()
                 .AsNoTracking()
                 .Where(console => console.Name == name)
                 .SingleOrDefaultAsync(cancellationToken);

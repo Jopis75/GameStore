@@ -10,7 +10,7 @@ using System.Linq.Expressions;
 
 namespace Persistance.Repositories
 {
-    public class ConsoleVideoGameRepository(GameStoreDbContext gameStoreDbContext, IMapper mapper) : RepositoryBase<ConsoleVideoGame, ConsoleVideoGameDto, ConsoleVideoGameFilter>(gameStoreDbContext, mapper), IConsoleVideoGameRepository
+    public class ConsoleVideoGameRepository(GameStoreDbContextFactory gameStoreDbContextFactory, IMapper mapper) : RepositoryBase<ConsoleVideoGame, ConsoleVideoGameDto, ConsoleVideoGameFilter>(gameStoreDbContextFactory, mapper), IConsoleVideoGameRepository
     {
         protected override async Task<IEnumerable<ConsoleVideoGameDto>> ReadByFilterAsync(ConsoleVideoGameFilter filter, Expression<Func<ConsoleVideoGame, bool>> predicate, CancellationToken cancellationToken)
         {
@@ -24,7 +24,10 @@ namespace Persistance.Repositories
                 predicate = predicate.And(consoleVideoGame => consoleVideoGame.VideoGameId == filter.VideoGameId);
             }
 
-            var consoleVideoGames = await Entities
+            using var gameStoreDbContext = gameStoreDbContextFactory.CreateGameStoreDbContext();
+
+            var consoleVideoGames = await gameStoreDbContext
+                .Set<ConsoleVideoGame>()
                 .AsNoTracking()
                 .Where(predicate)
                 .ToArrayAsync(cancellationToken);
@@ -34,7 +37,10 @@ namespace Persistance.Repositories
 
         public async Task<IEnumerable<ConsoleVideoGameDto>> ReadByConsoleIdAsync(int consoleId, CancellationToken cancellationToken)
         {
-            var consoleVideoGames = await Entities
+            using var gameStoreDbContext = gameStoreDbContextFactory.CreateGameStoreDbContext();
+
+            var consoleVideoGames = await gameStoreDbContext
+                .Set<ConsoleVideoGame>()
                 .AsNoTracking()
                 .Where(consoleVideoGame => consoleVideoGame.ConsoleId == consoleId)
                 .ToArrayAsync(cancellationToken);
@@ -44,7 +50,10 @@ namespace Persistance.Repositories
 
         public async Task<IEnumerable<ConsoleVideoGameDto>> ReadByVideoGameIdAsync(int videoGameId, CancellationToken cancellationToken)
         {
-            var consoleVideoGames = await Entities
+            using var gameStoreDbContext = gameStoreDbContextFactory.CreateGameStoreDbContext();
+
+            var consoleVideoGames = await gameStoreDbContext
+                .Set<ConsoleVideoGame>()
                 .AsNoTracking()
                 .Where(consoleVideoGame => consoleVideoGame.VideoGameId == videoGameId)
                 .ToArrayAsync(cancellationToken);

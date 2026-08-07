@@ -11,7 +11,7 @@ using System.Linq.Expressions;
 
 namespace Persistance.Repositories
 {
-    public class TrophyRepository(GameStoreDbContext gameStoreDbContext, IMapper mapper) : RepositoryBase<Trophy, TrophyDto, TrophyFilter>(gameStoreDbContext, mapper), ITrophyRepository
+    public class TrophyRepository(GameStoreDbContextFactory gameStoreDbContextFactory, IMapper mapper) : RepositoryBase<Trophy, TrophyDto, TrophyFilter>(gameStoreDbContextFactory, mapper), ITrophyRepository
     {
         protected override async Task<IEnumerable<TrophyDto>> ReadByFilterAsync(TrophyFilter filter, Expression<Func<Trophy, bool>> predicate, CancellationToken cancellationToken)
         {
@@ -35,7 +35,10 @@ namespace Persistance.Repositories
                 predicate = predicate.And(trophy => trophy.VideoGameId == filter.VideoGameId);
             }
 
-            var trophies = await Entities
+            using var gameStoreDbContext = gameStoreDbContextFactory.CreateGameStoreDbContext();
+
+            var trophies = await gameStoreDbContext
+                .Set<Trophy>()
                 .AsNoTracking()
                 .Where(predicate)
                 .ToArrayAsync(cancellationToken);
@@ -45,7 +48,10 @@ namespace Persistance.Repositories
 
         public async Task<IEnumerable<TrophyDto>> ReadByNameAsync(string name, CancellationToken cancellationToken)
         {
-            var trophies = await Entities
+            using var gameStoreDbContext = gameStoreDbContextFactory.CreateGameStoreDbContext();
+
+            var trophies = await gameStoreDbContext
+                .Set<Trophy>()
                 .AsNoTracking()
                 .Where(trophy => EF.Functions.Like(trophy.Name, $"{name}%"))
                 .ToArrayAsync(cancellationToken);
@@ -55,7 +61,10 @@ namespace Persistance.Repositories
 
         public async Task<IEnumerable<TrophyDto>> ReadByTrophyValueAsync(TrophyValue trophyValue, CancellationToken cancellationToken)
         {
-            var trophies = await Entities
+            using var gameStoreDbContext = gameStoreDbContextFactory.CreateGameStoreDbContext();
+
+            var trophies = await gameStoreDbContext
+                .Set<Trophy>()
                 .AsNoTracking()
                 .Where(trophy => trophy.TrophyValue == trophyValue)
                 .ToArrayAsync(cancellationToken);

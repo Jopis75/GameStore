@@ -10,7 +10,7 @@ using System.Linq.Expressions;
 
 namespace Persistance.Repositories
 {
-    public class GenreRepository(GameStoreDbContext gameStoreDbContext, IMapper mapper) : RepositoryBase<Genre, GenreDto, GenreFilter>(gameStoreDbContext, mapper), IGenreRepository
+    public class GenreRepository(GameStoreDbContextFactory gameStoreDbContextFactory, IMapper mapper) : RepositoryBase<Genre, GenreDto, GenreFilter>(gameStoreDbContextFactory, mapper), IGenreRepository
     {
         protected override async Task<IEnumerable<GenreDto>> ReadByFilterAsync(GenreFilter filter, Expression<Func<Genre, bool>> predicate, CancellationToken cancellationToken)
         {
@@ -24,7 +24,10 @@ namespace Persistance.Repositories
                 predicate = predicate.And(genre => genre.Description != null && EF.Functions.Like(genre.Description, $"{filter.Description}%"));
             }
 
-            var genres = await Entities
+            using var gameStoreDbContext = gameStoreDbContextFactory.CreateGameStoreDbContext();
+
+            var genres = await gameStoreDbContext
+                .Set<Genre>()
                 .AsNoTracking()
                 .Where(predicate)
                 .ToArrayAsync(cancellationToken);
@@ -34,7 +37,10 @@ namespace Persistance.Repositories
 
         public async Task<IEnumerable<GenreDto>> ReadByNameAsync(string name, CancellationToken cancellationToken)
         {
-            var genres = await Entities
+            using var gameStoreDbContext = gameStoreDbContextFactory.CreateGameStoreDbContext();
+
+            var genres = await gameStoreDbContext
+                .Set<Genre>()
                 .AsNoTracking()
                 .Where(genre => EF.Functions.Like(genre.Name, $"{name}%"))
                 .ToArrayAsync(cancellationToken);
@@ -44,7 +50,10 @@ namespace Persistance.Repositories
 
         public async Task<GenreDto> ReadByNameExactAsync(string name, CancellationToken cancellationToken)
         {
-            var genre = await Entities
+            using var gameStoreDbContext = gameStoreDbContextFactory.CreateGameStoreDbContext();
+
+            var genre = await gameStoreDbContext
+                .Set<Genre>()
                 .AsNoTracking()
                 .Where(genre => genre.Name == name)
                 .SingleOrDefaultAsync(cancellationToken);

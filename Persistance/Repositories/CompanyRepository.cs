@@ -10,11 +10,14 @@ using Company = Domain.Entities.Company;
 
 namespace Persistance.Repositories
 {
-    public class CompanyRepository(GameStoreDbContext gameStoreDbContext, IMapper mapper) : RepositoryBase<Company, CompanyDto, CompanyFilter>(gameStoreDbContext, mapper), ICompanyRepository
+    public class CompanyRepository(GameStoreDbContextFactory gameStoreDbContextFactory, IMapper mapper) : RepositoryBase<Company, CompanyDto, CompanyFilter>(gameStoreDbContextFactory, mapper), ICompanyRepository
     {
         public async Task<CompanyDto> ReadByEmailAddressAsync(string emailAddress, CancellationToken cancellationToken)
         {
-            var company = await Entities
+            using var gameStoreDbContext = gameStoreDbContextFactory.CreateGameStoreDbContext();
+
+            var company = await gameStoreDbContext
+                .Set<Company>()
                 .AsNoTracking()
                 .Where(company => company.EmailAddress == emailAddress)
                 .SingleOrDefaultAsync(cancellationToken);
@@ -79,7 +82,10 @@ namespace Persistance.Repositories
                 predicate = predicate.And(company => company.WebsiteUrl != null && company.WebsiteUrl == filter.WebsiteUrl);
             }
 
-            var companies = await Entities
+            using var gameStoreDbContext = gameStoreDbContextFactory.CreateGameStoreDbContext();
+
+            var companies = await gameStoreDbContext
+                .Set<Company>()
                 .AsNoTracking()
                 .Where(predicate)
                 .ToArrayAsync(cancellationToken);
@@ -89,7 +95,10 @@ namespace Persistance.Repositories
 
         public async Task<IEnumerable<CompanyDto>> ReadByNameAsync(string name, CancellationToken cancellationToken)
         {
-            var companies = await Entities
+            using var gameStoreDbContext = gameStoreDbContextFactory.CreateGameStoreDbContext();
+
+            var companies = await gameStoreDbContext
+                .Set<Company>()
                 .AsNoTracking()
                 .Where(company => EF.Functions.Like(company.Name, $"{name}%"))
                 .ToArrayAsync(cancellationToken);
@@ -99,7 +108,10 @@ namespace Persistance.Repositories
 
         public async Task<CompanyDto> ReadByNameExactAsync(string name, CancellationToken cancellationToken)
         {
-            var company = await Entities
+            using var gameStoreDbContext = gameStoreDbContextFactory.CreateGameStoreDbContext();
+
+            var company = await gameStoreDbContext
+                .Set<Company>()
                 .AsNoTracking()
                 .Where(company => company.Name == name)
                 .SingleOrDefaultAsync(cancellationToken);
@@ -114,7 +126,10 @@ namespace Persistance.Repositories
 
         public async Task<IEnumerable<CompanyDto>> ReadByPhoneNumberAsync(string phoneNumber, CancellationToken cancellationToken)
         {
-            var companies = await Entities
+            using var gameStoreDbContext = gameStoreDbContextFactory.CreateGameStoreDbContext();
+
+            var companies = await gameStoreDbContext
+                .Set<Company>()
                 .AsNoTracking()
                 .Where(company => EF.Functions.Like(company.PhoneNumber, $"{phoneNumber}%"))
                 .ToArrayAsync(cancellationToken);
@@ -124,7 +139,10 @@ namespace Persistance.Repositories
 
         public async Task<IEnumerable<CompanyDto>> ReadByTradeNameAsync(string tradeName, CancellationToken cancellationToken)
         {
-            var companies = await Entities
+            using var gameStoreDbContext = gameStoreDbContextFactory.CreateGameStoreDbContext();
+
+            var companies = await gameStoreDbContext
+                .Set<Company>()
                 .AsNoTracking()
                 .Where(company => EF.Functions.Like(company.TradeName, $"{tradeName}%"))
                 .ToArrayAsync(cancellationToken);

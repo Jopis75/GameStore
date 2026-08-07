@@ -1,5 +1,6 @@
 ﻿using Application.Aggregates.Addresses;
 using Application.Dtos.Identity;
+using Application.Events.Addresses;
 using Application.Features.Addresses.Requests.Commands;
 using Application.Features.Companies.Requests.Commands;
 using Application.Features.Consoles.Requests.Commands;
@@ -23,6 +24,9 @@ namespace Application.Profiles
         {
             // Domain.Dtos.
             CreateMap<Address, AddressDto>().ReverseMap();
+            CreateMap<AddressAggregate, AddressDto>().ReverseMap();
+            CreateMap<AddressCreatedEvent, AddressDto>().ReverseMap();
+            CreateMap<AddressUpdatedEvent, AddressDto>().ReverseMap();
             CreateMap<Company, CompanyDto>().ReverseMap();
             CreateMap<Genre, GenreDto>().ReverseMap();
             CreateMap<Console, ConsoleDto>().ReverseMap();
@@ -32,9 +36,6 @@ namespace Application.Profiles
             CreateMap<Trophy, TrophyDto>().ReverseMap();
             CreateMap<VideoGame, VideoGameDto>().ReverseMap();
             CreateMap<VideoGameGenre, VideoGameGenreDto>().ReverseMap();
-
-            // Domain.Dtos.
-            CreateMap<AddressAggregate, AddressDto>().ReverseMap();
 
             // Application.Dtos.Identity.
             CreateMap<ApplicationUser, UserDto>().ReverseMap();

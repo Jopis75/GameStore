@@ -10,11 +10,14 @@ using System.Linq.Expressions;
 
 namespace Persistance.Repositories
 {
-    public class AddressRepository(GameStoreDbContext gameStoreDbContext, IMapper mapper) : RepositoryBase<Address, AddressDto, AddressFilter>(gameStoreDbContext, mapper), IAddressRepository
+    public class AddressRepository(GameStoreDbContextFactory gameStoreDbContextFactory, IMapper mapper) : RepositoryBase<Address, AddressDto, AddressFilter>(gameStoreDbContextFactory, mapper), IAddressRepository
     {
         public async Task<bool> IsUniqueAsync(string streetAddress, string postalCode, string city, CancellationToken cancellationToken)
         {
-            var isUnique = await Entities
+            using var gameStoreDbContext = gameStoreDbContextFactory.CreateGameStoreDbContext();
+
+            var isUnique = await gameStoreDbContext
+                .Set<Address>()
                 .AsNoTracking()
                 .Where(address => address.StreetAddress == streetAddress
                     && address.PostalCode == postalCode
@@ -26,7 +29,10 @@ namespace Persistance.Repositories
 
         public async Task<IEnumerable<AddressDto>> ReadByCityAsync(string city, CancellationToken cancellationToken)
         {
-            var addresses = await Entities
+            using var gameStoreDbContext = gameStoreDbContextFactory.CreateGameStoreDbContext();
+
+            var addresses = await gameStoreDbContext
+                .Set<Address>()
                 .AsNoTracking()
                 .Where(address => address.City == city)
                 .ToArrayAsync(cancellationToken);
@@ -61,7 +67,10 @@ namespace Persistance.Repositories
                 predicate = predicate.And(address => address.StreetAddress == filter.StreetAddress);
             }
 
-            var addresses = await Entities
+            using var gameStoreDbContext = gameStoreDbContextFactory.CreateGameStoreDbContext();
+
+            var addresses = await gameStoreDbContext
+                .Set<Address>()
                 .AsNoTracking()
                 .Where(predicate)
                 .ToArrayAsync(cancellationToken);
@@ -71,7 +80,10 @@ namespace Persistance.Repositories
 
         public async Task<IEnumerable<AddressDto>> ReadByStreetAddressAsync(string streetAddress, CancellationToken cancellationToken)
         {
-            var addresses = await Entities
+            using var gameStoreDbContext = gameStoreDbContextFactory.CreateGameStoreDbContext();
+
+            var addresses = await gameStoreDbContext
+                .Set<Address>()
                 .AsNoTracking()
                 .Where(address => address.StreetAddress == streetAddress)
                 .ToArrayAsync(cancellationToken);
@@ -81,7 +93,10 @@ namespace Persistance.Repositories
 
         public async Task<IEnumerable<AddressDto>> ReadByPostalCodeAsync(string postalCode, CancellationToken cancellationToken)
         {
-           var addresses = await Entities
+            using var gameStoreDbContext = gameStoreDbContextFactory.CreateGameStoreDbContext();
+
+            var addresses = await gameStoreDbContext
+                .Set<Address>()
                 .AsNoTracking()
                 .Where(address => address.PostalCode == postalCode)
                 .ToArrayAsync(cancellationToken);

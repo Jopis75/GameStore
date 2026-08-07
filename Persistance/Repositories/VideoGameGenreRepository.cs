@@ -10,7 +10,7 @@ using System.Linq.Expressions;
 
 namespace Persistance.Repositories
 {
-    public class VideoGameGenreRepository(GameStoreDbContext gameStoreDbContext, IMapper mapper) : RepositoryBase<VideoGameGenre, VideoGameGenreDto, VideoGameGenreFilter>(gameStoreDbContext, mapper), IVideoGameGenreRepository
+    public class VideoGameGenreRepository(GameStoreDbContextFactory gameStoreDbContextFactory, IMapper mapper) : RepositoryBase<VideoGameGenre, VideoGameGenreDto, VideoGameGenreFilter>(gameStoreDbContextFactory, mapper), IVideoGameGenreRepository
     {
         protected override async Task<IEnumerable<VideoGameGenreDto>> ReadByFilterAsync(VideoGameGenreFilter filter, Expression<Func<VideoGameGenre, bool>> predicate, CancellationToken cancellationToken)
         {
@@ -24,7 +24,10 @@ namespace Persistance.Repositories
                 predicate = predicate.And(videoGameGenre => videoGameGenre.GenreId == filter.GenreId);
             }
 
-            var videoGameGenres = await Entities
+            using var gameStoreDbContext = gameStoreDbContextFactory.CreateGameStoreDbContext();
+
+            var videoGameGenres = await gameStoreDbContext
+                .Set<VideoGameGenre>()
                 .AsNoTracking()
                 .Where(predicate)
                 .ToArrayAsync(cancellationToken);
@@ -34,7 +37,10 @@ namespace Persistance.Repositories
 
         public async Task<IEnumerable<VideoGameGenreDto>> ReadByVideoGameIdAsync(int videoGameId, CancellationToken cancellationToken)
         {
-            var videoGameGenres = await Entities
+            using var gameStoreDbContext = gameStoreDbContextFactory.CreateGameStoreDbContext();
+
+            var videoGameGenres = await gameStoreDbContext
+                .Set<VideoGameGenre>()
                 .AsNoTracking()
                 .Where(videoGameGenre => videoGameGenre.VideoGameId == videoGameId)
                 .ToArrayAsync(cancellationToken);

@@ -1,44 +1,30 @@
 ﻿using Application.Events.Addresses;
 using Application.Interfaces.EventSourcing.Handlers.Addresses;
 using Application.Interfaces.Persistance;
+using AutoMapper;
 using Domain.Dtos;
 
 namespace EventSourcing.Handlers.Addresses
 {
-    public class AddressEventHandler(IAddressRepository addressRepository) : IAddressEventHandler
+    public class AddressEventHandler(IAddressRepository addressRepository, IMapper mapper) : IAddressEventHandler
     {
-        public async Task On(AddressCreatedEvent addressCreatedEvent, CancellationToken cancellationToken)
+        public async Task On(AddressCreatedEvent addressCreatedEvent/*, CancellationToken cancellationToken*/)
         {
-            var addressDto = new AddressDto
-            {
-                StreetAddress = addressCreatedEvent.StreetAddress,
-                PostalCode = addressCreatedEvent.PostalCode,
-                City = addressCreatedEvent.City,
-                State = addressCreatedEvent.State,
-                Country = addressCreatedEvent.Country
-            };
+            var addressDto = mapper.Map<AddressDto>(addressCreatedEvent);
 
-            await addressRepository.CreateAsync(addressDto, cancellationToken);
+            await addressRepository.CreateAsync(addressDto, CancellationToken.None);
         }
 
-        public async Task On(AddressDeletedEvent addressDeletedEvent, CancellationToken cancellationToken)
+        public async Task On(AddressDeletedEvent addressDeletedEvent/*, CancellationToken cancellationToken*/)
         {
-            await addressRepository.DeleteByIdAsync(addressDeletedEvent.Id, cancellationToken);
+            await addressRepository.DeleteByIdAsync(addressDeletedEvent.Id, new CancellationToken());
         }
 
-        public async Task On(AddressUpdatedEvent addressUpdatedEvent, CancellationToken cancellationToken)
+        public async Task On(AddressUpdatedEvent addressUpdatedEvent/*, CancellationToken cancellationToken*/)
         {
-            var addressDto = new AddressDto
-            {
-                Id = addressUpdatedEvent.Id,
-                StreetAddress = addressUpdatedEvent.StreetAddress,
-                PostalCode = addressUpdatedEvent.PostalCode,
-                City = addressUpdatedEvent.City,
-                State = addressUpdatedEvent.State,
-                Country = addressUpdatedEvent.Country
-            };
+            var addressDto = mapper.Map<AddressDto>(addressUpdatedEvent);
 
-            await addressRepository.UpdateAsync(addressDto, cancellationToken);
+            await addressRepository.UpdateAsync(addressDto, new CancellationToken());
         }
     }
 }

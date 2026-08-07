@@ -32,7 +32,7 @@ namespace Persistance.Repositories
                 .Where(predicate)
                 .ToArrayAsync(cancellationToken);
 
-            return videoGameGenres.Select(Mapper.Map<VideoGameGenreDto>);
+            return videoGameGenres.Select(mapper.Map<VideoGameGenreDto>);
         }
 
         public async Task<IEnumerable<VideoGameGenreDto>> ReadByVideoGameIdAsync(int videoGameId, CancellationToken cancellationToken)
@@ -45,7 +45,7 @@ namespace Persistance.Repositories
                 .Where(videoGameGenre => videoGameGenre.VideoGameId == videoGameId)
                 .ToArrayAsync(cancellationToken);
 
-            return videoGameGenres.Select(Mapper.Map<VideoGameGenreDto>);
+            return videoGameGenres.Select(mapper.Map<VideoGameGenreDto>);
         }
     }
 }

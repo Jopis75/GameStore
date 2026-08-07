@@ -37,7 +37,7 @@ namespace Persistance.Repositories
                 .Where(address => address.City == city)
                 .ToArrayAsync(cancellationToken);
 
-            return addresses.Select(Mapper.Map<AddressDto>);
+            return addresses.Select(mapper.Map<AddressDto>);
         }
 
         protected override async Task<IEnumerable<AddressDto>> ReadByFilterAsync(AddressFilter filter, Expression<Func<Address, bool>> predicate, CancellationToken cancellationToken)
@@ -75,7 +75,7 @@ namespace Persistance.Repositories
                 .Where(predicate)
                 .ToArrayAsync(cancellationToken);
 
-            return addresses.Select(Mapper.Map<AddressDto>);
+            return addresses.Select(mapper.Map<AddressDto>);
         }
 
         public async Task<IEnumerable<AddressDto>> ReadByStreetAddressAsync(string streetAddress, CancellationToken cancellationToken)
@@ -88,7 +88,7 @@ namespace Persistance.Repositories
                 .Where(address => address.StreetAddress == streetAddress)
                 .ToArrayAsync(cancellationToken);
 
-            return addresses.Select(Mapper.Map<AddressDto>);
+            return addresses.Select(mapper.Map<AddressDto>);
         }
 
         public async Task<IEnumerable<AddressDto>> ReadByPostalCodeAsync(string postalCode, CancellationToken cancellationToken)
@@ -101,7 +101,7 @@ namespace Persistance.Repositories
                 .Where(address => address.PostalCode == postalCode)
                 .ToArrayAsync(cancellationToken);
 
-            return addresses.Select(Mapper.Map<AddressDto>);
+            return addresses.Select(mapper.Map<AddressDto>);
         }
     }
 }

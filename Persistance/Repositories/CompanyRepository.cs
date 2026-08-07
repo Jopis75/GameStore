@@ -27,7 +27,7 @@ namespace Persistance.Repositories
                 return NullObject;
             }
 
-            return Mapper.Map<CompanyDto>(company);
+            return mapper.Map<CompanyDto>(company);
         }
 
         protected override async Task<IEnumerable<CompanyDto>> ReadByFilterAsync(CompanyFilter filter, Expression<Func<Company, bool>> predicate, CancellationToken cancellationToken)
@@ -90,7 +90,7 @@ namespace Persistance.Repositories
                 .Where(predicate)
                 .ToArrayAsync(cancellationToken);
 
-            return companies.Select(Mapper.Map<CompanyDto>);
+            return companies.Select(mapper.Map<CompanyDto>);
         }
 
         public async Task<IEnumerable<CompanyDto>> ReadByNameAsync(string name, CancellationToken cancellationToken)
@@ -103,7 +103,7 @@ namespace Persistance.Repositories
                 .Where(company => EF.Functions.Like(company.Name, $"{name}%"))
                 .ToArrayAsync(cancellationToken);
 
-            return companies.Select(Mapper.Map<CompanyDto>);
+            return companies.Select(mapper.Map<CompanyDto>);
         }
 
         public async Task<CompanyDto> ReadByNameExactAsync(string name, CancellationToken cancellationToken)
@@ -121,7 +121,7 @@ namespace Persistance.Repositories
                 return NullObject;
             }
 
-            return Mapper.Map<CompanyDto>(company);
+            return mapper.Map<CompanyDto>(company);
         }
 
         public async Task<IEnumerable<CompanyDto>> ReadByPhoneNumberAsync(string phoneNumber, CancellationToken cancellationToken)
@@ -134,7 +134,7 @@ namespace Persistance.Repositories
                 .Where(company => EF.Functions.Like(company.PhoneNumber, $"{phoneNumber}%"))
                 .ToArrayAsync(cancellationToken);
 
-            return companies.Select(Mapper.Map<CompanyDto>);
+            return companies.Select(mapper.Map<CompanyDto>);
         }
 
         public async Task<IEnumerable<CompanyDto>> ReadByTradeNameAsync(string tradeName, CancellationToken cancellationToken)
@@ -147,7 +147,7 @@ namespace Persistance.Repositories
                 .Where(company => EF.Functions.Like(company.TradeName, $"{tradeName}%"))
                 .ToArrayAsync(cancellationToken);
 
-            return companies.Select(Mapper.Map<CompanyDto>);
+            return companies.Select(mapper.Map<CompanyDto>);
         }
     }
 }

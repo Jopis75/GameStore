@@ -32,7 +32,7 @@ namespace Persistance.Repositories
                 .Where(predicate)
                 .ToArrayAsync(cancellationToken);
 
-            return genres.Select(Mapper.Map<GenreDto>);
+            return genres.Select(mapper.Map<GenreDto>);
         }
 
         public async Task<IEnumerable<GenreDto>> ReadByNameAsync(string name, CancellationToken cancellationToken)
@@ -45,7 +45,7 @@ namespace Persistance.Repositories
                 .Where(genre => EF.Functions.Like(genre.Name, $"{name}%"))
                 .ToArrayAsync(cancellationToken);
 
-            return genres.Select(Mapper.Map<GenreDto>);
+            return genres.Select(mapper.Map<GenreDto>);
         }
 
         public async Task<GenreDto> ReadByNameExactAsync(string name, CancellationToken cancellationToken)
@@ -63,7 +63,7 @@ namespace Persistance.Repositories
                 return NullObject;
             }
 
-            return Mapper.Map<GenreDto>(genre);
+            return mapper.Map<GenreDto>(genre);
         }
     }
 }

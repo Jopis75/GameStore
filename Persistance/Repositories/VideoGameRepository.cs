@@ -30,7 +30,7 @@ namespace Persistance.Repositories
                 .Where(videoGame => videoGame.ConsoleVideoGames.Any(consoleVideoGame => consoleVideoGame.ConsoleId == consoleId))
                 .ToArrayAsync(cancellationToken);
 
-            return videoGames.Select(Mapper.Map<VideoGameDto>);
+            return videoGames.Select(mapper.Map<VideoGameDto>);
         }
 
         public async Task<IEnumerable<VideoGameDto>> ReadByDeveloperIdAsync(int developerId, CancellationToken cancellationToken)
@@ -43,7 +43,7 @@ namespace Persistance.Repositories
                 .Where(videoGame => videoGame.DeveloperId == developerId)
                 .ToArrayAsync(cancellationToken);
 
-            return videoGames.Select(Mapper.Map<VideoGameDto>);
+            return videoGames.Select(mapper.Map<VideoGameDto>);
         }
 
         protected override async Task<IEnumerable<VideoGameDto>> ReadByFilterAsync(VideoGameFilter filter, Expression<Func<VideoGame, bool>> predicate, CancellationToken cancellationToken)
@@ -96,7 +96,7 @@ namespace Persistance.Repositories
                 .Where(predicate)
                 .ToArrayAsync(cancellationToken);
 
-            return videoGames.Select(Mapper.Map<VideoGameDto>);
+            return videoGames.Select(mapper.Map<VideoGameDto>);
         }
 
         public async Task<IEnumerable<VideoGameDto>> ReadByPublisherIdAsync(int publisherId, CancellationToken cancellationToken)
@@ -109,7 +109,7 @@ namespace Persistance.Repositories
                 .Where(videoGame => videoGame.PublisherId == publisherId)
                 .ToArrayAsync(cancellationToken);
 
-            return videoGames.Select(Mapper.Map<VideoGameDto>);
+            return videoGames.Select(mapper.Map<VideoGameDto>);
         }
 
         public async Task<IEnumerable<VideoGameDto>> ReadByPriceAsync(decimal fromPrice, decimal toPrice, CancellationToken cancellationToken)
@@ -122,7 +122,7 @@ namespace Persistance.Repositories
                 .Where(videoGame => videoGame.Price >= fromPrice && videoGame.Price <= toPrice)
                 .ToArrayAsync(cancellationToken);
 
-            return videoGames.Select(Mapper.Map<VideoGameDto>);
+            return videoGames.Select(mapper.Map<VideoGameDto>);
         }
 
         public async Task<IEnumerable<VideoGameDto>> ReadByPurchaseDateAsync(DateTime fromPurchaseDate, DateTime toPurchaseDate, CancellationToken cancellationToken)
@@ -135,7 +135,7 @@ namespace Persistance.Repositories
                 .Where(videoGame => videoGame.PurchaseDate.Date >= fromPurchaseDate.Date && videoGame.PurchaseDate.Date <= toPurchaseDate.Date)
                 .ToArrayAsync(cancellationToken);
 
-            return videoGames.Select(Mapper.Map<VideoGameDto>);
+            return videoGames.Select(mapper.Map<VideoGameDto>);
         }
 
         public async Task<IEnumerable<VideoGameDto>> ReadByReleaseDateAsync(DateTime fromReleaseDate, DateTime toReleaseDate, CancellationToken cancellationToken)
@@ -148,7 +148,7 @@ namespace Persistance.Repositories
                 .Where(videoGame => videoGame.ReleaseDate.Date >= fromReleaseDate.Date && videoGame.ReleaseDate.Date <= toReleaseDate.Date)
                 .ToArrayAsync(cancellationToken);
 
-            return videoGames.Select(Mapper.Map<VideoGameDto>);
+            return videoGames.Select(mapper.Map<VideoGameDto>);
         }
 
         public async Task<IEnumerable<VideoGameDto>> ReadByTitleAsync(string title, CancellationToken cancellationToken)
@@ -161,7 +161,7 @@ namespace Persistance.Repositories
                 .Where(videoGame => EF.Functions.Like(videoGame.Title, $"{title}%"))
                 .ToArrayAsync(cancellationToken);
 
-            return videoGames.Select(Mapper.Map<VideoGameDto>);
+            return videoGames.Select(mapper.Map<VideoGameDto>);
         }
 
         public async Task<VideoGameDto> ReadByTitleExactAsync(string title, CancellationToken cancellationToken)
@@ -179,7 +179,7 @@ namespace Persistance.Repositories
                 return NullObject;
             }
 
-            return Mapper.Map<VideoGameDto>(videoGame);
+            return mapper.Map<VideoGameDto>(videoGame);
         }
 
         public async Task<VideoGameDto> ReadMostPlayedByConsoleIdAsync(int consoleId, CancellationToken cancellationToken)
@@ -208,7 +208,7 @@ namespace Persistance.Repositories
                 return NullObject;
             }
 
-            return Mapper.Map<VideoGameDto>(videoGame);
+            return mapper.Map<VideoGameDto>(videoGame);
         }
     }
 }

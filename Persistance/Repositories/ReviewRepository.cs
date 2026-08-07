@@ -32,7 +32,7 @@ namespace Persistance.Repositories
                 .Where(predicate)
                 .ToArrayAsync(cancellationToken);
 
-            return reviews.Select(Mapper.Map<ReviewDto>);
+            return reviews.Select(mapper.Map<ReviewDto>);
         }
 
         public async Task<IEnumerable<ReviewDto>> ReadByGradeAsync(int grade, CancellationToken cancellationToken)
@@ -45,7 +45,7 @@ namespace Persistance.Repositories
                 .Where(review => review.Grade == grade)
                 .ToArrayAsync(cancellationToken);
 
-            return reviews.Select(Mapper.Map<ReviewDto>);
+            return reviews.Select(mapper.Map<ReviewDto>);
         }
 
         public async Task<IEnumerable<ReviewDto>> ReadByGradeAsync(int fromGrade, int toGrade, CancellationToken cancellationToken)
@@ -58,7 +58,7 @@ namespace Persistance.Repositories
                 .Where(review => review.Grade >= fromGrade && review.Grade <= toGrade)
                 .ToArrayAsync(cancellationToken);
 
-            return reviews.Select(Mapper.Map<ReviewDto>);
+            return reviews.Select(mapper.Map<ReviewDto>);
         }
 
         public async Task<IEnumerable<ReviewDto>> ReadByReviewDateAsync(DateTime fromReviewDate, DateTime toReviewDate, CancellationToken cancellationToken)
@@ -71,7 +71,7 @@ namespace Persistance.Repositories
                 .Where(review => review.ReviewDate.Date >= fromReviewDate.Date && review.ReviewDate.Date <= toReviewDate.Date)
                 .ToArrayAsync(cancellationToken);
 
-            return reviews.Select(Mapper.Map<ReviewDto>);
+            return reviews.Select(mapper.Map<ReviewDto>);
         }
 
         public async Task<IEnumerable<ReviewDto>> ReadByVideoGameIdAsync(int videoGameId, CancellationToken cancellationToken)
@@ -84,7 +84,7 @@ namespace Persistance.Repositories
                 .Where(review => review.VideoGameId == videoGameId)
                 .ToArrayAsync(cancellationToken);
 
-            return reviews.Select(Mapper.Map<ReviewDto>);
+            return reviews.Select(mapper.Map<ReviewDto>);
         }
     }
 }

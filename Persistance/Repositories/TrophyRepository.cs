@@ -43,7 +43,7 @@ namespace Persistance.Repositories
                 .Where(predicate)
                 .ToArrayAsync(cancellationToken);
 
-            return trophies.Select(Mapper.Map<TrophyDto>);
+            return trophies.Select(mapper.Map<TrophyDto>);
         }
 
         public async Task<IEnumerable<TrophyDto>> ReadByNameAsync(string name, CancellationToken cancellationToken)
@@ -56,7 +56,7 @@ namespace Persistance.Repositories
                 .Where(trophy => EF.Functions.Like(trophy.Name, $"{name}%"))
                 .ToArrayAsync(cancellationToken);
 
-            return trophies.Select(Mapper.Map<TrophyDto>);
+            return trophies.Select(mapper.Map<TrophyDto>);
         }
 
         public async Task<IEnumerable<TrophyDto>> ReadByTrophyValueAsync(TrophyValue trophyValue, CancellationToken cancellationToken)
@@ -69,7 +69,7 @@ namespace Persistance.Repositories
                 .Where(trophy => trophy.TrophyValue == trophyValue)
                 .ToArrayAsync(cancellationToken);
 
-            return trophies.Select(Mapper.Map<TrophyDto>);
+            return trophies.Select(mapper.Map<TrophyDto>);
         }
     }
 }

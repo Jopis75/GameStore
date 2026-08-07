@@ -57,7 +57,7 @@ namespace Persistance.Repositories
                 .Where(predicate)
                 .ToArrayAsync(cancellationToken);
 
-            return consoles.Select(Mapper.Map<ConsoleDto>);
+            return consoles.Select(mapper.Map<ConsoleDto>);
         }
 
         public async Task<IEnumerable<ConsoleDto>> ReadByNameAsync(string name, CancellationToken cancellationToken)
@@ -70,7 +70,7 @@ namespace Persistance.Repositories
                 .Where(console => EF.Functions.Like(console.Name, $"{name}%"))
                 .ToArrayAsync(cancellationToken);
 
-            return consoles.Select(Mapper.Map<ConsoleDto>);
+            return consoles.Select(mapper.Map<ConsoleDto>);
         }
 
         public async Task<ConsoleDto> ReadByNameExactAsync(string name, CancellationToken cancellationToken)
@@ -88,7 +88,7 @@ namespace Persistance.Repositories
                 return NullObject;
             }
 
-            return Mapper.Map<ConsoleDto>(console);
+            return mapper.Map<ConsoleDto>(console);
         }
     }
 }

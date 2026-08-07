@@ -16,32 +16,23 @@ namespace Persistance.Repositories
         where TDto : DtoBase, new()
         where TFilter : FilterBase, new()
     {
-        protected IMapper Mapper => mapper;
-
         public TDto NullObject => new();
 
         public async Task<TDto> CreateAsync(TDto dto, CancellationToken cancellationToken)
         {
-            try
-            {
-                var entity = Mapper.Map<TEntity>(dto);
+            var entity = mapper.Map<TEntity>(dto);
 
-                using var gameStoreDbContext = gameStoreDbContextFactory.CreateGameStoreDbContext();
+            using var gameStoreDbContext = gameStoreDbContextFactory.CreateGameStoreDbContext();
 
-                EntityEntry<TEntity> entityEntry = await gameStoreDbContext.AddAsync<TEntity>(entity, cancellationToken);
-                await gameStoreDbContext.SaveChangesAsync();
+            EntityEntry<TEntity> entityEntry = await gameStoreDbContext.AddAsync<TEntity>(entity, cancellationToken);
+            await gameStoreDbContext.SaveChangesAsync();
 
-                return Mapper.Map<TDto>(entityEntry.Entity);
-            }
-            catch (Exception ex)
-            {
-                throw;
-            }
+            return mapper.Map<TDto>(entityEntry.Entity);
         }
 
         public async Task<TDto> DeleteAsync(TDto dto, CancellationToken cancellationToken)
         {
-            var entity = Mapper.Map<TEntity>(dto);
+            var entity = mapper.Map<TEntity>(dto);
 
             cancellationToken.ThrowIfCancellationRequested();
 
@@ -50,7 +41,7 @@ namespace Persistance.Repositories
             EntityEntry<TEntity> entityEntry = gameStoreDbContext.Remove<TEntity>(entity);
             await gameStoreDbContext.SaveChangesAsync();
 
-            return Mapper.Map<TDto>(entityEntry.Entity);
+            return mapper.Map<TDto>(entityEntry.Entity);
         }
 
         public async Task<TDto> DeleteByIdAsync(int id, CancellationToken cancellationToken)
@@ -67,7 +58,7 @@ namespace Persistance.Repositories
             var entityEntry = gameStoreDbContext.Remove<TEntity>(entity);
             await gameStoreDbContext.SaveChangesAsync();
 
-            return Mapper.Map<TDto>(entityEntry.Entity);
+            return mapper.Map<TDto>(entityEntry.Entity);
         }
 
         public async Task<bool> ExistsAsync(int id, CancellationToken cancellationToken)
@@ -88,7 +79,7 @@ namespace Persistance.Repositories
                 .AsNoTracking()
                 .ToArrayAsync(cancellationToken);
 
-            return entities.Select(Mapper.Map<TDto>);
+            return entities.Select(mapper.Map<TDto>);
         }
 
         public async Task<IEnumerable<TDto>> ReadByFilterAsync(TFilter filter, CancellationToken cancellationToken)
@@ -149,12 +140,12 @@ namespace Persistance.Repositories
                 return NullObject;
             }
 
-            return Mapper.Map<TDto>(entity);
+            return mapper.Map<TDto>(entity);
         }
 
         public async Task<TDto> UpdateAsync(TDto dto, CancellationToken cancellationToken)
         {
-            var entity = Mapper.Map<TEntity>(dto);
+            var entity = mapper.Map<TEntity>(dto);
 
             cancellationToken.ThrowIfCancellationRequested();
 
@@ -163,7 +154,7 @@ namespace Persistance.Repositories
             EntityEntry<TEntity> entityEntry = gameStoreDbContext.Update<TEntity>(entity);
             await gameStoreDbContext.SaveChangesAsync();
 
-            return Mapper.Map<TDto>(entityEntry.Entity);
+            return mapper.Map<TDto>(entityEntry.Entity);
         }
     }
 }

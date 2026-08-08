@@ -10,7 +10,7 @@ namespace EventSourcing.Consumers
 {
     public class EventConsumer(IAddressEventHandler addressEventHandler, IOptions<ConsumerConfig> consumerConfig) : IEventConsumer
     {
-        public void Consume(string topic)
+        public void Consume(string topic, CancellationToken cancellationToken)
         {
             using var consumerBuilder = new ConsumerBuilder<string, string>(consumerConfig.Value)
                 .SetKeyDeserializer(Deserializers.Utf8)
@@ -40,14 +40,14 @@ namespace EventSourcing.Consumers
                         throw new ArgumentNullException(nameof(@event), "Could not deserialize event.");
                     }
 
-                    var eventHandlerMethod = addressEventHandler.GetType().GetMethod("On", [@event!.GetType()]);
+                    var eventHandlerMethod = addressEventHandler.GetType().GetMethod("Handle", [@event!.GetType(), cancellationToken.GetType()]);
 
                     if (eventHandlerMethod == null)
                     {
                         throw new ArgumentNullException(nameof(eventHandlerMethod), "Could not find event handler method.");
                     }
 
-                    eventHandlerMethod.Invoke(addressEventHandler, [@event]);
+                    eventHandlerMethod.Invoke(addressEventHandler, [@event, cancellationToken]);
 
                     consumerBuilder.Commit(consumeResult);
                 }

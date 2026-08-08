@@ -4,10 +4,10 @@ namespace Application.Interfaces.EventSourcing.Handlers.Addresses
 {
     public interface IAddressEventHandler
     {
-        Task On(AddressCreatedEvent addressCreatedEvent/*, CancellationToken cancellationToken*/);
+        Task Handle(AddressCreatedEvent addressCreatedEvent, CancellationToken cancellationToken);
 
-        Task On(AddressDeletedEvent addressDeletedEvent/*, CancellationToken cancellationToken*/);
+        Task Handle(AddressDeletedEvent addressDeletedEvent, CancellationToken cancellationToken);
 
-        Task On(AddressUpdatedEvent addressUpdatedEvent/*, CancellationToken cancellationToken*/);
+        Task Handle(AddressUpdatedEvent addressUpdatedEvent, CancellationToken cancellationToken);
     }
 }

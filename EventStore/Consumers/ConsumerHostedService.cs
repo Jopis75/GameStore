@@ -17,7 +17,7 @@ namespace EventSourcing.Consumers
 
                 var topic = Environment.GetEnvironmentVariable("KAFKA_TOPIC") ?? throw new ArgumentNullException("KAFKA_TOPIC", "Environment variable KAFKA_TOPIC is not set.");
 
-                Task.Run(() => eventConsumer.Consume(topic), cancellationToken);
+                Task.Run(() => eventConsumer.Consume(topic, cancellationToken), cancellationToken);
             }
 
             return Task.CompletedTask;

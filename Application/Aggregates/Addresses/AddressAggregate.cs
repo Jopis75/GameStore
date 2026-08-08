@@ -1,10 +1,4 @@
-﻿using Application.Events;
-using Application.Events.Addresses;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Application.Events.Addresses;
 
 namespace Application.Aggregates.Addresses
 {
@@ -40,14 +34,16 @@ namespace Application.Aggregates.Addresses
 
         private void CreateAddress(string streetAddress, string postalCode, string city, string state, string country)
         {
-            RaiseEvent(new AddressCreatedEvent
+            var addressCreatedEvent = new AddressCreatedEvent
             {
                 StreetAddress = streetAddress,
                 PostalCode = postalCode,
                 City = city,
                 State = state,
                 Country = country
-            });
+            };
+
+            RaiseEvent(addressCreatedEvent);
         }
 
         public void DeleteAddress()
@@ -57,10 +53,12 @@ namespace Application.Aggregates.Addresses
                 throw new InvalidOperationException($"Unable to delete the inactive post with Id {Id}.");
             }
 
-            RaiseEvent(new AddressDeletedEvent
+            var addressDeletedEvent = new AddressDeletedEvent
             {
                 Id = Id
-            });
+            };
+
+            RaiseEvent(addressDeletedEvent);
         }
 
         public void UpdateAddress(string streetAddress, string postalCode, string city, string state, string country)
@@ -70,7 +68,7 @@ namespace Application.Aggregates.Addresses
                 throw new InvalidOperationException($"Unable to update the inactive post with Id {Id}.");
             }
 
-            RaiseEvent(new AddressUpdatedEvent
+            var addressUpdatedEvent = new AddressUpdatedEvent
             {
                 Id = Id,
                 StreetAddress = streetAddress,
@@ -78,7 +76,9 @@ namespace Application.Aggregates.Addresses
                 City = city,
                 State = state,
                 Country = country
-            });
+            };
+
+            RaiseEvent(addressUpdatedEvent);
         }
     }
 }

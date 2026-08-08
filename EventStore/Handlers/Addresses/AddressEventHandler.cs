@@ -13,22 +13,22 @@ namespace EventSourcing.Handlers.Addresses
         {
             try
             {
-                logger.LogInformation("Begin HandleCreatedAddressEvent {@AddressCreatedEvent}.", addressCreatedEvent);
+                logger.LogInformation("Begin HandleAddressCreatedEvent {@AddressCreatedEvent}.", addressCreatedEvent);
 
                 var addressDto = mapper.Map<AddressDto>(addressCreatedEvent);
 
                 await addressRepository.CreateAsync(addressDto, cancellationToken);
 
-                logger.LogInformation("Done HandleCreatedAddressEvent {@AddressCreatedEvent}.", addressCreatedEvent);
+                logger.LogInformation("Done HandleAddressCreatedEvent {@AddressCreatedEvent}.", addressCreatedEvent);
             }
             catch (OperationCanceledException ex)
             {
-                logger.LogError(ex, "Canceled HandleCreatedAddressEvent {@AddressCreatedEvent}.", addressCreatedEvent);
+                logger.LogError(ex, "Canceled HandleAddressCreatedEvent {@AddressCreatedEvent}.", addressCreatedEvent);
                 throw;
             }
             catch (Exception ex)
             {
-                logger.LogError(ex, "Error HandleCreatedAddressEvent {@AddressCreatedEvent}.", addressCreatedEvent);
+                logger.LogError(ex, "Error HandleAddressCreatedEvent {@AddressCreatedEvent}.", addressCreatedEvent);
                 throw;
             }
         }
@@ -40,9 +40,26 @@ namespace EventSourcing.Handlers.Addresses
 
         public async Task Handle(AddressUpdatedEvent addressUpdatedEvent, CancellationToken cancellationToken)
         {
-            var addressDto = mapper.Map<AddressDto>(addressUpdatedEvent);
+            try
+            {
+                logger.LogInformation("Begin HandleAddressUpdatedEvent {@AddressUpdatedEvent}.", addressUpdatedEvent);
 
-            await addressRepository.UpdateAsync(addressDto, cancellationToken);
+                var addressDto = mapper.Map<AddressDto>(addressUpdatedEvent);
+
+                await addressRepository.UpdateAsync(addressDto, cancellationToken);
+
+                logger.LogInformation("Done HandleAddressUpdatedEvent {@AddressUpdatedEvent}.", addressUpdatedEvent);
+            }
+            catch (OperationCanceledException ex)
+            {
+                logger.LogError(ex, "Canceled HandleAddressUpdatedEvent {@AddressUpdatedEvent}.", addressUpdatedEvent);
+                throw;
+            }
+            catch (Exception ex)
+            {
+                logger.LogError(ex, "Error HandleAddressUpdatedEvent {@AddressUpdatedEvent}.", addressUpdatedEvent);
+                throw;
+            }
         }
     }
 }

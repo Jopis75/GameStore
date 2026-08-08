@@ -17,13 +17,13 @@ namespace Application.Features.Addresses.RequestHandlers.Commands
         {
             try
             {
-                logger.LogInformation("Begin CreateAddress {@CreateAddressRequest}.", createAddressRequest);
+                logger.LogInformation("Begin HandleCreateAddress {@CreateAddressRequest}.", createAddressRequest);
 
                 if (createAddressRequest == null)
                 {
                     var ex = new ArgumentNullException(nameof(createAddressRequest));
                     var httpResponseDto1 = new HttpResponseDto<AddressDto>(ex.Message, StatusCodes.Status400BadRequest);
-                    logger.LogError(ex, "Error CreateAddress {@HttpResponseDto}.", httpResponseDto1);
+                    logger.LogError(ex, "Error HandleCreateAddress {@HttpResponseDto}.", httpResponseDto1);
                     return httpResponseDto1;
                 }
 
@@ -33,7 +33,7 @@ namespace Application.Features.Addresses.RequestHandlers.Commands
                 {
                     var ex = new ValidationException(validationResult.Errors);
                     var httpResponseDto1 = new HttpResponseDto<AddressDto>(ex.Message, StatusCodes.Status400BadRequest);
-                    logger.LogError(ex, "Error CreateAddress {@HttpResponseDto}.", httpResponseDto1);
+                    logger.LogError(ex, "Error HandleCreateAddress {@HttpResponseDto}.", httpResponseDto1);
                     return httpResponseDto1;
                 }
 
@@ -49,19 +49,19 @@ namespace Application.Features.Addresses.RequestHandlers.Commands
                 var addressDto = mapper.Map<AddressDto>(createAddressRequest);
 
                 var httpResponseDto = new HttpResponseDto<AddressDto>(addressDto, StatusCodes.Status201Created);
-                logger.LogInformation("Done CreateAddress {@HttpResponseDto}.", httpResponseDto);
+                logger.LogInformation("Done HandleCreateAddress {@HttpResponseDto}.", httpResponseDto);
                 return httpResponseDto;
             }
             catch (OperationCanceledException ex)
             {
                 var httpResponseDto1 = new HttpResponseDto<AddressDto>(ex.Message, StatusCodes.Status500InternalServerError);
-                logger.LogError(ex, "Canceled CreateAddress {@HttpResponseDto}.", httpResponseDto1);
+                logger.LogError(ex, "Canceled HandleCreateAddress {@HttpResponseDto}.", httpResponseDto1);
                 return httpResponseDto1;
             }
             catch (Exception ex)
             {
                 var httpResponseDto1 = new HttpResponseDto<AddressDto>(ex.Message, StatusCodes.Status500InternalServerError);
-                logger.LogError(ex, "Error CreateAddress {@HttpResponseDto}.", httpResponseDto1);
+                logger.LogError(ex, "Error HandleCreateAddress {@HttpResponseDto}.", httpResponseDto1);
                 return httpResponseDto1;
             }
         }

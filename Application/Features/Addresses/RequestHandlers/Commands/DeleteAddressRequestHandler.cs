@@ -1,7 +1,8 @@
-﻿using Application.Dtos.General;
+﻿using Application.Aggregates.Addresses;
+using Application.Dtos.General;
 using Application.Features.Addresses.Requests.Commands;
-using Application.Interfaces.Persistance;
-using Domain.Dtos;
+using Application.Interfaces.EventSourcing.Handlers;
+using AutoMapper;
 using FluentValidation;
 using MediatR;
 using Microsoft.AspNetCore.Http;
@@ -9,21 +10,19 @@ using Microsoft.Extensions.Logging;
 
 namespace Application.Features.Addresses.RequestHandlers.Commands
 {
-    public class DeleteAddressRequestHandler(IUnitOfWork unitOfWork, IValidator<DeleteAddressRequest> validator, ILogger<DeleteAddressRequestHandler> logger) : IRequestHandler<DeleteAddressRequest, HttpResponseDto<AddressDto>>
+    public class DeleteAddressRequestHandler(IEventSourcingHandler<AddressAggregate> eventSourcingHandler, IValidator<DeleteAddressRequest> validator, IMapper mapper, ILogger<DeleteAddressRequestHandler> logger) : IRequestHandler<DeleteAddressRequest, HttpResponseDto<DeleteAddressRequest>>
     {
-        public async Task<HttpResponseDto<AddressDto>> Handle(DeleteAddressRequest deleteAddressRequest, CancellationToken cancellationToken)
+        public async Task<HttpResponseDto<DeleteAddressRequest>> Handle(DeleteAddressRequest deleteAddressRequest, CancellationToken cancellationToken)
         {
-            await unitOfWork.BeginTransactionAsync(cancellationToken);
-
             try
             {
-                logger.LogInformation("Begin DeleteAddress {@DeleteAddressRequest}.", deleteAddressRequest);
+                logger.LogInformation("Begin HandleDeleteAddress {@DeleteAddressRequest}.", deleteAddressRequest);
 
                 if (deleteAddressRequest == null)
                 {
                     var ex = new ArgumentNullException(nameof(deleteAddressRequest));
-                    var httpResponseDto1 = new HttpResponseDto<AddressDto>(ex.Message, StatusCodes.Status400BadRequest);
-                    logger.LogError(ex, "Error DeleteAddress {@HttpResponseDto}.", httpResponseDto1);
+                    var httpResponseDto1 = new HttpResponseDto<DeleteAddressRequest>(ex.Message, StatusCodes.Status400BadRequest);
+                    logger.LogError(ex, "Error HandleDeleteAddress {@HttpResponseDto}.", httpResponseDto1);
                     return httpResponseDto1;
                 }
 
@@ -32,33 +31,41 @@ namespace Application.Features.Addresses.RequestHandlers.Commands
                 if (validationResult.IsValid == false)
                 {
                     var ex = new ValidationException(validationResult.Errors);
-                    var httpResponseDto1 = new HttpResponseDto<AddressDto>(ex.Message, StatusCodes.Status400BadRequest);
-                    logger.LogError(ex, "Error DeleteAddress {@HttpResponseDto}.", httpResponseDto1);
+                    var httpResponseDto1 = new HttpResponseDto<DeleteAddressRequest>(ex.Message, StatusCodes.Status400BadRequest);
+                    logger.LogError(ex, "Error HandleDeleteAddress {@HttpResponseDto}.", httpResponseDto1);
                     return httpResponseDto1;
                 }
 
-                var deletedAddressDto = await unitOfWork.AddressRepository.DeleteByIdAsync(deleteAddressRequest.Id, cancellationToken);
+                var topic = Environment.GetEnvironmentVariable("KAFKA_TOPIC");
 
-                await unitOfWork.CommitTransactionAsync(cancellationToken);
+                if (topic == null)
+                {
+                    var ex = new ArgumentNullException("KAFKA_TOPIC environment variable is not set.");
+                    var httpResponseDto1 = new HttpResponseDto<DeleteAddressRequest>(ex.Message, StatusCodes.Status400BadRequest);
+                    logger.LogError(ex, "Error HandleDeleteAddress {@HttpResponseDto}.", httpResponseDto1);
+                    return httpResponseDto1;
+                }
 
-                var httpResponseDto = new HttpResponseDto<AddressDto>(deletedAddressDto, StatusCodes.Status200OK);
-                logger.LogInformation("Done DeleteAddress {@HttpResponseDto}.", httpResponseDto);
+                var addressAggregate = await eventSourcingHandler.ReadByAggregateIdAsync(deleteAddressRequest.Id);
+
+                addressAggregate.DeleteAddress();
+
+                await eventSourcingHandler.SaveAsync(topic, addressAggregate);
+
+                var httpResponseDto = new HttpResponseDto<DeleteAddressRequest>(deleteAddressRequest, StatusCodes.Status200OK);
+                logger.LogInformation("Done HandleDeleteAddress {@HttpResponseDto}.", httpResponseDto);
                 return httpResponseDto;
             }
             catch (OperationCanceledException ex)
             {
-                await unitOfWork.RollbackTransactionAsync(cancellationToken);
-
-                var httpResponseDto1 = new HttpResponseDto<AddressDto>(ex.Message, StatusCodes.Status500InternalServerError);
-                logger.LogError(ex, "Canceled DeleteAddress {@HttpResponseDto}.", httpResponseDto1);
+                var httpResponseDto1 = new HttpResponseDto<DeleteAddressRequest>(ex.Message, StatusCodes.Status500InternalServerError);
+                logger.LogError(ex, "Canceled HandleDeleteAddress {@HttpResponseDto}.", httpResponseDto1);
                 return httpResponseDto1;
             }
             catch (Exception ex)
             {
-                await unitOfWork.RollbackTransactionAsync(cancellationToken);
-
-                var httpResponseDto1 = new HttpResponseDto<AddressDto>(ex.Message, StatusCodes.Status500InternalServerError);
-                logger.LogError(ex, "Error DeleteAddress {@HttpResponseDto}.", httpResponseDto1);
+                var httpResponseDto1 = new HttpResponseDto<DeleteAddressRequest>(ex.Message, StatusCodes.Status500InternalServerError);
+                logger.LogError(ex, "Error HandleDeleteAddress {@HttpResponseDto}.", httpResponseDto1);
                 return httpResponseDto1;
             }
         }

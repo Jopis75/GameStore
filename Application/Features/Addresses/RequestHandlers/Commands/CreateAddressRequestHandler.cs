@@ -3,7 +3,6 @@ using Application.Dtos.General;
 using Application.Features.Addresses.Requests.Commands;
 using Application.Interfaces.EventSourcing.Handlers;
 using AutoMapper;
-using Domain.Dtos;
 using FluentValidation;
 using MediatR;
 using Microsoft.AspNetCore.Http;
@@ -11,9 +10,9 @@ using Microsoft.Extensions.Logging;
 
 namespace Application.Features.Addresses.RequestHandlers.Commands
 {
-    public class CreateAddressRequestHandler(IEventSourcingHandler<AddressAggregate> eventSourcingHandler, IMapper mapper, IValidator<CreateAddressRequest> validator, ILogger<CreateAddressRequestHandler> logger) : IRequestHandler<CreateAddressRequest, HttpResponseDto<AddressDto>>
+    public class CreateAddressRequestHandler(IEventSourcingHandler<AddressAggregate> eventSourcingHandler, IMapper mapper, IValidator<CreateAddressRequest> validator, ILogger<CreateAddressRequestHandler> logger) : IRequestHandler<CreateAddressRequest, HttpResponseDto<CreateAddressRequest>>
     {
-        public async Task<HttpResponseDto<AddressDto>> Handle(CreateAddressRequest createAddressRequest, CancellationToken cancellationToken)
+        public async Task<HttpResponseDto<CreateAddressRequest>> Handle(CreateAddressRequest createAddressRequest, CancellationToken cancellationToken)
         {
             try
             {
@@ -22,7 +21,7 @@ namespace Application.Features.Addresses.RequestHandlers.Commands
                 if (createAddressRequest == null)
                 {
                     var ex = new ArgumentNullException(nameof(createAddressRequest));
-                    var httpResponseDto1 = new HttpResponseDto<AddressDto>(ex.Message, StatusCodes.Status400BadRequest);
+                    var httpResponseDto1 = new HttpResponseDto<CreateAddressRequest>(ex.Message, StatusCodes.Status400BadRequest);
                     logger.LogError(ex, "Error HandleCreateAddress {@HttpResponseDto}.", httpResponseDto1);
                     return httpResponseDto1;
                 }
@@ -32,7 +31,17 @@ namespace Application.Features.Addresses.RequestHandlers.Commands
                 if (validationResult.IsValid == false)
                 {
                     var ex = new ValidationException(validationResult.Errors);
-                    var httpResponseDto1 = new HttpResponseDto<AddressDto>(ex.Message, StatusCodes.Status400BadRequest);
+                    var httpResponseDto1 = new HttpResponseDto<CreateAddressRequest>(ex.Message, StatusCodes.Status400BadRequest);
+                    logger.LogError(ex, "Error HandleCreateAddress {@HttpResponseDto}.", httpResponseDto1);
+                    return httpResponseDto1;
+                }
+
+                var topic = Environment.GetEnvironmentVariable("KAFKA_TOPIC");
+
+                if (topic == null)
+                {
+                    var ex = new ArgumentNullException("KAFKA_TOPIC environment variable is not set.");
+                    var httpResponseDto1 = new HttpResponseDto<CreateAddressRequest>(ex.Message, StatusCodes.Status400BadRequest);
                     logger.LogError(ex, "Error HandleCreateAddress {@HttpResponseDto}.", httpResponseDto1);
                     return httpResponseDto1;
                 }
@@ -44,23 +53,21 @@ namespace Application.Features.Addresses.RequestHandlers.Commands
                     createAddressRequest.State,
                     createAddressRequest.Country);
 
-                await eventSourcingHandler.SaveAsync(addressAggregate);
+                await eventSourcingHandler.SaveAsync(topic, addressAggregate);
 
-                var addressDto = mapper.Map<AddressDto>(createAddressRequest);
-
-                var httpResponseDto = new HttpResponseDto<AddressDto>(addressDto, StatusCodes.Status201Created);
+                var httpResponseDto = new HttpResponseDto<CreateAddressRequest>(createAddressRequest, StatusCodes.Status201Created);
                 logger.LogInformation("Done HandleCreateAddress {@HttpResponseDto}.", httpResponseDto);
                 return httpResponseDto;
             }
             catch (OperationCanceledException ex)
             {
-                var httpResponseDto1 = new HttpResponseDto<AddressDto>(ex.Message, StatusCodes.Status500InternalServerError);
+                var httpResponseDto1 = new HttpResponseDto<CreateAddressRequest>(ex.Message, StatusCodes.Status500InternalServerError);
                 logger.LogError(ex, "Canceled HandleCreateAddress {@HttpResponseDto}.", httpResponseDto1);
                 return httpResponseDto1;
             }
             catch (Exception ex)
             {
-                var httpResponseDto1 = new HttpResponseDto<AddressDto>(ex.Message, StatusCodes.Status500InternalServerError);
+                var httpResponseDto1 = new HttpResponseDto<CreateAddressRequest>(ex.Message, StatusCodes.Status500InternalServerError);
                 logger.LogError(ex, "Error HandleCreateAddress {@HttpResponseDto}.", httpResponseDto1);
                 return httpResponseDto1;
             }

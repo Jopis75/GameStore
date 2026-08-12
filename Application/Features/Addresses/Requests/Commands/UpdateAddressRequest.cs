@@ -1,10 +1,9 @@
 ﻿using Application.Dtos.General;
-using Domain.Dtos;
 using MediatR;
 
 namespace Application.Features.Addresses.Requests.Commands
 {
-    public class UpdateAddressRequest : IRequest<HttpResponseDto<AddressDto>>
+    public class UpdateAddressRequest : IRequest<HttpResponseDto<UpdateAddressRequest>>
     {
         public string City { get; set; } = String.Empty;
 

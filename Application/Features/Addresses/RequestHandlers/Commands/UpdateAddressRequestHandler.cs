@@ -3,7 +3,6 @@ using Application.Dtos.General;
 using Application.Features.Addresses.Requests.Commands;
 using Application.Interfaces.EventSourcing.Handlers;
 using AutoMapper;
-using Domain.Dtos;
 using FluentValidation;
 using MediatR;
 using Microsoft.AspNetCore.Http;
@@ -11,9 +10,9 @@ using Microsoft.Extensions.Logging;
 
 namespace Application.Features.Addresses.RequestHandlers.Commands
 {
-    public class UpdateAddressRequestHandler(IEventSourcingHandler<AddressAggregate> eventSourcingHandler, IMapper mapper, IValidator<UpdateAddressRequest> validator, ILogger<UpdateAddressRequestHandler> logger) : IRequestHandler<UpdateAddressRequest, HttpResponseDto<AddressDto>>
+    public class UpdateAddressRequestHandler(IEventSourcingHandler<AddressAggregate> eventSourcingHandler, IMapper mapper, IValidator<UpdateAddressRequest> validator, ILogger<UpdateAddressRequestHandler> logger) : IRequestHandler<UpdateAddressRequest, HttpResponseDto<UpdateAddressRequest>>
     {
-        public async Task<HttpResponseDto<AddressDto>> Handle(UpdateAddressRequest updateAddressRequest, CancellationToken cancellationToken)
+        public async Task<HttpResponseDto<UpdateAddressRequest>> Handle(UpdateAddressRequest updateAddressRequest, CancellationToken cancellationToken)
         {
             try
             {
@@ -22,7 +21,7 @@ namespace Application.Features.Addresses.RequestHandlers.Commands
                 if (updateAddressRequest == null)
                 {
                     var ex = new ArgumentNullException(nameof(updateAddressRequest));
-                    var httpResponseDto1 = new HttpResponseDto<AddressDto>(ex.Message, StatusCodes.Status400BadRequest);
+                    var httpResponseDto1 = new HttpResponseDto<UpdateAddressRequest>(ex.Message, StatusCodes.Status400BadRequest);
                     logger.LogError(ex, "Error HandleUpdateAddress {@HttpResponseDto}.", httpResponseDto1);
                     return httpResponseDto1;
                 }
@@ -32,7 +31,17 @@ namespace Application.Features.Addresses.RequestHandlers.Commands
                 if (validationResult.IsValid == false)
                 {
                     var ex = new ValidationException(validationResult.Errors);
-                    var httpResponseDto1 = new HttpResponseDto<AddressDto>(ex.Message, StatusCodes.Status400BadRequest);
+                    var httpResponseDto1 = new HttpResponseDto<UpdateAddressRequest>(ex.Message, StatusCodes.Status400BadRequest);
+                    logger.LogError(ex, "Error HandleUpdateAddress {@HttpResponseDto}.", httpResponseDto1);
+                    return httpResponseDto1;
+                }
+
+                var topic = Environment.GetEnvironmentVariable("KAFKA_TOPIC");
+
+                if (topic == null)
+                {
+                    var ex = new ArgumentNullException("KAFKA_TOPIC environment variable is not set.");
+                    var httpResponseDto1 = new HttpResponseDto<UpdateAddressRequest>(ex.Message, StatusCodes.Status400BadRequest);
                     logger.LogError(ex, "Error HandleUpdateAddress {@HttpResponseDto}.", httpResponseDto1);
                     return httpResponseDto1;
                 }
@@ -46,23 +55,21 @@ namespace Application.Features.Addresses.RequestHandlers.Commands
                     updateAddressRequest.State,
                     updateAddressRequest.Country);
 
-                await eventSourcingHandler.SaveAsync(addressAggregate);
+                await eventSourcingHandler.SaveAsync(topic, addressAggregate);
 
-                var addressDto = mapper.Map<AddressDto>(updateAddressRequest);
-
-                var httpResponseDto = new HttpResponseDto<AddressDto>(addressDto, StatusCodes.Status200OK);
+                var httpResponseDto = new HttpResponseDto<UpdateAddressRequest>(updateAddressRequest, StatusCodes.Status200OK);
                 logger.LogInformation("Done HandleUpdateAddress {@HttpResponseDto}.", httpResponseDto);
                 return httpResponseDto;
             }
             catch (OperationCanceledException ex)
             {
-                var httpResponseDto1 = new HttpResponseDto<AddressDto>(ex.Message, StatusCodes.Status500InternalServerError);
+                var httpResponseDto1 = new HttpResponseDto<UpdateAddressRequest>(ex.Message, StatusCodes.Status500InternalServerError);
                 logger.LogError(ex, "Canceled HandleUpdateAddress {@HttpResponseDto}.", httpResponseDto1);
                 return httpResponseDto1;
             }
             catch (Exception ex)
             {
-                var httpResponseDto1 = new HttpResponseDto<AddressDto>(ex.Message, StatusCodes.Status500InternalServerError);
+                var httpResponseDto1 = new HttpResponseDto<UpdateAddressRequest>(ex.Message, StatusCodes.Status500InternalServerError);
                 logger.LogError(ex, "Error HandleUpdateAddress {@HttpResponseDto}.", httpResponseDto1);
                 return httpResponseDto1;
             }

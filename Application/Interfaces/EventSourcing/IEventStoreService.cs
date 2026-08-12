@@ -1,4 +1,5 @@
-﻿using Application.Events;
+﻿using Application.Aggregates;
+using Application.Events;
 
 namespace Application.Interfaces.EventSourcing
 {
@@ -6,6 +7,7 @@ namespace Application.Interfaces.EventSourcing
     {
         Task<IEnumerable<EventBase>> ReadByAggregateIdAsync(int aggregateId);
 
-        Task SaveAsync(int aggregateId, IEnumerable<EventBase> events, int expectedVersion);
+        Task SaveAsync<TAggregate>(string topic, int aggregateId, IEnumerable<EventBase> events, int expectedVersion)
+            where TAggregate : AggregateRoot;
     }
 }

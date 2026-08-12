@@ -25,10 +25,10 @@ namespace EventSourcing.Handlers.Addresses
             return addressAggregate;
         }
 
-        public async Task SaveAsync(AddressAggregate addressAggregate)
+        public async Task SaveAsync(string topic, AddressAggregate addressAggregate)
         {
             await eventStoreService
-                .SaveAsync(addressAggregate.Id, addressAggregate.GetUncommittedChanges(), addressAggregate.Version)
+                .SaveAsync<AddressAggregate>(topic, addressAggregate.Id, addressAggregate.GetUncommittedChanges(), addressAggregate.Version)
                 .ConfigureAwait(false);
 
             addressAggregate.MarkChangesAsCommitted();

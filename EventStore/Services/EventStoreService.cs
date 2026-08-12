@@ -1,4 +1,4 @@
-﻿using Application.Aggregates.Addresses;
+﻿using Application.Aggregates;
 using Application.Events;
 using Application.Interfaces.EventSourcing;
 using Application.Interfaces.EventSourcing.Producers;
@@ -19,7 +19,8 @@ namespace EventSourcing.Services
                 .Select(eventModel => eventModel.Event);
         }
 
-        public async Task SaveAsync(int aggregateId, IEnumerable<EventBase> events, int expectedVersion)
+        public async Task SaveAsync<TAggregate>(string topic, int aggregateId, IEnumerable<EventBase> events, int expectedVersion)
+            where TAggregate : AggregateRoot
         {
             if (expectedVersion != -1 && events.Last().Version != expectedVersion)
             {
@@ -37,7 +38,7 @@ namespace EventSourcing.Services
                 var eventModel = new EventModel
                 {
                     AggregateId = aggregateId,
-                    AggregateType = nameof(AddressAggregate),
+                    AggregateType = nameof(TAggregate),
                     Version = version,
                     EventType = @event.GetType().Name,
                     Event = @event,
@@ -47,8 +48,6 @@ namespace EventSourcing.Services
                 await eventStoreRepository
                     .SaveAsync(eventModel)
                     .ConfigureAwait(false);
-
-                var topic = Environment.GetEnvironmentVariable("KAFKA_TOPIC") ?? throw new InvalidOperationException("KAFKA_TOPIC environment variable is not set.");
 
                 await eventProducer
                     .ProduceAsync(topic, @event)

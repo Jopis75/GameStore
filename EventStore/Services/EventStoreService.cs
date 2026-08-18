@@ -38,7 +38,7 @@ namespace EventSourcing.Services
                 var eventModel = new EventModel
                 {
                     AggregateId = aggregateId,
-                    AggregateType = nameof(TAggregate),
+                    AggregateType = typeof(TAggregate).Name,
                     Version = version,
                     EventType = @event.GetType().Name,
                     Event = @event,

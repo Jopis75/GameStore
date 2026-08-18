@@ -8,7 +8,7 @@ using System.Text.Json;
 
 namespace EventSourcing.Consumers
 {
-    public class EventConsumer(IAddressEventHandler addressEventHandler, IOptions<ConsumerConfig> consumerConfig) : IEventConsumer
+    public class AddressEventConsumer(IAddressEventHandler addressEventHandler, IOptions<ConsumerConfig> consumerConfig) : IAddressEventConsumer
     {
         public void Consume(string topic, CancellationToken cancellationToken)
         {
@@ -27,7 +27,7 @@ namespace EventSourcing.Consumers
                 {
                     var jsonSerializerOptions = new JsonSerializerOptions
                     {
-                        Converters = 
+                        Converters =
                         {
                             new EventJsonConverter()
                         }

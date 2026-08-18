@@ -35,7 +35,24 @@ namespace EventSourcing.Handlers.Addresses
 
         public async Task Handle(AddressDeletedEvent addressDeletedEvent, CancellationToken cancellationToken)
         {
-            await addressRepository.DeleteByIdAsync(addressDeletedEvent.Id, cancellationToken);
+            try
+            {
+                logger.LogInformation("Begin HandleAddressDeletedEvent {@AddressDeletedEvent}.", addressDeletedEvent);
+
+                await addressRepository.DeleteByIdAsync(addressDeletedEvent.Id, cancellationToken);
+
+                logger.LogInformation("Done HandleAddressDeletedEvent {@AddressDeletedEvent}.", addressDeletedEvent);
+            }
+            catch (OperationCanceledException ex)
+            {
+                logger.LogError(ex, "Canceled HandleAddressDeletedEvent {@AddressDeletedEvent}.", addressDeletedEvent);
+                throw;
+            }
+            catch (Exception ex)
+            {
+                logger.LogError(ex, "Error HandleAddressDeletedEvent {@AddressDeletedEvent}.", addressDeletedEvent);
+                throw;
+            }
         }
 
         public async Task Handle(AddressUpdatedEvent addressUpdatedEvent, CancellationToken cancellationToken)

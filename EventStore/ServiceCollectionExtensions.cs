@@ -41,7 +41,7 @@ namespace EventSourcing
 
         private static IServiceCollection AddConsumers(this IServiceCollection serviceCollection)
         {
-            serviceCollection.AddScoped<IEventConsumer, EventConsumer>();
+            serviceCollection.AddScoped<IAddressEventConsumer, AddressEventConsumer>();
             serviceCollection.AddHostedService<ConsumerHostedService>();
 
             return serviceCollection;

@@ -2,7 +2,6 @@
 using Application.Dtos.General;
 using Application.Features.Addresses.Requests.Commands;
 using Application.Interfaces.EventSourcing.Handlers;
-using AutoMapper;
 using FluentValidation;
 using MediatR;
 using Microsoft.AspNetCore.Http;
@@ -10,8 +9,10 @@ using Microsoft.Extensions.Logging;
 
 namespace Application.Features.Addresses.RequestHandlers.Commands
 {
-    public class DeleteAddressRequestHandler(IEventSourcingHandler<AddressAggregate> eventSourcingHandler, IValidator<DeleteAddressRequest> validator, IMapper mapper, ILogger<DeleteAddressRequestHandler> logger) : IRequestHandler<DeleteAddressRequest, HttpResponseDto<DeleteAddressRequest>>
+    public class DeleteAddressRequestHandler(IEventSourcingHandler<AddressAggregate> eventSourcingHandler, IValidator<DeleteAddressRequest> validator, ILogger<DeleteAddressRequestHandler> logger) : IRequestHandler<DeleteAddressRequest, HttpResponseDto<DeleteAddressRequest>>
     {
+        private readonly string addressEventsTopicEnvironmentVariable = "ADDRESS_EVENTS_TOPIC";
+
         public async Task<HttpResponseDto<DeleteAddressRequest>> Handle(DeleteAddressRequest deleteAddressRequest, CancellationToken cancellationToken)
         {
             try
@@ -36,20 +37,18 @@ namespace Application.Features.Addresses.RequestHandlers.Commands
                     return httpResponseDto1;
                 }
 
-                var topic = Environment.GetEnvironmentVariable("KAFKA_TOPIC");
+                var topic = Environment.GetEnvironmentVariable(addressEventsTopicEnvironmentVariable);
 
                 if (topic == null)
                 {
-                    var ex = new ArgumentNullException("KAFKA_TOPIC environment variable is not set.");
+                    var ex = new ArgumentNullException($"Environment variable {addressEventsTopicEnvironmentVariable} is not found.");
                     var httpResponseDto1 = new HttpResponseDto<DeleteAddressRequest>(ex.Message, StatusCodes.Status400BadRequest);
                     logger.LogError(ex, "Error HandleDeleteAddress {@HttpResponseDto}.", httpResponseDto1);
                     return httpResponseDto1;
                 }
 
                 var addressAggregate = await eventSourcingHandler.ReadByAggregateIdAsync(deleteAddressRequest.Id);
-
                 addressAggregate.DeleteAddress();
-
                 await eventSourcingHandler.SaveAsync(topic, addressAggregate);
 
                 var httpResponseDto = new HttpResponseDto<DeleteAddressRequest>(deleteAddressRequest, StatusCodes.Status200OK);

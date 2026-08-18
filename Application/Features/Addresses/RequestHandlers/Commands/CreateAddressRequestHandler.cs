@@ -2,7 +2,6 @@
 using Application.Dtos.General;
 using Application.Features.Addresses.Requests.Commands;
 using Application.Interfaces.EventSourcing.Handlers;
-using AutoMapper;
 using FluentValidation;
 using MediatR;
 using Microsoft.AspNetCore.Http;
@@ -10,8 +9,10 @@ using Microsoft.Extensions.Logging;
 
 namespace Application.Features.Addresses.RequestHandlers.Commands
 {
-    public class CreateAddressRequestHandler(IEventSourcingHandler<AddressAggregate> eventSourcingHandler, IMapper mapper, IValidator<CreateAddressRequest> validator, ILogger<CreateAddressRequestHandler> logger) : IRequestHandler<CreateAddressRequest, HttpResponseDto<CreateAddressRequest>>
+    public class CreateAddressRequestHandler(IEventSourcingHandler<AddressAggregate> eventSourcingHandler, IValidator<CreateAddressRequest> validator, ILogger<CreateAddressRequestHandler> logger) : IRequestHandler<CreateAddressRequest, HttpResponseDto<CreateAddressRequest>>
     {
+        private readonly string addressEventsTopicEnvironmentVariable = "ADDRESS_EVENTS_TOPIC";
+
         public async Task<HttpResponseDto<CreateAddressRequest>> Handle(CreateAddressRequest createAddressRequest, CancellationToken cancellationToken)
         {
             try
@@ -36,23 +37,17 @@ namespace Application.Features.Addresses.RequestHandlers.Commands
                     return httpResponseDto1;
                 }
 
-                var topic = Environment.GetEnvironmentVariable("KAFKA_TOPIC");
+                var topic = Environment.GetEnvironmentVariable(addressEventsTopicEnvironmentVariable);
 
                 if (topic == null)
                 {
-                    var ex = new ArgumentNullException("KAFKA_TOPIC environment variable is not set.");
+                    var ex = new ArgumentNullException($"Environment variable {addressEventsTopicEnvironmentVariable} is not found.");
                     var httpResponseDto1 = new HttpResponseDto<CreateAddressRequest>(ex.Message, StatusCodes.Status400BadRequest);
                     logger.LogError(ex, "Error HandleCreateAddress {@HttpResponseDto}.", httpResponseDto1);
                     return httpResponseDto1;
                 }
 
-                var addressAggregate = new AddressAggregate(
-                    createAddressRequest.StreetAddress,
-                    createAddressRequest.PostalCode,
-                    createAddressRequest.City,
-                    createAddressRequest.State,
-                    createAddressRequest.Country);
-
+                var addressAggregate = new AddressAggregate(createAddressRequest.StreetAddress, createAddressRequest.PostalCode, createAddressRequest.City, createAddressRequest.State, createAddressRequest.Country);
                 await eventSourcingHandler.SaveAsync(topic, addressAggregate);
 
                 var httpResponseDto = new HttpResponseDto<CreateAddressRequest>(createAddressRequest, StatusCodes.Status201Created);

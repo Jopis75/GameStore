@@ -1,6 +1,6 @@
 ﻿namespace Application.Interfaces.EventSourcing.Consumers
 {
-    public interface IEventConsumer
+    public interface IAddressEventConsumer
     {
         void Consume(string topic, CancellationToken cancellationToken);
     }

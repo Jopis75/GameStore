@@ -1,4 +1,4 @@
-﻿using Application.Aggregates.Addresses;
+﻿using Application.Aggregates;
 using Application.Dtos.General;
 using Application.Features.Addresses.Requests.Commands;
 using Application.Interfaces.EventSourcing.Handlers;

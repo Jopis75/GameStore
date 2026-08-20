@@ -2,14 +2,14 @@
 {
     public class AddressCreatedEvent() : EventBase(nameof(AddressCreatedEvent))
     {
-        public string City { get; set; } = String.Empty;
+        public string City { get; set; } = default!;
 
-        public string Country { get; set; } = String.Empty;
+        public string Country { get; set; } = default!;
 
-        public string PostalCode { get; set; } = String.Empty;
+        public string PostalCode { get; set; } = default!;
 
-        public string State { get; set; } = String.Empty;
+        public string State { get; set; } = default!;
 
-        public string StreetAddress { get; set; } = String.Empty;
+        public string StreetAddress { get; set; } = default!;
     }
 }

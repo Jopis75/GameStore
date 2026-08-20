@@ -1,4 +1,4 @@
-﻿using Application.Aggregates.Addresses;
+﻿using Application.Aggregates;
 using Application.Interfaces.EventSourcing;
 using Application.Interfaces.EventSourcing.Handlers;
 

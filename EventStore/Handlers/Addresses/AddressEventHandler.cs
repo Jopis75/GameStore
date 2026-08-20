@@ -1,5 +1,5 @@
 ﻿using Application.Events.Addresses;
-using Application.Interfaces.EventSourcing.Handlers.Addresses;
+using Application.Interfaces.EventSourcing.Handlers;
 using Application.Interfaces.Persistance;
 using AutoMapper;
 using Domain.Dtos;

@@ -1,6 +1,6 @@
 ﻿using Application.Events.Addresses;
 
-namespace Application.Aggregates.Addresses
+namespace Application.Aggregates
 {
     public class AddressAggregate : AggregateRoot
     {

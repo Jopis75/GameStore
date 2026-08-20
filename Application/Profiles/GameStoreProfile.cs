@@ -1,5 +1,4 @@
-﻿using Application.Aggregates.Addresses;
-using Application.Dtos.Identity;
+﻿using Application.Dtos.Identity;
 using Application.Events.Addresses;
 using Application.Features.Addresses.Requests.Commands;
 using Application.Features.Companies.Requests.Commands;
@@ -13,7 +12,6 @@ using Application.Models.Identity;
 using AutoMapper;
 using Domain.Dtos;
 using Domain.Entities;
-using MongoDB.Driver;
 using Console = Domain.Entities.Console;
 
 namespace Application.Profiles

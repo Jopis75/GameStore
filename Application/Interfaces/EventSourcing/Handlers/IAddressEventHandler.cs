@@ -1,6 +1,6 @@
 ﻿using Application.Events.Addresses;
 
-namespace Application.Interfaces.EventSourcing.Handlers.Addresses
+namespace Application.Interfaces.EventSourcing.Handlers
 {
     public interface IAddressEventHandler
     {

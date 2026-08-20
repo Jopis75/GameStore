@@ -52,7 +52,7 @@ namespace Application.Aggregates
             RaiseEvent(companyCreatedEvent);
         }
 
-        private void DeleteCompany()
+        public void DeleteCompany()
         {
             if (Active == false)
             {
@@ -67,11 +67,11 @@ namespace Application.Aggregates
             RaiseEvent(companyDeletedEvent);
         }
 
-        private void UpdateCompany(string name, string tradeName, CompanyType companyType, Industry industry, int? parentCompanyId, int headquarterId, string? logoImageUri, string emailAddress, string phoneNumber, string? websiteUrl)
+        public void UpdateCompany(string name, string tradeName, CompanyType companyType, Industry industry, int? parentCompanyId, int headquarterId, string? logoImageUri, string emailAddress, string phoneNumber, string? websiteUrl)
         {
             if (Active == false)
             {
-                throw new InvalidOperationException($"Unable to delete the inactive company with Id {Id}.");
+                throw new InvalidOperationException($"Unable to update the inactive company with Id {Id}.");
             }
 
             var companyUpdatedEvent = new CompanyUpdatedEvent

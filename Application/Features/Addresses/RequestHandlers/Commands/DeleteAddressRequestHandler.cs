@@ -1,7 +1,7 @@
 ﻿using Application.Aggregates;
 using Application.Dtos.General;
 using Application.Features.Addresses.Requests.Commands;
-using Application.Interfaces.EventSourcing.Handlers;
+using Application.Interfaces.EventSourcing.EventSourcingHandlers;
 using FluentValidation;
 using MediatR;
 using Microsoft.AspNetCore.Http;

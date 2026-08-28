@@ -1,6 +1,6 @@
 ﻿using Application.Aggregates;
 
-namespace Application.Interfaces.EventSourcing.Handlers
+namespace Application.Interfaces.EventSourcing.EventSourcingHandlers
 {
     public interface IEventSourcingHandler<TAggregate>
         where TAggregate : AggregateRoot

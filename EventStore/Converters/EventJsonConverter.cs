@@ -1,5 +1,6 @@
 ﻿using Application.Events;
 using Application.Events.Addresses;
+using Application.Events.Companies;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
@@ -32,6 +33,9 @@ namespace EventSourcing.Converters
                 "AddressCreatedEvent" => JsonSerializer.Deserialize<AddressCreatedEvent>(json, options),
                 "AddressDeletedEvent" => JsonSerializer.Deserialize<AddressDeletedEvent>(json, options),
                 "AddressUpdatedEvent" => JsonSerializer.Deserialize<AddressUpdatedEvent>(json, options),
+                "CompanyCreatedEvent" => JsonSerializer.Deserialize<CompanyCreatedEvent>(json, options),
+                "CompanyDeletedEvent" => JsonSerializer.Deserialize<CompanyDeletedEvent>(json, options),
+                "CompanyUpdatedEvent" => JsonSerializer.Deserialize<CompanyUpdatedEvent>(json, options),
                 _ => throw new JsonException($"Unknown event type: {typeName}")
             };
         }

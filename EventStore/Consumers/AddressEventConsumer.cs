@@ -1,6 +1,6 @@
 ﻿using Application.Events;
 using Application.Interfaces.EventSourcing.Consumers;
-using Application.Interfaces.EventSourcing.Handlers;
+using Application.Interfaces.EventSourcing.EventHandlers;
 using Confluent.Kafka;
 using EventSourcing.Converters;
 using Microsoft.Extensions.Options;

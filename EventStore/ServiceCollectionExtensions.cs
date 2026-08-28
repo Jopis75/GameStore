@@ -1,12 +1,14 @@
 ﻿using Application.Aggregates;
 using Application.Interfaces.EventSourcing;
 using Application.Interfaces.EventSourcing.Consumers;
-using Application.Interfaces.EventSourcing.Handlers;
+using Application.Interfaces.EventSourcing.EventHandlers;
+using Application.Interfaces.EventSourcing.EventSourcingHandlers;
 using Application.Interfaces.EventSourcing.Producers;
 using Confluent.Kafka;
 using EventSourcing.Configurations;
 using EventSourcing.Consumers;
-using EventSourcing.Handlers.Addresses;
+using EventSourcing.EventHandlers;
+using EventSourcing.EventSourcingHandlers;
 using EventSourcing.Producers;
 using EventSourcing.Repositories;
 using EventSourcing.Services;
@@ -49,7 +51,9 @@ namespace EventSourcing
         private static IServiceCollection AddHandlers(this IServiceCollection serviceCollection)
         {
             serviceCollection.AddScoped<IAddressEventHandler, AddressEventHandler>();
-            serviceCollection.AddScoped<IEventSourcingHandler<AddressAggregate>, AddressEventSourcingHandler>();
+            serviceCollection.AddScoped<ICompanyEventHandler, CompanyEventHandler>();
+            serviceCollection.AddScoped<IAddressEventSourcingHandler, AddressEventSourcingHandler>();
+            serviceCollection.AddScoped<ICompanyEventSourcingHandler, CompanyEventSourcingHandler>();
 
             return serviceCollection;
         }
@@ -57,7 +61,7 @@ namespace EventSourcing
         private static IServiceCollection AddProducers(this IServiceCollection serviceCollection)
         {
             serviceCollection.AddScoped<IEventProducer, EventProducer>();
-           
+
             return serviceCollection;
         }
 

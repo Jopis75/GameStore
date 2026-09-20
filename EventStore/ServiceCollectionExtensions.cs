@@ -1,5 +1,4 @@
-﻿using Application.Aggregates;
-using Application.Interfaces.EventSourcing;
+﻿using Application.Interfaces.EventSourcing;
 using Application.Interfaces.EventSourcing.Consumers;
 using Application.Interfaces.EventSourcing.EventHandlers;
 using Application.Interfaces.EventSourcing.EventSourcingHandlers;
@@ -27,7 +26,6 @@ namespace EventSourcing
             serviceCollection.AddHandlers();
             serviceCollection.AddProducers();
             serviceCollection.AddConsumers();
-
             return serviceCollection;
         }
 
@@ -36,7 +34,6 @@ namespace EventSourcing
             serviceCollection.Configure<MongoDbConfig>(configuration.GetSection("MongoDbConfig"));
             serviceCollection.Configure<ProducerConfig>(configuration.GetSection("ProducerConfig"));
             serviceCollection.Configure<ConsumerConfig>(configuration.GetSection("ConsumerConfig"));
-
             return serviceCollection;
         }
 
@@ -44,7 +41,6 @@ namespace EventSourcing
         {
             serviceCollection.AddScoped<IAddressEventConsumer, AddressEventConsumer>();
             serviceCollection.AddHostedService<ConsumerHostedService>();
-
             return serviceCollection;
         }
 
@@ -54,28 +50,24 @@ namespace EventSourcing
             serviceCollection.AddScoped<ICompanyEventHandler, CompanyEventHandler>();
             serviceCollection.AddScoped<IAddressEventSourcingHandler, AddressEventSourcingHandler>();
             serviceCollection.AddScoped<ICompanyEventSourcingHandler, CompanyEventSourcingHandler>();
-
             return serviceCollection;
         }
 
         private static IServiceCollection AddProducers(this IServiceCollection serviceCollection)
         {
             serviceCollection.AddScoped<IEventProducer, EventProducer>();
-
             return serviceCollection;
         }
 
         private static IServiceCollection AddRepositories(this IServiceCollection serviceCollection)
         {
             serviceCollection.AddScoped<IEventStoreRepository, EventStoreRepository>();
-
             return serviceCollection;
         }
 
         private static IServiceCollection AddServices(this IServiceCollection serviceCollection)
         {
             serviceCollection.AddScoped<IEventStoreService, EventStoreService>();
-
             return serviceCollection;
         }
     }

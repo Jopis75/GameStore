@@ -17,12 +17,10 @@ namespace Identity
         public static IServiceCollection AddIdentityServices(this IServiceCollection serviceCollection, IConfiguration configuration)
         {
             serviceCollection.Configure<JwtSettings>(configuration.GetSection("JwtSettings"));
-
             serviceCollection.AddDbContext(configuration);
             serviceCollection.AddIdentity();
             serviceCollection.AddServices();
             serviceCollection.AddAuthentication(configuration);
-
             return serviceCollection;
         }
 
@@ -48,16 +46,13 @@ namespace Identity
                         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["JwtSettings:Key"]))
                     };
                 });
-
             return serviceCollection;
         }
 
         private static IServiceCollection AddDbContext(this IServiceCollection serviceCollection, IConfiguration configuration)
         {
             serviceCollection.AddDbContext<GameStoreIdentityDbContext>(dbContextOptionsBuilder =>
-                dbContextOptionsBuilder.UseSqlServer(configuration.GetConnectionString("GameStoreIdentityConnectionString"))); //, 
-                                                                                                                               //sqlServerDbContextOptionsBuilder => sqlServerDbContextOptionsBuilder.MigrationsAssembly(typeof(GameStoreIdentityDbContext).Assembly.FullName)));
-
+                dbContextOptionsBuilder.UseSqlServer(configuration.GetConnectionString("GameStoreIdentityConnectionString")));
             return serviceCollection;
         }
 
@@ -67,7 +62,6 @@ namespace Identity
                 .AddIdentity<ApplicationUser, IdentityRole>()
                 .AddEntityFrameworkStores<GameStoreIdentityDbContext>()
                 .AddDefaultTokenProviders();
-
             return serviceCollection;
         }
 
@@ -75,7 +69,6 @@ namespace Identity
         {
             serviceCollection.AddTransient<IAuthenticationService, AuthenticationService>();
             serviceCollection.AddTransient<IUserService, UserService>();
-
             return serviceCollection;
         }
     }

@@ -1,11 +1,10 @@
 ﻿using Application.Dtos.General;
-using Domain.Dtos;
 using Domain.Enums;
 using MediatR;
 
 namespace Application.Features.Companies.Requests.Commands
 {
-    public class UpdateCompanyRequest : IRequest<HttpResponseDto<CompanyDto>>
+    public class UpdateCompanyRequest : IRequest<HttpResponseDto<UpdateCompanyRequest>>
     {
         public CompanyType CompanyType { get; set; }
 

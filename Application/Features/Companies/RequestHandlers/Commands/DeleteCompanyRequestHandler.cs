@@ -1,7 +1,6 @@
 ﻿using Application.Dtos.General;
 using Application.Features.Companies.Requests.Commands;
-using Application.Interfaces.Persistance;
-using Domain.Dtos;
+using Application.Interfaces.EventSourcing.EventSourcingHandlers;
 using FluentValidation;
 using MediatR;
 using Microsoft.AspNetCore.Http;
@@ -9,21 +8,21 @@ using Microsoft.Extensions.Logging;
 
 namespace Application.Features.Companies.RequestHandlers.Commands
 {
-    public class DeleteCompanyRequestHandler(IUnitOfWork unitOfWork, IValidator<DeleteCompanyRequest> validator, ILogger<DeleteCompanyRequestHandler> logger) : IRequestHandler<DeleteCompanyRequest, HttpResponseDto<CompanyDto>>
+    public class DeleteCompanyRequestHandler(ICompanyEventSourcingHandler companyEventSourcingHandler, IValidator<DeleteCompanyRequest> validator, ILogger<DeleteCompanyRequestHandler> logger) : IRequestHandler<DeleteCompanyRequest, HttpResponseDto<DeleteCompanyRequest>>
     {
-        public async Task<HttpResponseDto<CompanyDto>> Handle(DeleteCompanyRequest deleteCompanyRequest, CancellationToken cancellationToken)
-        {
-            await unitOfWork.BeginTransactionAsync(cancellationToken);
+        private readonly string companyEventsTopicEnvironmentVariable = "COMPANY_EVENTS_TOPIC";
 
+        public async Task<HttpResponseDto<DeleteCompanyRequest>> Handle(DeleteCompanyRequest deleteCompanyRequest, CancellationToken cancellationToken)
+        {
             try
             {
-                logger.LogInformation("Begin DeleteCompany {@DeleteCompanyRequest}.", deleteCompanyRequest);
+                logger.LogInformation("Begin HandleDeleteCompany {@DeleteCompanyRequest}.", deleteCompanyRequest);
 
                 if (deleteCompanyRequest == null)
                 {
                     var ex = new ArgumentNullException(nameof(deleteCompanyRequest));
-                    var httpResponseDto1 = new HttpResponseDto<CompanyDto>(ex.Message, StatusCodes.Status400BadRequest);
-                    logger.LogError(ex, "Error DeleteCompany {@HttpResponseDto}.", httpResponseDto1);
+                    var httpResponseDto1 = new HttpResponseDto<DeleteCompanyRequest>(ex.Message, StatusCodes.Status400BadRequest);
+                    logger.LogError(ex, "Error HandleDeleteCompany {@HttpResponseDto}.", httpResponseDto1);
                     return httpResponseDto1;
                 }
 
@@ -32,33 +31,39 @@ namespace Application.Features.Companies.RequestHandlers.Commands
                 if (validationResult.IsValid == false)
                 {
                     var ex = new ValidationException(validationResult.Errors);
-                    var httpResponseDto1 = new HttpResponseDto<CompanyDto>(ex.Message, StatusCodes.Status400BadRequest);
-                    logger.LogError(ex, "Error DeleteCompany {@HttpResponseDto}.", httpResponseDto1);
+                    var httpResponseDto1 = new HttpResponseDto<DeleteCompanyRequest>(ex.Message, StatusCodes.Status400BadRequest);
+                    logger.LogError(ex, "Error HandleDeleteCompany {@HttpResponseDto}.", httpResponseDto1);
                     return httpResponseDto1;
                 }
 
-                var deletedCompanyDto = await unitOfWork.CompanyRepository.DeleteByIdAsync(deleteCompanyRequest.Id, cancellationToken);
+                var topic = Environment.GetEnvironmentVariable(companyEventsTopicEnvironmentVariable);
 
-                await unitOfWork.CommitTransactionAsync(cancellationToken);
+                if (topic == null)
+                {
+                    var ex = new ArgumentNullException($"Environment variable {companyEventsTopicEnvironmentVariable} is not found.");
+                    var httpResponseDto1 = new HttpResponseDto<DeleteCompanyRequest>(ex.Message, StatusCodes.Status400BadRequest);
+                    logger.LogError(ex, "Error HandleDeleteCompany {@HttpResponseDto}.", httpResponseDto1);
+                    return httpResponseDto1;
+                }
 
-                var httpResponseDto = new HttpResponseDto<CompanyDto>(deletedCompanyDto, StatusCodes.Status200OK);
-                logger.LogInformation("Done DeleteCompany {@HttpResponseDto}.", httpResponseDto);
+                var companyAggregate = await companyEventSourcingHandler.ReadByAggregateIdAsync(deleteCompanyRequest.Id);
+                companyAggregate.DeleteCompany();
+                await companyEventSourcingHandler.SaveAsync(topic, companyAggregate);
+
+                var httpResponseDto = new HttpResponseDto<DeleteCompanyRequest>(deleteCompanyRequest, StatusCodes.Status200OK);
+                logger.LogInformation("Done HandleDeleteCompany {@HttpResponseDto}.", httpResponseDto);
                 return httpResponseDto;
             }
             catch (OperationCanceledException ex)
             {
-                await unitOfWork.RollbackTransactionAsync(cancellationToken);
-
-                var httpResponseDto1 = new HttpResponseDto<CompanyDto>(ex.Message, StatusCodes.Status500InternalServerError);
-                logger.LogError(ex, "Canceled DeleteCompany {@HttpResponseDto}.", httpResponseDto1);
+                var httpResponseDto1 = new HttpResponseDto<DeleteCompanyRequest>(ex.Message, StatusCodes.Status500InternalServerError);
+                logger.LogError(ex, "Canceled HandleDeleteCompany {@HttpResponseDto}.", httpResponseDto1);
                 return httpResponseDto1;
             }
             catch (Exception ex)
             {
-                await unitOfWork.RollbackTransactionAsync(cancellationToken);
-
-                var httpResponseDto1 = new HttpResponseDto<CompanyDto>(ex.Message, StatusCodes.Status500InternalServerError);
-                logger.LogError(ex, "Error DeleteCompany {@HttpResponseDto}.", httpResponseDto1);
+                var httpResponseDto1 = new HttpResponseDto<DeleteCompanyRequest>(ex.Message, StatusCodes.Status500InternalServerError);
+                logger.LogError(ex, "Error HandleDeleteCompany {@HttpResponseDto}.", httpResponseDto1);
                 return httpResponseDto1;
             }
         }

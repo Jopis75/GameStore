@@ -1,5 +1,4 @@
-﻿using Application.Aggregates;
-using Application.Dtos.General;
+﻿using Application.Dtos.General;
 using Application.Features.Addresses.Requests.Commands;
 using Application.Interfaces.EventSourcing.EventSourcingHandlers;
 using FluentValidation;
@@ -9,7 +8,7 @@ using Microsoft.Extensions.Logging;
 
 namespace Application.Features.Addresses.RequestHandlers.Commands
 {
-    public class UpdateAddressRequestHandler(IEventSourcingHandler<AddressAggregate> eventSourcingHandler, IValidator<UpdateAddressRequest> validator, ILogger<UpdateAddressRequestHandler> logger) : IRequestHandler<UpdateAddressRequest, HttpResponseDto<UpdateAddressRequest>>
+    public class UpdateAddressRequestHandler(IAddressEventSourcingHandler addressEventSourcingHandler, IValidator<UpdateAddressRequest> validator, ILogger<UpdateAddressRequestHandler> logger) : IRequestHandler<UpdateAddressRequest, HttpResponseDto<UpdateAddressRequest>>
     {
         private readonly string addressEventsTopicEnvironmentVariable = "ADDRESS_EVENTS_TOPIC";
 
@@ -47,9 +46,9 @@ namespace Application.Features.Addresses.RequestHandlers.Commands
                     return httpResponseDto1;
                 }
 
-                var addressAggregate = await eventSourcingHandler.ReadByAggregateIdAsync(updateAddressRequest.Id);
+                var addressAggregate = await addressEventSourcingHandler.ReadByAggregateIdAsync(updateAddressRequest.Id);
                 addressAggregate.UpdateAddress(updateAddressRequest.StreetAddress, updateAddressRequest.PostalCode, updateAddressRequest.City, updateAddressRequest.State, updateAddressRequest.Country);
-                await eventSourcingHandler.SaveAsync(topic, addressAggregate);
+                await addressEventSourcingHandler.SaveAsync(topic, addressAggregate);
 
                 var httpResponseDto = new HttpResponseDto<UpdateAddressRequest>(updateAddressRequest, StatusCodes.Status200OK);
                 logger.LogInformation("Done HandleUpdateAddress {@HttpResponseDto}.", httpResponseDto);

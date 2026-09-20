@@ -1,6 +1,8 @@
-﻿namespace Application.Interfaces.EventSourcing.EventSourcingHandlers
+﻿using Application.Aggregates;
+
+namespace Application.Interfaces.EventSourcing.EventSourcingHandlers
 {
-    public interface IAddressEventSourcingHandler
+    public interface IAddressEventSourcingHandler : IEventSourcingHandlerBase<AddressAggregate>
     {
     }
 }

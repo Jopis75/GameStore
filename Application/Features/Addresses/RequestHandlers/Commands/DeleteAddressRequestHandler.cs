@@ -1,5 +1,4 @@
-﻿using Application.Aggregates;
-using Application.Dtos.General;
+﻿using Application.Dtos.General;
 using Application.Features.Addresses.Requests.Commands;
 using Application.Interfaces.EventSourcing.EventSourcingHandlers;
 using FluentValidation;
@@ -9,7 +8,7 @@ using Microsoft.Extensions.Logging;
 
 namespace Application.Features.Addresses.RequestHandlers.Commands
 {
-    public class DeleteAddressRequestHandler(IEventSourcingHandler<AddressAggregate> eventSourcingHandler, IValidator<DeleteAddressRequest> validator, ILogger<DeleteAddressRequestHandler> logger) : IRequestHandler<DeleteAddressRequest, HttpResponseDto<DeleteAddressRequest>>
+    public class DeleteAddressRequestHandler(IAddressEventSourcingHandler addressEventSourcingHandler, IValidator<DeleteAddressRequest> validator, ILogger<DeleteAddressRequestHandler> logger) : IRequestHandler<DeleteAddressRequest, HttpResponseDto<DeleteAddressRequest>>
     {
         private readonly string addressEventsTopicEnvironmentVariable = "ADDRESS_EVENTS_TOPIC";
 
@@ -47,9 +46,9 @@ namespace Application.Features.Addresses.RequestHandlers.Commands
                     return httpResponseDto1;
                 }
 
-                var addressAggregate = await eventSourcingHandler.ReadByAggregateIdAsync(deleteAddressRequest.Id);
+                var addressAggregate = await addressEventSourcingHandler.ReadByAggregateIdAsync(deleteAddressRequest.Id);
                 addressAggregate.DeleteAddress();
-                await eventSourcingHandler.SaveAsync(topic, addressAggregate);
+                await addressEventSourcingHandler.SaveAsync(topic, addressAggregate);
 
                 var httpResponseDto = new HttpResponseDto<DeleteAddressRequest>(deleteAddressRequest, StatusCodes.Status200OK);
                 logger.LogInformation("Done HandleDeleteAddress {@HttpResponseDto}.", httpResponseDto);

@@ -14,7 +14,6 @@ namespace Persistance
             serviceCollection.AddDbContext(configuration);
             serviceCollection.AddRepositories();
             serviceCollection.AddUnitOfWork();
-
             return serviceCollection;
         }
 
@@ -23,7 +22,6 @@ namespace Persistance
             Action<DbContextOptionsBuilder> dbContextOptionsBuilder = dbContextOptionsBuilder => dbContextOptionsBuilder.UseSqlServer(configuration.GetConnectionString("GameStoreConnectionString"));
             serviceCollection.AddDbContext<GameStoreDbContext>(dbContextOptionsBuilder);
             serviceCollection.AddSingleton(new GameStoreDbContextFactory(dbContextOptionsBuilder));
-
             return serviceCollection;
         }
 
@@ -38,14 +36,12 @@ namespace Persistance
             serviceCollection.AddScoped<ITrophyRepository, TrophyRepository>();
             serviceCollection.AddScoped<IVideoGameGenreRepository, VideoGameGenreRepository>();
             serviceCollection.AddScoped<IVideoGameRepository, VideoGameRepository>();
-
             return serviceCollection;
         }
 
         private static IServiceCollection AddUnitOfWork(this IServiceCollection serviceCollection)
         {
             serviceCollection.AddScoped<IUnitOfWork, UnitOfWork>();
-
             return serviceCollection;
         }
     }

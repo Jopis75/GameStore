@@ -15,7 +15,6 @@ namespace Infrastructure
             serviceCollection.AddEmailSender(configuration);
             serviceCollection.AddAzureServiceClients(configuration);
             serviceCollection.AddServices();
-
             return serviceCollection;
         }
 
@@ -29,7 +28,6 @@ namespace Infrastructure
                 // Set up any default settings.
                 azureClientFactoryBuilder.ConfigureDefaults(configuration.GetSection("AzureDefaults"));
             });
-
             return serviceCollection;
         }
 
@@ -37,7 +35,6 @@ namespace Infrastructure
         {
             serviceCollection.Configure<EmailSettings>(configuration.GetSection("EmailSettings"));
             serviceCollection.AddTransient<IEmailSender, EmailSender>();
-
             return serviceCollection;
         }
 
@@ -46,7 +43,7 @@ namespace Infrastructure
             serviceCollection.AddScoped<IAzureBlobStorageService, AzureBlobStorageService>();
             serviceCollection.AddScoped<IGameStoreFileService, GameStoreFileService>();
             serviceCollection.AddScoped<IExcelFileService, ExcelFileService>();
-
+            serviceCollection.AddScoped(typeof(ILoggerService<>), typeof(LoggerService<>));
             return serviceCollection;
         }
     }

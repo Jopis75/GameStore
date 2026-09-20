@@ -4,7 +4,7 @@ using Application.Interfaces.EventSourcing.EventSourcingHandlers;
 
 namespace EventSourcing.EventSourcingHandlers
 {
-    public abstract class EventSourcingHandlerBase<TAggregate>(IEventStoreService eventStoreService) : IEventSourcingHandler<TAggregate>
+    public abstract class EventSourcingHandlerBase<TAggregate>(IEventStoreService eventStoreService) : IEventSourcingHandlerBase<TAggregate>
         where TAggregate : AggregateRoot, new()
     {
         public async Task<TAggregate> ReadByAggregateIdAsync(int aggregateId)

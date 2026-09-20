@@ -2,69 +2,55 @@
 using Application.Dtos.General;
 using Application.Features.Addresses.Requests.Commands;
 using Application.Interfaces.EventSourcing.EventSourcingHandlers;
+using Application.Interfaces.Infrastructure;
 using FluentValidation;
 using MediatR;
 using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.Logging;
 
 namespace Application.Features.Addresses.RequestHandlers.Commands
 {
-    public class CreateAddressRequestHandler(IEventSourcingHandler<AddressAggregate> eventSourcingHandler, IValidator<CreateAddressRequest> validator, ILogger<CreateAddressRequestHandler> logger) : IRequestHandler<CreateAddressRequest, HttpResponseDto<CreateAddressRequest>>
+    public class CreateAddressRequestHandler(IAddressEventSourcingHandler addressEventSourcingHandler, IValidator<CreateAddressRequest> validator, ILoggerService<CreateAddressRequestHandler> loggerService) : IRequestHandler<CreateAddressRequest, HttpResponseDto<CreateAddressRequest>>
     {
-        private readonly string addressEventsTopicEnvironmentVariable = "ADDRESS_EVENTS_TOPIC";
-
         public async Task<HttpResponseDto<CreateAddressRequest>> Handle(CreateAddressRequest createAddressRequest, CancellationToken cancellationToken)
         {
+            var methodName = "CreateAddressRequestHandler.Handle";
+            var addressEventsTopicEnvironmentVariable = "ADDRESS_EVENTS_TOPIC";
+
             try
             {
-                logger.LogInformation("Begin HandleCreateAddress {@CreateAddressRequest}.", createAddressRequest);
+                loggerService.LogBeginInformation(methodName, createAddressRequest);
 
                 if (createAddressRequest == null)
                 {
-                    var ex = new ArgumentNullException(nameof(createAddressRequest));
-                    var httpResponseDto1 = new HttpResponseDto<CreateAddressRequest>(ex.Message, StatusCodes.Status400BadRequest);
-                    logger.LogError(ex, "Error HandleCreateAddress {@HttpResponseDto}.", httpResponseDto1);
-                    return httpResponseDto1;
+                    return loggerService.LogArgumentNullException<CreateAddressRequest>(new ArgumentNullException(nameof(createAddressRequest)), methodName);
                 }
 
                 var validationResult = await validator.ValidateAsync(createAddressRequest, cancellationToken);
 
                 if (validationResult.IsValid == false)
                 {
-                    var ex = new ValidationException(validationResult.Errors);
-                    var httpResponseDto1 = new HttpResponseDto<CreateAddressRequest>(ex.Message, StatusCodes.Status400BadRequest);
-                    logger.LogError(ex, "Error HandleCreateAddress {@HttpResponseDto}.", httpResponseDto1);
-                    return httpResponseDto1;
+                    return loggerService.LogValidationException<CreateAddressRequest>(new ValidationException(validationResult.Errors), methodName);
                 }
 
                 var topic = Environment.GetEnvironmentVariable(addressEventsTopicEnvironmentVariable);
 
                 if (topic == null)
                 {
-                    var ex = new ArgumentNullException($"Environment variable {addressEventsTopicEnvironmentVariable} is not found.");
-                    var httpResponseDto1 = new HttpResponseDto<CreateAddressRequest>(ex.Message, StatusCodes.Status400BadRequest);
-                    logger.LogError(ex, "Error HandleCreateAddress {@HttpResponseDto}.", httpResponseDto1);
-                    return httpResponseDto1;
+                    return loggerService.LogArgumentNullException<CreateAddressRequest>(new ArgumentNullException($"Environment variable {addressEventsTopicEnvironmentVariable} is not found."), methodName);
                 }
 
                 var addressAggregate = new AddressAggregate(createAddressRequest.StreetAddress, createAddressRequest.PostalCode, createAddressRequest.City, createAddressRequest.State, createAddressRequest.Country);
-                await eventSourcingHandler.SaveAsync(topic, addressAggregate);
+                await addressEventSourcingHandler.SaveAsync(topic, addressAggregate);
 
-                var httpResponseDto = new HttpResponseDto<CreateAddressRequest>(createAddressRequest, StatusCodes.Status201Created);
-                logger.LogInformation("Done HandleCreateAddress {@HttpResponseDto}.", httpResponseDto);
-                return httpResponseDto;
+                return loggerService.LogDoneInformation(methodName, createAddressRequest, StatusCodes.Status201Created);
             }
             catch (OperationCanceledException ex)
             {
-                var httpResponseDto1 = new HttpResponseDto<CreateAddressRequest>(ex.Message, StatusCodes.Status500InternalServerError);
-                logger.LogError(ex, "Canceled HandleCreateAddress {@HttpResponseDto}.", httpResponseDto1);
-                return httpResponseDto1;
+                return loggerService.LogOperationCanceledException<CreateAddressRequest>(ex, methodName);
             }
             catch (Exception ex)
             {
-                var httpResponseDto1 = new HttpResponseDto<CreateAddressRequest>(ex.Message, StatusCodes.Status500InternalServerError);
-                logger.LogError(ex, "Error HandleCreateAddress {@HttpResponseDto}.", httpResponseDto1);
-                return httpResponseDto1;
+                return loggerService.LogException<CreateAddressRequest>(ex, methodName);
             }
         }
     }

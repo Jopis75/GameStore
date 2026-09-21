@@ -1,70 +1,58 @@
 ﻿using Application.Dtos.General;
 using Application.Features.Addresses.Requests.Commands;
 using Application.Interfaces.EventSourcing.EventSourcingHandlers;
+using Application.Interfaces.Infrastructure;
 using FluentValidation;
 using MediatR;
 using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.Logging;
 
 namespace Application.Features.Addresses.RequestHandlers.Commands
 {
-    public class DeleteAddressRequestHandler(IAddressEventSourcingHandler addressEventSourcingHandler, IValidator<DeleteAddressRequest> validator, ILogger<DeleteAddressRequestHandler> logger) : IRequestHandler<DeleteAddressRequest, HttpResponseDto<DeleteAddressRequest>>
+    public class DeleteAddressRequestHandler(IAddressEventSourcingHandler addressEventSourcingHandler, IValidator<DeleteAddressRequest> validator, ILoggerService<DeleteAddressRequestHandler> loggerService) : IRequestHandler<DeleteAddressRequest, HttpResponseDto<DeleteAddressRequest>>
     {
         private readonly string addressEventsTopicEnvironmentVariable = "ADDRESS_EVENTS_TOPIC";
 
         public async Task<HttpResponseDto<DeleteAddressRequest>> Handle(DeleteAddressRequest deleteAddressRequest, CancellationToken cancellationToken)
         {
+            var methodName = "DeleteAddressRequestHandler.Handle";
+            var addressEventsTopicEnvironmentVariable = "ADDRESS_EVENTS_TOPIC";
+
             try
             {
-                logger.LogInformation("Begin HandleDeleteAddress {@DeleteAddressRequest}.", deleteAddressRequest);
+                loggerService.LogBeginInformation(methodName, deleteAddressRequest);
 
                 if (deleteAddressRequest == null)
                 {
-                    var ex = new ArgumentNullException(nameof(deleteAddressRequest));
-                    var httpResponseDto1 = new HttpResponseDto<DeleteAddressRequest>(ex.Message, StatusCodes.Status400BadRequest);
-                    logger.LogError(ex, "Error HandleDeleteAddress {@HttpResponseDto}.", httpResponseDto1);
-                    return httpResponseDto1;
+                    return loggerService.LogArgumentNullException<DeleteAddressRequest>(new ArgumentNullException(nameof(deleteAddressRequest)), methodName);
                 }
 
                 var validationResult = await validator.ValidateAsync(deleteAddressRequest, cancellationToken);
 
                 if (validationResult.IsValid == false)
                 {
-                    var ex = new ValidationException(validationResult.Errors);
-                    var httpResponseDto1 = new HttpResponseDto<DeleteAddressRequest>(ex.Message, StatusCodes.Status400BadRequest);
-                    logger.LogError(ex, "Error HandleDeleteAddress {@HttpResponseDto}.", httpResponseDto1);
-                    return httpResponseDto1;
+                    return loggerService.LogValidationException<DeleteAddressRequest>(new ValidationException(validationResult.Errors), methodName);
                 }
 
                 var topic = Environment.GetEnvironmentVariable(addressEventsTopicEnvironmentVariable);
 
                 if (topic == null)
                 {
-                    var ex = new ArgumentNullException($"Environment variable {addressEventsTopicEnvironmentVariable} is not found.");
-                    var httpResponseDto1 = new HttpResponseDto<DeleteAddressRequest>(ex.Message, StatusCodes.Status400BadRequest);
-                    logger.LogError(ex, "Error HandleDeleteAddress {@HttpResponseDto}.", httpResponseDto1);
-                    return httpResponseDto1;
+                    return loggerService.LogArgumentNullException<DeleteAddressRequest>(new ArgumentNullException($"Environment variable {addressEventsTopicEnvironmentVariable} is not found."), methodName);
                 }
 
                 var addressAggregate = await addressEventSourcingHandler.ReadByAggregateIdAsync(deleteAddressRequest.Id);
                 addressAggregate.DeleteAddress();
                 await addressEventSourcingHandler.SaveAsync(topic, addressAggregate);
 
-                var httpResponseDto = new HttpResponseDto<DeleteAddressRequest>(deleteAddressRequest, StatusCodes.Status200OK);
-                logger.LogInformation("Done HandleDeleteAddress {@HttpResponseDto}.", httpResponseDto);
-                return httpResponseDto;
+                return loggerService.LogDoneInformation(methodName, deleteAddressRequest, StatusCodes.Status200OK);
             }
             catch (OperationCanceledException ex)
             {
-                var httpResponseDto1 = new HttpResponseDto<DeleteAddressRequest>(ex.Message, StatusCodes.Status500InternalServerError);
-                logger.LogError(ex, "Canceled HandleDeleteAddress {@HttpResponseDto}.", httpResponseDto1);
-                return httpResponseDto1;
+                return loggerService.LogOperationCanceledException<DeleteAddressRequest>(ex, methodName);
             }
             catch (Exception ex)
             {
-                var httpResponseDto1 = new HttpResponseDto<DeleteAddressRequest>(ex.Message, StatusCodes.Status500InternalServerError);
-                logger.LogError(ex, "Error HandleDeleteAddress {@HttpResponseDto}.", httpResponseDto1);
-                return httpResponseDto1;
+                return loggerService.LogException<DeleteAddressRequest>(ex, methodName);
             }
         }
     }

@@ -12,6 +12,7 @@
 - Service Layer Pattern.
 - Repository Pattern.
 - UnitOfWork Pattern.
+- Factory Pattern.
 - DTO Pattern.
 - Null Object Pattern.
 - AutoMapper.

@@ -36,7 +36,7 @@ namespace Application.Features.Addresses.RequestHandlers.Commands
 
                 if (topic == null)
                 {
-                    return loggerService.LogArgumentNullException<UpdateAddressRequest>(new ArgumentNullException($"Environment variable {addressEventsTopicEnvironmentVariable} is not found."), methodName);
+                    return loggerService.LogArgumentNullException<UpdateAddressRequest>(new ArgumentNullException($"Could not find environment variable {addressEventsTopicEnvironmentVariable}."), methodName);
                 }
 
                 var addressAggregate = await addressEventSourcingHandler.ReadByAggregateIdAsync(updateAddressRequest.Id);

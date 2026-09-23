@@ -36,7 +36,7 @@ namespace Application.Features.Addresses.RequestHandlers.Commands
 
                 if (topic == null)
                 {
-                    return loggerService.LogArgumentNullException<CreateAddressRequest>(new ArgumentNullException($"Environment variable {addressEventsTopicEnvironmentVariable} is not found."), methodName);
+                    return loggerService.LogArgumentNullException<CreateAddressRequest>(new ArgumentNullException($"Could not find environment variable {addressEventsTopicEnvironmentVariable}."), methodName);
                 }
 
                 var addressAggregate = new AddressAggregate(createAddressRequest.StreetAddress, createAddressRequest.PostalCode, createAddressRequest.City, createAddressRequest.State, createAddressRequest.Country);

@@ -37,7 +37,7 @@ namespace Application.Features.Addresses.RequestHandlers.Commands
 
                 if (topic == null)
                 {
-                    return loggerService.LogArgumentNullException<DeleteAddressRequest>(new ArgumentNullException($"Environment variable {addressEventsTopicEnvironmentVariable} is not found."), methodName);
+                    return loggerService.LogArgumentNullException<DeleteAddressRequest>(new ArgumentNullException($"Could not find environment variable {addressEventsTopicEnvironmentVariable}."), methodName);
                 }
 
                 var addressAggregate = await addressEventSourcingHandler.ReadByAggregateIdAsync(deleteAddressRequest.Id);

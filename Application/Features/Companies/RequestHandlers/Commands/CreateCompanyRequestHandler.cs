@@ -2,49 +2,41 @@
 using Application.Dtos.General;
 using Application.Features.Companies.Requests.Commands;
 using Application.Interfaces.EventSourcing.EventSourcingHandlers;
+using Application.Interfaces.Infrastructure;
 using FluentValidation;
 using MediatR;
 using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.Logging;
 
 namespace Application.Features.Companies.RequestHandlers.Commands
 {
-    public class CreateCompanyRequestHandler(ICompanyEventSourcingHandler companyEventSourcingHandler, IValidator<CreateCompanyRequest> validator, ILogger<CreateCompanyRequestHandler> logger) : IRequestHandler<CreateCompanyRequest, HttpResponseDto<CreateCompanyRequest>>
+    public class CreateCompanyRequestHandler(ICompanyEventSourcingHandler companyEventSourcingHandler, IValidator<CreateCompanyRequest> validator, ILoggerService<CreateCompanyRequestHandler> loggerService) : IRequestHandler<CreateCompanyRequest, HttpResponseDto<CreateCompanyRequest>>
     {
-        private readonly string companyEventsTopicEnvironmentVariable = "COMPANY_EVENTS_TOPIC";
-
         public async Task<HttpResponseDto<CreateCompanyRequest>> Handle(CreateCompanyRequest createCompanyRequest, CancellationToken cancellationToken)
         {
+            var methodName = "HandleCreateCompanyRequest";
+            var companyEventsTopicEnvironmentVariable = "COMPANY_EVENTS_TOPIC";
+
             try
             {
-                logger.LogInformation("Begin HandleCreateCompany {@CreateCompanyRequest}.", createCompanyRequest);
+                loggerService.LogBeginInformation(methodName, createCompanyRequest);
 
                 if (createCompanyRequest == null)
                 {
-                    var ex = new ArgumentNullException(nameof(createCompanyRequest));
-                    var httpResponseDto1 = new HttpResponseDto<CreateCompanyRequest>(ex.Message, StatusCodes.Status400BadRequest);
-                    logger.LogError(ex, "Error HandleCreateCompany {@HttpResponseDto}.", httpResponseDto1);
-                    return httpResponseDto1;
+                    return loggerService.LogArgumentNullException<CreateCompanyRequest>(new ArgumentNullException(nameof(createCompanyRequest)), methodName);
                 }
 
                 var validationResult = await validator.ValidateAsync(createCompanyRequest, cancellationToken);
 
                 if (validationResult.IsValid == false)
                 {
-                    var ex = new ValidationException(validationResult.Errors);
-                    var httpResponseDto1 = new HttpResponseDto<CreateCompanyRequest>(ex.Message, StatusCodes.Status400BadRequest);
-                    logger.LogError(ex, "Error HandleCreateCompany {@HttpResponseDto}.", httpResponseDto1);
-                    return httpResponseDto1;
+                    return loggerService.LogValidationException<CreateCompanyRequest>(new ValidationException(validationResult.Errors), methodName);
                 }
 
                 var topic = Environment.GetEnvironmentVariable(companyEventsTopicEnvironmentVariable);
 
                 if (topic == null)
                 {
-                    var ex = new ArgumentNullException($"Environment variable {companyEventsTopicEnvironmentVariable} is not found.");
-                    var httpResponseDto1 = new HttpResponseDto<CreateCompanyRequest>(ex.Message, StatusCodes.Status400BadRequest);
-                    logger.LogError(ex, "Error HandleCreateCompany {@HttpResponseDto}.", httpResponseDto1);
-                    return httpResponseDto1;
+                    return loggerService.LogArgumentNullException<CreateCompanyRequest>(new ArgumentNullException($"Could not find environment variable {companyEventsTopicEnvironmentVariable}."), methodName);
                 }
 
                 var companyAggregate = new CompanyAggregate(
@@ -60,21 +52,15 @@ namespace Application.Features.Companies.RequestHandlers.Commands
                     createCompanyRequest.WebsiteUrl);
                 await companyEventSourcingHandler.SaveAsync(topic, companyAggregate);
 
-                var httpResponseDto = new HttpResponseDto<CreateCompanyRequest>(createCompanyRequest, StatusCodes.Status201Created);
-                logger.LogInformation("Done HandleCreateCompany {@HttpResponseDto}.", httpResponseDto);
-                return httpResponseDto;
+                return loggerService.LogDoneInformation(methodName, createCompanyRequest, StatusCodes.Status201Created);
             }
             catch (OperationCanceledException ex)
             {
-                var httpResponseDto1 = new HttpResponseDto<CreateCompanyRequest>(ex.Message, StatusCodes.Status500InternalServerError);
-                logger.LogError(ex, "Canceled HandleCreateCompany {@HttpResponseDto}.", httpResponseDto1);
-                return httpResponseDto1;
+                return loggerService.LogOperationCanceledException<CreateCompanyRequest>(ex, methodName);
             }
             catch (Exception ex)
             {
-                var httpResponseDto1 = new HttpResponseDto<CreateCompanyRequest>(ex.Message, StatusCodes.Status500InternalServerError);
-                logger.LogError(ex, "Error HandleCreateCompany {@HttpResponseDto}.", httpResponseDto1);
-                return httpResponseDto1;
+                return loggerService.LogException<CreateCompanyRequest>(ex, methodName);
             }
         }
     }

@@ -6,11 +6,10 @@ using Application.Interfaces.Persistance;
 using FluentValidation;
 using MediatR;
 using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.Logging;
 
 namespace Application.Features.Addresses.RequestHandlers.Queries
 {
-    public class ReadAddressByIdRequestHandler(IUnitOfWork unitOfWork, IValidator<ReadAddressByIdRequest> validator, ILoggerService<ReadAddressByIdRequestHandler> loggerService, ILogger<ReadAddressByIdRequestHandler> logger) : IRequestHandler<ReadAddressByIdRequest, HttpResponseDto<ReadAddressByIdRequest>>
+    public class ReadAddressByIdRequestHandler(IUnitOfWork unitOfWork, IValidator<ReadAddressByIdRequest> validator, ILoggerService<ReadAddressByIdRequestHandler> loggerService) : IRequestHandler<ReadAddressByIdRequest, HttpResponseDto<ReadAddressByIdRequest>>
     {
         public async Task<HttpResponseDto<ReadAddressByIdRequest>> Handle(ReadAddressByIdRequest readAddressByIdRequest, CancellationToken cancellationToken)
         {

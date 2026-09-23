@@ -1,39 +1,41 @@
 ﻿using Application.Dtos.General;
 using Application.Features.Companies.Requests.Commands;
 using Application.Interfaces.EventSourcing.EventSourcingHandlers;
+using Application.Interfaces.Infrastructure;
 using FluentValidation;
 using MediatR;
 using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.Logging;
 
 namespace Application.Features.Companies.RequestHandlers.Commands
 {
-    public class UpdateCompanyRequestHandler(ICompanyEventSourcingHandler companyEventSourcingHandler, IValidator<UpdateCompanyRequest> validator, ILogger<UpdateCompanyRequestHandler> logger) : IRequestHandler<UpdateCompanyRequest, HttpResponseDto<UpdateCompanyRequest>>
+    public class UpdateCompanyRequestHandler(ICompanyEventSourcingHandler companyEventSourcingHandler, IValidator<UpdateCompanyRequest> validator, ILoggerService<UpdateCompanyRequestHandler> loggerService) : IRequestHandler<UpdateCompanyRequest, HttpResponseDto<UpdateCompanyRequest>>
     {
-        private readonly string companyEventsTopicEnvironmentVariable = "COMPANY_EVENTS_TOPIC";
-
         public async Task<HttpResponseDto<UpdateCompanyRequest>> Handle(UpdateCompanyRequest updateCompanyRequest, CancellationToken cancellationToken)
         {
+            var methodName = "HandleUpdateCompanyRequest";
+            var companyEventsTopicEnvironmentVariable = "COMPANY_EVENTS_TOPIC";
+
             try
             {
-                logger.LogInformation("Begin HandleUpdateCompany {@UpdateCompanyRequest}.", updateCompanyRequest);
+                loggerService.LogBeginInformation(methodName, updateCompanyRequest);
 
                 if (updateCompanyRequest == null)
                 {
-                    var ex = new ArgumentNullException(nameof(updateCompanyRequest));
-                    var httpResponseDto1 = new HttpResponseDto<UpdateCompanyRequest>(ex.Message, StatusCodes.Status400BadRequest);
-                    logger.LogError(ex, "Error HandleUpdateCompany {@HttpResponseDto}.", httpResponseDto1);
-                    return httpResponseDto1;
+                    return loggerService.LogArgumentNullException<UpdateCompanyRequest>(new ArgumentNullException(nameof(updateCompanyRequest)), methodName);
                 }
 
                 var validationResult = await validator.ValidateAsync(updateCompanyRequest, cancellationToken);
 
                 if (validationResult.IsValid == false)
                 {
-                    var ex = new ValidationException(validationResult.Errors);
-                    var httpResponseDto1 = new HttpResponseDto<UpdateCompanyRequest>(ex.Message, StatusCodes.Status400BadRequest);
-                    logger.LogError(ex, "Error HandleUpdateCompany {@HttpResponseDto}.", httpResponseDto1);
-                    return httpResponseDto1;
+                    return loggerService.LogValidationException<UpdateCompanyRequest>(new ValidationException(validationResult.Errors), methodName);
+                }
+
+                var topic = Environment.GetEnvironmentVariable(companyEventsTopicEnvironmentVariable);
+
+                if (topic == null)
+                {
+                    return loggerService.LogArgumentNullException<UpdateCompanyRequest>(new ArgumentNullException($"Could not find environment variable {companyEventsTopicEnvironmentVariable}."), methodName);
                 }
 
                 var companyAggregate = await companyEventSourcingHandler.ReadByAggregateIdAsync(updateCompanyRequest.Id);
@@ -48,23 +50,17 @@ namespace Application.Features.Companies.RequestHandlers.Commands
                     updateCompanyRequest.EmailAddress,
                     updateCompanyRequest.PhoneNumber,
                     updateCompanyRequest.WebsiteUrl);
-                await companyEventSourcingHandler.SaveAsync(companyEventsTopicEnvironmentVariable, companyAggregate);
+                await companyEventSourcingHandler.SaveAsync(topic, companyAggregate);
 
-                var httpResponseDto = new HttpResponseDto<UpdateCompanyRequest>(updateCompanyRequest, StatusCodes.Status200OK);
-                logger.LogInformation("Done HandleUpdateCompany {@HttpResponseDto}.", httpResponseDto);
-                return httpResponseDto;
+                return loggerService.LogDoneInformation(methodName, updateCompanyRequest, StatusCodes.Status200OK);
             }
             catch (OperationCanceledException ex)
             {
-                var httpResponseDto1 = new HttpResponseDto<UpdateCompanyRequest>(ex.Message, StatusCodes.Status500InternalServerError);
-                logger.LogError(ex, "Canceled HandleUpdateCompany {@HttpResponseDto}.", httpResponseDto1);
-                return httpResponseDto1;
+                return loggerService.LogOperationCanceledException<UpdateCompanyRequest>(ex, methodName);
             }
             catch (Exception ex)
             {
-                var httpResponseDto1 = new HttpResponseDto<UpdateCompanyRequest>(ex.Message, StatusCodes.Status500InternalServerError);
-                logger.LogError(ex, "Error HandleUpdateCompany {@HttpResponseDto}.", httpResponseDto1);
-                return httpResponseDto1;
+                return loggerService.LogException<UpdateCompanyRequest>(ex, methodName);
             }
         }
     }

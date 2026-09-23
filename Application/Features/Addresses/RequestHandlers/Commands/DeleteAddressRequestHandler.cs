@@ -14,7 +14,7 @@ namespace Application.Features.Addresses.RequestHandlers.Commands
 
         public async Task<HttpResponseDto<DeleteAddressRequest>> Handle(DeleteAddressRequest deleteAddressRequest, CancellationToken cancellationToken)
         {
-            var methodName = "DeleteAddressRequestHandler.Handle";
+            var methodName = "HandleDeleteAddressRequest";
             var addressEventsTopicEnvironmentVariable = "ADDRESS_EVENTS_TOPIC";
 
             try

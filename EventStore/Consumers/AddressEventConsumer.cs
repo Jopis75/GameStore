@@ -44,7 +44,7 @@ namespace EventSourcing.Consumers
 
                     if (eventHandlerMethod == null)
                     {
-                        throw new ArgumentNullException(nameof(eventHandlerMethod), "Could not find event handler method.");
+                        throw new ArgumentNullException(nameof(eventHandlerMethod), "Could not find the public method IAddressEventHandler.Handle.");
                     }
 
                     eventHandlerMethod.Invoke(addressEventHandler, [@event, cancellationToken]);

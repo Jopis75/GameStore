@@ -21,7 +21,7 @@ namespace EventSourcing.Consumers
             return Task.CompletedTask;
         }
 
-        private void StartConsumeAddressEvents(IServiceScope scope, CancellationToken cancellationToken)
+        private void StartConsumeAddressEvents(IServiceScope serviceScope, CancellationToken cancellationToken)
         {
             var addressEventsTopic = Environment.GetEnvironmentVariable(addressEventsTopicEnvironmentVariable);
 
@@ -32,7 +32,7 @@ namespace EventSourcing.Consumers
             }
             else
             {
-                var addressEventConsumer = scope.ServiceProvider.GetRequiredService<IAddressEventConsumer>();
+                var addressEventConsumer = serviceScope.ServiceProvider.GetRequiredService<IAddressEventConsumer>();
 
                 Task.Run(() => addressEventConsumer.Consume(addressEventsTopic, cancellationToken), cancellationToken);
             }

@@ -13,7 +13,7 @@ namespace Application.Features.Addresses.RequestHandlers.Commands
     {
         public async Task<HttpResponseDto<UpdateAddressRequest>> Handle(UpdateAddressRequest updateAddressRequest, CancellationToken cancellationToken)
         {
-            var methodName = "UpdateAddressRequestHandler.Handle";
+            var methodName = "HandleUpdateAddressRequest";
             var addressEventsTopicEnvironmentVariable = "ADDRESS_EVENTS_TOPIC";
 
             try

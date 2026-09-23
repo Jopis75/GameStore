@@ -1,48 +1,38 @@
 ﻿using Application.Dtos.General;
 using Application.Features.Addresses.Requests.Queries;
+using Application.Interfaces.Infrastructure;
 using Application.Interfaces.Persistance;
-using Domain.Dtos;
 using MediatR;
 using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.Logging;
 
 namespace Application.Features.Addresses.RequestHandlers.Queries
 {
-    public class ReadAddressAllRequestHandler(IUnitOfWork unitOfWork, ILogger<ReadAddressAllRequestHandler> logger) : IRequestHandler<ReadAddressAllRequest, HttpResponseDto<AddressDto>>
+    public class ReadAddressAllRequestHandler(IUnitOfWork unitOfWork, ILoggerService<ReadAddressAllRequestHandler> loggerService) : IRequestHandler<ReadAddressAllRequest, HttpResponseDto<ReadAddressAllRequest>>
     {
-        public async Task<HttpResponseDto<AddressDto>> Handle(ReadAddressAllRequest readAddressAllRequest, CancellationToken cancellationToken)
+        public async Task<HttpResponseDto<ReadAddressAllRequest>> Handle(ReadAddressAllRequest readAddressAllRequest, CancellationToken cancellationToken)
         {
+            var methodName = "HandleReadAddressAllRequest";
+
             try
             {
-                logger.LogInformation("Begin ReadAddressAll {@ReadAddressAllRequest}.", readAddressAllRequest);
+                loggerService.LogBeginInformation(methodName, readAddressAllRequest);
 
                 if (readAddressAllRequest == null)
                 {
-                    var ex = new ArgumentNullException(nameof(readAddressAllRequest));
-                    var httpResponseDto1 = new HttpResponseDto<AddressDto>(ex.Message, StatusCodes.Status400BadRequest);
-                    logger.LogError(ex, "Error ReadAddressAll {@HttpResponseDto}.", httpResponseDto1);
-                    return httpResponseDto1;
+                    return loggerService.LogArgumentNullException<ReadAddressAllRequest>(new ArgumentNullException(nameof(readAddressAllRequest)), methodName);
                 }
 
                 var addressDtos = await unitOfWork.AddressRepository.ReadAllAsync(cancellationToken);
 
-                var httpResponseDto = new HttpResponseDto<AddressDto>(addressDtos.ToArray(), addressDtos.Any()
-                    ? StatusCodes.Status200OK
-                    : StatusCodes.Status204NoContent);
-                logger.LogInformation("Done ReadAddressAll {@HttpResponseDto}.", httpResponseDto);
-                return httpResponseDto;
+                return loggerService.LogDoneInformation(methodName, readAddressAllRequest, addressDtos.Any() ? StatusCodes.Status200OK : StatusCodes.Status204NoContent);
             }
             catch (OperationCanceledException ex)
             {
-                var httpResponseDto1 = new HttpResponseDto<AddressDto>(ex.Message, StatusCodes.Status500InternalServerError);
-                logger.LogError(ex, "Canceled ReadAddressAll {@HttpResponseDto}.", httpResponseDto1);
-                return httpResponseDto1;
+                return loggerService.LogOperationCanceledException<ReadAddressAllRequest>(ex, methodName);
             }
             catch (Exception ex)
             {
-                var httpResponseDto1 = new HttpResponseDto<AddressDto>(ex.Message, StatusCodes.Status500InternalServerError);
-                logger.LogError(ex, "Error ReadAddressAll {@HttpResponseDto}.", httpResponseDto1);
-                return httpResponseDto1;
+                return loggerService.LogException<ReadAddressAllRequest>(ex, methodName);
             }
         }
     }

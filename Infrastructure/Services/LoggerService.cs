@@ -1,5 +1,6 @@
 ﻿using Application.Dtos.General;
 using Application.Events;
+using Application.Exceptions;
 using Application.Interfaces.Infrastructure;
 using FluentValidation;
 using MediatR;
@@ -50,6 +51,14 @@ namespace Infrastructure.Services
             where TData : class, new()
         {
             logger.LogError(ex, $"Error {methodName}" + " {@" + $"{typeof(TData).Name}" + "}.", data);
+        }
+
+        public HttpResponseDto<TRequest> LogNotFoundException<TRequest>(NotFoundException ex, string methodName)
+            where TRequest : IRequest<HttpResponseDto<TRequest>>, new()
+        {
+            var httpResponseDto = new HttpResponseDto<TRequest>(ex.Message, StatusCodes.Status404NotFound);
+            logger.LogError(ex, $"Error {methodName}" + " {@HttpResponseDto}.", httpResponseDto);
+            return httpResponseDto;
         }
 
         public HttpResponseDto<TRequest> LogOperationCanceledException<TRequest>(OperationCanceledException ex, string methodName)

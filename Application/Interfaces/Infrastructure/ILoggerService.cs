@@ -1,5 +1,6 @@
 ﻿using Application.Dtos.General;
 using Application.Events;
+using Application.Exceptions;
 using FluentValidation;
 using MediatR;
 
@@ -24,6 +25,9 @@ namespace Application.Interfaces.Infrastructure
 
         void LogException<TData>(Exception ex, string methodName, TData data)
             where TData : class, new();
+
+        HttpResponseDto<TRequest> LogNotFoundException<TRequest>(NotFoundException ex, string methodName)
+            where TRequest : IRequest<HttpResponseDto<TRequest>>, new();
 
         HttpResponseDto<TRequest> LogOperationCanceledException<TRequest>(OperationCanceledException ex, string methodName)
             where TRequest : IRequest<HttpResponseDto<TRequest>>, new();

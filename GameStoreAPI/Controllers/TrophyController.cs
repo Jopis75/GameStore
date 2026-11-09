@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace GameStoreAPI.Controllers
 {
     [Route("api/[controller]")]
+    //[Authorize]
     [ApiController]
     public class TrophyController(IMediator mediator) : ControllerBase
     {
@@ -16,7 +17,7 @@ namespace GameStoreAPI.Controllers
         [ProducesResponseType(typeof(HttpResponseDto<TrophyDto>), StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult<HttpResponseDto<TrophyDto>>> CreateAsync([FromBody] CreateTrophyRequest createTrophyRequest)
+        public async Task<IActionResult> CreateAsync([FromBody] CreateTrophyRequest createTrophyRequest)
         {
             var httpResponseDto = await mediator.Send(createTrophyRequest);
             return StatusCode(httpResponseDto.StatusCode, httpResponseDto);
@@ -27,7 +28,7 @@ namespace GameStoreAPI.Controllers
         [ProducesResponseType(typeof(HttpResponseDto<TrophyDto>), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult<HttpResponseDto<TrophyDto>>> DeleteAsync(int id)
+        public async Task<IActionResult> DeleteAsync(int id)
         {
             var httpResponseDto = await mediator.Send(new DeleteTrophyRequest { Id = id });
             return StatusCode(httpResponseDto.StatusCode, httpResponseDto);
@@ -37,7 +38,7 @@ namespace GameStoreAPI.Controllers
         [Route("ReadAllAsync")]
         [ProducesResponseType(typeof(HttpResponseDto<TrophyDto>), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult<HttpResponseDto<TrophyDto>>> ReadAllAsync()
+        public async Task<IActionResult> ReadAllAsync()
         {
             var httpResponseDto = await mediator.Send(new ReadTrophyAllRequest());
             return StatusCode(httpResponseDto.StatusCode, httpResponseDto);
@@ -48,7 +49,7 @@ namespace GameStoreAPI.Controllers
         [ProducesResponseType(typeof(HttpResponseDto<TrophyDto>), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult<HttpResponseDto<TrophyDto>>> ReadByIdAsync(int id)
+        public async Task<IActionResult> ReadByIdAsync(int id)
         {
             var httpResponseDto = await mediator.Send(new ReadTrophyByIdRequest { Id = id });
             return StatusCode(httpResponseDto.StatusCode, httpResponseDto);
@@ -59,7 +60,7 @@ namespace GameStoreAPI.Controllers
         [ProducesResponseType(typeof(HttpResponseDto<TrophyDto>), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult<HttpResponseDto<TrophyDto>>> UpdateAsync([FromBody] UpdateTrophyRequest updateTrophyRequest)
+        public async Task<IActionResult> UpdateAsync([FromBody] UpdateTrophyRequest updateTrophyRequest)
         {
             var httpResponseDto = await mediator.Send(updateTrophyRequest);
             return StatusCode(httpResponseDto.StatusCode, httpResponseDto);

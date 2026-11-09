@@ -1,10 +1,9 @@
 ﻿using Application.Dtos.General;
-using Domain.Dtos;
 using MediatR;
 
 namespace Application.Features.Consoles.Requests.Commands
 {
-    public class CreateConsoleRequest : IRequest<HttpResponseDto<ConsoleDto>>
+    public class CreateConsoleRequest : IRequest<HttpResponseDto<CreateConsoleRequest>>
     {
         public int DeveloperId { get; set; }
 

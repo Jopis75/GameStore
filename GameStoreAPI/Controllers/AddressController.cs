@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace GameStoreAPI.Controllers
 {
     [Route("api/[controller]")]
+    //[Authorize]
     [ApiController]
     public class AddressController(IMediator mediator) : ControllerBase
     {
@@ -16,7 +17,7 @@ namespace GameStoreAPI.Controllers
         [ProducesResponseType(typeof(HttpResponseDto<AddressDto>), StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult<HttpResponseDto<AddressDto>>> CreateAsync([FromBody] CreateAddressRequest createAddressRequest)
+        public async Task<IActionResult> CreateAsync([FromBody] CreateAddressRequest createAddressRequest)
         {
             var httpResponseDto = await mediator.Send(createAddressRequest);
             return StatusCode(httpResponseDto.StatusCode, httpResponseDto);
@@ -27,7 +28,7 @@ namespace GameStoreAPI.Controllers
         [ProducesResponseType(typeof(HttpResponseDto<AddressDto>), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult<HttpResponseDto<AddressDto>>> DeleteAsync(int id)
+        public async Task<IActionResult> DeleteAsync(int id)
         {
             var httpResponseDto = await mediator.Send(new DeleteAddressRequest { Id = id });
             return StatusCode(httpResponseDto.StatusCode, httpResponseDto);
@@ -37,7 +38,7 @@ namespace GameStoreAPI.Controllers
         [Route("ReadAllAsync")]
         [ProducesResponseType(typeof(HttpResponseDto<AddressDto>), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult<HttpResponseDto<AddressDto>>> ReadAllAsync()
+        public async Task<IActionResult> ReadAllAsync()
         {
             var httpResponseDto = await mediator.Send(new ReadAddressAllRequest());
             return StatusCode(httpResponseDto.StatusCode, httpResponseDto);
@@ -48,7 +49,7 @@ namespace GameStoreAPI.Controllers
         [ProducesResponseType(typeof(HttpResponseDto<AddressDto>), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult<HttpResponseDto<AddressDto>>> ReadByIdAsync(int id)
+        public async Task<IActionResult> ReadByIdAsync(int id)
         {
             var httpResponseDto = await mediator.Send(new ReadAddressByIdRequest { Id = id });
             return StatusCode(httpResponseDto.StatusCode, httpResponseDto);
@@ -59,7 +60,7 @@ namespace GameStoreAPI.Controllers
         [ProducesResponseType(typeof(HttpResponseDto<AddressDto>), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult<HttpResponseDto<AddressDto>>> UpdateAsync([FromBody] UpdateAddressRequest updateAddressRequest)
+        public async Task<IActionResult> UpdateAsync([FromBody] UpdateAddressRequest updateAddressRequest)
         {
             var httpResponseDto = await mediator.Send(updateAddressRequest);
             return StatusCode(httpResponseDto.StatusCode, httpResponseDto);

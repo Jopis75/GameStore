@@ -1,5 +1,4 @@
 ﻿using Application.Dtos.General;
-using Application.Events;
 using Application.Exceptions;
 using FluentValidation;
 using MediatR;

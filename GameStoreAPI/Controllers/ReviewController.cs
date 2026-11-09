@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace GameStoreAPI.Controllers
 {
     [Route("api/[controller]")]
+    //[Authorize]
     [ApiController]
     public class ReviewController(IMediator mediator) : ControllerBase
     {
@@ -16,7 +17,7 @@ namespace GameStoreAPI.Controllers
         [ProducesResponseType(typeof(HttpResponseDto<ReviewDto>), StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult<HttpResponseDto<ReviewDto>>> CreateAsync([FromBody] CreateReviewRequest createReviewRequest)
+        public async Task<IActionResult> CreateAsync([FromBody] CreateReviewRequest createReviewRequest)
         {
             var httpResponseDto = await mediator.Send(createReviewRequest);
             return StatusCode(httpResponseDto.StatusCode, httpResponseDto);
@@ -27,7 +28,7 @@ namespace GameStoreAPI.Controllers
         [ProducesResponseType(typeof(HttpResponseDto<ReviewDto>), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult<HttpResponseDto<ReviewDto>>> DeleteAsync(int id)
+        public async Task<IActionResult> DeleteAsync(int id)
         {
             var httpResponseDto = await mediator.Send(new DeleteReviewRequest { Id = id });
             return StatusCode(httpResponseDto.StatusCode, httpResponseDto);
@@ -37,7 +38,7 @@ namespace GameStoreAPI.Controllers
         [Route("ReadAllAsync")]
         [ProducesResponseType(typeof(HttpResponseDto<ReviewDto>), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult<HttpResponseDto<ReviewDto>>> ReadAllAsync()
+        public async Task<IActionResult> ReadAllAsync()
         {
             var httpResponseDto = await mediator.Send(new ReadReviewAllRequest());
             return StatusCode(httpResponseDto.StatusCode, httpResponseDto);
@@ -48,7 +49,7 @@ namespace GameStoreAPI.Controllers
         [ProducesResponseType(typeof(HttpResponseDto<ReviewDto>), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult<HttpResponseDto<ReviewDto>>> ReadByIdAsync(int id)
+        public async Task<IActionResult> ReadByIdAsync(int id)
         {
             var httpResponseDto = await mediator.Send(new ReadReviewByIdRequest { Id = id });
             return StatusCode(httpResponseDto.StatusCode, httpResponseDto);
@@ -59,7 +60,7 @@ namespace GameStoreAPI.Controllers
         [ProducesResponseType(typeof(HttpResponseDto<ReviewDto>), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult<HttpResponseDto<ReviewDto>>> ReadByVideoGameIdAsync(int videoGameId)
+        public async Task<IActionResult> ReadByVideoGameIdAsync(int videoGameId)
         {
             var httpResponseDto = await mediator.Send(new ReadReviewsByVideoGameIdRequest { VideoGameId = videoGameId });
             return StatusCode(httpResponseDto.StatusCode, httpResponseDto);
@@ -70,7 +71,7 @@ namespace GameStoreAPI.Controllers
         [ProducesResponseType(typeof(HttpResponseDto<ReviewDto>), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult<HttpResponseDto<ReviewDto>>> UpdateAsync([FromBody] UpdateReviewRequest updateReviewRequest)
+        public async Task<IActionResult> UpdateAsync([FromBody] UpdateReviewRequest updateReviewRequest)
         {
             var httpResponseDto = await mediator.Send(updateReviewRequest);
             return StatusCode(httpResponseDto.StatusCode, httpResponseDto);

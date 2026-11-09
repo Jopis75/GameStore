@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace GameStoreAPI.Controllers
 {
     [Route("api/[controller]")]
+    //[Authorize]
     [ApiController]
     public class VideoGameController(IMediator mediator) : ControllerBase
     {
@@ -16,7 +17,7 @@ namespace GameStoreAPI.Controllers
         [ProducesResponseType(typeof(HttpResponseDto<VideoGameDto>), StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult<HttpResponseDto<VideoGameDto>>> CreateAsync([FromBody] CreateVideoGameRequest createVideoGameRequest)
+        public async Task<IActionResult> CreateAsync([FromBody] CreateVideoGameRequest createVideoGameRequest)
         {
             var httpResponseDto = await mediator.Send(createVideoGameRequest);
             return StatusCode(httpResponseDto.StatusCode, httpResponseDto);
@@ -27,7 +28,7 @@ namespace GameStoreAPI.Controllers
         [ProducesResponseType(typeof(HttpResponseDto<VideoGameDto>), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult<HttpResponseDto<VideoGameDto>>> DeleteAsync(int id)
+        public async Task<IActionResult> DeleteAsync(int id)
         {
             var httpResponseDto = await mediator.Send(new DeleteVideoGameRequest { Id = id });
             return StatusCode(httpResponseDto.StatusCode, httpResponseDto);
@@ -38,7 +39,7 @@ namespace GameStoreAPI.Controllers
         [ProducesResponseType(typeof(HttpResponseDto<FileDownloadResponseDto>), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult<HttpResponseDto<FileDownloadResponseDto>>> DownloadExcelFileByConsoleIdAsync([FromBody] DownloadExcelFileByConsoleIdRequest downloadExcelFileByConsoleIdRequest)
+        public async Task<IActionResult> DownloadExcelFileByConsoleIdAsync([FromBody] DownloadExcelFileByConsoleIdRequest downloadExcelFileByConsoleIdRequest)
         {
             var httpResponseDto = await mediator.Send(downloadExcelFileByConsoleIdRequest);
             return httpResponseDto.Successful
@@ -50,7 +51,7 @@ namespace GameStoreAPI.Controllers
         [Route("ReadAllAsync")]
         [ProducesResponseType(typeof(HttpResponseDto<VideoGameDto>), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult<HttpResponseDto<VideoGameDto>>> ReadAllAsync()
+        public async Task<IActionResult> ReadAllAsync()
         {
             var httpResponseDto = await mediator.Send(new ReadVideoGameAllRequest());
             return StatusCode(httpResponseDto.StatusCode, httpResponseDto);
@@ -61,7 +62,7 @@ namespace GameStoreAPI.Controllers
         [ProducesResponseType(typeof(HttpResponseDto<VideoGameDto>), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult<HttpResponseDto<VideoGameDto>>> ReadByIdAsync(int id)
+        public async Task<IActionResult> ReadByIdAsync(int id)
         {
             var httpResponseDto = await mediator.Send(new ReadVideoGameByIdRequest { Id = id });
             return StatusCode(httpResponseDto.StatusCode, httpResponseDto);
@@ -72,7 +73,7 @@ namespace GameStoreAPI.Controllers
         [ProducesResponseType(typeof(HttpResponseDto<VideoGameDto>), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult<HttpResponseDto<VideoGameDto>>> ReadMostPlayedByConsoleIdAsync(int consoleId)
+        public async Task<IActionResult> ReadMostPlayedByConsoleIdAsync(int consoleId)
         {
             var httpResponseDto = await mediator.Send(new ReadMostPlayedVideoGameByConsoleIdRequest { ConsoleId = consoleId });
             return StatusCode(httpResponseDto.StatusCode, httpResponseDto);
@@ -83,7 +84,7 @@ namespace GameStoreAPI.Controllers
         [ProducesResponseType(typeof(HttpResponseDto<VideoGameDto>), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult<HttpResponseDto<VideoGameDto>>> UpdateAsync([FromBody] UpdateVideoGameRequest updateVideoGameRequest)
+        public async Task<IActionResult> UpdateAsync([FromBody] UpdateVideoGameRequest updateVideoGameRequest)
         {
             var httpResponseDto = await mediator.Send(updateVideoGameRequest);
             return StatusCode(httpResponseDto.StatusCode, httpResponseDto);
@@ -94,7 +95,7 @@ namespace GameStoreAPI.Controllers
         [ProducesResponseType(typeof(HttpResponseDto<GameStoreFileUploadResponseDto<VideoGameDto>>), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult<HttpResponseDto<GameStoreFileUploadResponseDto<VideoGameDto>>>> UploadGameStoreFileAsync(IFormFile formFile)
+        public async Task<IActionResult> UploadGameStoreFileAsync(IFormFile formFile)
         {
             var httpResponseDto = await mediator.Send(new UploadGameStoreFileRequest { FormFile = formFile });
             return StatusCode(httpResponseDto.StatusCode, httpResponseDto);

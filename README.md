@@ -21,8 +21,11 @@
 - ClosedXML.
 - JWT authentication.
 
-
-Next up:
+In progress:
 - Event Sourcing.
 - Kafka.
 - MongoDB.
+- 
+Coming up next:
+- Convert to .NET 11.
+- Convert to C# 15.

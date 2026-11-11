@@ -25,6 +25,7 @@ In progress:
 - Event Sourcing.
 - Kafka.
 - MongoDB.
+- Redoing GameStoreFileService class.
   
 Coming up next:
 - Convert to .NET 11.

@@ -1,4 +1,4 @@
-﻿namespace Domain.Dtos
+﻿namespace GameStore.Domain.Dtos
 {
     public class ReviewDto : DtoBase
     {

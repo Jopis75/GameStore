@@ -1,14 +1,14 @@
-﻿using Application.Dtos.General;
-using Application.Exceptions;
-using Application.Features.Trophies.Requests.Queries;
-using Application.Interfaces.Persistance;
-using Domain.Dtos;
-using FluentValidation;
+﻿using FluentValidation;
+using GameStore.Application.Dtos.General;
+using GameStore.Application.Exceptions;
+using GameStore.Application.Features.Trophies.Requests.Queries;
+using GameStore.Application.Interfaces.Persistance;
+using GameStore.Domain.Dtos;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 
-namespace Application.Features.Trophies.RequestHandlers.Queries
+namespace GameStore.Application.Features.Trophies.RequestHandlers.Queries
 {
     public class ReadTrophyByIdRequestHandler(IUnitOfWork unitOfWork, IValidator<ReadTrophyByIdRequest> validator, ILogger<ReadTrophyByIdRequestHandler> logger) : IRequestHandler<ReadTrophyByIdRequest, HttpResponseDto<TrophyDto>>
     {
@@ -28,7 +28,7 @@ namespace Application.Features.Trophies.RequestHandlers.Queries
 
                 var validationResult = await validator.ValidateAsync(readTrophyByIdRequest, cancellationToken);
 
-                if (validationResult.IsValid == false)
+                if (!validationResult.IsValid)
                 {
                     var ex = new ValidationException(validationResult.Errors);
                     var httpResponseDto1 = new HttpResponseDto<TrophyDto>(ex.Message, StatusCodes.Status400BadRequest);

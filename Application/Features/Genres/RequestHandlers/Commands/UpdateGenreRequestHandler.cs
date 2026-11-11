@@ -1,14 +1,14 @@
-﻿using Application.Dtos.General;
-using Application.Features.Genres.Requests.Commands;
-using Application.Interfaces.Persistance;
-using AutoMapper;
-using Domain.Dtos;
+﻿using AutoMapper;
 using FluentValidation;
+using GameStore.Application.Dtos.General;
+using GameStore.Application.Features.Genres.Requests.Commands;
+using GameStore.Application.Interfaces.Persistance;
+using GameStore.Domain.Dtos;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 
-namespace Application.Features.Genres.RequestHandlers.Commands
+namespace GameStore.Application.Features.Genres.RequestHandlers.Commands
 {
     public class UpdateGenreRequestHandler(IUnitOfWork unitOfWork, IMapper mapper, IValidator<UpdateGenreRequest> validator, ILogger<UpdateGenreRequestHandler> logger) : IRequestHandler<UpdateGenreRequest, HttpResponseDto<GenreDto>>
     {
@@ -30,7 +30,7 @@ namespace Application.Features.Genres.RequestHandlers.Commands
 
                 var validationResult = await validator.ValidateAsync(updateGenreRequest, cancellationToken);
 
-                if (validationResult.IsValid == false)
+                if (!validationResult.IsValid)
                 {
                     var ex = new ValidationException(validationResult.Errors);
                     var httpResponseDto1 = new HttpResponseDto<GenreDto>(ex.Message, StatusCodes.Status400BadRequest);

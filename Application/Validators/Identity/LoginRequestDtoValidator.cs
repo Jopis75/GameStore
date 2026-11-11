@@ -1,7 +1,7 @@
-﻿using Application.Dtos.Identity;
-using FluentValidation;
+﻿using FluentValidation;
+using GameStore.Application.Dtos.Identity;
 
-namespace Application.Validators.Identity
+namespace GameStore.Application.Validators.Identity
 {
     public class LoginRequestDtoValidator : AbstractValidator<LoginRequestDto>
     {

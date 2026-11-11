@@ -1,11 +1,11 @@
-﻿using Application.Dtos.General;
-using Application.Features.Addresses.Requests.Queries;
-using Application.Interfaces.Infrastructure;
-using Application.Interfaces.Persistance;
+﻿using GameStore.Application.Dtos.General;
+using GameStore.Application.Features.Addresses.Requests.Queries;
+using GameStore.Application.Interfaces.Infrastructure;
+using GameStore.Application.Interfaces.Persistance;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 
-namespace Application.Features.Addresses.RequestHandlers.Queries
+namespace GameStore.Application.Features.Addresses.RequestHandlers.Queries
 {
     public class ReadAddressAllRequestHandler(IUnitOfWork unitOfWork, ILoggerService<ReadAddressAllRequestHandler> loggerService) : IRequestHandler<ReadAddressAllRequest, HttpResponseDto<ReadAddressAllRequest>>
     {

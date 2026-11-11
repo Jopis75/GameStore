@@ -1,6 +1,6 @@
 ﻿using Azure.Messaging.ServiceBus;
 
-namespace Application.Dtos.Azure.ServiceBus
+namespace GameStore.Application.Dtos.Azure.ServiceBus
 {
     public class AzureServiceBusStartProcessingRequestDto
     {

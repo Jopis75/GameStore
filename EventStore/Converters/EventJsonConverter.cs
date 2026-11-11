@@ -1,10 +1,10 @@
-﻿using Application.Events;
-using Application.Events.Addresses;
-using Application.Events.Companies;
+﻿using GameStore.Application.Events;
+using GameStore.Application.Events.Addresses;
+using GameStore.Application.Events.Companies;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
-namespace EventSourcing.Converters
+namespace GameStore.EventSourcing.Converters
 {
     public class EventJsonConverter : JsonConverter<EventBase>
     {
@@ -17,7 +17,7 @@ namespace EventSourcing.Converters
         {
             if (!JsonDocument.TryParseValue(ref reader, out var document))
             {
-                throw new JsonException($"Failed to parse JSON document: {nameof (JsonDocument)}");
+                throw new JsonException($"Failed to parse JSON document: {nameof(JsonDocument)}");
             }
 
             if (!document.RootElement.TryGetProperty("Type", out var type))

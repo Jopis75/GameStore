@@ -1,4 +1,4 @@
-﻿namespace Domain.Dtos
+﻿namespace GameStore.Domain.Dtos
 {
     public abstract class ProductDto : DtoBase
     {
@@ -16,7 +16,7 @@
 
         public DateTime ReleaseDate { get; set; }
 
-        public List<ReviewDto> Reviews { get; set; } = new();
+        public List<ReviewDto> Reviews { get; set; } = [];
 
         public string? Url { get; set; }
     }

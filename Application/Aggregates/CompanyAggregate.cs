@@ -1,7 +1,7 @@
-﻿using Application.Events.Companies;
-using Domain.Enums;
+﻿using GameStore.Application.Events.Companies;
+using GameStore.Domain.Enums;
 
-namespace Application.Aggregates
+namespace GameStore.Application.Aggregates
 {
     public class CompanyAggregate : AggregateRoot
     {
@@ -10,7 +10,7 @@ namespace Application.Aggregates
         public CompanyAggregate()
         {
         }
-        
+
         public CompanyAggregate(string name, string tradeName, CompanyType companyType, Industry industry, int? parentCompanyId, int headquarterId, string? logoImageUri, string emailAddress, string phoneNumber, string? websiteUrl)
         {
             CreateCompany(name, tradeName, companyType, industry, parentCompanyId, headquarterId, logoImageUri, emailAddress, phoneNumber, websiteUrl);

@@ -1,6 +1,6 @@
-﻿using Domain.Enums;
+﻿using GameStore.Domain.Enums;
 
-namespace Application.Events.Companies
+namespace GameStore.Application.Events.Companies
 {
     public class CompanyCreatedEvent() : EventBase(nameof(CompanyCreatedEvent))
     {

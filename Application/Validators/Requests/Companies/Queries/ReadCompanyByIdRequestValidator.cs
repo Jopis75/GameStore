@@ -1,7 +1,7 @@
-﻿using Application.Features.Companies.Requests.Queries;
-using FluentValidation;
+﻿using FluentValidation;
+using GameStore.Application.Features.Companies.Requests.Queries;
 
-namespace Application.Validators.Requests.Companies.Queries
+namespace GameStore.Application.Validators.Requests.Companies.Queries
 {
     public class ReadCompanyByIdRequestValidator : AbstractValidator<ReadCompanyByIdRequest>
     {

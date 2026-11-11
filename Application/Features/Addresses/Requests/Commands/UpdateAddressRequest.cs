@@ -1,7 +1,7 @@
-﻿using Application.Dtos.General;
+﻿using GameStore.Application.Dtos.General;
 using MediatR;
 
-namespace Application.Features.Addresses.Requests.Commands
+namespace GameStore.Application.Features.Addresses.Requests.Commands
 {
     public class UpdateAddressRequest : IRequest<HttpResponseDto<UpdateAddressRequest>>
     {

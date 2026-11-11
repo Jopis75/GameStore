@@ -1,7 +1,7 @@
-﻿using Application.Features.Genres.Requests.Queries;
-using FluentValidation;
+﻿using FluentValidation;
+using GameStore.Application.Features.Genres.Requests.Queries;
 
-namespace Application.Validators.Requests.Genres.Queries
+namespace GameStore.Application.Validators.Requests.Genres.Queries
 {
     public class ReadGenreByIdRequestValidator : AbstractValidator<ReadGenreByIdRequest>
     {

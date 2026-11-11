@@ -1,8 +1,8 @@
-﻿using Application.Features.Companies.Requests.Commands;
-using Application.Validators.Requests.Addresses.Commands;
-using FluentValidation;
+﻿using FluentValidation;
+using GameStore.Application.Features.Companies.Requests.Commands;
+using GameStore.Application.Validators.Requests.Addresses.Commands;
 
-namespace Application.Validators.Requests.Companies.Commands
+namespace GameStore.Application.Validators.Requests.Companies.Commands
 {
     public class CreateCompanyWithHeadquarterRequestValidator : AbstractValidator<CreateCompanyWithHeadquarterRequest>
     {

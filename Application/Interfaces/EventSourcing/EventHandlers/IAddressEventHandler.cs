@@ -1,6 +1,6 @@
-﻿using Application.Events.Addresses;
+﻿using GameStore.Application.Events.Addresses;
 
-namespace Application.Interfaces.EventSourcing.EventHandlers
+namespace GameStore.Application.Interfaces.EventSourcing.EventHandlers
 {
     public interface IAddressEventHandler
     {

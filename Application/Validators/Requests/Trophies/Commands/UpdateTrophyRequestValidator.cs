@@ -1,7 +1,7 @@
-﻿using Application.Features.Trophies.Requests.Commands;
-using FluentValidation;
+﻿using FluentValidation;
+using GameStore.Application.Features.Trophies.Requests.Commands;
 
-namespace Application.Validators.Requests.Trophies.Commands
+namespace GameStore.Application.Validators.Requests.Trophies.Commands
 {
     public class UpdateTrophyRequestValidator : AbstractValidator<UpdateTrophyRequest>
     {

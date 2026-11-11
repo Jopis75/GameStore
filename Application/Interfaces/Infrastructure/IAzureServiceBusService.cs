@@ -1,7 +1,7 @@
-﻿using Application.Dtos.Azure.ServiceBus;
-using Application.Dtos.General;
+﻿using GameStore.Application.Dtos.Azure.ServiceBus;
+using GameStore.Application.Dtos.General;
 
-namespace Application.Interfaces.Infrastructure
+namespace GameStore.Application.Interfaces.Infrastructure
 {
     public interface IAzureServiceBusService
     {

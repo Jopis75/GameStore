@@ -1,7 +1,7 @@
-﻿using Application.Features.Genres.Requests.Commands;
-using FluentValidation;
+﻿using FluentValidation;
+using GameStore.Application.Features.Genres.Requests.Commands;
 
-namespace Application.Validators.Requests.Genres.Commands
+namespace GameStore.Application.Validators.Requests.Genres.Commands
 {
     public class UpdateGenreRequestValidator : AbstractValidator<UpdateGenreRequest>
     {

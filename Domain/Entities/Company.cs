@@ -1,14 +1,14 @@
-﻿using Domain.Enums;
+﻿using GameStore.Domain.Enums;
 
-namespace Domain.Entities
+namespace GameStore.Domain.Entities
 {
     public class Company : EntityBase
     {
         public CompanyType CompanyType { get; set; }
 
-        public virtual ICollection<Console> Consoles { get; set; } = new List<Console>();
+        public virtual ICollection<Console> Consoles { get; set; } = [];
 
-        public virtual ICollection<VideoGame> DevelopedVideoGames { get; set; } = new List<VideoGame>();
+        public virtual ICollection<VideoGame> DevelopedVideoGames { get; set; } = [];
 
         public string EmailAddress { get; set; } = default!;
 
@@ -28,7 +28,7 @@ namespace Domain.Entities
 
         public string PhoneNumber { get; set; } = default!;
 
-        public virtual ICollection<VideoGame> PublishedVideoGames { get; set; } = new List<VideoGame>();
+        public virtual ICollection<VideoGame> PublishedVideoGames { get; set; } = [];
 
         public string TradeName { get; set; } = default!;
 

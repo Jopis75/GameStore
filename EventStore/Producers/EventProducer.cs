@@ -1,10 +1,10 @@
-﻿using Application.Events;
-using Application.Interfaces.EventSourcing.Producers;
-using Confluent.Kafka;
+﻿using Confluent.Kafka;
+using GameStore.Application.Events;
+using GameStore.Application.Interfaces.EventSourcing.Producers;
 using Microsoft.Extensions.Options;
 using System.Text.Json;
 
-namespace EventSourcing.Producers
+namespace GameStore.EventSourcing.Producers
 {
     public class EventProducer(IOptions<ProducerConfig> producerConfig) : IEventProducer
     {

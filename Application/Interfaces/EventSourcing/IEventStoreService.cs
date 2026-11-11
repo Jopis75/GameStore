@@ -1,7 +1,7 @@
-﻿using Application.Aggregates;
-using Application.Events;
+﻿using GameStore.Application.Aggregates;
+using GameStore.Application.Events;
 
-namespace Application.Interfaces.EventSourcing
+namespace GameStore.Application.Interfaces.EventSourcing
 {
     public interface IEventStoreService
     {

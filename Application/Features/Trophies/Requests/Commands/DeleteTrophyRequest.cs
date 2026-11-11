@@ -1,8 +1,8 @@
-﻿using Application.Dtos.General;
-using Domain.Dtos;
+﻿using GameStore.Application.Dtos.General;
+using GameStore.Domain.Dtos;
 using MediatR;
 
-namespace Application.Features.Trophies.Requests.Commands
+namespace GameStore.Application.Features.Trophies.Requests.Commands
 {
     public class DeleteTrophyRequest : IRequest<HttpResponseDto<TrophyDto>>
     {

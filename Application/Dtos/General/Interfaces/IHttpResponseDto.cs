@@ -1,4 +1,4 @@
-﻿namespace Application.Dtos.General.Interfaces
+﻿namespace GameStore.Application.Dtos.General.Interfaces
 {
     public interface IHttpResponseDto<TDto>
         where TDto : new()

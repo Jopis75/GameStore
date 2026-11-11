@@ -1,13 +1,13 @@
-﻿using Application.Dtos.General;
-using Application.Features.Genres.Requests.Commands;
-using Application.Interfaces.Persistance;
-using Domain.Dtos;
-using FluentValidation;
+﻿using FluentValidation;
+using GameStore.Application.Dtos.General;
+using GameStore.Application.Features.Genres.Requests.Commands;
+using GameStore.Application.Interfaces.Persistance;
+using GameStore.Domain.Dtos;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 
-namespace Application.Features.Genres.RequestHandlers.Commands
+namespace GameStore.Application.Features.Genres.RequestHandlers.Commands
 {
     public class DeleteGenreRequestHandler(IUnitOfWork unitOfWork, IValidator<DeleteGenreRequest> validator, ILogger<DeleteGenreRequestHandler> logger) : IRequestHandler<DeleteGenreRequest, HttpResponseDto<GenreDto>>
     {
@@ -29,7 +29,7 @@ namespace Application.Features.Genres.RequestHandlers.Commands
 
                 var validationResult = await validator.ValidateAsync(deleteGenreRequest, cancellationToken);
 
-                if (validationResult.IsValid == false)
+                if (!validationResult.IsValid)
                 {
                     var ex = new ValidationException(validationResult.Errors);
                     var httpResponseDto1 = new HttpResponseDto<GenreDto>(ex.Message, StatusCodes.Status400BadRequest);

@@ -1,14 +1,14 @@
-﻿using Application.Dtos.General;
-using Application.Features.Trophies.Requests.Commands;
-using Application.Interfaces.Persistance;
-using AutoMapper;
-using Domain.Dtos;
+﻿using AutoMapper;
 using FluentValidation;
+using GameStore.Application.Dtos.General;
+using GameStore.Application.Features.Trophies.Requests.Commands;
+using GameStore.Application.Interfaces.Persistance;
+using GameStore.Domain.Dtos;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 
-namespace Application.Features.Trophies.RequestHandlers.Commands
+namespace GameStore.Application.Features.Trophies.RequestHandlers.Commands
 {
     public class CreateTrophyRequestHandler(IUnitOfWork unitOfWork, IMapper mapper, IValidator<CreateTrophyRequest> validator, ILogger<CreateTrophyRequestHandler> logger) : IRequestHandler<CreateTrophyRequest, HttpResponseDto<TrophyDto>>
     {
@@ -30,7 +30,7 @@ namespace Application.Features.Trophies.RequestHandlers.Commands
 
                 var validationResult = await validator.ValidateAsync(createTrophyRequest, cancellationToken);
 
-                if (validationResult.IsValid == false)
+                if (!validationResult.IsValid)
                 {
                     var ex = new ValidationException(validationResult.Errors);
                     var httpResponseDto1 = new HttpResponseDto<TrophyDto>(ex.Message, StatusCodes.Status400BadRequest);

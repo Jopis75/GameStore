@@ -1,12 +1,12 @@
-﻿using Application.Dtos.General;
-using Application.Features.VideoGames.Requests.Queries;
-using Application.Interfaces.Infrastructure;
-using FluentValidation;
+﻿using FluentValidation;
+using GameStore.Application.Dtos.General;
+using GameStore.Application.Features.VideoGames.Requests.Queries;
+using GameStore.Application.Interfaces.Infrastructure;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 
-namespace Application.Features.VideoGames.RequestHandlers.Queries
+namespace GameStore.Application.Features.VideoGames.RequestHandlers.Queries
 {
     public class DownloadExcelFileByConsoleIdRequestHandler(IExcelFileService excelFileService, IValidator<DownloadExcelFileByConsoleIdRequest> validator, ILogger<DownloadExcelFileByConsoleIdRequestHandler> logger) : IRequestHandler<DownloadExcelFileByConsoleIdRequest, HttpResponseDto<FileDownloadResponseDto>>
     {
@@ -26,7 +26,7 @@ namespace Application.Features.VideoGames.RequestHandlers.Queries
 
                 var validationResult = await validator.ValidateAsync(downloadExcelFileByConsoleIdRequest, cancellationToken);
 
-                if (validationResult.IsValid == false)
+                if (!validationResult.IsValid)
                 {
                     var ex = new ValidationException(validationResult.Errors);
                     var httpResponseDto1 = new HttpResponseDto<FileDownloadResponseDto>(ex.Message, StatusCodes.Status400BadRequest);

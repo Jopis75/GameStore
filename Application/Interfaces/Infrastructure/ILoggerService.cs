@@ -1,9 +1,9 @@
-﻿using Application.Dtos.General;
-using Application.Exceptions;
-using FluentValidation;
+﻿using FluentValidation;
+using GameStore.Application.Dtos.General;
+using GameStore.Application.Exceptions;
 using MediatR;
 
-namespace Application.Interfaces.Infrastructure
+namespace GameStore.Application.Interfaces.Infrastructure
 {
     public interface ILoggerService<TCategoryName>
     {

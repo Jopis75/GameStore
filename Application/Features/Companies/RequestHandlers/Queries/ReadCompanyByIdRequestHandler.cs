@@ -1,13 +1,13 @@
-﻿using Application.Dtos.General;
-using Application.Exceptions;
-using Application.Features.Companies.Requests.Queries;
-using Application.Interfaces.Infrastructure;
-using Application.Interfaces.Persistance;
-using FluentValidation;
+﻿using FluentValidation;
+using GameStore.Application.Dtos.General;
+using GameStore.Application.Exceptions;
+using GameStore.Application.Features.Companies.Requests.Queries;
+using GameStore.Application.Interfaces.Infrastructure;
+using GameStore.Application.Interfaces.Persistance;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 
-namespace Application.Features.Companies.RequestHandlers.Queries
+namespace GameStore.Application.Features.Companies.RequestHandlers.Queries
 {
     public class ReadCompanyByIdRequestHandler(IUnitOfWork unitOfWork, IValidator<ReadCompanyByIdRequest> validator, ILoggerService<ReadCompanyByIdRequestHandler> loggerService) : IRequestHandler<ReadCompanyByIdRequest, HttpResponseDto<ReadCompanyByIdRequest>>
     {
@@ -26,7 +26,7 @@ namespace Application.Features.Companies.RequestHandlers.Queries
 
                 var validationResult = await validator.ValidateAsync(readCompanyByIdRequest, cancellationToken);
 
-                if (validationResult.IsValid == false)
+                if (!validationResult.IsValid)
                 {
                     return loggerService.LogValidationException<ReadCompanyByIdRequest>(new ValidationException(validationResult.Errors), methodName);
                 }

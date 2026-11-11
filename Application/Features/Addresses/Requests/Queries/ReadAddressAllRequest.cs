@@ -1,7 +1,7 @@
-﻿using Application.Dtos.General;
+﻿using GameStore.Application.Dtos.General;
 using MediatR;
 
-namespace Application.Features.Addresses.Requests.Queries
+namespace GameStore.Application.Features.Addresses.Requests.Queries
 {
     public class ReadAddressAllRequest : IRequest<HttpResponseDto<ReadAddressAllRequest>>
     {

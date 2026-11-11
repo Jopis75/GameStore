@@ -1,4 +1,4 @@
-﻿namespace Domain.Dtos.Interfaces
+﻿namespace GameStore.Domain.Dtos.Interfaces
 {
     public interface IDtoBase
     {

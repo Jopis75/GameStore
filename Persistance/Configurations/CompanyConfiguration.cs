@@ -1,9 +1,9 @@
-﻿using Domain.Entities;
-using Domain.Enums;
+﻿using GameStore.Domain.Entities;
+using GameStore.Domain.Enums;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace Persistance.Configurations
+namespace GameStore.Persistance.Configurations
 {
     public class CompanyConfiguration : IEntityTypeConfiguration<Company>
     {

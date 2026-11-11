@@ -1,6 +1,6 @@
-﻿using Domain.Entities;
+﻿using GameStore.Domain.Entities;
 
-namespace Domain.Dtos
+namespace GameStore.Domain.Dtos
 {
     public class GenreDto : DtoBase
     {
@@ -8,6 +8,6 @@ namespace Domain.Dtos
 
         public string? Description { get; set; }
 
-        public List<VideoGameGenre> VideoGameGenres { get; set; } = new();
+        public List<VideoGameGenre> VideoGameGenres { get; set; } = [];
     }
 }

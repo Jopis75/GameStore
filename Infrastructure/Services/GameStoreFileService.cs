@@ -1,12 +1,12 @@
-﻿using Application.Dtos.General;
-using Application.Exceptions;
-using Application.Interfaces.Infrastructure;
-using Application.Interfaces.Persistance;
-using Domain.Dtos;
+﻿using GameStore.Application.Dtos.General;
+using GameStore.Application.Exceptions;
+using GameStore.Application.Interfaces.Infrastructure;
+using GameStore.Application.Interfaces.Persistance;
+using GameStore.Domain.Dtos;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 
-namespace Infrastructure.Services
+namespace GameStore.Infrastructure.Services
 {
     public class GameStoreFileService(IUnitOfWork unitOfWork, ILogger<GameStoreFileService> logger) : IGameStoreFileService
     {

@@ -1,8 +1,7 @@
-﻿using Application.Interfaces.Persistance;
-using Domain.Dtos;
-using FluentValidation;
+﻿using FluentValidation;
+using GameStore.Domain.Dtos;
 
-namespace Application.Validators.Dtos
+namespace GameStore.Application.Validators.Dtos
 {
     //LINE 1: ADDRESSEE'S FULL LEGAL NAME
     //LINE 2: STREET ADDRESS OR POST OFFICE BOX NUMBER

@@ -1,12 +1,12 @@
-﻿using Application.Dtos.Azure.ServiceBus;
-using Application.Dtos.General;
-using Application.Interfaces.Infrastructure;
-using Azure.Messaging.ServiceBus;
+﻿using Azure.Messaging.ServiceBus;
+using GameStore.Application.Dtos.Azure.ServiceBus;
+using GameStore.Application.Dtos.General;
+using GameStore.Application.Interfaces.Infrastructure;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Azure;
 using Microsoft.Extensions.Logging;
 
-namespace Infrastructure.Services
+namespace GameStore.Infrastructure.Services
 {
     public class AzureServiceBusService : IAzureServiceBusService
     {
@@ -131,7 +131,7 @@ namespace Infrastructure.Services
                     _logger.LogError(ex, "Error StopProcessingAsync {@HttpResponseDto}.", httpResponseDto1);
                     return httpResponseDto1;
                 }
-                
+
                 await azureServiceBusStopProcessingRequestDto.ServiceBusProcessor.StopProcessingAsync(cancellationToken);
 
                 var azureServiceBusStopProcessingResponseDto = new AzureServiceBusStopProcessingResponseDto();

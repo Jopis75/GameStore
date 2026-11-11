@@ -1,6 +1,6 @@
-﻿using Domain.Filters.Interfaces;
+﻿using GameStore.Domain.Filters.Interfaces;
 
-namespace Domain.Filters
+namespace GameStore.Domain.Filters
 {
     public class FilterBase : IFilterBase
     {

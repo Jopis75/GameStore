@@ -1,7 +1,7 @@
-﻿using Application.Features.Addresses.Requests.Queries;
-using FluentValidation;
+﻿using FluentValidation;
+using GameStore.Application.Features.Addresses.Requests.Queries;
 
-namespace Application.Validators.Requests.Addresses.Queries
+namespace GameStore.Application.Validators.Requests.Addresses.Queries
 {
     public class ReadAddressByIdRequestValidator : AbstractValidator<ReadAddressByIdRequest>
     {

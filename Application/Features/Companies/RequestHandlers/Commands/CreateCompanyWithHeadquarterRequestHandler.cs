@@ -1,14 +1,14 @@
-﻿using Application.Dtos.General;
-using Application.Features.Companies.Requests.Commands;
-using Application.Interfaces.Persistance;
-using AutoMapper;
-using Domain.Dtos;
+﻿using AutoMapper;
 using FluentValidation;
+using GameStore.Application.Dtos.General;
+using GameStore.Application.Features.Companies.Requests.Commands;
+using GameStore.Application.Interfaces.Persistance;
+using GameStore.Domain.Dtos;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 
-namespace Application.Features.Companies.RequestHandlers.Commands
+namespace GameStore.Application.Features.Companies.RequestHandlers.Commands
 {
     public class CreateCompanyWithHeadquarterRequestHandler(IUnitOfWork unitOfWork, IMapper mapper, IValidator<CreateCompanyWithHeadquarterRequest> validator, ILogger<CreateCompanyWithHeadquarterRequestHandler> logger) : IRequestHandler<CreateCompanyWithHeadquarterRequest, HttpResponseDto<CompanyDto>>
     {
@@ -30,7 +30,7 @@ namespace Application.Features.Companies.RequestHandlers.Commands
 
                 var validationResult = await validator.ValidateAsync(createCompanyWithHeadquarterRequest, cancellationToken);
 
-                if (validationResult.IsValid == false)
+                if (!validationResult.IsValid)
                 {
                     var ex = new ValidationException(validationResult.Errors);
                     var httpResponseDto1 = new HttpResponseDto<CompanyDto>(ex.Message, StatusCodes.Status400BadRequest);

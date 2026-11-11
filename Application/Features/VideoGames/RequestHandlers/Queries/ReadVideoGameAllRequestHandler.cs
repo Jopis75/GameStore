@@ -1,12 +1,12 @@
-﻿using Application.Dtos.General;
-using Application.Features.VideoGames.Requests.Queries;
-using Application.Interfaces.Persistance;
-using Domain.Dtos;
+﻿using GameStore.Application.Dtos.General;
+using GameStore.Application.Features.VideoGames.Requests.Queries;
+using GameStore.Application.Interfaces.Persistance;
+using GameStore.Domain.Dtos;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 
-namespace Application.Features.VideoGames.RequestHandlers.Queries
+namespace GameStore.Application.Features.VideoGames.RequestHandlers.Queries
 {
     public class ReadVideoGameAllRequestHandler(IUnitOfWork unitOfWork, ILogger<ReadVideoGameAllRequestHandler> logger) : IRequestHandler<ReadVideoGameAllRequest, HttpResponseDto<VideoGameDto>>
     {

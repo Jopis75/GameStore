@@ -1,15 +1,15 @@
 ﻿using Abp.Linq.Expressions;
-using Application.Interfaces.Persistance;
 using AutoMapper;
-using Domain.Dtos;
-using Domain.Entities;
-using Domain.Enums;
-using Domain.Filters;
+using GameStore.Application.Interfaces.Persistance;
+using GameStore.Domain.Dtos;
+using GameStore.Domain.Entities;
+using GameStore.Domain.Enums;
+using GameStore.Domain.Filters;
+using GameStore.Persistance.DbContexts;
 using Microsoft.EntityFrameworkCore;
-using Persistance.DbContexts;
 using System.Linq.Expressions;
 
-namespace Persistance.Repositories
+namespace GameStore.Persistance.Repositories
 {
     public class TrophyRepository(GameStoreDbContextFactory gameStoreDbContextFactory, IMapper mapper) : RepositoryBase<Trophy, TrophyDto, TrophyFilter>(gameStoreDbContextFactory, mapper), ITrophyRepository
     {

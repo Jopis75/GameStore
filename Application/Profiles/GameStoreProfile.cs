@@ -1,20 +1,20 @@
-﻿using Application.Dtos.Identity;
-using Application.Events.Addresses;
-using Application.Features.Addresses.Requests.Commands;
-using Application.Features.Companies.Requests.Commands;
-using Application.Features.Consoles.Requests.Commands;
-using Application.Features.ConsoleVideoGames.Requests.Commands;
-using Application.Features.Genres.Requests.Commands;
-using Application.Features.Reviews.Requests.Commands;
-using Application.Features.Trophies.Requests.Commands;
-using Application.Features.VideoGames.Requests.Commands;
-using Application.Models.Identity;
-using AutoMapper;
-using Domain.Dtos;
-using Domain.Entities;
-using Console = Domain.Entities.Console;
+﻿using AutoMapper;
+using GameStore.Application.Dtos.Identity;
+using GameStore.Application.Events.Addresses;
+using GameStore.Application.Features.Addresses.Requests.Commands;
+using GameStore.Application.Features.Companies.Requests.Commands;
+using GameStore.Application.Features.Consoles.Requests.Commands;
+using GameStore.Application.Features.ConsoleVideoGames.Requests.Commands;
+using GameStore.Application.Features.Genres.Requests.Commands;
+using GameStore.Application.Features.Reviews.Requests.Commands;
+using GameStore.Application.Features.Trophies.Requests.Commands;
+using GameStore.Application.Features.VideoGames.Requests.Commands;
+using GameStore.Application.Models.Identity;
+using GameStore.Domain.Dtos;
+using GameStore.Domain.Entities;
+using Console = GameStore.Domain.Entities.Console;
 
-namespace Application.Profiles
+namespace GameStore.Application.Profiles
 {
     public class GameStoreProfile : Profile
     {

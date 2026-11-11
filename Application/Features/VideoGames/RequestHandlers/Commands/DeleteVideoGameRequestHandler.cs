@@ -1,13 +1,13 @@
-﻿using Application.Dtos.General;
-using Application.Features.VideoGames.Requests.Commands;
-using Application.Interfaces.Persistance;
-using Domain.Dtos;
-using FluentValidation;
+﻿using FluentValidation;
+using GameStore.Application.Dtos.General;
+using GameStore.Application.Features.VideoGames.Requests.Commands;
+using GameStore.Application.Interfaces.Persistance;
+using GameStore.Domain.Dtos;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 
-namespace Application.Features.VideoGames.RequestHandlers.Commands
+namespace GameStore.Application.Features.VideoGames.RequestHandlers.Commands
 {
     public class DeleteVideoGameRequestHandler(IUnitOfWork unitOfWork, IValidator<DeleteVideoGameRequest> validator, ILogger<DeleteVideoGameRequestHandler> logger) : IRequestHandler<DeleteVideoGameRequest, HttpResponseDto<VideoGameDto>>
     {
@@ -29,7 +29,7 @@ namespace Application.Features.VideoGames.RequestHandlers.Commands
 
                 var validationResult = await validator.ValidateAsync(deleteVideoGameRequest, cancellationToken);
 
-                if (validationResult.IsValid == false)
+                if (!validationResult.IsValid)
                 {
                     var ex = new ValidationException(validationResult.Errors);
                     var httpResponseDto1 = new HttpResponseDto<VideoGameDto>(ex.Message, StatusCodes.Status400BadRequest);

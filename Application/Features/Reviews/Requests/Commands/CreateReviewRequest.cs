@@ -1,8 +1,8 @@
-﻿using Application.Dtos.General;
-using Domain.Dtos;
+﻿using GameStore.Application.Dtos.General;
+using GameStore.Domain.Dtos;
 using MediatR;
 
-namespace Application.Features.Reviews.Requests.Commands
+namespace GameStore.Application.Features.Reviews.Requests.Commands
 {
     public class CreateReviewRequest : IRequest<HttpResponseDto<ReviewDto>>
     {

@@ -1,8 +1,8 @@
-﻿namespace Domain.Dtos
+﻿namespace GameStore.Domain.Dtos
 {
     public class VideoGameDto : ProductDto
     {
-        public List<ConsoleVideoGameDto> ConsoleVideoGames { get; set; } = new();
+        public List<ConsoleVideoGameDto> ConsoleVideoGames { get; set; } = [];
 
         public CompanyDto Publisher { get; set; } = default!;
 
@@ -14,6 +14,6 @@
 
         public List<TrophyDto> Trophies { get; set; } = new();
 
-        public List<VideoGameGenreDto> VideoGameGenres { get; set; } = new();
+        public List<VideoGameGenreDto> VideoGameGenres { get; set; } = [];
     }
 }

@@ -1,6 +1,6 @@
-﻿using Application.Models.Identity;
+﻿using GameStore.Application.Models.Identity;
 
-namespace Application.Dtos.Identity
+namespace GameStore.Application.Dtos.Identity
 {
     public class RegistrationRequestDto
     {

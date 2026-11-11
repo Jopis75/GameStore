@@ -1,7 +1,7 @@
-﻿using Application.Features.Consoles.Requests.Commands;
-using FluentValidation;
+﻿using FluentValidation;
+using GameStore.Application.Features.Consoles.Requests.Commands;
 
-namespace Application.Validators.Requests.Consoles.Commands
+namespace GameStore.Application.Validators.Requests.Consoles.Commands
 {
     public class DeleteConsoleRequestValidator : AbstractValidator<DeleteConsoleRequest>
     {

@@ -1,6 +1,6 @@
-﻿using Application.Events.Companies;
+﻿using GameStore.Application.Events.Companies;
 
-namespace Application.Interfaces.EventSourcing.EventHandlers
+namespace GameStore.Application.Interfaces.EventSourcing.EventHandlers
 {
     public interface ICompanyEventHandler
     {

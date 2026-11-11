@@ -1,7 +1,7 @@
-﻿using Application.Features.Trophies.Requests.Queries;
-using FluentValidation;
+﻿using FluentValidation;
+using GameStore.Application.Features.Trophies.Requests.Queries;
 
-namespace Application.Validators.Requests.Trophies.Queries
+namespace GameStore.Application.Validators.Requests.Trophies.Queries
 {
     public class ReadTrophyByIdRequestValidator : AbstractValidator<ReadTrophyByIdRequest>
     {

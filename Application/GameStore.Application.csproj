@@ -30,6 +30,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Domain\Domain.csproj" />
+    <ProjectReference Include="..\Domain\GameStore.Domain.csproj" />
   </ItemGroup>
 
 </Project>

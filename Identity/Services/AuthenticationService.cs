@@ -1,9 +1,9 @@
-﻿using Application.Dtos.General;
-using Application.Dtos.Identity;
-using Application.Exceptions;
-using Application.Interfaces.Identity;
-using Application.Models.Identity;
-using FluentValidation;
+﻿using FluentValidation;
+using GameStore.Application.Dtos.General;
+using GameStore.Application.Dtos.Identity;
+using GameStore.Application.Exceptions;
+using GameStore.Application.Interfaces.Identity;
+using GameStore.Application.Models.Identity;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
@@ -14,7 +14,7 @@ using System.Security.Claims;
 using System.Text;
 using ValidationException = FluentValidation.ValidationException;
 
-namespace Identity.Services
+namespace GameStore.Identity.Services
 {
     public class AuthenticationService(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, IValidator<LoginRequestDto> loginRequestDtoValidator, IValidator<RegistrationRequestDto> registrationRequestDtoValidator, ILogger<AuthenticationService> logger, IOptions<JwtSettings> options) : IAuthenticationService
     {
@@ -34,7 +34,7 @@ namespace Identity.Services
 
                 var validationResult = await loginRequestDtoValidator.ValidateAsync(loginRequestDto, cancellationToken);
 
-                if (validationResult.IsValid == false)
+                if (!validationResult.IsValid)
                 {
                     var ex = new ValidationException(validationResult.Errors);
                     var httpResponseDto1 = new HttpResponseDto<LoginResponseDto>(ex.Message, StatusCodes.Status400BadRequest);
@@ -119,7 +119,7 @@ namespace Identity.Services
 
                 var validationResult = await registrationRequestDtoValidator.ValidateAsync(registrationRequestDto, cancellationToken);
 
-                if (validationResult.IsValid == false)
+                if (!validationResult.IsValid)
                 {
                     var ex = new ValidationException(validationResult.Errors);
                     var httpResponseDto1 = new HttpResponseDto<RegistrationResponseDto>(ex.Message, StatusCodes.Status400BadRequest);

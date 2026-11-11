@@ -1,12 +1,12 @@
-﻿using Application.Dtos.General;
-using Application.Features.Genres.Requests.Queries;
-using Application.Interfaces.Persistance;
-using Domain.Dtos;
+﻿using GameStore.Application.Dtos.General;
+using GameStore.Application.Features.Genres.Requests.Queries;
+using GameStore.Application.Interfaces.Persistance;
+using GameStore.Domain.Dtos;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 
-namespace Application.Features.Genres.RequestHandlers.Queries
+namespace GameStore.Application.Features.Genres.RequestHandlers.Queries
 {
     public class ReadGenreAllRequestHandler(IUnitOfWork unitOfWork, ILogger<ReadGenreAllRequestHandler> logger) : IRequestHandler<ReadGenreAllRequest, HttpResponseDto<GenreDto>>
     {

@@ -1,18 +1,17 @@
-﻿using Application.Interfaces.Infrastructure;
-using Application.Models.Email;
-using Infrastructure.Email;
-using Infrastructure.Services;
+﻿using GameStore.Application.Interfaces.Infrastructure;
+using GameStore.Application.Models.Email;
+using GameStore.Infrastructure.Services;
 using Microsoft.Extensions.Azure;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Infrastructure
+namespace GameStore.Infrastructure
 {
     public static class ServiceCollectionExtensions
     {
         public static IServiceCollection AddInfrastructureServices(this IServiceCollection serviceCollection, IConfiguration configuration)
         {
-            serviceCollection.AddEmailSender(configuration);
+            serviceCollection.AddEmailService(configuration);
             serviceCollection.AddAzureServiceClients(configuration);
             serviceCollection.AddServices();
             return serviceCollection;
@@ -31,10 +30,10 @@ namespace Infrastructure
             return serviceCollection;
         }
 
-        private static IServiceCollection AddEmailSender(this IServiceCollection serviceCollection, IConfiguration configuration)
+        private static IServiceCollection AddEmailService(this IServiceCollection serviceCollection, IConfiguration configuration)
         {
             serviceCollection.Configure<EmailSettings>(configuration.GetSection("EmailSettings"));
-            serviceCollection.AddTransient<IEmailSender, EmailSender>();
+            serviceCollection.AddTransient<IEmailService, EmailService>();
             return serviceCollection;
         }
 

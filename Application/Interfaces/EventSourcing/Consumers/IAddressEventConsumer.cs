@@ -1,4 +1,4 @@
-﻿namespace Application.Interfaces.EventSourcing.Consumers
+﻿namespace GameStore.Application.Interfaces.EventSourcing.Consumers
 {
     public interface IAddressEventConsumer
     {

@@ -1,7 +1,7 @@
-﻿using Application.Features.Reviews.Requests.Commands;
-using FluentValidation;
+﻿using FluentValidation;
+using GameStore.Application.Features.Reviews.Requests.Commands;
 
-namespace Application.Validators.Requests.Reviews.Commands
+namespace GameStore.Application.Validators.Requests.Reviews.Commands
 {
     public class UpdateReviewRequestValidator : AbstractValidator<UpdateReviewRequest>
     {

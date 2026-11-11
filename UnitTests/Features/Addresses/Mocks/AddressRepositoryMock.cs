@@ -1,8 +1,8 @@
-﻿using Application.Interfaces.Persistance;
-using Domain.Entities;
+﻿using GameStore.Application.Interfaces.Persistance;
+using GameStore.Domain.Entities;
 using Moq;
 
-namespace UnitTests.Features.Addresses.Mocks
+namespace GameStore.Tests.Features.Addresses.Mocks
 {
     public static class AddressRepositoryMock
     {

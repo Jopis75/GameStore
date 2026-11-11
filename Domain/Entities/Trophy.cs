@@ -1,6 +1,6 @@
-﻿using Domain.Enums;
+﻿using GameStore.Domain.Enums;
 
-namespace Domain.Entities
+namespace GameStore.Domain.Entities
 {
     public class Trophy : EntityBase
     {

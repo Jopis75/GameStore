@@ -1,6 +1,6 @@
-﻿using Application.Models.Event;
+﻿using GameStore.Application.Models.Event;
 
-namespace Application.Interfaces.EventSourcing
+namespace GameStore.Application.Interfaces.EventSourcing
 {
     public interface IEventStoreRepository
     {

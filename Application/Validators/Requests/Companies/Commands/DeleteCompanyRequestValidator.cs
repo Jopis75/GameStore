@@ -1,7 +1,7 @@
-﻿using Application.Features.Companies.Requests.Commands;
-using FluentValidation;
+﻿using FluentValidation;
+using GameStore.Application.Features.Companies.Requests.Commands;
 
-namespace Application.Validators.Requests.Companies.Commands
+namespace GameStore.Application.Validators.Requests.Companies.Commands
 {
     public class DeleteCompanyRequestValidator : AbstractValidator<DeleteCompanyRequest>
     {

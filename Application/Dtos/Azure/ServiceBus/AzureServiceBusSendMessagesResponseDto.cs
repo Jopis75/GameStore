@@ -1,4 +1,4 @@
-﻿namespace Application.Dtos.Azure.ServiceBus
+﻿namespace GameStore.Application.Dtos.Azure.ServiceBus
 {
     public class AzureServiceBusSendMessagesResponseDto
     {

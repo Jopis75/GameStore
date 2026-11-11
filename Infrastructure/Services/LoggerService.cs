@@ -1,12 +1,12 @@
-﻿using Application.Dtos.General;
-using Application.Exceptions;
-using Application.Interfaces.Infrastructure;
-using FluentValidation;
+﻿using FluentValidation;
+using GameStore.Application.Dtos.General;
+using GameStore.Application.Exceptions;
+using GameStore.Application.Interfaces.Infrastructure;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 
-namespace Infrastructure.Services
+namespace GameStore.Infrastructure.Services
 {
     public class LoggerService<TCategoryName>(ILogger<TCategoryName> logger) : ILoggerService<TCategoryName>
     {

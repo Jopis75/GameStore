@@ -1,14 +1,14 @@
-﻿using Application.Dtos.General;
-using Application.Dtos.Identity;
-using Application.Exceptions;
-using Application.Interfaces.Identity;
-using Application.Models.Identity;
-using AutoMapper;
+﻿using AutoMapper;
+using GameStore.Application.Dtos.General;
+using GameStore.Application.Dtos.Identity;
+using GameStore.Application.Exceptions;
+using GameStore.Application.Interfaces.Identity;
+using GameStore.Application.Models.Identity;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
 
-namespace Identity.Services
+namespace GameStore.Identity.Services
 {
     public class UserService : IUserService
     {

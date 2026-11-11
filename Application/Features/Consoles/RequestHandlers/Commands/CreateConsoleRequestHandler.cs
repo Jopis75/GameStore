@@ -1,13 +1,13 @@
-﻿using Application.Dtos.General;
-using Application.Features.Consoles.Requests.Commands;
-using Application.Interfaces.Infrastructure;
-using Application.Interfaces.Persistance;
-using AutoMapper;
+﻿using AutoMapper;
 using FluentValidation;
+using GameStore.Application.Dtos.General;
+using GameStore.Application.Features.Consoles.Requests.Commands;
+using GameStore.Application.Interfaces.Infrastructure;
+using GameStore.Application.Interfaces.Persistance;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 
-namespace Application.Features.Consoles.RequestHandlers.Commands
+namespace GameStore.Application.Features.Consoles.RequestHandlers.Commands
 {
     public class CreateConsoleRequestHandler(IUnitOfWork unitOfWork, IMapper mapper, IValidator<CreateConsoleRequest> validator, ILoggerService<CreateConsoleRequestHandler> loggerService) : IRequestHandler<CreateConsoleRequest, HttpResponseDto<CreateConsoleRequest>>
     {
@@ -27,12 +27,12 @@ namespace Application.Features.Consoles.RequestHandlers.Commands
 
                 var validationResult = await validator.ValidateAsync(createConsoleRequest, cancellationToken);
 
-                if (validationResult.IsValid == false)
+                if (!validationResult.IsValid)
                 {
                     return loggerService.LogValidationException<CreateConsoleRequest>(new ValidationException(validationResult.Errors), methodName);
                 }
 
-                
+
 
                 return loggerService.LogDoneInformation(methodName, createConsoleRequest, StatusCodes.Status201Created);
             }

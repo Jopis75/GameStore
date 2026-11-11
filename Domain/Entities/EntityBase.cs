@@ -1,6 +1,6 @@
-﻿using Domain.Entities.Interfaces;
+﻿using GameStore.Domain.Entities.Interfaces;
 
-namespace Domain.Entities
+namespace GameStore.Domain.Entities
 {
     public abstract class EntityBase : IEntityBase
     {

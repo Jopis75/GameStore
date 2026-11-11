@@ -1,7 +1,7 @@
-﻿using Application.Features.ConsoleVideoGames.Requests.Commands;
-using FluentValidation;
+﻿using FluentValidation;
+using GameStore.Application.Features.ConsoleVideoGames.Requests.Commands;
 
-namespace Application.Validators.Requests.ConsoleVideoGame.Commands
+namespace GameStore.Application.Validators.Requests.ConsoleVideoGame.Commands
 {
     public class CreateConsoleVideoGameRequestValidator : AbstractValidator<CreateConsoleVideoGameRequest>
     {

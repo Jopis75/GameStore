@@ -1,6 +1,6 @@
-﻿using Application.Events;
+﻿using GameStore.Application.Events;
 
-namespace Application.Aggregates
+namespace GameStore.Application.Aggregates
 {
     public abstract class AggregateRoot
     {

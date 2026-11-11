@@ -1,6 +1,6 @@
-﻿using Domain.Dtos.Interfaces;
+﻿using GameStore.Domain.Dtos.Interfaces;
 
-namespace Domain.Dtos
+namespace GameStore.Domain.Dtos
 {
     public abstract class DtoBase : IDtoBase
     {

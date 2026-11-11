@@ -1,8 +1,8 @@
-﻿using Application.Dtos.General;
-using Domain.Dtos;
+﻿using GameStore.Application.Dtos.General;
+using GameStore.Domain.Dtos;
 using MediatR;
 
-namespace Application.Features.ConsoleVideoGames.Requests.Commands
+namespace GameStore.Application.Features.ConsoleVideoGames.Requests.Commands
 {
     public class DeleteConsoleVideoGameRequest : IRequest<HttpResponseDto<ConsoleVideoGameDto>>
     {

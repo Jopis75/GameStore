@@ -15,21 +15,21 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Infrastructure", "Infrastru
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "UI", "UI", "{22616756-40D2-4D50-8192-1EBCD7531035}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Domain", "Domain\Domain.csproj", "{99D8A908-0B55-465A-9707-7B70C0ADFD2C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GameStore.Domain", "Domain\GameStore.Domain.csproj", "{99D8A908-0B55-465A-9707-7B70C0ADFD2C}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Application", "Application\Application.csproj", "{F43F8E22-3791-4633-9EE5-B8B9252D7503}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GameStore.Application", "Application\GameStore.Application.csproj", "{F43F8E22-3791-4633-9EE5-B8B9252D7503}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Persistance", "Persistance\Persistance.csproj", "{431F6A5F-DD0C-479B-9433-FF372D09A14B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GameStore.Persistance", "Persistance\GameStore.Persistance.csproj", "{431F6A5F-DD0C-479B-9433-FF372D09A14B}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Infrastructure", "Infrastructure\Infrastructure.csproj", "{418ECDD4-1DCE-4F4C-93E6-084682F2E070}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GameStore.Infrastructure", "Infrastructure\GameStore.Infrastructure.csproj", "{418ECDD4-1DCE-4F4C-93E6-084682F2E070}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Identity", "Identity\Identity.csproj", "{F433A661-75E4-40D0-8946-01FDDC0080DD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GameStore.Identity", "Identity\GameStore.Identity.csproj", "{F433A661-75E4-40D0-8946-01FDDC0080DD}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GameStoreAPI", "GameStoreAPI\GameStoreAPI.csproj", "{278536E9-1C56-4106-9231-7CE6D92C020F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GameStore.API", "GameStoreAPI\GameStore.API.csproj", "{278536E9-1C56-4106-9231-7CE6D92C020F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnitTests", "UnitTests\UnitTests.csproj", "{8BB8ED25-EBDE-426D-AC33-66B1CB617E41}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GameStore.Tests", "UnitTests\GameStore.Tests.csproj", "{8BB8ED25-EBDE-426D-AC33-66B1CB617E41}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EventSourcing", "EventStore\EventSourcing.csproj", "{0364E773-78BE-41BC-AF2B-4A184F48EBAF}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GameStore.EventSourcing", "EventStore\GameStore.EventSourcing.csproj", "{0364E773-78BE-41BC-AF2B-4A184F48EBAF}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

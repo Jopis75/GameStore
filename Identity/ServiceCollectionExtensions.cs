@@ -1,7 +1,7 @@
-﻿using Application.Interfaces.Identity;
-using Application.Models.Identity;
-using Identity.DbContexts;
-using Identity.Services;
+﻿using GameStore.Application.Interfaces.Identity;
+using GameStore.Application.Models.Identity;
+using GameStore.Identity.DbContexts;
+using GameStore.Identity.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -10,7 +10,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 
-namespace Identity
+namespace GameStore.Identity
 {
     public static class ServiceCollectionExtensions
     {

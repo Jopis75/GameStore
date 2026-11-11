@@ -1,8 +1,8 @@
-﻿using Application.Dtos.Identity;
-using Application.Interfaces.Identity;
+﻿using GameStore.Application.Dtos.Identity;
+using GameStore.Application.Interfaces.Identity;
 using Microsoft.AspNetCore.Mvc;
 
-namespace GameStoreAPI.Controllers
+namespace GameStore.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]

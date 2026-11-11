@@ -1,10 +1,10 @@
-﻿using Application.Interfaces.EventSourcing;
-using Application.Models.Event;
-using EventSourcing.Configurations;
+﻿using GameStore.Application.Interfaces.EventSourcing;
+using GameStore.Application.Models.Event;
+using GameStore.EventSourcing.Configurations;
 using Microsoft.Extensions.Options;
 using MongoDB.Driver;
 
-namespace EventSourcing.Repositories
+namespace GameStore.EventSourcing.Repositories
 {
     public class EventStoreRepository : IEventStoreRepository
     {

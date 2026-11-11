@@ -1,6 +1,6 @@
-﻿using Application.Events.Addresses;
+﻿using GameStore.Application.Events.Addresses;
 
-namespace Application.Aggregates
+namespace GameStore.Application.Aggregates
 {
     public class AddressAggregate : AggregateRoot
     {

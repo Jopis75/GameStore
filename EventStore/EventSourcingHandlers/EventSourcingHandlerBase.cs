@@ -1,8 +1,8 @@
-﻿using Application.Aggregates;
-using Application.Interfaces.EventSourcing;
-using Application.Interfaces.EventSourcing.EventSourcingHandlers;
+﻿using GameStore.Application.Aggregates;
+using GameStore.Application.Interfaces.EventSourcing;
+using GameStore.Application.Interfaces.EventSourcing.EventSourcingHandlers;
 
-namespace EventSourcing.EventSourcingHandlers
+namespace GameStore.EventSourcing.EventSourcingHandlers
 {
     public abstract class EventSourcingHandlerBase<TAggregate>(IEventStoreService eventStoreService) : IEventSourcingHandlerBase<TAggregate>
         where TAggregate : AggregateRoot, new()

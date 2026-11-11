@@ -1,14 +1,14 @@
 ﻿using Abp.Linq.Expressions;
-using Application.Interfaces.Persistance;
 using AutoMapper;
-using Domain.Dtos;
-using Domain.Filters;
+using GameStore.Application.Interfaces.Persistance;
+using GameStore.Domain.Dtos;
+using GameStore.Domain.Filters;
+using GameStore.Persistance.DbContexts;
 using Microsoft.EntityFrameworkCore;
-using Persistance.DbContexts;
 using System.Linq.Expressions;
-using Console = Domain.Entities.Console;
+using Console = GameStore.Domain.Entities.Console;
 
-namespace Persistance.Repositories
+namespace GameStore.Persistance.Repositories
 {
     public class ConsoleRepository(GameStoreDbContextFactory gameStoreDbContextFactory, IMapper mapper) : RepositoryBase<Console, ConsoleDto, ConsoleFilter>(gameStoreDbContextFactory, mapper), IConsoleRepository
     {

@@ -1,4 +1,4 @@
-﻿namespace Domain.Enums
+﻿namespace GameStore.Domain.Enums
 {
     public enum TrophyValue
     {

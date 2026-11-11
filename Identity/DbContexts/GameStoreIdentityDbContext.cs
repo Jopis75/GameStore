@@ -1,9 +1,9 @@
-﻿using Application.Models.Identity;
-using Identity.Configurations;
+﻿using GameStore.Application.Models.Identity;
+using GameStore.Identity.Configurations;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
-namespace Identity.DbContexts
+namespace GameStore.Identity.DbContexts
 {
     public class GameStoreIdentityDbContext(DbContextOptions<GameStoreIdentityDbContext> dbContextOptions) : IdentityDbContext<ApplicationUser>(dbContextOptions)
     {

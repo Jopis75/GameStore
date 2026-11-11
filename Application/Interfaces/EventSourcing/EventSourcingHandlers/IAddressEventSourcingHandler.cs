@@ -1,6 +1,6 @@
-﻿using Application.Aggregates;
+﻿using GameStore.Application.Aggregates;
 
-namespace Application.Interfaces.EventSourcing.EventSourcingHandlers
+namespace GameStore.Application.Interfaces.EventSourcing.EventSourcingHandlers
 {
     public interface IAddressEventSourcingHandler : IEventSourcingHandlerBase<AddressAggregate>
     {

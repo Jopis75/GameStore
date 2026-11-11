@@ -1,6 +1,6 @@
-﻿using Domain.Enums;
+﻿using GameStore.Domain.Enums;
 
-namespace Domain.Filters
+namespace GameStore.Domain.Filters
 {
     public class CompanyFilter : FilterBase
     {

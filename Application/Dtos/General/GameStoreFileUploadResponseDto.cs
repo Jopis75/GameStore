@@ -1,6 +1,6 @@
-﻿using Domain.Dtos;
+﻿using GameStore.Domain.Dtos;
 
-namespace Application.Dtos.General
+namespace GameStore.Application.Dtos.General
 {
     public class GameStoreFileUploadResponseDto<TDto>
         where TDto : DtoBase, new()
@@ -9,7 +9,7 @@ namespace Application.Dtos.General
 
         public GameStoreFileUploadResponseDto()
         {
-            Data = Array.Empty<TDto>();
+            Data = [];
         }
 
         public GameStoreFileUploadResponseDto(TDto[] data)

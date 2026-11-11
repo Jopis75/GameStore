@@ -1,4 +1,4 @@
-﻿namespace Application.Events.Companies
+﻿namespace GameStore.Application.Events.Companies
 {
     public class CompanyDeletedEvent() : EventBase(nameof(CompanyDeletedEvent))
     {

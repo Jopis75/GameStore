@@ -1,13 +1,12 @@
-﻿using Application.Dtos.General;
-using Application.Features.Addresses.Requests.Commands;
-using Application.Interfaces.EventSourcing.EventSourcingHandlers;
-using Application.Interfaces.Infrastructure;
-using FluentValidation;
+﻿using FluentValidation;
+using GameStore.Application.Dtos.General;
+using GameStore.Application.Features.Addresses.Requests.Commands;
+using GameStore.Application.Interfaces.EventSourcing.EventSourcingHandlers;
+using GameStore.Application.Interfaces.Infrastructure;
 using MediatR;
 using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.Logging;
 
-namespace Application.Features.Addresses.RequestHandlers.Commands
+namespace GameStore.Application.Features.Addresses.RequestHandlers.Commands
 {
     public class UpdateAddressRequestHandler(IAddressEventSourcingHandler addressEventSourcingHandler, IValidator<UpdateAddressRequest> validator, ILoggerService<UpdateAddressRequestHandler> loggerService) : IRequestHandler<UpdateAddressRequest, HttpResponseDto<UpdateAddressRequest>>
     {
@@ -22,12 +21,12 @@ namespace Application.Features.Addresses.RequestHandlers.Commands
 
                 if (updateAddressRequest == null)
                 {
-                   return loggerService.LogArgumentNullException<UpdateAddressRequest>(new ArgumentNullException(nameof(updateAddressRequest)), methodName);
+                    return loggerService.LogArgumentNullException<UpdateAddressRequest>(new ArgumentNullException(nameof(updateAddressRequest)), methodName);
                 }
 
                 var validationResult = await validator.ValidateAsync(updateAddressRequest, cancellationToken);
 
-                if (validationResult.IsValid == false)
+                if (!validationResult.IsValid)
                 {
                     return loggerService.LogValidationException<UpdateAddressRequest>(new ValidationException(validationResult.Errors), methodName);
                 }
@@ -40,7 +39,9 @@ namespace Application.Features.Addresses.RequestHandlers.Commands
                 }
 
                 var addressAggregate = await addressEventSourcingHandler.ReadByAggregateIdAsync(updateAddressRequest.Id);
+
                 addressAggregate.UpdateAddress(updateAddressRequest.StreetAddress, updateAddressRequest.PostalCode, updateAddressRequest.City, updateAddressRequest.State, updateAddressRequest.Country);
+
                 await addressEventSourcingHandler.SaveAsync(topic, addressAggregate);
 
                 return loggerService.LogDoneInformation(methodName, updateAddressRequest, StatusCodes.Status200OK);

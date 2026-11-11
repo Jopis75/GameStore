@@ -27,11 +27,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Application\Application.csproj" />
-    <ProjectReference Include="..\EventStore\EventSourcing.csproj" />
-    <ProjectReference Include="..\Identity\Identity.csproj" />
-    <ProjectReference Include="..\Infrastructure\Infrastructure.csproj" />
-    <ProjectReference Include="..\Persistance\Persistance.csproj" />
+    <ProjectReference Include="..\Application\GameStore.Application.csproj" />
+    <ProjectReference Include="..\EventStore\GameStore.EventSourcing.csproj" />
+    <ProjectReference Include="..\Identity\GameStore.Identity.csproj" />
+    <ProjectReference Include="..\Infrastructure\GameStore.Infrastructure.csproj" />
+    <ProjectReference Include="..\Persistance\GameStore.Persistance.csproj" />
   </ItemGroup>
 
   <ItemGroup>

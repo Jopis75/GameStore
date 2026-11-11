@@ -1,12 +1,12 @@
-﻿using Application.Dtos.General;
-using Application.Features.Consoles.Requests.Queries;
-using Application.Interfaces.Persistance;
-using Domain.Dtos;
+﻿using GameStore.Application.Dtos.General;
+using GameStore.Application.Features.Consoles.Requests.Queries;
+using GameStore.Application.Interfaces.Persistance;
+using GameStore.Domain.Dtos;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 
-namespace Application.Features.Consoles.RequestHandlers.Queries
+namespace GameStore.Application.Features.Consoles.RequestHandlers.Queries
 {
     public class ReadConsoleAllRequestHandler(IUnitOfWork unitOfWork, ILogger<ReadConsoleAllRequestHandler> logger) : IRequestHandler<ReadConsoleAllRequest, HttpResponseDto<ConsoleDto>>
     {

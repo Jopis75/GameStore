@@ -1,6 +1,6 @@
-﻿using Application.Dtos.General.Interfaces;
+﻿using GameStore.Application.Dtos.General.Interfaces;
 
-namespace Application.Dtos.General
+namespace GameStore.Application.Dtos.General
 {
     public class HttpResponseDto<TDto> : IHttpResponseDto<TDto>
         where TDto : new()
@@ -23,10 +23,10 @@ namespace Application.Dtos.General
 
         public HttpResponseDto(TDto data, int statusCode)
         {
-            Data = new TDto[]
-            {
+            Data =
+            [
                 data
-            };
+            ];
             ErrorMessage = string.Empty;
             StatusCode = statusCode;
         }
@@ -41,7 +41,7 @@ namespace Application.Dtos.General
 
         public HttpResponseDto(string errorMessage, int statusCode)
         {
-            Data = Array.Empty<TDto>();
+            Data = [];
             ErrorMessage = errorMessage;
             StatusCode = statusCode;
         }

@@ -1,4 +1,4 @@
-﻿namespace Application.Dtos.General
+﻿namespace GameStore.Application.Dtos.General
 {
     public class GameStoreFileUploadRequestDto
     {

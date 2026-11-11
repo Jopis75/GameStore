@@ -1,14 +1,14 @@
-﻿using Application.Dtos.General;
-using Application.Exceptions;
-using Application.Features.ConsoleVideoGames.Requests.Queries;
-using Application.Interfaces.Persistance;
-using Domain.Dtos;
-using FluentValidation;
+﻿using FluentValidation;
+using GameStore.Application.Dtos.General;
+using GameStore.Application.Exceptions;
+using GameStore.Application.Features.ConsoleVideoGames.Requests.Queries;
+using GameStore.Application.Interfaces.Persistance;
+using GameStore.Domain.Dtos;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 
-namespace Application.Features.ConsoleVideoGames.RequestHandlers.Queries
+namespace GameStore.Application.Features.ConsoleVideoGames.RequestHandlers.Queries
 {
     public class ReadConsoleVideoGameByIdRequestHandler(IUnitOfWork unitOfWork, IValidator<ReadConsoleVideoGameByIdRequest> validator, ILogger<ReadConsoleVideoGameByIdRequestHandler> logger) : IRequestHandler<ReadConsoleVideoGameByIdRequest, HttpResponseDto<ConsoleVideoGameDto>>
     {
@@ -28,7 +28,7 @@ namespace Application.Features.ConsoleVideoGames.RequestHandlers.Queries
 
                 var validationResult = await validator.ValidateAsync(readConsoleVideoGameByIdRequest, cancellationToken);
 
-                if (validationResult.IsValid == false)
+                if (!validationResult.IsValid)
                 {
                     var ex = new ValidationException(validationResult.Errors);
                     var httpResponseDto1 = new HttpResponseDto<ConsoleVideoGameDto>(ex.Message, StatusCodes.Status400BadRequest);

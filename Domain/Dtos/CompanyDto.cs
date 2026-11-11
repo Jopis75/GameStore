@@ -1,6 +1,6 @@
-﻿using Domain.Enums;
+﻿using GameStore.Domain.Enums;
 
-namespace Domain.Dtos
+namespace GameStore.Domain.Dtos
 {
     public class CompanyDto : DtoBase
     {

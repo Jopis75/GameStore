@@ -1,9 +1,8 @@
-﻿using Application.Dtos.General;
-using Domain.Dtos;
-using Domain.Entities;
+﻿using GameStore.Application.Dtos.General;
+using GameStore.Domain.Dtos;
 using MediatR;
 
-namespace Application.Features.VideoGames.Requests.Commands
+namespace GameStore.Application.Features.VideoGames.Requests.Commands
 {
     public class CreateVideoGameRequest : IRequest<HttpResponseDto<VideoGameDto>>
     {

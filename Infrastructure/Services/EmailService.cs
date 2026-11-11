@@ -1,22 +1,22 @@
-﻿using Application.Interfaces.Infrastructure;
-using Application.Models.Email;
+﻿using GameStore.Application.Interfaces.Infrastructure;
+using GameStore.Application.Models.Email;
 using Microsoft.Extensions.Options;
 using SendGrid;
 using SendGrid.Helpers.Mail;
 using System.Net;
 
-namespace Infrastructure.Email
+namespace GameStore.Infrastructure.Services
 {
-    public class EmailSender : IEmailSender
+    public class EmailService : IEmailService
     {
         private readonly EmailSettings _emailSettings;
 
-        public EmailSender(IOptions<EmailSettings> emailSettings)
+        public EmailService(IOptions<EmailSettings> emailSettings)
         {
             _emailSettings = emailSettings.Value;
         }
 
-        public async Task<bool> SendEmail(Application.Models.Email.Email email)
+        public async Task<bool> SendEmail(Email email)
         {
             var sendGridClient = new SendGridClient(_emailSettings.ApiKey);
             var fromEmailAddress = new EmailAddress

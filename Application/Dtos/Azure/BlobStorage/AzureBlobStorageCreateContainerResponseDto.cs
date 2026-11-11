@@ -1,6 +1,6 @@
 ﻿using Azure.Storage.Blobs;
 
-namespace Application.Dtos.Azure.BlobStorage
+namespace GameStore.Application.Dtos.Azure.BlobStorage
 {
     public class AzureBlobStorageCreateContainerResponseDto
     {

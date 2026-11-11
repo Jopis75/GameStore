@@ -1,9 +1,9 @@
-﻿using Application.Dtos.General;
-using Domain.Dtos;
-using Domain.Enums;
+﻿using GameStore.Application.Dtos.General;
+using GameStore.Domain.Dtos;
+using GameStore.Domain.Enums;
 using MediatR;
 
-namespace Application.Features.Trophies.Requests.Commands
+namespace GameStore.Application.Features.Trophies.Requests.Commands
 {
     public class CreateTrophyRequest : IRequest<HttpResponseDto<TrophyDto>>
     {

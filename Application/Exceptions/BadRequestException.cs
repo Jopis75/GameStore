@@ -1,8 +1,6 @@
-﻿namespace Application.Exceptions
+﻿namespace GameStore.Application.Exceptions
 {
-    public class BadRequestException : ApplicationException
+    public class BadRequestException(string message) : ApplicationException(message)
     {
-        public BadRequestException(string message)
-            : base(message) { }
     }
 }

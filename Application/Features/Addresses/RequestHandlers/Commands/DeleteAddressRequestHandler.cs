@@ -1,12 +1,12 @@
-﻿using Application.Dtos.General;
-using Application.Features.Addresses.Requests.Commands;
-using Application.Interfaces.EventSourcing.EventSourcingHandlers;
-using Application.Interfaces.Infrastructure;
-using FluentValidation;
+﻿using FluentValidation;
+using GameStore.Application.Dtos.General;
+using GameStore.Application.Features.Addresses.Requests.Commands;
+using GameStore.Application.Interfaces.EventSourcing.EventSourcingHandlers;
+using GameStore.Application.Interfaces.Infrastructure;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 
-namespace Application.Features.Addresses.RequestHandlers.Commands
+namespace GameStore.Application.Features.Addresses.RequestHandlers.Commands
 {
     public class DeleteAddressRequestHandler(IAddressEventSourcingHandler addressEventSourcingHandler, IValidator<DeleteAddressRequest> validator, ILoggerService<DeleteAddressRequestHandler> loggerService) : IRequestHandler<DeleteAddressRequest, HttpResponseDto<DeleteAddressRequest>>
     {
@@ -28,7 +28,7 @@ namespace Application.Features.Addresses.RequestHandlers.Commands
 
                 var validationResult = await validator.ValidateAsync(deleteAddressRequest, cancellationToken);
 
-                if (validationResult.IsValid == false)
+                if (!validationResult.IsValid)
                 {
                     return loggerService.LogValidationException<DeleteAddressRequest>(new ValidationException(validationResult.Errors), methodName);
                 }
@@ -41,7 +41,9 @@ namespace Application.Features.Addresses.RequestHandlers.Commands
                 }
 
                 var addressAggregate = await addressEventSourcingHandler.ReadByAggregateIdAsync(deleteAddressRequest.Id);
+
                 addressAggregate.DeleteAddress();
+
                 await addressEventSourcingHandler.SaveAsync(topic, addressAggregate);
 
                 return loggerService.LogDoneInformation(methodName, deleteAddressRequest, StatusCodes.Status200OK);

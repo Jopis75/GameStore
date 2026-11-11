@@ -1,11 +1,11 @@
-﻿using Application.Dtos.General;
-using Application.Features.Trophies.Requests.Commands;
-using Application.Features.Trophies.Requests.Queries;
-using Domain.Dtos;
+﻿using GameStore.Application.Dtos.General;
+using GameStore.Application.Features.Trophies.Requests.Commands;
+using GameStore.Application.Features.Trophies.Requests.Queries;
+using GameStore.Domain.Dtos;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
-namespace GameStoreAPI.Controllers
+namespace GameStore.API.Controllers
 {
     [Route("api/[controller]")]
     //[Authorize]

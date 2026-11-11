@@ -1,8 +1,8 @@
-﻿using Domain.Dtos;
-using Domain.Entities;
-using Domain.Filters;
+﻿using GameStore.Domain.Dtos;
+using GameStore.Domain.Entities;
+using GameStore.Domain.Filters;
 
-namespace Application.Interfaces.Persistance
+namespace GameStore.Application.Interfaces.Persistance
 {
     public interface IAddressRepository : IRepositoryBase<Address, AddressDto, AddressFilter>
     {

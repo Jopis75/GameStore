@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 
-namespace Persistance.DbContexts
+namespace GameStore.Persistance.DbContexts
 {
     public class GameStoreDbContextFactory(Action<DbContextOptionsBuilder> dbContextOptionBuilder)
     {

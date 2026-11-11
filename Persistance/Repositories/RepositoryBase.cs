@@ -1,15 +1,15 @@
 ﻿using Abp.Linq.Expressions;
-using Application.Interfaces.Persistance;
 using AutoMapper;
-using Domain.Dtos;
-using Domain.Entities;
-using Domain.Filters;
+using GameStore.Application.Interfaces.Persistance;
+using GameStore.Domain.Dtos;
+using GameStore.Domain.Entities;
+using GameStore.Domain.Filters;
+using GameStore.Persistance.DbContexts;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
-using Persistance.DbContexts;
 using System.Linq.Expressions;
 
-namespace Persistance.Repositories
+namespace GameStore.Persistance.Repositories
 {
     public abstract class RepositoryBase<TEntity, TDto, TFilter>(GameStoreDbContextFactory gameStoreDbContextFactory, IMapper mapper) : IRepositoryBase<TEntity, TDto, TFilter>
         where TEntity : EntityBase, new()

@@ -1,7 +1,7 @@
-﻿using Application.Dtos.General;
+﻿using GameStore.Application.Dtos.General;
 using MediatR;
 
-namespace Application.Features.Companies.Requests.Commands
+namespace GameStore.Application.Features.Companies.Requests.Commands
 {
     public class DeleteCompanyRequest : IRequest<HttpResponseDto<DeleteCompanyRequest>>
     {

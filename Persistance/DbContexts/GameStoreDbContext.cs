@@ -1,9 +1,9 @@
-﻿using Domain.Entities;
+﻿using GameStore.Domain.Entities;
+using GameStore.Persistance.Configurations;
 using Microsoft.EntityFrameworkCore;
-using Persistance.Configurations;
-using Console = Domain.Entities.Console;
+using Console = GameStore.Domain.Entities.Console;
 
-namespace Persistance.DbContexts
+namespace GameStore.Persistance.DbContexts
 {
     public class GameStoreDbContext : DbContext
     {

@@ -1,10 +1,10 @@
-﻿using Application.Dtos.General;
-using Application.Interfaces.Infrastructure;
-using Application.Interfaces.Persistance;
-using ClosedXML.Excel;
+﻿using ClosedXML.Excel;
+using GameStore.Application.Dtos.General;
+using GameStore.Application.Interfaces.Infrastructure;
+using GameStore.Application.Interfaces.Persistance;
 using System.Data;
 
-namespace Infrastructure.Services
+namespace GameStore.Infrastructure.Services
 {
     public class ExcelFileService(IUnitOfWork unitOfWork) : IExcelFileService
     {

@@ -1,4 +1,4 @@
-﻿namespace Domain.Entities
+﻿namespace GameStore.Domain.Entities
 {
     public class Review : EntityBase
     {

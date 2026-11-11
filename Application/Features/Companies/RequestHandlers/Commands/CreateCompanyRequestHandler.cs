@@ -1,13 +1,13 @@
-﻿using Application.Aggregates;
-using Application.Dtos.General;
-using Application.Features.Companies.Requests.Commands;
-using Application.Interfaces.EventSourcing.EventSourcingHandlers;
-using Application.Interfaces.Infrastructure;
-using FluentValidation;
+﻿using FluentValidation;
+using GameStore.Application.Aggregates;
+using GameStore.Application.Dtos.General;
+using GameStore.Application.Features.Companies.Requests.Commands;
+using GameStore.Application.Interfaces.EventSourcing.EventSourcingHandlers;
+using GameStore.Application.Interfaces.Infrastructure;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 
-namespace Application.Features.Companies.RequestHandlers.Commands
+namespace GameStore.Application.Features.Companies.RequestHandlers.Commands
 {
     public class CreateCompanyRequestHandler(ICompanyEventSourcingHandler companyEventSourcingHandler, IValidator<CreateCompanyRequest> validator, ILoggerService<CreateCompanyRequestHandler> loggerService) : IRequestHandler<CreateCompanyRequest, HttpResponseDto<CreateCompanyRequest>>
     {
@@ -27,7 +27,7 @@ namespace Application.Features.Companies.RequestHandlers.Commands
 
                 var validationResult = await validator.ValidateAsync(createCompanyRequest, cancellationToken);
 
-                if (validationResult.IsValid == false)
+                if (!validationResult.IsValid)
                 {
                     return loggerService.LogValidationException<CreateCompanyRequest>(new ValidationException(validationResult.Errors), methodName);
                 }
@@ -50,6 +50,7 @@ namespace Application.Features.Companies.RequestHandlers.Commands
                     createCompanyRequest.EmailAddress,
                     createCompanyRequest.PhoneNumber,
                     createCompanyRequest.WebsiteUrl);
+
                 await companyEventSourcingHandler.SaveAsync(topic, companyAggregate);
 
                 return loggerService.LogDoneInformation(methodName, createCompanyRequest, StatusCodes.Status201Created);

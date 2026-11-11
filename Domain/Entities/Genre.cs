@@ -1,4 +1,4 @@
-﻿namespace Domain.Entities
+﻿namespace GameStore.Domain.Entities
 {
     public class Genre : EntityBase
     {
@@ -6,6 +6,6 @@
 
         public string? Description { get; set; }
 
-        public virtual ICollection<VideoGameGenre> VideoGameGenres { get; set; } = new List<VideoGameGenre>();
+        public virtual ICollection<VideoGameGenre> VideoGameGenres { get; set; } = [];
     }
 }

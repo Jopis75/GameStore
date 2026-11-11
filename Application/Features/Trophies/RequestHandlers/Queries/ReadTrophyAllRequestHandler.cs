@@ -1,12 +1,12 @@
-﻿using Application.Dtos.General;
-using Application.Features.Trophies.Requests.Queries;
-using Application.Interfaces.Persistance;
-using Domain.Dtos;
+﻿using GameStore.Application.Dtos.General;
+using GameStore.Application.Features.Trophies.Requests.Queries;
+using GameStore.Application.Interfaces.Persistance;
+using GameStore.Domain.Dtos;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 
-namespace Application.Features.Trophies.RequestHandlers.Queries
+namespace GameStore.Application.Features.Trophies.RequestHandlers.Queries
 {
     public class ReadTrophyAllRequestHandler(IUnitOfWork unitOfWork, ILogger<ReadTrophyAllRequestHandler> logger) : IRequestHandler<ReadTrophyAllRequest, HttpResponseDto<TrophyDto>>
     {

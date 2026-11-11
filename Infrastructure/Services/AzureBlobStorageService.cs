@@ -1,13 +1,13 @@
-﻿using Application.Dtos.Azure.BlobStorage;
-using Application.Dtos.General;
-using Application.Interfaces.Infrastructure;
-using Azure.Storage.Blobs;
+﻿using Azure.Storage.Blobs;
 using Azure.Storage.Blobs.Models;
+using GameStore.Application.Dtos.Azure.BlobStorage;
+using GameStore.Application.Dtos.General;
+using GameStore.Application.Interfaces.Infrastructure;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Azure;
 using Microsoft.Extensions.Logging;
 
-namespace Infrastructure.Services
+namespace GameStore.Infrastructure.Services
 {
     public class AzureBlobStorageService : IAzureBlobStorageService
     {

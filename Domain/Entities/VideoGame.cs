@@ -1,8 +1,8 @@
-﻿namespace Domain.Entities
+﻿namespace GameStore.Domain.Entities
 {
     public class VideoGame : Product
     {
-        public virtual ICollection<ConsoleVideoGame> ConsoleVideoGames { get; set; } = new List<ConsoleVideoGame>();
+        public virtual ICollection<ConsoleVideoGame> ConsoleVideoGames { get; set; } = [];
 
         public virtual Company Publisher { get; set; } = default!;
 
@@ -12,8 +12,8 @@
 
         public TimeSpan TotalTimePlayed { get; set; }
 
-        public virtual ICollection<Trophy> Trophies { get; set; } = new List<Trophy>();
+        public virtual ICollection<Trophy> Trophies { get; set; } = [];
 
-        public virtual ICollection<VideoGameGenre> VideoGameGenres { get; set; } = new List<VideoGameGenre>();
+        public virtual ICollection<VideoGameGenre> VideoGameGenres { get; set; } = [];
     }
 }

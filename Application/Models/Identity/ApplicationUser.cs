@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 
-namespace Application.Models.Identity
+namespace GameStore.Application.Models.Identity
 {
     public class ApplicationUser : IdentityUser
     {

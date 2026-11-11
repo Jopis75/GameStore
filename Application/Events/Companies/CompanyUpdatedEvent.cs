@@ -1,7 +1,6 @@
-﻿using Domain.Dtos;
-using Domain.Enums;
+﻿using GameStore.Domain.Enums;
 
-namespace Application.Events.Companies
+namespace GameStore.Application.Events.Companies
 {
     public class CompanyUpdatedEvent() : EventBase(nameof(CompanyUpdatedEvent))
     {

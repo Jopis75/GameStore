@@ -1,10 +1,10 @@
-﻿using Application.Aggregates;
-using Application.Events;
-using Application.Interfaces.EventSourcing;
-using Application.Interfaces.EventSourcing.Producers;
-using Application.Models.Event;
+﻿using GameStore.Application.Aggregates;
+using GameStore.Application.Events;
+using GameStore.Application.Interfaces.EventSourcing;
+using GameStore.Application.Interfaces.EventSourcing.Producers;
+using GameStore.Application.Models.Event;
 
-namespace EventSourcing.Services
+namespace GameStore.EventSourcing.Services
 {
     public class EventStoreService(IEventStoreRepository eventStoreRepository, IEventProducer eventProducer) : IEventStoreService
     {

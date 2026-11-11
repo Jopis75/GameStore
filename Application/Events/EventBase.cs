@@ -1,4 +1,4 @@
-﻿namespace Application.Events
+﻿namespace GameStore.Application.Events
 {
     public abstract class EventBase(string type)
     {

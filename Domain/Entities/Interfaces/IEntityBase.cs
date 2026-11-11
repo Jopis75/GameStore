@@ -1,4 +1,4 @@
-﻿namespace Domain.Entities.Interfaces
+﻿namespace GameStore.Domain.Entities.Interfaces
 {
     public interface IEntityBase
     {

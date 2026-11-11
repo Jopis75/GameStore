@@ -1,6 +1,6 @@
-﻿using Application.Dtos.General;
+﻿using GameStore.Application.Dtos.General;
 
-namespace Application.Interfaces.Infrastructure
+namespace GameStore.Application.Interfaces.Infrastructure
 {
     public interface IExcelFileService
     {

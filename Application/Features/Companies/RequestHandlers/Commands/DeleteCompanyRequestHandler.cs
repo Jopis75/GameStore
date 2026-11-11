@@ -1,12 +1,12 @@
-﻿using Application.Dtos.General;
-using Application.Features.Companies.Requests.Commands;
-using Application.Interfaces.EventSourcing.EventSourcingHandlers;
-using Application.Interfaces.Infrastructure;
-using FluentValidation;
+﻿using FluentValidation;
+using GameStore.Application.Dtos.General;
+using GameStore.Application.Features.Companies.Requests.Commands;
+using GameStore.Application.Interfaces.EventSourcing.EventSourcingHandlers;
+using GameStore.Application.Interfaces.Infrastructure;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 
-namespace Application.Features.Companies.RequestHandlers.Commands
+namespace GameStore.Application.Features.Companies.RequestHandlers.Commands
 {
     public class DeleteCompanyRequestHandler(ICompanyEventSourcingHandler companyEventSourcingHandler, IValidator<DeleteCompanyRequest> validator, ILoggerService<DeleteCompanyRequestHandler> loggerService) : IRequestHandler<DeleteCompanyRequest, HttpResponseDto<DeleteCompanyRequest>>
     {
@@ -39,7 +39,9 @@ namespace Application.Features.Companies.RequestHandlers.Commands
                 }
 
                 var companyAggregate = await companyEventSourcingHandler.ReadByAggregateIdAsync(deleteCompanyRequest.Id);
+
                 companyAggregate.DeleteCompany();
+
                 await companyEventSourcingHandler.SaveAsync(topic, companyAggregate);
 
                 return loggerService.LogDoneInformation(methodName, deleteCompanyRequest, StatusCodes.Status200OK);

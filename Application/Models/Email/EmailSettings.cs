@@ -1,4 +1,4 @@
-﻿namespace Application.Models.Email
+﻿namespace GameStore.Application.Models.Email
 {
     public class EmailSettings
     {

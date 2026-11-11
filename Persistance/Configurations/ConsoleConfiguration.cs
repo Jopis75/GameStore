@@ -1,8 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using Console = Domain.Entities.Console;
+using Console = GameStore.Domain.Entities.Console;
 
-namespace Persistance.Configurations
+namespace GameStore.Persistance.Configurations
 {
     public class ConsoleConfiguration : IEntityTypeConfiguration<Console>
     {

@@ -1,11 +1,11 @@
-﻿using Application.Interfaces.Persistance;
+﻿using GameStore.Application.Interfaces.Persistance;
+using GameStore.Persistance.DbContexts;
+using GameStore.Persistance.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Persistance.DbContexts;
-using Persistance.Repositories;
 
-namespace Persistance
+namespace GameStore.Persistance
 {
     public static class ServiceCollectionExtensions
     {

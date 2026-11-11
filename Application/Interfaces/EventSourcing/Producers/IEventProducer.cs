@@ -1,6 +1,6 @@
-﻿using Application.Events;
+﻿using GameStore.Application.Events;
 
-namespace Application.Interfaces.EventSourcing.Producers
+namespace GameStore.Application.Interfaces.EventSourcing.Producers
 {
     public interface IEventProducer
     {

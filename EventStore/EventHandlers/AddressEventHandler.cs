@@ -1,12 +1,11 @@
-﻿using Application.Events.Addresses;
-using Application.Interfaces.EventSourcing.EventHandlers;
-using Application.Interfaces.Infrastructure;
-using Application.Interfaces.Persistance;
-using AutoMapper;
-using Domain.Dtos;
-using Microsoft.Extensions.Logging;
+﻿using AutoMapper;
+using GameStore.Application.Events.Addresses;
+using GameStore.Application.Interfaces.EventSourcing.EventHandlers;
+using GameStore.Application.Interfaces.Infrastructure;
+using GameStore.Application.Interfaces.Persistance;
+using GameStore.Domain.Dtos;
 
-namespace EventSourcing.EventHandlers
+namespace GameStore.EventSourcing.EventHandlers
 {
     public class AddressEventHandler(IUnitOfWork unitOfWork, IMapper mapper, ILoggerService<AddressEventHandler> loggerService) : IAddressEventHandler
     {

@@ -1,4 +1,4 @@
-﻿namespace Domain.Filters.Interfaces
+﻿namespace GameStore.Domain.Filters.Interfaces
 {
     public interface IFilterBase
     {

@@ -1,7 +1,7 @@
-﻿using Application.Features.Addresses.Requests.Commands;
-using FluentValidation;
+﻿using FluentValidation;
+using GameStore.Application.Features.Addresses.Requests.Commands;
 
-namespace Application.Validators.Requests.Addresses.Commands
+namespace GameStore.Application.Validators.Requests.Addresses.Commands
 {
     public class DeleteAddressRequestValidator : AbstractValidator<DeleteAddressRequest>
     {

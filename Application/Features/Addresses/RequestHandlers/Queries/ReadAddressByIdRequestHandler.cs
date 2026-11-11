@@ -1,13 +1,13 @@
-﻿using Application.Dtos.General;
-using Application.Exceptions;
-using Application.Features.Addresses.Requests.Queries;
-using Application.Interfaces.Infrastructure;
-using Application.Interfaces.Persistance;
-using FluentValidation;
+﻿using FluentValidation;
+using GameStore.Application.Dtos.General;
+using GameStore.Application.Exceptions;
+using GameStore.Application.Features.Addresses.Requests.Queries;
+using GameStore.Application.Interfaces.Infrastructure;
+using GameStore.Application.Interfaces.Persistance;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 
-namespace Application.Features.Addresses.RequestHandlers.Queries
+namespace GameStore.Application.Features.Addresses.RequestHandlers.Queries
 {
     public class ReadAddressByIdRequestHandler(IUnitOfWork unitOfWork, IValidator<ReadAddressByIdRequest> validator, ILoggerService<ReadAddressByIdRequestHandler> loggerService) : IRequestHandler<ReadAddressByIdRequest, HttpResponseDto<ReadAddressByIdRequest>>
     {
@@ -26,7 +26,7 @@ namespace Application.Features.Addresses.RequestHandlers.Queries
 
                 var validationResult = await validator.ValidateAsync(readAddressByIdRequest, cancellationToken);
 
-                if (validationResult.IsValid == false)
+                if (!validationResult.IsValid)
                 {
                     return loggerService.LogValidationException<ReadAddressByIdRequest>(new ValidationException(validationResult.Errors), methodName);
                 }

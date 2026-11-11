@@ -1,4 +1,4 @@
-﻿namespace Application.Models.Identity
+﻿namespace GameStore.Application.Models.Identity
 {
     public class JwtSettings
     {

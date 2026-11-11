@@ -1,9 +1,9 @@
-﻿using Application.Dtos.General;
-using Domain.Dtos;
+﻿using GameStore.Application.Dtos.General;
+using GameStore.Domain.Dtos;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 
-namespace Application.Features.VideoGames.Requests.Commands
+namespace GameStore.Application.Features.VideoGames.Requests.Commands
 {
     public class UploadGameStoreFileRequest : IRequest<HttpResponseDto<GameStoreFileUploadResponseDto<VideoGameDto>>>
     {

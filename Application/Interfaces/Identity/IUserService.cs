@@ -1,7 +1,7 @@
-﻿using Application.Dtos.General;
-using Application.Dtos.Identity;
+﻿using GameStore.Application.Dtos.General;
+using GameStore.Application.Dtos.Identity;
 
-namespace Application.Interfaces.Identity
+namespace GameStore.Application.Interfaces.Identity
 {
     public interface IUserService
     {

@@ -1,14 +1,14 @@
-﻿using Application.Dtos.General;
-using Application.Features.Reviews.Requests.Commands;
-using Application.Interfaces.Persistance;
-using AutoMapper;
-using Domain.Dtos;
+﻿using AutoMapper;
 using FluentValidation;
+using GameStore.Application.Dtos.General;
+using GameStore.Application.Features.Reviews.Requests.Commands;
+using GameStore.Application.Interfaces.Persistance;
+using GameStore.Domain.Dtos;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 
-namespace Application.Features.Reviews.RequestHandlers.Commands
+namespace GameStore.Application.Features.Reviews.RequestHandlers.Commands
 {
     public class CreateReviewRequestHandler(IUnitOfWork unitOfWork, IMapper mapper, IValidator<CreateReviewRequest> validator, ILogger<CreateReviewRequestHandler> logger) : IRequestHandler<CreateReviewRequest, HttpResponseDto<ReviewDto>>
     {
@@ -30,7 +30,7 @@ namespace Application.Features.Reviews.RequestHandlers.Commands
 
                 var validationResult = await validator.ValidateAsync(createReviewRequest, cancellationToken);
 
-                if (validationResult.IsValid == false)
+                if (!validationResult.IsValid)
                 {
                     var ex = new ValidationException(validationResult.Errors);
                     var httpResponseDto1 = new HttpResponseDto<ReviewDto>(ex.Message, StatusCodes.Status400BadRequest);

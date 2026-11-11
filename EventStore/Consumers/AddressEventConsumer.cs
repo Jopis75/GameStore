@@ -1,12 +1,12 @@
-﻿using Application.Events;
-using Application.Interfaces.EventSourcing.Consumers;
-using Application.Interfaces.EventSourcing.EventHandlers;
-using Confluent.Kafka;
-using EventSourcing.Converters;
+﻿using Confluent.Kafka;
+using GameStore.Application.Events;
+using GameStore.Application.Interfaces.EventSourcing.Consumers;
+using GameStore.Application.Interfaces.EventSourcing.EventHandlers;
+using GameStore.EventSourcing.Converters;
 using Microsoft.Extensions.Options;
 using System.Text.Json;
 
-namespace EventSourcing.Consumers
+namespace GameStore.EventSourcing.Consumers
 {
     public class AddressEventConsumer(IAddressEventHandler addressEventHandler, IOptions<ConsumerConfig> consumerConfig) : IAddressEventConsumer
     {

@@ -1,8 +1,8 @@
-﻿using Application.Dtos.General;
-using Domain.Dtos;
+﻿using GameStore.Application.Dtos.General;
+using GameStore.Domain.Dtos;
 using MediatR;
 
-namespace Application.Features.Genres.Requests.Commands
+namespace GameStore.Application.Features.Genres.Requests.Commands
 {
     public class DeleteGenreRequest : IRequest<HttpResponseDto<GenreDto>>
     {

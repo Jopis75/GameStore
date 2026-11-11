@@ -1,9 +1,9 @@
-﻿using Application.Interfaces.EventSourcing.Consumers;
+﻿using GameStore.Application.Interfaces.EventSourcing.Consumers;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 
-namespace EventSourcing.Consumers
+namespace GameStore.EventSourcing.Consumers
 {
     public class ConsumerHostedService(IServiceProvider serviceProvider, ILogger<ConsumerHostedService> logger) : IHostedService
     {

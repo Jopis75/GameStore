@@ -1,7 +1,7 @@
-﻿using Application.Features.Reviews.Requests.Queries;
-using FluentValidation;
+﻿using FluentValidation;
+using GameStore.Application.Features.Reviews.Requests.Queries;
 
-namespace Application.Validators.Requests.Reviews.Queries
+namespace GameStore.Application.Validators.Requests.Reviews.Queries
 {
     public class ReadReviewsByVideoGameIdRequestValidator : AbstractValidator<ReadReviewsByVideoGameIdRequest>
     {

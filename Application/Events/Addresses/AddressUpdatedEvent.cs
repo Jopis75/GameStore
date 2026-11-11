@@ -1,4 +1,4 @@
-﻿namespace Application.Events.Addresses
+﻿namespace GameStore.Application.Events.Addresses
 {
     public class AddressUpdatedEvent() : EventBase(nameof(AddressUpdatedEvent))
     {

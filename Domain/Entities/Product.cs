@@ -1,4 +1,4 @@
-﻿namespace Domain.Entities
+﻿namespace GameStore.Domain.Entities
 {
     public abstract class Product : EntityBase
     {
@@ -16,7 +16,7 @@
 
         public DateTime ReleaseDate { get; set; }
 
-        public virtual ICollection<Review> Reviews { get; set; } = new List<Review>();
+        public virtual ICollection<Review> Reviews { get; set; } = [];
 
         public string? Url { get; set; }
     }

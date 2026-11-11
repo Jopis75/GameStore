@@ -1,13 +1,13 @@
-﻿using Application.Aggregates;
-using Application.Dtos.General;
-using Application.Features.Addresses.Requests.Commands;
-using Application.Interfaces.EventSourcing.EventSourcingHandlers;
-using Application.Interfaces.Infrastructure;
-using FluentValidation;
+﻿using FluentValidation;
+using GameStore.Application.Aggregates;
+using GameStore.Application.Dtos.General;
+using GameStore.Application.Features.Addresses.Requests.Commands;
+using GameStore.Application.Interfaces.EventSourcing.EventSourcingHandlers;
+using GameStore.Application.Interfaces.Infrastructure;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 
-namespace Application.Features.Addresses.RequestHandlers.Commands
+namespace GameStore.Application.Features.Addresses.RequestHandlers.Commands
 {
     public class CreateAddressRequestHandler(IAddressEventSourcingHandler addressEventSourcingHandler, IValidator<CreateAddressRequest> validator, ILoggerService<CreateAddressRequestHandler> loggerService) : IRequestHandler<CreateAddressRequest, HttpResponseDto<CreateAddressRequest>>
     {
@@ -27,7 +27,7 @@ namespace Application.Features.Addresses.RequestHandlers.Commands
 
                 var validationResult = await validator.ValidateAsync(createAddressRequest, cancellationToken);
 
-                if (validationResult.IsValid == false)
+                if (!validationResult.IsValid)
                 {
                     return loggerService.LogValidationException<CreateAddressRequest>(new ValidationException(validationResult.Errors), methodName);
                 }
@@ -40,6 +40,7 @@ namespace Application.Features.Addresses.RequestHandlers.Commands
                 }
 
                 var addressAggregate = new AddressAggregate(createAddressRequest.StreetAddress, createAddressRequest.PostalCode, createAddressRequest.City, createAddressRequest.State, createAddressRequest.Country);
+
                 await addressEventSourcingHandler.SaveAsync(topic, addressAggregate);
 
                 return loggerService.LogDoneInformation(methodName, createAddressRequest, StatusCodes.Status201Created);

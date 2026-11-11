@@ -1,4 +1,4 @@
-﻿namespace Application.Exceptions
+﻿namespace GameStore.Application.Exceptions
 {
     public class NotFoundException(string message) : ApplicationException(message)
     {

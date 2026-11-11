@@ -1,4 +1,4 @@
-﻿namespace Application.Dtos.Identity
+﻿namespace GameStore.Application.Dtos.Identity
 {
     public class LoginRequestDto
     {

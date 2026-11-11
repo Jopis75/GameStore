@@ -1,20 +1,20 @@
-﻿using Application.Interfaces.EventSourcing;
-using Application.Interfaces.EventSourcing.Consumers;
-using Application.Interfaces.EventSourcing.EventHandlers;
-using Application.Interfaces.EventSourcing.EventSourcingHandlers;
-using Application.Interfaces.EventSourcing.Producers;
-using Confluent.Kafka;
-using EventSourcing.Configurations;
-using EventSourcing.Consumers;
-using EventSourcing.EventHandlers;
-using EventSourcing.EventSourcingHandlers;
-using EventSourcing.Producers;
-using EventSourcing.Repositories;
-using EventSourcing.Services;
+﻿using Confluent.Kafka;
+using GameStore.Application.Interfaces.EventSourcing;
+using GameStore.Application.Interfaces.EventSourcing.Consumers;
+using GameStore.Application.Interfaces.EventSourcing.EventHandlers;
+using GameStore.Application.Interfaces.EventSourcing.EventSourcingHandlers;
+using GameStore.Application.Interfaces.EventSourcing.Producers;
+using GameStore.EventSourcing.Configurations;
+using GameStore.EventSourcing.Consumers;
+using GameStore.EventSourcing.EventHandlers;
+using GameStore.EventSourcing.EventSourcingHandlers;
+using GameStore.EventSourcing.Producers;
+using GameStore.EventSourcing.Repositories;
+using GameStore.EventSourcing.Services;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace EventSourcing
+namespace GameStore.EventSourcing
 {
     public static class ServiceCollectionExtensions
     {

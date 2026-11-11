@@ -1,0 +1,18 @@
+# For more info on HTTP files go to https://aka.ms/vs/httpfile
+@schema https
+@hostname localhost
+@port 7240
+
+GET {{schema}}://{{hostname}}:{{port}}/api/VideoGame/ReadAllAsync
+
+###
+#POST {{schema}}://{{hostname}}:{{port}}/api/VideoGame/CreateAsync
+#accept: application/json
+#content-type: application/json
+#{
+#  "title": "The Legend of Zelda: Breath of the Wild",
+#  "genre": "Action-adventure",
+#   "releaseDate": "2017-03-03T00:00:00Z",
+#   "developer": "Nintendo",
+#   "publisher": "Nintendo"
+# }

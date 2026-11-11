@@ -1,8 +1,8 @@
-﻿using Application.Interfaces.Persistance;
+﻿using GameStore.Application.Interfaces.Persistance;
+using GameStore.Persistance.DbContexts;
 using Microsoft.EntityFrameworkCore.Storage;
-using Persistance.DbContexts;
 
-namespace Persistance.Repositories
+namespace GameStore.Persistance.Repositories
 {
     public class UnitOfWork(
         GameStoreDbContext gameStoreDbContext,

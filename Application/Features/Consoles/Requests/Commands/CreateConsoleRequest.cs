@@ -1,7 +1,7 @@
-﻿using Application.Dtos.General;
+﻿using GameStore.Application.Dtos.General;
 using MediatR;
 
-namespace Application.Features.Consoles.Requests.Commands
+namespace GameStore.Application.Features.Consoles.Requests.Commands
 {
     public class CreateConsoleRequest : IRequest<HttpResponseDto<CreateConsoleRequest>>
     {

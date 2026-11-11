@@ -1,7 +1,7 @@
 ﻿using FluentValidation;
 using Microsoft.AspNetCore.Http;
 
-namespace Application.Validators.General
+namespace GameStore.Application.Validators.General
 {
     public class FormFileValidator : AbstractValidator<IFormFile>
     {

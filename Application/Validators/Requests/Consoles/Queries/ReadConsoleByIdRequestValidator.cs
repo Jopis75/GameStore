@@ -1,7 +1,7 @@
-﻿using Application.Features.Consoles.Requests.Queries;
-using FluentValidation;
+﻿using FluentValidation;
+using GameStore.Application.Features.Consoles.Requests.Queries;
 
-namespace Application.Validators.Requests.Consoles.Queries
+namespace GameStore.Application.Validators.Requests.Consoles.Queries
 {
     public class ReadConsoleByIdRequestValidator : AbstractValidator<ReadConsoleByIdRequest>
     {

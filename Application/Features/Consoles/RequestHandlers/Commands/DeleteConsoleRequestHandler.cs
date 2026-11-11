@@ -1,13 +1,13 @@
-﻿using Application.Dtos.General;
-using Application.Features.Consoles.Requests.Commands;
-using Application.Interfaces.Persistance;
-using Domain.Dtos;
-using FluentValidation;
+﻿using FluentValidation;
+using GameStore.Application.Dtos.General;
+using GameStore.Application.Features.Consoles.Requests.Commands;
+using GameStore.Application.Interfaces.Persistance;
+using GameStore.Domain.Dtos;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 
-namespace Application.Features.Consoles.RequestHandlers.Commands
+namespace GameStore.Application.Features.Consoles.RequestHandlers.Commands
 {
     public class DeleteConsoleRequestHandler(IUnitOfWork unitOfWork, IValidator<DeleteConsoleRequest> validator, ILogger<DeleteConsoleRequestHandler> logger) : IRequestHandler<DeleteConsoleRequest, HttpResponseDto<ConsoleDto>>
     {
@@ -29,7 +29,7 @@ namespace Application.Features.Consoles.RequestHandlers.Commands
 
                 var validationResult = await validator.ValidateAsync(deleteConsoleRequest, cancellationToken);
 
-                if (validationResult.IsValid == false)
+                if (!validationResult.IsValid)
                 {
                     var ex = new ValidationException(validationResult.Errors);
                     var httpResponseDto1 = new HttpResponseDto<ConsoleDto>(ex.Message, StatusCodes.Status400BadRequest);

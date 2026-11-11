@@ -1,7 +1,7 @@
-﻿using Application.Dtos.General;
+﻿using GameStore.Application.Dtos.General;
 using MediatR;
 
-namespace Application.Features.Companies.Requests.Queries
+namespace GameStore.Application.Features.Companies.Requests.Queries
 {
     public class ReadCompanyAllRequest : IRequest<HttpResponseDto<ReadCompanyAllRequest>>
     {

@@ -1,10 +1,10 @@
-﻿using Application.Dtos.General;
-using Application.Features.Addresses.Requests.Commands;
-using Domain.Dtos;
-using Domain.Enums;
+﻿using GameStore.Application.Dtos.General;
+using GameStore.Application.Features.Addresses.Requests.Commands;
+using GameStore.Domain.Dtos;
+using GameStore.Domain.Enums;
 using MediatR;
 
-namespace Application.Features.Companies.Requests.Commands
+namespace GameStore.Application.Features.Companies.Requests.Commands
 {
     public class CreateCompanyWithHeadquarterRequest : IRequest<HttpResponseDto<CompanyDto>>
     {

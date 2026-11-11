@@ -1,8 +1,8 @@
-﻿using Application.Dtos.General;
-using Domain.Dtos;
+﻿using GameStore.Application.Dtos.General;
+using GameStore.Domain.Dtos;
 using Microsoft.AspNetCore.Http;
 
-namespace Application.Interfaces.Infrastructure
+namespace GameStore.Application.Interfaces.Infrastructure
 {
     public interface IGameStoreFileService
     {

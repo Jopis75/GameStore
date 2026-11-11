@@ -1,8 +1,8 @@
-﻿using Domain.Dtos;
-using Domain.Filters;
-using Console = Domain.Entities.Console;
+﻿using GameStore.Domain.Dtos;
+using GameStore.Domain.Filters;
+using Console = GameStore.Domain.Entities.Console;
 
-namespace Application.Interfaces.Persistance
+namespace GameStore.Application.Interfaces.Persistance
 {
     public interface IConsoleRepository : IRepositoryBase<Console, ConsoleDto, ConsoleFilter>
     {

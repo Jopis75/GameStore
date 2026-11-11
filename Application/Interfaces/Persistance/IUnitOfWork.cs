@@ -1,4 +1,4 @@
-﻿namespace Application.Interfaces.Persistance
+﻿namespace GameStore.Application.Interfaces.Persistance
 {
     public interface IUnitOfWork : IDisposable
     {

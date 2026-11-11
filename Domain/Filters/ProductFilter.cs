@@ -1,4 +1,4 @@
-﻿namespace Domain.Filters
+﻿namespace GameStore.Domain.Filters
 {
     public abstract class ProductFilter : FilterBase
     {

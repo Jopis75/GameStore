@@ -1,8 +1,8 @@
-﻿using Domain.Entities;
+﻿using GameStore.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace Persistance.Configurations
+namespace GameStore.Persistance.Configurations
 {
     public class VideoGameGenreConfiguration : IEntityTypeConfiguration<VideoGameGenre>
     {

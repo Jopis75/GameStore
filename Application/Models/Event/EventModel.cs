@@ -1,8 +1,8 @@
-﻿using Application.Events;
+﻿using GameStore.Application.Events;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
 
-namespace Application.Models.Event
+namespace GameStore.Application.Models.Event
 {
     public class EventModel
     {

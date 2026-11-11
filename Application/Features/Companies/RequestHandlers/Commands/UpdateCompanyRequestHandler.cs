@@ -1,12 +1,12 @@
-﻿using Application.Dtos.General;
-using Application.Features.Companies.Requests.Commands;
-using Application.Interfaces.EventSourcing.EventSourcingHandlers;
-using Application.Interfaces.Infrastructure;
-using FluentValidation;
+﻿using FluentValidation;
+using GameStore.Application.Dtos.General;
+using GameStore.Application.Features.Companies.Requests.Commands;
+using GameStore.Application.Interfaces.EventSourcing.EventSourcingHandlers;
+using GameStore.Application.Interfaces.Infrastructure;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 
-namespace Application.Features.Companies.RequestHandlers.Commands
+namespace GameStore.Application.Features.Companies.RequestHandlers.Commands
 {
     public class UpdateCompanyRequestHandler(ICompanyEventSourcingHandler companyEventSourcingHandler, IValidator<UpdateCompanyRequest> validator, ILoggerService<UpdateCompanyRequestHandler> loggerService) : IRequestHandler<UpdateCompanyRequest, HttpResponseDto<UpdateCompanyRequest>>
     {
@@ -26,7 +26,7 @@ namespace Application.Features.Companies.RequestHandlers.Commands
 
                 var validationResult = await validator.ValidateAsync(updateCompanyRequest, cancellationToken);
 
-                if (validationResult.IsValid == false)
+                if (!validationResult.IsValid)
                 {
                     return loggerService.LogValidationException<UpdateCompanyRequest>(new ValidationException(validationResult.Errors), methodName);
                 }
@@ -39,6 +39,7 @@ namespace Application.Features.Companies.RequestHandlers.Commands
                 }
 
                 var companyAggregate = await companyEventSourcingHandler.ReadByAggregateIdAsync(updateCompanyRequest.Id);
+
                 companyAggregate.UpdateCompany(
                     updateCompanyRequest.Name,
                     updateCompanyRequest.TradeName,
@@ -50,6 +51,7 @@ namespace Application.Features.Companies.RequestHandlers.Commands
                     updateCompanyRequest.EmailAddress,
                     updateCompanyRequest.PhoneNumber,
                     updateCompanyRequest.WebsiteUrl);
+
                 await companyEventSourcingHandler.SaveAsync(topic, companyAggregate);
 
                 return loggerService.LogDoneInformation(methodName, updateCompanyRequest, StatusCodes.Status200OK);

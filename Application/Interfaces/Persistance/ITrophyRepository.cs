@@ -1,9 +1,9 @@
-﻿using Domain.Dtos;
-using Domain.Entities;
-using Domain.Enums;
-using Domain.Filters;
+﻿using GameStore.Domain.Dtos;
+using GameStore.Domain.Entities;
+using GameStore.Domain.Enums;
+using GameStore.Domain.Filters;
 
-namespace Application.Interfaces.Persistance
+namespace GameStore.Application.Interfaces.Persistance
 {
     public interface ITrophyRepository : IRepositoryBase<Trophy, TrophyDto, TrophyFilter>
     {

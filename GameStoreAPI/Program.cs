@@ -1,9 +1,9 @@
-using Application;
-using EventSourcing;
-using Identity;
-using Infrastructure;
+using GameStore.Application;
+using GameStore.EventSourcing;
+using GameStore.Identity;
+using GameStore.Infrastructure;
 using Microsoft.OpenApi.Models;
-using Persistance;
+using GameStore.Persistance;
 using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);

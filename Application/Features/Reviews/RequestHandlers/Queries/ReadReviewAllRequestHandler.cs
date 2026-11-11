@@ -1,12 +1,12 @@
-﻿using Application.Dtos.General;
-using Application.Features.Reviews.Requests.Queries;
-using Application.Interfaces.Persistance;
-using Domain.Dtos;
+﻿using GameStore.Application.Dtos.General;
+using GameStore.Application.Features.Reviews.Requests.Queries;
+using GameStore.Application.Interfaces.Persistance;
+using GameStore.Domain.Dtos;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 
-namespace Application.Features.Reviews.RequestHandlers.Queries
+namespace GameStore.Application.Features.Reviews.RequestHandlers.Queries
 {
     public class ReadReviewAllRequestHandler(IUnitOfWork unitOfWork, ILogger<ReadReviewAllRequestHandler> logger) : IRequestHandler<ReadReviewAllRequest, HttpResponseDto<ReviewDto>>
     {

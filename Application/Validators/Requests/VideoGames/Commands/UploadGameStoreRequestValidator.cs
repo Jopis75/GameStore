@@ -4,7 +4,7 @@ using GameStore.Application.Validators.General;
 
 namespace GameStore.Application.Validators.Requests.VideoGames.Commands
 {
-    public class UploadGameStoreRequestValidator : AbstractValidator<UploadGameStoreFileRequest>
+    public class UploadGameStoreRequestValidator : AbstractValidator<UploadGameStoreCsvFileRequest>
     {
         public UploadGameStoreRequestValidator()
         {

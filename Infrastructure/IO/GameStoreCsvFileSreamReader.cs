@@ -6,13 +6,14 @@ using GameStore.Domain.Dtos;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 
-namespace GameStore.Infrastructure.Services
+namespace GameStore.Infrastructure.IO
 {
-    public class GameStoreFileService(IUnitOfWork unitOfWork, ILogger<GameStoreFileService> logger) : IGameStoreFileService
+    public class GameStoreCsvFileSreamReader(IUnitOfWork unitOfWork, ILogger<GameStoreCsvFileSreamReader> logger) : IGameStoreFileService
     {
         public async Task<GameStoreFileUploadResponseDto<VideoGameDto>> UploadAsync(IFormFile formFile, CancellationToken cancellationToken)
         {
-            var memoryStream = new MemoryStream();
+            using var memoryStream = new MemoryStream();
+
             await formFile.CopyToAsync(memoryStream, cancellationToken);
             memoryStream.Position = 0;
 
@@ -25,69 +26,11 @@ namespace GameStore.Infrastructure.Services
         {
             var videoGameDtos = new List<VideoGameDto>();
 
-            TextReader textReader = new StreamReader(stream);
+            using var streamReader = new StreamReader(stream);
 
-            var rows = (await textReader.ReadToEndAsync(cancellationToken)).Split("\r\n", StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
+            var rows = (await streamReader.ReadToEndAsync(cancellationToken)).Split(Environment.NewLine, StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
 
-            foreach (var row in rows)
-            {
-                await unitOfWork.BeginTransactionAsync(cancellationToken);
-
-                try
-                {
-                    var columns = row.Split('|', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
-
-                    // Trim and parse all file data.
-                    var videoGameTitle = columns[0];
-                    var developerName = columns[1]; // Must exist in db.
-                    var publisherName = columns[2]; // Must exist in db.
-                    var consoleName = columns[3]; // Must exist in db.
-                    var genreNames = columns[4].Split(';', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries); // Must exist in db.
-                    var videoGameReleaseDate = DateTime.Parse(columns[5]);
-                    var videoGamePurchaseDate = DateTime.Parse(columns[6]);
-                    var videoGamePrice = Decimal.Parse(columns[7]);
-
-                    var gameStoreFileUploadRequestDto = new GameStoreFileUploadRequestDto
-                    {
-                        VideoGameTitle = columns[0],
-                        DeveloperName = columns[1],
-                        PublisherName = columns[2],
-                        ConsoleName = columns[3],
-                        GenreNames = columns[4],
-                        VideoGameReleaseDate = columns[5],
-                        VideoGamePurchaseDate = columns[6],
-                        VideoGamePrice = columns[7]
-                    };
-
-                    // Create or update VideoGame.
-                    var videoGameDto = await CreateOrUpdateVideoGameAsync(gameStoreFileUploadRequestDto, cancellationToken);
-
-                    // Create if not exist ConsoleVideoGame.
-                    var consoleVideoGameDtos = await CreateIfNotExistConsoleVideoGamesAsync(consoleName, videoGameDto.Id, cancellationToken);
-
-                    // Create or update VideoGameGenre.
-                    var videoGameGenreDtos = await CreateOrUpdateVideoGameGenresAsync(videoGameDto.Id, genreNames, cancellationToken);
-
-                    await unitOfWork.CommitTransactionAsync(cancellationToken);
-
-                    videoGameDtos.Add(videoGameDto);
-
-                    // Log success.
-                    logger.LogInformation("Success Upload {@VideoGameDto}.", videoGameDto);
-                }
-                catch (OperationCanceledException)
-                {
-                    await unitOfWork.RollbackTransactionAsync(cancellationToken);
-
-                    throw;
-                }
-                catch (Exception ex)
-                {
-                    await unitOfWork.RollbackTransactionAsync(cancellationToken);
-
-                    logger.LogError(ex, $"Error Upload {row}.");
-                }
-            }
+            var dtos = GameStoreCsvFileParser.Parse(rows);
 
             var uploadGameStoreFileResponseDto = new GameStoreFileUploadResponseDto<VideoGameDto>(videoGameDtos.ToArray());
 
@@ -147,8 +90,8 @@ namespace GameStore.Infrastructure.Services
             }
 
             // ToDo: Validate GameStoreFileUploadRequestDto object.
-            var releaseDate = DateTime.Parse(gameStoreFileUploadRequestDto.VideoGameReleaseDate);
-            var purchaseDate = DateTime.Parse(gameStoreFileUploadRequestDto.VideoGamePurchaseDate);
+            var releaseDate = gameStoreFileUploadRequestDto.VideoGameReleaseDate;
+            var purchaseDate = gameStoreFileUploadRequestDto.VideoGamePurchaseDate;
             var price = Decimal.Parse(gameStoreFileUploadRequestDto.VideoGamePrice);
 
             var videoGameDto = await unitOfWork.VideoGameRepository.ReadByTitleExactAsync(gameStoreFileUploadRequestDto.VideoGameTitle, cancellationToken);

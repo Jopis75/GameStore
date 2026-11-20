@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Azure;
 using Microsoft.Extensions.Logging;
 
-namespace GameStore.Infrastructure.Services
+namespace GameStore.Infrastructure.Azure
 {
     public class AzureBlobStorageService : IAzureBlobStorageService
     {

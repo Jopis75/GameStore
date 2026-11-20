@@ -5,7 +5,7 @@ using SendGrid;
 using SendGrid.Helpers.Mail;
 using System.Net;
 
-namespace GameStore.Infrastructure.Services
+namespace GameStore.Infrastructure.Email
 {
     public class EmailService : IEmailService
     {
@@ -16,7 +16,7 @@ namespace GameStore.Infrastructure.Services
             _emailSettings = emailSettings.Value;
         }
 
-        public async Task<bool> SendEmail(Email email)
+        public async Task<bool> SendEmail(GameStore.Application.Models.Email.Email email)
         {
             var sendGridClient = new SendGridClient(_emailSettings.ApiKey);
             var fromEmailAddress = new EmailAddress

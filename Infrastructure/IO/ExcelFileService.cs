@@ -4,7 +4,7 @@ using GameStore.Application.Interfaces.Infrastructure;
 using GameStore.Application.Interfaces.Persistance;
 using System.Data;
 
-namespace GameStore.Infrastructure.Services
+namespace GameStore.Infrastructure.IO
 {
     public class ExcelFileService(IUnitOfWork unitOfWork) : IExcelFileService
     {

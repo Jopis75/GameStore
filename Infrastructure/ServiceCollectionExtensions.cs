@@ -1,6 +1,9 @@
 ﻿using GameStore.Application.Interfaces.Infrastructure;
 using GameStore.Application.Models.Email;
-using GameStore.Infrastructure.Services;
+using GameStore.Infrastructure.Azure;
+using GameStore.Infrastructure.Email;
+using GameStore.Infrastructure.IO;
+using GameStore.Infrastructure.Logging;
 using Microsoft.Extensions.Azure;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -40,7 +43,7 @@ namespace GameStore.Infrastructure
         private static IServiceCollection AddServices(this IServiceCollection serviceCollection)
         {
             serviceCollection.AddScoped<IAzureBlobStorageService, AzureBlobStorageService>();
-            serviceCollection.AddScoped<IGameStoreFileService, GameStoreFileService>();
+            serviceCollection.AddScoped<IGameStoreFileService, GameStoreCsvFileSreamReader>();
             serviceCollection.AddScoped<IExcelFileService, ExcelFileService>();
             serviceCollection.AddScoped(typeof(ILoggerService<>), typeof(LoggerService<>));
             return serviceCollection;

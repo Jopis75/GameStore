@@ -9,9 +9,9 @@ using Microsoft.Extensions.Logging;
 
 namespace GameStore.Application.Features.VideoGames.RequestHandlers.Commands
 {
-    public class UploadGameStoreFileRequestHandler(IGameStoreFileService gameStoreFileService, IValidator<UploadGameStoreFileRequest> validator, ILogger<UploadGameStoreFileRequestHandler> logger) : IRequestHandler<UploadGameStoreFileRequest, HttpResponseDto<GameStoreFileUploadResponseDto<VideoGameDto>>>
+    public class UploadGameStoreCsvFileRequestHandler(IGameStoreFileService gameStoreFileService, IValidator<UploadGameStoreCsvFileRequest> validator, ILogger<UploadGameStoreCsvFileRequestHandler> logger) : IRequestHandler<UploadGameStoreCsvFileRequest, HttpResponseDto<GameStoreFileUploadResponseDto<VideoGameDto>>>
     {
-        public async Task<HttpResponseDto<GameStoreFileUploadResponseDto<VideoGameDto>>> Handle(UploadGameStoreFileRequest uploadGameStoreFileRequest, CancellationToken cancellationToken)
+        public async Task<HttpResponseDto<GameStoreFileUploadResponseDto<VideoGameDto>>> Handle(UploadGameStoreCsvFileRequest uploadGameStoreFileRequest, CancellationToken cancellationToken)
         {
             try
             {

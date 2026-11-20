@@ -16,9 +16,9 @@
 
         public string VideoGamePrice { get; set; } = String.Empty;
 
-        public string VideoGamePurchaseDate { get; set; } = String.Empty;
+        public DateTime VideoGamePurchaseDate { get; set; }
 
-        public string VideoGameReleaseDate { get; set; } = String.Empty;
+        public DateTime VideoGameReleaseDate { get; set; }
 
         public string VideoGameTitle { get; set; } = String.Empty;
     }

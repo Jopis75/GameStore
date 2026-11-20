@@ -6,7 +6,7 @@ using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 
-namespace GameStore.Infrastructure.Services
+namespace GameStore.Infrastructure.Logging
 {
     public class LoggerService<TCategoryName>(ILogger<TCategoryName> logger) : ILoggerService<TCategoryName>
     {

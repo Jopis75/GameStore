@@ -14,13 +14,14 @@ namespace GameStore.Infrastructure
     {
         public static IServiceCollection AddInfrastructureServices(this IServiceCollection serviceCollection, IConfiguration configuration)
         {
+            serviceCollection.AddAzureServices(configuration);
             serviceCollection.AddEmailService(configuration);
-            serviceCollection.AddAzureServiceClients(configuration);
-            serviceCollection.AddServices();
+            serviceCollection.AddIOServices();
+            serviceCollection.AddLoggerServices();
             return serviceCollection;
         }
 
-        private static IServiceCollection AddAzureServiceClients(this IServiceCollection serviceCollection, IConfiguration configuration)
+        private static IServiceCollection AddAzureServices(this IServiceCollection serviceCollection, IConfiguration configuration)
         {
             serviceCollection.AddAzureClients(azureClientFactoryBuilder =>
             {
@@ -30,6 +31,7 @@ namespace GameStore.Infrastructure
                 // Set up any default settings.
                 azureClientFactoryBuilder.ConfigureDefaults(configuration.GetSection("AzureDefaults"));
             });
+            serviceCollection.AddScoped<IAzureBlobStorageService, AzureBlobStorageService>();
             return serviceCollection;
         }
 
@@ -40,11 +42,17 @@ namespace GameStore.Infrastructure
             return serviceCollection;
         }
 
-        private static IServiceCollection AddServices(this IServiceCollection serviceCollection)
+        private static IServiceCollection AddIOServices(this IServiceCollection serviceCollection)
         {
-            serviceCollection.AddScoped<IAzureBlobStorageService, AzureBlobStorageService>();
-            serviceCollection.AddScoped<IGameStoreFileService, GameStoreCsvFileSreamReader>();
+            serviceCollection.AddScoped<IGameStoreCsvFileParser, GameStoreCsvFileParser>();
+            serviceCollection.AddScoped<IGameStoreCsvFileStreamReader, GameStoreCsvFileStreamReader>();
+            serviceCollection.AddScoped<IGameStoreCsvFileService, GameStoreCsvFileService>();
             serviceCollection.AddScoped<IExcelFileService, ExcelFileService>();
+            return serviceCollection;
+        }
+
+        public static IServiceCollection AddLoggerServices(this IServiceCollection serviceCollection)
+        {
             serviceCollection.AddScoped(typeof(ILoggerService<>), typeof(LoggerService<>));
             return serviceCollection;
         }

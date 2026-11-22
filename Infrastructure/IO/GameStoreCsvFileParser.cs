@@ -21,6 +21,8 @@ namespace GameStore.Infrastructure.IO
 
         public async Task<GameStoreCsvFileDto> ParseAsync(string row, CancellationToken cancellationToken)
         {
+            var gameStoreCsvFileDto = new GameStoreCsvFileDto();
+
             var columns = row.Split(';', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
 
             if (columns.Length != 8)
@@ -36,6 +38,8 @@ namespace GameStore.Infrastructure.IO
                 throw new ArgumentException();
             }
 
+            gameStoreCsvFileDto.VideoGameDto.Title = videoGameTitle;
+
             // Parse the developer name. The developer company name must exist in db.
             var developerName = columns[1];
 
@@ -44,12 +48,15 @@ namespace GameStore.Infrastructure.IO
                 throw new ArgumentException();
             }
 
-            var developerCompany = await unitOfWork.CompanyRepository.ReadByNameExactAsync(developerName, cancellationToken);
+            var developerCompanyDto = await unitOfWork.CompanyRepository.ReadByNameExactAsync(developerName, cancellationToken);
 
-            if (developerCompany == null)
+            if (developerCompanyDto.IsNullObject)
             {
                 throw new ArgumentException();
             }
+
+            gameStoreCsvFileDto.DeveloperCompanyDto.Id = developerCompanyDto.Id;
+            gameStoreCsvFileDto.DeveloperCompanyDto.Name = developerCompanyDto.Name;
 
             // Parse the publisher name. The publisher company name must exist in db.
             var publisherName = columns[2];
@@ -59,12 +66,15 @@ namespace GameStore.Infrastructure.IO
                 throw new ArgumentException();
             }
 
-            var publisherCompany = await unitOfWork.CompanyRepository.ReadByNameExactAsync(publisherName, cancellationToken);
+            var publisherCompanyDto = await unitOfWork.CompanyRepository.ReadByNameExactAsync(publisherName, cancellationToken);
 
-            if (publisherCompany == null)
+            if (publisherCompanyDto.IsNullObject)
             {
                 throw new ArgumentException();
             }
+
+            gameStoreCsvFileDto.PublisherCompanyDto.Id = publisherCompanyDto.Id;
+            gameStoreCsvFileDto.PublisherCompanyDto.Name = publisherCompanyDto.Name;
 
             // Parse the console name. The console name must exist in db.
             var consoleName = columns[3];
@@ -74,12 +84,15 @@ namespace GameStore.Infrastructure.IO
                 throw new ArgumentException();
             }
 
-            var console = await unitOfWork.ConsoleRepository.ReadByNameExactAsync(consoleName, cancellationToken);
+            var consoleDto = await unitOfWork.ConsoleRepository.ReadByNameExactAsync(consoleName, cancellationToken);
 
-            if (console == null)
+            if (consoleDto.IsNullObject)
             {
                 throw new ArgumentException();
             }
+
+            gameStoreCsvFileDto.ConsoleDto.Id = consoleDto.Id;
+            gameStoreCsvFileDto.ConsoleDto.Name = consoleDto.Name;
 
             // Parse the gere names. The genre names must exist in db.
             var genreNames = columns[4].Split('|', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
@@ -91,12 +104,14 @@ namespace GameStore.Infrastructure.IO
 
             foreach (var genreName in genreNames)
             {
-                var genre = unitOfWork.GenreRepository.ReadByNameExactAsync(genreName, cancellationToken);
+                var genreDto = await unitOfWork.GenreRepository.ReadByNameExactAsync(genreName, cancellationToken);
 
-                if (genre == null)
+                if (genreDto.IsNullObject)
                 {
                     throw new ArgumentException();
                 }
+
+                gameStoreCsvFileDto.GenreDtos.Add(genreDto);
             }
 
             // Parse the videogame release date.
@@ -105,11 +120,15 @@ namespace GameStore.Infrastructure.IO
                 throw new ArgumentException();
             }
 
+            gameStoreCsvFileDto.VideoGameDto.ReleaseDate = videoGameReleaseDate;
+
             // Parse the videogame purchase date.
             if (!DateTime.TryParse(columns[6], out var videoGamePurchaseDate))
             {
                 throw new ArgumentException();
             }
+
+            gameStoreCsvFileDto.VideoGameDto.PurchaseDate = videoGamePurchaseDate;
 
             // Parse the videogame price.
             if (!Decimal.TryParse(columns[7], out var videoGamePrice))
@@ -117,17 +136,7 @@ namespace GameStore.Infrastructure.IO
                 throw new ArgumentException();
             }
 
-            var gameStoreCsvFileDto = new GameStoreCsvFileDto
-            {
-                VideoGameTitle = videoGameTitle,
-                DeveloperName = developerName,
-                PublisherName = publisherName,
-                ConsoleName = consoleName,
-                GenreNames = [.. genreNames],
-                VideoGameReleaseDate = videoGameReleaseDate,
-                VideoGamePurchaseDate = videoGamePurchaseDate,
-                VideoGamePrice = videoGamePrice
-            };
+            gameStoreCsvFileDto.VideoGameDto.Price = videoGamePrice;
 
             return gameStoreCsvFileDto;
         }

@@ -1,161 +1,150 @@
 ﻿using GameStore.Application.Dtos.General;
 using GameStore.Application.Interfaces.Infrastructure;
+using GameStore.Application.Interfaces.Persistance;
 using GameStore.Domain.Dtos;
+using GameStore.Domain.Entities;
 using Microsoft.AspNetCore.Http;
 
 namespace GameStore.Infrastructure.IO
 {
-    public class GameStoreCsvFileService(IGameStoreCsvFileStreamReader gameStoreCsvFileStreamReader) : IGameStoreCsvFileService
+    public class GameStoreCsvFileService(IUnitOfWork unitOfWork, IGameStoreCsvFileStreamReader gameStoreCsvFileStreamReader) : IGameStoreCsvFileService
     {
         public async Task UploadAsync(IFormFile formFile, CancellationToken cancellationToken)
         {
-            var dtos = await gameStoreCsvFileStreamReader.ReadAsync(formFile, cancellationToken);
+            var gameStoreCsvFileDtos = await gameStoreCsvFileStreamReader.ReadAsync(formFile, cancellationToken);
+
+            foreach (var gameStoreCsvFileDto in gameStoreCsvFileDtos)
+            {
+                var videoGameDto = await CreateOrUpdateVideoGameAsync(gameStoreCsvFileDto, cancellationToken);
+
+                await CreateOrUpdateVideoGameGenresAsync(videoGameDto.Id, gameStoreCsvFileDto.GenreDtos, cancellationToken);
+            }
         }
 
         public async Task UploadAsync(Stream stream, CancellationToken cancellationToken)
         {
-            var dtos = await gameStoreCsvFileStreamReader.ReadAsync(stream, cancellationToken);
+            var gameStoreCsvFileDtos = await gameStoreCsvFileStreamReader.ReadAsync(stream, cancellationToken);
+
+            foreach (var gameStoreCsvFileDto in gameStoreCsvFileDtos)
+            {
+                var videoGameDto = await CreateOrUpdateVideoGameAsync(gameStoreCsvFileDto, cancellationToken);
+
+                await CreateOrUpdateVideoGameGenresAsync(videoGameDto.Id, gameStoreCsvFileDto.GenreDtos, cancellationToken);
+            }
         }
 
-        //private async Task<ConsoleVideoGameDto> CreateIfNotExistConsoleVideoGamesAsync(string consoleName, int videoGameId, CancellationToken cancellationToken)
-        //{
-        //    var consoleDto = await unitOfWork.ConsoleRepository.ReadByNameExactAsync(consoleName, cancellationToken);
+        private async Task<VideoGameDto> CreateOrUpdateVideoGameAsync(GameStoreCsvFileDto gameStoreCsvFileDto, CancellationToken cancellationToken)
+        {
+            var videoGameDto = await unitOfWork.VideoGameRepository.ReadByTitleExactAsync(gameStoreCsvFileDto.VideoGameDto.Title, cancellationToken);
 
-        //    // Did not found an exact match.
-        //    if (consoleDto.IsNullObject)
-        //    {
-        //        throw new NotFoundException(consoleName);
-        //    }
+            // Create if not exist.
+            if (videoGameDto.IsNullObject)
+            {
+                var newVideoGameDto = new VideoGameDto
+                {
+                    Title = gameStoreCsvFileDto.VideoGameDto.Title,
+                    Name = gameStoreCsvFileDto.VideoGameDto.Title,
+                    ReleaseDate = gameStoreCsvFileDto.VideoGameDto.ReleaseDate,
+                    PurchaseDate = gameStoreCsvFileDto.VideoGameDto.PurchaseDate,
+                    Price = gameStoreCsvFileDto.VideoGameDto.Price,
+                    DeveloperId = gameStoreCsvFileDto.DeveloperCompanyDto.Id,
+                    PublisherId = gameStoreCsvFileDto.PublisherCompanyDto.Id,
+                    CreatedAt = DateTime.Now,
+                    CreatedBy = "System",
+                    DeletedAt = null,
+                    DeletedBy = String.Empty,
+                    UpdatedAt = null,
+                    UpdatedBy = String.Empty
+                };
 
-        //    var consoleVideoGameDtos = await unitOfWork.ConsoleVideoGameRepository.ReadByVideoGameIdAsync(videoGameId, cancellationToken);
+                var createdVideoGameDto = await unitOfWork.VideoGameRepository.CreateAsync(newVideoGameDto, cancellationToken);
 
-        //    if (consoleVideoGameDtos.Any(cvgd => cvgd.ConsoleId == consoleDto.Id) == false)
-        //    {
-        //        var consoleVideoGameDto = new ConsoleVideoGameDto
-        //        {
-        //            ConsoleId = consoleDto.Id,
-        //            VideoGameId = videoGameId,
-        //            CreatedAt = DateTime.Now,
-        //            CreatedBy = "System",
-        //            DeletedAt = null,
-        //            DeletedBy = String.Empty,
-        //            UpdatedAt = null,
-        //            UpdatedBy = String.Empty
-        //        };
+                var consoleVideoGameDto = new ConsoleVideoGameDto
+                {
+                    ConsoleId = gameStoreCsvFileDto.ConsoleDto.Id,
+                    VideoGameId = createdVideoGameDto.Id,
+                    CreatedAt = DateTime.Now,
+                    CreatedBy = "System",
+                    DeletedAt = null,
+                    DeletedBy = String.Empty,
+                    UpdatedAt = null,
+                    UpdatedBy = String.Empty
+                };
 
-        //        var createdConsoleVideoGameDto = await unitOfWork.ConsoleVideoGameRepository.CreateAsync(consoleVideoGameDto, cancellationToken);
+                await unitOfWork.ConsoleVideoGameRepository.CreateAsync(consoleVideoGameDto, cancellationToken);
 
-        //        return createdConsoleVideoGameDto;
-        //    }
+                return createdVideoGameDto;
+            }
+            else // Update if exist.
+            {
+                videoGameDto.Title = gameStoreCsvFileDto.VideoGameDto.Title;
+                videoGameDto.Name = gameStoreCsvFileDto.VideoGameDto.Title;
+                videoGameDto.ReleaseDate = gameStoreCsvFileDto.VideoGameDto.ReleaseDate;
+                videoGameDto.PurchaseDate = gameStoreCsvFileDto.VideoGameDto.PurchaseDate;
+                videoGameDto.Price = gameStoreCsvFileDto.VideoGameDto.Price;
+                videoGameDto.DeveloperId = gameStoreCsvFileDto.DeveloperCompanyDto.Id;
+                videoGameDto.PublisherId = gameStoreCsvFileDto.PublisherCompanyDto.Id;
+                videoGameDto.UpdatedAt = DateTime.Now;
+                videoGameDto.UpdatedBy = "System";
 
-        //    return unitOfWork.ConsoleVideoGameRepository.NullObject;
-        //}
+                var updatedVideoGameDto = await unitOfWork.VideoGameRepository.UpdateAsync(videoGameDto, cancellationToken);
 
-        //private async Task<VideoGameDto> CreateOrUpdateVideoGameAsync(GameStoreCsvFileDto gameStoreFileUploadRequestDto, CancellationToken cancellationToken)
-        //{
-        //    var developerCompanyDto = await unitOfWork.CompanyRepository.ReadByNameExactAsync(gameStoreFileUploadRequestDto.DeveloperName, cancellationToken);
+                //var consoleVideoGameDtos = await unitOfWork.ConsoleVideoGameRepository.ReadByVideoGameIdAsync(updatedVideoGameDto.Id, cancellationToken);
 
-        //    // Did not found an exact match.
-        //    if (developerCompanyDto.IsNullObject)
-        //    {
-        //        throw new NotFoundException(gameStoreFileUploadRequestDto.DeveloperName);
-        //    }
+                //foreach (var consoleVideoGameDto in consoleVideoGameDtos)
+                //{
+                //    await unitOfWork.ConsoleVideoGameRepository.DeleteAsync(consoleVideoGameDto, cancellationToken);
+                //}
 
-        //    var publisherCompanyDto = await unitOfWork.CompanyRepository.ReadByNameExactAsync(gameStoreFileUploadRequestDto.PublisherName, cancellationToken);
+                //var consoleVideoGameDto = new ConsoleVideoGameDto
+                //{
+                //    ConsoleId = gameStoreCsvFileDto.ConsoleDto.Id,
+                //    VideoGameId = createdVideoGameDto.Id,
+                //    CreatedAt = DateTime.Now,
+                //    CreatedBy = "System",
+                //    DeletedAt = null,
+                //    DeletedBy = String.Empty,
+                //    UpdatedAt = null,
+                //    UpdatedBy = String.Empty
+                //};
 
-        //    // Did not found an exact match.
-        //    if (publisherCompanyDto.IsNullObject)
-        //    {
-        //        throw new NotFoundException(gameStoreFileUploadRequestDto.PublisherName);
-        //    }
+                //await unitOfWork.ConsoleVideoGameRepository.CreateAsync(consoleVideoGameDto, cancellationToken);
 
-        //    // ToDo: Validate GameStoreFileUploadRequestDto object.
-        //    var releaseDate = gameStoreFileUploadRequestDto.VideoGameReleaseDate;
-        //    var purchaseDate = gameStoreFileUploadRequestDto.VideoGamePurchaseDate;
-        //    var price = Decimal.Parse(gameStoreFileUploadRequestDto.VideoGamePrice);
+                return updatedVideoGameDto;
+            }
+        }
 
-        //    var videoGameDto = await unitOfWork.VideoGameRepository.ReadByTitleExactAsync(gameStoreFileUploadRequestDto.VideoGameTitle, cancellationToken);
+        private async Task<IEnumerable<VideoGameGenreDto>> CreateOrUpdateVideoGameGenresAsync(int videoGameId, List<GenreDto> genreDtos, CancellationToken cancellationToken)
+        {
+            var videoGameGenreDtos = await unitOfWork.VideoGameGenreRepository.ReadByVideoGameIdAsync(videoGameId, cancellationToken);
 
-        //    // Create if not exist.
-        //    if (videoGameDto.IsNullObject)
-        //    {
-        //        var videoGameDto1 = new VideoGameDto
-        //        {
-        //            Title = gameStoreFileUploadRequestDto.VideoGameTitle,
-        //            Name = gameStoreFileUploadRequestDto.VideoGameTitle,
-        //            ReleaseDate = releaseDate,
-        //            PurchaseDate = purchaseDate,
-        //            Price = price,
-        //            DeveloperId = developerCompanyDto.Id,
-        //            PublisherId = publisherCompanyDto.Id,
-        //            CreatedAt = DateTime.Now,
-        //            CreatedBy = "System",
-        //            DeletedAt = null,
-        //            DeletedBy = String.Empty,
-        //            UpdatedAt = null,
-        //            UpdatedBy = String.Empty
-        //        };
+            foreach (var videoGameGenreDto in videoGameGenreDtos)
+            {
+                await unitOfWork.VideoGameGenreRepository.DeleteAsync(videoGameGenreDto, cancellationToken);
+            }
 
-        //        var createdVideoGameDto = await unitOfWork.VideoGameRepository.CreateAsync(videoGameDto1, cancellationToken);
+            var createdVideoGameGenreDtos = new List<VideoGameGenreDto>();
 
-        //        return createdVideoGameDto;
-        //    }
-        //    else // Update if exist.
-        //    {
-        //        videoGameDto.Title = gameStoreFileUploadRequestDto.VideoGameTitle;
-        //        videoGameDto.ReleaseDate = releaseDate;
-        //        videoGameDto.PurchaseDate = purchaseDate;
-        //        videoGameDto.Price = price;
-        //        videoGameDto.DeveloperId = developerCompanyDto.Id;
-        //        videoGameDto.PublisherId = publisherCompanyDto.Id;
-        //        videoGameDto.UpdatedAt = DateTime.Now;
-        //        videoGameDto.UpdatedBy = "System";
+            foreach (var genreDto in genreDtos)
+            {
+                var videoGameGenreDto = new VideoGameGenreDto
+                {
+                    VideoGameId = videoGameId,
+                    GenreId = genreDto.Id,
+                    CreatedAt = DateTime.Now,
+                    CreatedBy = "System",
+                    DeletedAt = null,
+                    DeletedBy = String.Empty,
+                    UpdatedAt = null,
+                    UpdatedBy = String.Empty
+                };
 
-        //        var updatedVideoGameDto = await unitOfWork.VideoGameRepository.UpdateAsync(videoGameDto, cancellationToken);
+                var createdVideoGameGenreDto = await unitOfWork.VideoGameGenreRepository.CreateAsync(videoGameGenreDto, cancellationToken);
 
-        //        return updatedVideoGameDto;
-        //    }
-        //}
+                createdVideoGameGenreDtos.Add(createdVideoGameGenreDto);
+            }
 
-        //private async Task<IEnumerable<VideoGameGenreDto>> CreateOrUpdateVideoGameGenresAsync(int videoGameId, string[] genreNames, CancellationToken cancellationToken)
-        //{
-        //    var videoGameGenreDtos = await unitOfWork.VideoGameGenreRepository.ReadByVideoGameIdAsync(videoGameId, cancellationToken);
-
-        //    foreach (var videoGameGenreDto in videoGameGenreDtos)
-        //    {
-        //        await unitOfWork.VideoGameGenreRepository.DeleteAsync(videoGameGenreDto, cancellationToken);
-        //    }
-
-        //    var createdVideoGameGenreDtos = new List<VideoGameGenreDto>();
-
-        //    foreach (var genreName in genreNames)
-        //    {
-        //        var genreDto = await unitOfWork.GenreRepository.ReadByNameExactAsync(genreName, cancellationToken);
-
-        //        // Did not found exact match.
-        //        if (genreDto.IsNullObject)
-        //        {
-        //            throw new NotFoundException(genreName);
-        //        }
-
-        //        var videoGameGenreDto = new VideoGameGenreDto
-        //        {
-        //            VideoGameId = videoGameId,
-        //            GenreId = genreDto.Id,
-        //            CreatedAt = DateTime.Now,
-        //            CreatedBy = "System",
-        //            DeletedAt = null,
-        //            DeletedBy = String.Empty,
-        //            UpdatedAt = null,
-        //            UpdatedBy = String.Empty
-        //        };
-
-        //        var createdVideoGameGenreDto = await unitOfWork.VideoGameGenreRepository.CreateAsync(videoGameGenreDto, cancellationToken);
-
-        //        createdVideoGameGenreDtos.Add(createdVideoGameGenreDto);
-        //    }
-
-        //    return createdVideoGameGenreDtos;
-        //}
+            return createdVideoGameGenreDtos;
+        }
     }
 }
